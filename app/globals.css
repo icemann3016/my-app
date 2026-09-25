@@ -1,0 +1,18 @@
+:root {
+  --bg: #ffffff;
+  --fg: #171717;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0a0a0a;
+    --fg: #ededed;
+  }
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: system-ui, -apple-system, sans-serif;
+}
+.container { max-width: 720px; margin: 0 auto; padding: 48px 16px; }
