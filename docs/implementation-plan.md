@@ -100,9 +100,9 @@ Airports and aircraft home bases have a PostGIS `geography` point. A search RPC 
 
 | Table | Key columns | Notes |
 |-------|-------------|-------|
-| `profiles` | `id` (= auth user), display_name, photo, home_airport_id, locale, units, rating_avg, rating_count, suspended_at | Created by trigger on sign-up |
+| `profiles` | `id` (= user), display_name, avatar_key, home_airport_ident → airports, rating_avg, rating_count, suspended_at | Created by trigger on sign-up. Locale/units live in `user_settings` |
 | `user_roles` | user_id, role (`pilot`/`owner`/`admin`) | One user, many roles |
-| `airports` | id, icao, name, country, lat/lon (`geography`), timezone, elevation | Imported from OurAirports |
+| `airports` | ident (PK: ICAO or local id), type, name, icao_code, iata_code, municipality, country, latitude, longitude, elevation_ft, timezone | Imported from OurAirports (EU airfields) with `npm run airports:import`. Plain lat/lon; PostGIS decision in M5 |
 | `pilot_licences` | user_id, type (PPL/LAPL/CPL/ATPL), state, number, expires_on, document_id, status | |
 | `pilot_ratings` | user_id, kind (class/type/privilege), code (SEP, MEP, NIGHT, IR…), expires_on, status | |
 | `medicals` | user_id, class, valid_until, document_id, status | Restricted RLS |

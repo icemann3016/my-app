@@ -16,6 +16,7 @@ cd ownAplane
 npm install
 cp .env.example .env.local   # fill in DATABASE_URL and BETTER_AUTH_SECRET at least
 npm run db:migrate
+npm run airports:import     # loads ~7,400 European airfields (about a minute)
 npm run dev
 ```
 

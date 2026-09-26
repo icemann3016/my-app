@@ -13,7 +13,7 @@ This file tells Claude how to work in this repo. Claude reads it at the start of
 - **Plan:** [`docs/implementation-plan.md`](docs/implementation-plan.md) has the architecture, data model and milestones M0–M10. Tasks are GitHub issues. **Work on the current milestone's issues in order** and follow the plan's key technical decisions (§4).
 - **Current phase:** Phase 1 (MVP) — accounts, pilot verification, aircraft listings, search, booking requests, ratings. Don't build Phase 2–4 features unless asked.
 - **Team:** Zlati + friend, each working with our own Claude.
-- **Status:** M0 done. Live on Vercel: https://my-app-zeta-gold-25.vercel.app (every push to main deploys). **M1 done:** accounts, profiles, roles, public profiles, Google sign-in (needs Google keys), data export + account deletion, English/Bulgarian + units preference. Next: **M2 Airports**.
+- **Status:** M0 done. Live on Vercel: https://my-app-zeta-gold-25.vercel.app (every push to main deploys). **M1 done:** accounts, profiles, roles, public profiles, Google sign-in (needs Google keys), data export + account deletion, English/Bulgarian + units preference. **M2 done:** 7,392 European airfields (OurAirports) with time zones, airport search box, home airfield linked to airports. Next: **M3 Pilot verification**.
 - **Pending:** custom domain **ownaplane.eu** (waiting for DNS help from the registrar). When live: add it in Vercel → Domains, set `BETTER_AUTH_URL=https://ownaplane.eu`, update links in README/docs, then set up email (Resend SMTP) on the domain.
 - **Portability:** the app must stay movable to Google Cloud or Azure: no provider-specific SDKs outside `lib/storage` and `lib/email` drivers. See [`docs/deployment.md`](docs/deployment.md).
 
@@ -45,6 +45,7 @@ npm run db:generate        # create a migration from changes in lib/db/schema
 npm run db:custom -- name  # create an empty SQL migration (RLS policies, grants, functions, triggers)
 npm run db:migrate         # apply migrations to DATABASE_URL
 npm run db:studio          # browse the database in the browser
+npm run airports:import    # (re)load European airfields from OurAirports; -- --file x.csv for a local file
 
 docker build -t ownaplane .   # production container
 docker compose up -d db    # local Postgres (no cloud account needed)
@@ -68,9 +69,11 @@ components/
   forms/              # TextField, TextAreaField, SubmitButton, FormMessage
   layout/             # SiteHeader, UserMenu, MobileNav, SiteFooter, LanguageSwitcher, Logo
   auth/               # GoogleSignIn
+  airport-picker.tsx  # airport search box (combobox), submits the airport ident
 lib/
   auth/               # auth.ts (Better Auth config), session.ts (getUser, requireUser…), redirect.ts
   db/                 # index.ts (connection), rls.ts (asUser/asAnon), schema/ (Drizzle tables)
+  airports.ts         # searchAirports(), getAirport(), airportPlace()
   storage/            # file storage drivers
   email/              # email drivers + templates
   validation/         # Zod schemas shared by forms and Server Actions
@@ -80,7 +83,8 @@ lib/
 db/migrations/        # SQL migrations (generated + custom), applied with npm run db:migrate
 messages/             # translations: en.json (source) and bg.json (same keys)
 i18n/request.ts       # picks the language for each request
-tests/                # e2e/ (Playwright), db/ (database security tests)
+scripts/              # import-airports.mjs (+ airports/transform.mjs), create-github-issues.mjs
+tests/                # e2e/ (Playwright), db/ (database security tests), fixtures/ (test airports)
 docs/                 # requirements, implementation plan, deployment guide
 Dockerfile, docker-compose.yml
 ```
@@ -101,7 +105,7 @@ Target structure for the rest of the app is in the plan, §6. When new top-level
 
 - Region: **Europe / EASA** rules and terms (PPL/LAPL, Part-66, Part-ML, ARC). Not FAA.
 - Store all times in **UTC**; display airport-local time with UTC alongside on booking and PPR screens.
-- Airports are identified by **ICAO code** (e.g. `LBSF`).
+- Airports come from the `airports` table and are identified by their OurAirports **ident**: the ICAO code when there is one (`LBSF`), otherwise a local id (`BG-0004`, many small airfields). Show `code` (ICAO or ident) to users. Pick airports with `AirportPicker`, never free text. Each airport has an IANA `timezone` for local times.
 - Medical certificate data is GDPR special-category data: never expose the document, only "valid until".
 - The app never replaces official records (CRS, logbooks), ATC clearance or customs procedures. Say so in the UI where relevant.
 
@@ -145,6 +149,7 @@ _TODO: split areas so we don't edit the same files at the same time._
 
 Add one line per decision, newest first.
 
+- 2026-09-26: M2: airports keyed by OurAirports ident; only EU large/medium/small airports (no heliports/closed). Coordinates stored as plain lat/lon (no PostGIS yet; decide in M5 for radius search). Airport data is refreshed with `npm run airports:import`; stale rows are kept, not deleted.
 - 2026-09-26: M1 finished. i18n with next-intl without locale routing (cookie + user_settings + Accept-Language). Google sign-in via Better Auth (button hidden until GOOGLE_* keys exist). Account deletion with password + typed confirmation; data export as JSON without secrets.
 - 2026-09-26: App name is **ownAplane** (technical name `ownaplane`). Change the display name only in `lib/site.ts`.
 - 2026-09-26: **Portable stack.** Replaced Supabase Auth/SDK with Better Auth + Drizzle on plain Postgres, file storage and email behind drivers, Docker image + deployment guide, so the app can move to Google Cloud or Azure. Supabase is now only the Postgres + file host. RLS kept via the `app_user` role and `app.user_id` setting.

@@ -40,6 +40,13 @@ code**, so nothing about users or security is tied to a provider.
   first: on **Azure** add them to the server parameter `azure.extensions` (and `pg_cron` to
   `shared_preload_libraries`); on **Cloud SQL** set the flag `cloudsql.enable_pg_cron=on` for pg_cron.
 
+### Airport data
+- `npm run airports:import` downloads OurAirports (public domain) and upserts the European airfields
+  into `airports`. Run it once per environment after the migrations, and again every few months to
+  pick up changes. On Cloud Run / Azure run it as a one-off job from a machine with the repo, or
+  from your laptop against the target `DATABASE_URL`.
+- No database extensions are needed for airports (plain latitude/longitude columns).
+
 ### Files
 - One public bucket/container named `media`. Keys look like `avatars/<user-id>/<timestamp>.jpg`.
 - `STORAGE_DRIVER=s3` works with anything that speaks the S3 protocol; `azure` uses the Azure SDK.
@@ -126,6 +133,8 @@ pg_restore --no-owner --dbname="$TARGET_URL" app.dump
 
 # 3. Copy the files (rclone speaks S3, Google Cloud Storage and Azure Blob)
 rclone copy source:media target:media --progress
+
+#    Airports come along with the database; or re-run `npm run airports:import` on the target.
 
 # 4. Point the app at the new database and storage (environment variables), deploy,
 #    and check https://<new-site>/api/health
