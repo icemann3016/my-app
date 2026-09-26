@@ -1,0 +1,9 @@
+.next
+node_modules
+package-lock.json
+lib/types/database.ts
+playwright-report
+test-results
+supabase/.temp
+# Markdown docs are formatted by hand
+*.md
