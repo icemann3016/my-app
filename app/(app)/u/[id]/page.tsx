@@ -3,7 +3,7 @@ import { eq } from "drizzle-orm";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { MapPinIcon, StarIcon } from "lucide-react";
+import { MapPinIcon, ShieldCheckIcon, StarIcon } from "lucide-react";
 import { getLocale, getTranslations } from "next-intl/server";
 
 import { UserAvatar } from "@/components/user-avatar";
@@ -17,6 +17,8 @@ import { isDatabaseConfigured } from "@/lib/db";
 import { asAnon } from "@/lib/db/rls";
 import { profiles, userRoles } from "@/lib/db/schema";
 import { intlLocale } from "@/lib/i18n/config";
+import { getPilotBadges } from "@/lib/pilot/credentials";
+import { credentialLabel, type PilotTranslate } from "@/lib/pilot/labels";
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const PUBLIC_ROLES = ["pilot", "owner"] as const;
@@ -67,6 +69,9 @@ export default async function PublicProfilePage({ params }: { params: Promise<{ 
   const homeAirport = await getAirport(profile.homeAirportIdent);
   const viewer = await getUser();
   const t = await getTranslations("profile");
+  const isPilot = roles.includes("pilot");
+  const badges = isPilot ? await getPilotBadges(profile.id) : [];
+  const tp = (await getTranslations("pilot")) as unknown as PilotTranslate;
   const memberSince = new Intl.DateTimeFormat(intlLocale(await getLocale()), {
     month: "long",
     year: "numeric",
@@ -136,6 +141,30 @@ export default async function PublicProfilePage({ params }: { params: Promise<{ 
               <dd className="font-medium">{memberSince}</dd>
             </div>
           </dl>
+
+          {isPilot && (
+            <section aria-labelledby="verified-credentials" className="grid gap-2">
+              <h2 id="verified-credentials" className="text-sm text-muted-foreground">
+                {t("verifiedCredentials")}
+              </h2>
+              {badges.length ? (
+                <ul className="flex flex-wrap gap-1.5">
+                  {badges.map((b) => {
+                    const label = credentialLabel(b, tp);
+                    return (
+                      <li key={label}>
+                        <Badge variant="outline" className="border-success/40 text-sm">
+                          <ShieldCheckIcon className="text-success" aria-hidden /> {label}
+                        </Badge>
+                      </li>
+                    );
+                  })}
+                </ul>
+              ) : (
+                <p className="text-sm font-medium">{t("noVerifiedCredentials")}</p>
+              )}
+            </section>
+          )}
 
           {profile.bio && (
             <p className="text-sm leading-relaxed whitespace-pre-line">{profile.bio}</p>

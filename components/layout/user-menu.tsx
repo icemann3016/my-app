@@ -1,7 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { LayoutDashboardIcon, LogOutIcon, SettingsIcon, UserRoundIcon } from "lucide-react";
+import {
+  IdCardIcon,
+  LayoutDashboardIcon,
+  LogOutIcon,
+  SettingsIcon,
+  ShieldCheckIcon,
+  UserRoundIcon,
+} from "lucide-react";
 import { useTranslations } from "next-intl";
 
 import { signOut } from "@/app/(auth)/actions";
@@ -15,7 +22,13 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-export type AccountSummary = { id: string; name: string; avatarUrl: string | null };
+export type AccountSummary = {
+  id: string;
+  name: string;
+  avatarUrl: string | null;
+  isPilot: boolean;
+  isAdmin: boolean;
+};
 
 export function UserMenu({ account }: { account: AccountSummary }) {
   const t = useTranslations("common.nav");
@@ -35,6 +48,13 @@ export function UserMenu({ account }: { account: AccountSummary }) {
             <LayoutDashboardIcon /> {t("dashboard")}
           </Link>
         </DropdownMenuItem>
+        {account.isPilot && (
+          <DropdownMenuItem asChild>
+            <Link href="/pilot">
+              <IdCardIcon /> {t("pilotCredentials")}
+            </Link>
+          </DropdownMenuItem>
+        )}
         <DropdownMenuItem asChild>
           <Link href="/account">
             <SettingsIcon /> {t("account")}
@@ -45,6 +65,13 @@ export function UserMenu({ account }: { account: AccountSummary }) {
             <UserRoundIcon /> {t("publicProfile")}
           </Link>
         </DropdownMenuItem>
+        {account.isAdmin && (
+          <DropdownMenuItem asChild>
+            <Link href="/admin/verifications">
+              <ShieldCheckIcon /> {t("admin")}
+            </Link>
+          </DropdownMenuItem>
+        )}
         <DropdownMenuSeparator />
         <form action={signOut}>
           <DropdownMenuItem asChild>

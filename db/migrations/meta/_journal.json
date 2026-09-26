@@ -36,6 +36,20 @@
       "when": 1790437236616,
       "tag": "0004_drop_home_airport_icao",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1790442710306,
+      "tag": "0005_pilot_credentials",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1790442711406,
+      "tag": "0006_pilot_security",
+      "breakpoints": true
     }
   ]
 }

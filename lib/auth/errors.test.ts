@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { loginErrorKey } from "./errors";
+import { authErrorCode, loginErrorKey } from "./errors";
 
 describe("loginErrorKey", () => {
   it("explains an existing account that isn't linked to Google yet", () => {
@@ -15,5 +15,17 @@ describe("loginErrorKey", () => {
   });
   it("returns null without an error", () => {
     expect(loginErrorKey(undefined)).toBeNull();
+  });
+});
+
+describe("authErrorCode", () => {
+  it("reads the code of Better Auth errors, even from a second copy of the library", () => {
+    const err = Object.assign(new Error("Invalid email or password"), {
+      name: "APIError",
+      body: { code: "INVALID_EMAIL_OR_PASSWORD" },
+    });
+    expect(authErrorCode(err)).toBe("INVALID_EMAIL_OR_PASSWORD");
+    expect(authErrorCode(new Error("boom"))).toBeUndefined();
+    expect(authErrorCode("nope")).toBeUndefined();
   });
 });

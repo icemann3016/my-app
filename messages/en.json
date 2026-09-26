@@ -15,7 +15,9 @@
       "main": "Main",
       "mobile": "Mobile",
       "footer": "Footer",
-      "mainNavigation": "Main navigation"
+      "mainNavigation": "Main navigation",
+      "pilotCredentials": "Pilot credentials",
+      "admin": "Admin"
     },
     "footer": {
       "tagline": "Made for general aviation in Europe.",
@@ -171,7 +173,17 @@
     "termsRequired": "Please accept the terms to continue.",
     "bioMax": "Use at most 1000 characters.",
     "invalid": "Please check this field.",
-    "airportUnknown": "Choose an airfield from the list."
+    "airportUnknown": "Choose an airfield from the list.",
+    "dateInvalid": "Enter a valid date.",
+    "documentRequired": "Please upload a scan or photo.",
+    "documentInvalid": "That file can't be used. Please upload it again.",
+    "licenceNumberRequired": "Enter the licence number (up to 50 characters).",
+    "expiryBeforeIssue": "The expiry date can't be before the date of issue.",
+    "ratingCodeInvalid": "Choose a rating from the list, or enter an ICAO type designator like C510.",
+    "hoursInvalid": "Enter a number of hours, e.g. 125.5.",
+    "hoursMoreThanTotal": "Can't be more than your total hours.",
+    "aircraftTypeInvalid": "Enter an ICAO type designator, e.g. C172 or PA28.",
+    "reasonRequired": "Tell the pilot why (up to 500 characters)."
   },
   "dashboard": {
     "title": "Welcome, {name}",
@@ -183,14 +195,22 @@
     "profileComplete": "Complete profile",
     "profileEdit": "Edit profile",
     "pilotTitle": "Fly as a pilot",
-    "pilotTextOn": "Next: add your licence, ratings and medical. Coming soon.",
     "pilotTextOff": "Switch on the pilot role to rent aircraft.",
     "ownerTitle": "List your aircraft",
     "ownerTextOn": "Next: create your first listing. Coming soon.",
     "ownerTextOff": "Own an aircraft? Switch on the owner role to rent it out.",
     "switchOn": "Switch on",
     "publicProfile": "Your public profile:",
-    "seeWhatOthersSee": "see what others see"
+    "seeWhatOthersSee": "see what others see",
+    "pilotTextMissing": "Next: add your licence and medical so we can verify them.",
+    "pilotTextPending": "Thanks! We're checking your documents, usually within two working days.",
+    "pilotTextVerified": "You're a verified pilot. Booking aircraft is coming soon.",
+    "pilotTextRejected": "Something needs fixing: see the reason in your pilot credentials.",
+    "addCredentials": "Add credentials",
+    "manageCredentials": "Pilot credentials",
+    "expiryTitle": "Renew your credentials",
+    "credentialExpiring": "{item} expires on {date}.",
+    "credentialExpired": "{item} expired on {date}."
   },
   "account": {
     "title": "Account",
@@ -253,7 +273,7 @@
       "download": "Download my data",
       "delete": "Delete account",
       "dialogTitle": "Delete your account?",
-      "dialogDescription": "Your profile, photo, roles and settings will be deleted permanently. This can't be undone.",
+      "dialogDescription": "Your profile, photo, roles, settings, pilot credentials and uploaded documents will be deleted permanently. This can't be undone.",
       "passwordLabel": "Your password",
       "confirmLabel": "Type {word} to confirm",
       "confirmWord": "DELETE",
@@ -301,7 +321,9 @@
     "roles": {
       "pilot": "Pilot",
       "owner": "Aircraft owner"
-    }
+    },
+    "verifiedCredentials": "Verified by ownAplane",
+    "noVerifiedCredentials": "Nothing verified yet"
   },
   "email": {
     "linkFallback": "If the button doesn't work, copy this link into your browser:",
@@ -316,6 +338,23 @@
       "greeting": "Hi {name},",
       "body": "We received a request to reset your {app} password. The link is valid for one hour. If you didn't ask for this, you can ignore this email.",
       "cta": "Choose a new password"
+    },
+    "credentialReviewed": {
+      "greeting": "Hi {name},",
+      "verifiedSubject": "Your {item} is verified",
+      "verifiedBody": "Good news: we've checked your {item} and it's now verified. Owners will see it on your profile.",
+      "rejectedSubject": "We couldn't verify your {item}",
+      "rejectedBody": "We've checked your {item} but couldn't verify it.",
+      "reason": "Reason: {reason}",
+      "rejectedNext": "Please correct the details or upload a clearer document, and we'll check it again.",
+      "cta": "Open pilot credentials"
+    },
+    "expiryReminder": {
+      "subject": "{count, plural, one {A pilot credential expires soon} other {Pilot credentials expire soon}}",
+      "greeting": "Hi {name},",
+      "body": "Heads up: these expire within 30 days. Once renewed, update them and upload the new document so you can keep renting aircraft.",
+      "item": "{item}: valid until {date}",
+      "cta": "Update credentials"
     }
   },
   "airportPicker": {
@@ -323,5 +362,214 @@
     "searching": "Searching…",
     "noResults": "No airfields found",
     "clear": "Clear"
+  },
+  "documents": {
+    "choose": "Choose file",
+    "replace": "Replace file",
+    "preparing": "Preparing…",
+    "uploading": "Uploading…",
+    "none": "No file yet",
+    "view": "opens in a new tab",
+    "hint": "PDF, JPG, PNG or WebP, up to 4 MB.",
+    "invalidType": "Please choose a PDF, JPG, PNG or WebP file.",
+    "tooLarge": "That file is larger than 4 MB. Please choose a smaller one.",
+    "tooMany": "You've uploaded too many files. Delete some items first.",
+    "failed": "Upload failed. Please try again."
+  },
+  "pilot": {
+    "title": "Pilot credentials",
+    "description": "Add your licence, medical and ratings. We check them against your documents, usually within two working days.",
+    "privacy": "Owners only see which licence and ratings are verified. Numbers, documents and medical details are visible only to you and our verification team.",
+    "notPilotTitle": "Switch on the pilot role",
+    "notPilotText": "Turn on the pilot role to add your licence and rent aircraft.",
+    "switchOn": "Switch on pilot role",
+    "summary": {
+      "verifiedTitle": "You're a verified pilot",
+      "verified": "Owners can see your verified licence and ratings.",
+      "notVerifiedTitle": "Not verified yet",
+      "missing": "To rent aircraft you need a verified licence and a valid, verified medical.",
+      "pending": "{count, plural, one {# item is} other {# items are}} waiting for review.",
+      "rejected": "{count, plural, one {# item was} other {# items were}} rejected: see the reason below.",
+      "expiring": "{count, plural, one {# item expires} other {# items expire}} within 30 days.",
+      "expired": "{count, plural, one {# item has} other {# items have}} expired."
+    },
+    "status": {
+      "pending": "Pending review",
+      "verified": "Verified",
+      "rejected": "Rejected"
+    },
+    "expiry": {
+      "none": "No expiry",
+      "valid": "Valid until {date}",
+      "expiring": "Expires {date}",
+      "expired": "Expired {date}"
+    },
+    "rejectedBecause": "Not verified: {reason}",
+    "editResetsReview": "Saving changes to a verified item sends it for review again.",
+    "viewDocument": "Document",
+    "edit": "Edit",
+    "editLabel": "Edit {name}",
+    "delete": "Delete",
+    "deleteLabel": "Delete {name}",
+    "deleteTitle": "Delete {name}?",
+    "deleteText": "It will be removed together with its document. This can't be undone.",
+    "deleting": "Deleting…",
+    "cancel": "Cancel",
+    "save": "Save",
+    "saving": "Saving…",
+    "fields": {
+      "issuingState": "Issuing country",
+      "chooseCountry": "Choose a country",
+      "document": "Scan or photo",
+      "documentOptional": "Scan or photo (optional)"
+    },
+    "licences": {
+      "title": "Licences",
+      "description": "Your pilot licence, e.g. PPL(A) or LAPL(A).",
+      "empty": "No licence added yet.",
+      "add": "Add licence",
+      "addTitle": "Add a licence",
+      "editTitle": "Edit licence",
+      "dialogDescription": "Enter the details exactly as they appear on your licence.",
+      "type": "Licence",
+      "other": "Other licence",
+      "number": "Licence number",
+      "numberHint": "As printed on your licence, e.g. BG.FCL.PPL.12345.",
+      "issuedOn": "Date of issue",
+      "expiresOn": "Expiry date",
+      "expiresOnHint": "Leave empty if it doesn't expire (most EASA licences don't).",
+      "documentHint": "The pages with your details and ratings.",
+      "saved": "Licence saved. We'll review it soon."
+    },
+    "ratings": {
+      "title": "Ratings",
+      "description": "Class and type ratings, and privileges such as night or IR.",
+      "empty": "No ratings added yet.",
+      "add": "Add rating",
+      "addTitle": "Add a rating",
+      "editTitle": "Edit rating",
+      "dialogDescription": "Add each rating separately, with its expiry date if it has one.",
+      "kind": "Kind",
+      "kinds": {
+        "class": "Class rating",
+        "privilege": "Privilege",
+        "type": "Type rating"
+      },
+      "code": "Rating",
+      "typeCode": "Aircraft type (ICAO)",
+      "typeCodeHint": "ICAO type designator, e.g. PC12 or C510.",
+      "typeLabel": "{code} type rating",
+      "expiresOn": "Valid until",
+      "expiresOnHint": "Class ratings such as SEP are valid for 24 months, IR for 12.",
+      "documentHint": "Not needed if the rating is on the licence you uploaded.",
+      "saved": "Rating saved. We'll review it soon."
+    },
+    "privileges": {
+      "NIGHT": "Night",
+      "IR": "Instrument rating (IR)",
+      "BIR": "Basic instrument rating (BIR)",
+      "AEROBATIC": "Aerobatics",
+      "TOWING": "Towing (banner or glider)",
+      "MOUNTAIN": "Mountain"
+    },
+    "medical": {
+      "title": "Medical certificate",
+      "description": "Only you and our verification team see medical details.",
+      "empty": "No medical added yet.",
+      "add": "Add medical",
+      "addTitle": "Add a medical certificate",
+      "editTitle": "Edit medical certificate",
+      "dialogDescription": "Enter the class and the validity date that applies to your flying.",
+      "class": "Class",
+      "classes": {
+        "class1": "Class 1",
+        "class2": "Class 2",
+        "lapl": "LAPL"
+      },
+      "label": "{class} medical",
+      "validUntil": "Valid until",
+      "validUntilHint": "The validity date for private flying (class 2 or LAPL).",
+      "documentHint": "Photo or scan of the certificate.",
+      "saved": "Medical saved. We'll review it soon."
+    },
+    "experience": {
+      "title": "Flight experience",
+      "description": "Self-declared, from your logbook. Owners may ask to see it.",
+      "totalHours": "Total hours",
+      "picHours": "Hours as PIC",
+      "last90DaysHours": "Hours in the last 90 days",
+      "save": "Save experience",
+      "saving": "Saving…",
+      "saved": "Experience saved.",
+      "byType": "Hours by aircraft type",
+      "type": "Aircraft type",
+      "hours": "Hours",
+      "hoursValue": "{hours} h",
+      "addType": "Add",
+      "removeType": "Remove {type}",
+      "noTypes": "No aircraft types added yet."
+    },
+    "errors": {
+      "notFound": "This item no longer exists. Please reload the page."
+    },
+    "classRatings": {
+      "SEP_LAND": "SEP (land)",
+      "SEP_SEA": "SEP (sea)",
+      "MEP_LAND": "MEP (land)",
+      "MEP_SEA": "MEP (sea)",
+      "TMG": "TMG"
+    }
+  },
+  "admin": {
+    "verifications": {
+      "eyebrow": "Admin",
+      "title": "Verification queue",
+      "description": "Pilots waiting for their licence, medical or ratings to be checked.",
+      "waiting": "{count, plural, =0 {Nobody waiting} one {# pilot waiting} other {# pilots waiting}}",
+      "oldestFirst": "Oldest first. Try to answer within two working days.",
+      "empty": "Nothing to review right now.",
+      "items": "{count, plural, one {# item} other {# items}}",
+      "since": "waiting since {date} UTC"
+    },
+    "review": {
+      "metaTitle": "Review pilot",
+      "back": "Back to the queue",
+      "title": "Review {name}",
+      "memberSince": "Member since {date}",
+      "publicProfile": "Public profile",
+      "checklist": "Open each document and check that the name matches the account, and that the number, country, dates and ratings match what the pilot entered. Opening a document is logged.",
+      "nothing": "This pilot hasn't added any credentials.",
+      "reviewedBy": "Reviewed by {name} on {date} UTC",
+      "openDocument": "Open {name}",
+      "noDocument": "No document attached",
+      "verify": "Verify",
+      "verifying": "Verifying…",
+      "verifyLabel": "Verify {name}",
+      "reject": "Reject",
+      "revoke": "Revoke",
+      "rejectLabel": "Reject {name}",
+      "confirmReject": "Reject and tell the pilot",
+      "rejecting": "Rejecting…",
+      "cancel": "Cancel",
+      "reason": "Reason (sent to the pilot)",
+      "reasonPlaceholder": "e.g. The licence number doesn't match the document.",
+      "verified": "Verified. The pilot has been told.",
+      "rejected": "Rejected. The pilot has been told why.",
+      "errors": {
+        "notFound": "This item no longer exists.",
+        "ownItem": "You can't review your own credentials. Ask another admin.",
+        "changed": "The pilot changed this item since you opened the page. Please check it again."
+      },
+      "experience": "Declared experience",
+      "experienceHint": "Self-declared by the pilot; not verified.",
+      "noExperience": "Not declared.",
+      "history": "History",
+      "noHistory": "No admin actions yet.",
+      "actions": {
+        "verify": "verified {item}",
+        "reject": "rejected {item}",
+        "viewDocument": "opened a document"
+      }
+    }
   }
 }

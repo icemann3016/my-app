@@ -10,30 +10,35 @@ import { s3Storage } from "./s3";
  * - "s3": any S3-compatible service: Supabase Storage, Google Cloud Storage (interoperability
  *         mode), AWS S3, Cloudflare R2, MinIO.
  * - "azure": Azure Blob Storage.
- * - "local" (default): files in ./.data/uploads, served by /files/*. Development and tests only.
+ * - "local" (default): files in ./.data, public ones served by /files/*. Development and tests only.
+ *
+ * Two kinds of storage:
+ * - "public": photos anyone may see (public bucket, `publicUrl`).
+ * - "private": pilot and aircraft documents. Never linked directly: the app reads them with `get`
+ *   and serves them after checking who is asking (see app/api/documents).
  */
+export type StorageKind = "public" | "private";
+
 export interface FileStorage {
   put(key: string, body: Uint8Array, contentType: string): Promise<void>;
+  /** The file's bytes and type, or null if it doesn't exist. */
+  get(key: string): Promise<{ body: Uint8Array; contentType: string } | null>;
   delete(key: string): Promise<void>;
-  /** URL where anyone can view a public file. */
+  /** URL where anyone can view a file. Public storage only. */
   publicUrl(key: string): string;
 }
 
-let instance: FileStorage | undefined;
+const instances = new Map<StorageKind, FileStorage>();
 
-export function getStorage(): FileStorage {
+export function getStorage(kind: StorageKind = "public"): FileStorage {
+  let instance = instances.get(kind);
   if (!instance) {
     const driver = process.env.STORAGE_DRIVER ?? "local";
-    instance =
-      driver === "s3"
-        ? s3Storage()
-        : driver === "azure"
-          ? azureStorage()
-          : driver === "local"
-            ? localStorage()
-            : (() => {
-                throw new Error(`Unknown STORAGE_DRIVER "${driver}"`);
-              })();
+    if (driver === "s3") instance = s3Storage(kind);
+    else if (driver === "azure") instance = azureStorage(kind);
+    else if (driver === "local") instance = localStorage(kind);
+    else throw new Error(`Unknown STORAGE_DRIVER "${driver}"`);
+    instances.set(kind, instance);
   }
   return instance;
 }
@@ -46,4 +51,8 @@ export function required(name: string): string {
   const value = process.env[name];
   if (!value) throw new Error(`${name} is not set (needed for STORAGE_DRIVER).`);
   return value;
+}
+
+export function noPublicUrl(): never {
+  throw new Error("Private files have no public URL; serve them through the app.");
 }

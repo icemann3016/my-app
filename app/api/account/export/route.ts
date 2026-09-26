@@ -2,7 +2,20 @@ import { eq } from "drizzle-orm";
 
 import { getUser } from "@/lib/auth/session";
 import { getDb } from "@/lib/db";
-import { accounts, profiles, sessions, userRoles, userSettings, users } from "@/lib/db/schema";
+import {
+  accounts,
+  documents,
+  experienceByType,
+  medicals,
+  pilotExperience,
+  pilotLicences,
+  pilotRatings,
+  profiles,
+  sessions,
+  userRoles,
+  userSettings,
+  users,
+} from "@/lib/db/schema";
 
 /**
  * "Download my data" (GDPR): everything we store about the logged-in user, as JSON.
@@ -45,6 +58,30 @@ export async function GET() {
     .from(sessions)
     .where(eq(sessions.userId, user.id));
 
+  const pilot = {
+    licences: await db.select().from(pilotLicences).where(eq(pilotLicences.userId, user.id)),
+    ratings: await db.select().from(pilotRatings).where(eq(pilotRatings.userId, user.id)),
+    medicals: await db.select().from(medicals).where(eq(medicals.userId, user.id)),
+    experience:
+      (await db.select().from(pilotExperience).where(eq(pilotExperience.userId, user.id)))[0] ??
+      null,
+    hoursByType: await db
+      .select()
+      .from(experienceByType)
+      .where(eq(experienceByType.userId, user.id)),
+    // The files themselves can be opened from the pilot credentials page.
+    documents: await db
+      .select({
+        id: documents.id,
+        filename: documents.filename,
+        contentType: documents.contentType,
+        sizeBytes: documents.sizeBytes,
+        createdAt: documents.createdAt,
+      })
+      .from(documents)
+      .where(eq(documents.ownerId, user.id)),
+  };
+
   const data = {
     exportedAt: new Date().toISOString(),
     account,
@@ -53,6 +90,7 @@ export async function GET() {
     roles: roles.map((r) => ({ role: r.role, since: r.createdAt })),
     loginMethods,
     sessions: activeSessions,
+    pilot,
   };
   const date = new Date().toISOString().slice(0, 10);
   return new Response(JSON.stringify(data, null, 2), {

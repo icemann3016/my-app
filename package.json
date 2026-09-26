@@ -17,7 +17,8 @@
     "db:custom": "drizzle-kit generate --custom --name",
     "db:migrate": "drizzle-kit migrate",
     "db:studio": "drizzle-kit studio",
-    "airports:import": "node scripts/import-airports.mjs"
+    "airports:import": "node scripts/import-airports.mjs",
+    "admin:grant": "node scripts/grant-admin.mjs"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1141.0",

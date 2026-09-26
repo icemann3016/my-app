@@ -74,7 +74,7 @@ A Postgres function `check_eligibility(pilot_id, aircraft_id, period)` returns t
 Reviews are stored with `submitted_at` and `published_at`. RLS shows a review only to its author until `published_at` is set. A trigger publishes both reviews when the second one arrives, and a `pg_cron` job publishes after 14 days. Rating averages on profiles and aircraft update by trigger on publish.
 
 ### 4.4 Documents & medical privacy (VER-3, §7 GDPR)
-- Private storage buckets, split into `pilot-documents`, `medical` and `aircraft-documents`. Files are only reachable through **short-lived signed URLs** created on the server.
+- One private bucket `documents` (keys per user). Files are never linked directly: the app serves them at `/api/documents/<id>` after checking owner/admin (decided in M3 instead of signed URLs, so access checks and logging work the same on every storage provider).
 - Owners never get the medical file, only the `valid_until` date and a verified flag.
 - Admin access to documents is logged in `admin_actions`.
 
@@ -82,7 +82,7 @@ Reviews are stored with `submitted_at` and `published_at`. RLS shows a review on
 All timestamps are `timestamptz`, stored in UTC. Each airport has an IANA timezone (worked out from its coordinates at import). The UI shows airport-local time with UTC next to it on booking screens.
 
 ### 4.6 Scheduled jobs
-`pg_cron` (supported by Supabase, Cloud SQL and Azure) runs, or the platform scheduler (Cloud Scheduler / Azure Container Apps jobs) calls an API route:
+The platform scheduler (Vercel Cron today; Cloud Scheduler / Azure Container Apps jobs later) calls an API route protected by `CRON_SECRET` (M3 added `/api/cron/daily`):
 
 | Job | Frequency | What |
 |-----|-----------|------|

@@ -1,11 +1,17 @@
 import "server-only";
 
-import { DeleteObjectCommand, PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
+import {
+  DeleteObjectCommand,
+  GetObjectCommand,
+  NoSuchKey,
+  PutObjectCommand,
+  S3Client,
+} from "@aws-sdk/client-s3";
 
-import { type FileStorage, publicBaseUrl, required } from "./index";
+import { type FileStorage, noPublicUrl, publicBaseUrl, required, type StorageKind } from "./index";
 
-export function s3Storage(): FileStorage {
-  const bucket = required("S3_BUCKET");
+export function s3Storage(kind: StorageKind): FileStorage {
+  const bucket = kind === "private" ? required("S3_PRIVATE_BUCKET") : required("S3_BUCKET");
   const endpoint = process.env.S3_ENDPOINT; // omit for AWS S3
   const client = new S3Client({
     region: process.env.S3_REGION ?? "auto",
@@ -31,14 +37,31 @@ export function s3Storage(): FileStorage {
           Key: key,
           Body: body,
           ContentType: contentType,
-          CacheControl: "public, max-age=31536000, immutable",
+          CacheControl:
+            kind === "public" ? "public, max-age=31536000, immutable" : "private, no-store",
         }),
       );
+    },
+    async get(key) {
+      try {
+        const res = await client.send(new GetObjectCommand({ Bucket: bucket, Key: key }));
+        if (!res.Body) return null;
+        return {
+          body: await res.Body.transformToByteArray(),
+          contentType: res.ContentType ?? "application/octet-stream",
+        };
+      } catch (error) {
+        if (error instanceof NoSuchKey || (error as { name?: string }).name === "NoSuchKey") {
+          return null;
+        }
+        throw error;
+      }
     },
     async delete(key) {
       await client.send(new DeleteObjectCommand({ Bucket: bucket, Key: key }));
     },
     publicUrl(key) {
+      if (kind === "private") noPublicUrl();
       return `${base}/${key}`;
     },
   };

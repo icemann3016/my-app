@@ -6,28 +6,13 @@ import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { nextCookies } from "better-auth/next-js";
 
 import { getDb, schema } from "@/lib/db";
+import { deleteAllDocumentFiles } from "@/lib/documents";
 import { sendEmail } from "@/lib/email";
 import { resetPasswordEmail, verifyEmailEmail } from "@/lib/email/templates";
 import { siteConfig } from "@/lib/site";
+import { appUrl } from "@/lib/site-url";
 import { getStorage } from "@/lib/storage";
 import { isGoogleEnabled } from "./google";
-
-/**
- * Public URL of the site, used in links inside emails. Set BETTER_AUTH_URL everywhere you deploy;
- * without it we fall back to Vercel's address or, in development, http://localhost:3000.
- */
-function siteUrl(): string {
-  if (process.env.BETTER_AUTH_URL) return process.env.BETTER_AUTH_URL;
-  const vercelUrl =
-    process.env.VERCEL_ENV === "production"
-      ? process.env.VERCEL_PROJECT_PRODUCTION_URL
-      : process.env.VERCEL_URL;
-  if (vercelUrl) return `https://${vercelUrl}`;
-  if (process.env.NODE_ENV === "production") {
-    console.warn("[auth] BETTER_AUTH_URL is not set: links in emails may be wrong.");
-  }
-  return "http://localhost:3000";
-}
 
 /** The user's chosen language, for emails. */
 async function userLocale(userId: string): Promise<string | undefined> {
@@ -60,7 +45,7 @@ function trustedOrigins(): string[] {
 function createAuth() {
   return betterAuth({
     appName: siteConfig.name,
-    baseURL: siteUrl(),
+    baseURL: appUrl(),
     secret: process.env.BETTER_AUTH_SECRET,
     trustedOrigins: trustedOrigins(),
     database: drizzleAdapter(getDb(), {
@@ -114,6 +99,8 @@ function createAuth() {
               .delete(profile.avatarKey)
               .catch((e) => console.warn("[auth] couldn't delete avatar", e));
           }
+          // Licence and medical scans (the database rows go with the user).
+          await deleteAllDocumentFiles(user.id);
         },
       },
     },

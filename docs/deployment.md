@@ -51,7 +51,28 @@ code**, so nothing about users or security is tied to a provider.
 - One public bucket/container named `media`. Keys look like `avatars/<user-id>/<timestamp>.jpg`.
 - `STORAGE_DRIVER=s3` works with anything that speaks the S3 protocol; `azure` uses the Azure SDK.
   Only the environment variables change (see `.env.example`).
-- Private documents (licences, medicals in M3) will go in a second, **private** bucket with signed URLs.
+- A second, **private** bucket/container named `documents` holds licence and medical scans
+  (keys `documents/<user-id>/<uuid>.pdf|jpg|png|webp`). Never make it public: the app reads files with
+  its storage keys and serves them itself at `/api/documents/<id>` after checking that the viewer is
+  the owner or an admin (admin views are logged). Set `S3_PRIVATE_BUCKET=documents` (s3 driver) or
+  `AZURE_STORAGE_PRIVATE_CONTAINER=documents` (azure driver).
+- Uploads are limited to 4 MB (Vercel's request limit); the browser shrinks large photos first.
+
+### Admins
+- Make someone an admin (they must have signed up): `npm run admin:grant -- someone@example.com`
+  with that environment's `DATABASE_URL` in `.env.local`. Remove with `--revoke`.
+- Admins see **Admin** in the account menu → verification queue at `/admin/verifications`.
+
+### Scheduled jobs
+- `GET /api/cron/daily` sends 30-day expiry reminders and removes uploads that were never attached.
+  It only runs with the header `Authorization: Bearer $CRON_SECRET` (without `CRON_SECRET` it refuses).
+- **Vercel:** `vercel.json` schedules it every day at 06:00 UTC. Set `CRON_SECRET` in the project's
+  environment variables and Vercel sends the header automatically. (The Hobby plan allows daily jobs;
+  more frequent jobs later in the plan need Pro or one of the schedulers below.)
+- **Google Cloud:** Cloud Scheduler → HTTP job, `GET https://<site>/api/cron/daily`, header
+  `Authorization: Bearer <secret>`.
+- **Azure:** a scheduled Container Apps job (or Logic App) that runs
+  `curl -fsS -H "Authorization: Bearer $CRON_SECRET" https://<site>/api/cron/daily`.
 
 ### Google sign-in (optional)
 1. Google Cloud Console → create a project → **APIs & Services → OAuth consent screen** (External, app name, support email).
@@ -79,6 +100,8 @@ Environment variables on Vercel (Project → Settings → Environment Variables)
 | `STORAGE_DRIVER` | `s3` |
 | `S3_ENDPOINT`, `S3_REGION`, `S3_BUCKET`, `S3_ACCESS_KEY_ID`, `S3_SECRET_ACCESS_KEY` | Supabase → Storage → Settings → S3 Connection |
 | `STORAGE_PUBLIC_BASE_URL` | `https://<project-ref>.supabase.co/storage/v1/object/public/media` |
+| `S3_PRIVATE_BUCKET` | `documents` (Supabase → Storage → New bucket → **private**, i.e. "Public bucket" off) |
+| `CRON_SECRET` | output of `openssl rand -base64 32` (for the daily job) |
 | `EMAIL_DRIVER` | `console` for now |
 | `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET` | optional, see "Google sign-in" above |
 
@@ -93,7 +116,8 @@ Migrations are run from your Mac (`npm run db:migrate` with the Session pooler U
 2. **Files:** create a Cloud Storage bucket `media`, give `allUsers` the *Storage Object Viewer* role
    (public read), and create an **HMAC key** (Settings → Interoperability) for the `s3` driver:
    `S3_ENDPOINT=https://storage.googleapis.com`, `S3_REGION=auto`,
-   `STORAGE_PUBLIC_BASE_URL=https://storage.googleapis.com/media`.
+   `STORAGE_PUBLIC_BASE_URL=https://storage.googleapis.com/media`. Create a second bucket
+   `documents` **without** public access and set `S3_PRIVATE_BUCKET=documents`.
 3. **Image:** push the Docker image to Artifact Registry; create a **Cloud Run service** (port 8080,
    health check `/api/health`) and a **Cloud Run job** from the `migrate` target. Keep secrets in
    Secret Manager and expose them as environment variables.
@@ -105,7 +129,8 @@ Migrations are run from your Mac (`npm run db:migrate` with the Session pooler U
    a database `app`. Allow-list the extensions you use in `azure.extensions`.
 2. **Files:** create a Storage Account and a container `media` with access level *Blob* (public read).
    Use `STORAGE_DRIVER=azure`, `AZURE_STORAGE_CONNECTION_STRING`, `AZURE_STORAGE_CONTAINER=media`,
-   `STORAGE_PUBLIC_BASE_URL=https://<account>.blob.core.windows.net/media`.
+   `STORAGE_PUBLIC_BASE_URL=https://<account>.blob.core.windows.net/media`. Add a second container
+   `documents` with access level *Private* and set `AZURE_STORAGE_PRIVATE_CONTAINER=documents`.
 3. **Image:** push to Azure Container Registry; create a **Container App** (target port 8080, health
    probe `/api/health`) and a **Container Apps job** from the `migrate` target. Secrets from Key Vault.
 4. **Email:** Azure Communication Services Email supports SMTP → `EMAIL_DRIVER=smtp`.
@@ -133,6 +158,7 @@ pg_restore --no-owner --dbname="$TARGET_URL" app.dump
 
 # 3. Copy the files (rclone speaks S3, Google Cloud Storage and Azure Blob)
 rclone copy source:media target:media --progress
+rclone copy source:documents target:documents --progress   # private: keep it private on the target
 
 #    Airports come along with the database; or re-run `npm run airports:import` on the target.
 

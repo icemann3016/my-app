@@ -1,6 +1,5 @@
 "use server";
 
-import { APIError } from "better-auth/api";
 import { and, eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
@@ -8,6 +7,7 @@ import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 
 import { getAuth } from "@/lib/auth/auth";
+import { authErrorCode } from "@/lib/auth/errors";
 import { requireUser } from "@/lib/auth/session";
 import { getDb } from "@/lib/db";
 import { asUser } from "@/lib/db/rls";
@@ -21,10 +21,6 @@ import {
   profileSchema,
   selfServiceRoleSchema,
 } from "@/lib/validation/profile";
-
-function apiCode(error: unknown): string | undefined {
-  return error instanceof APIError ? (error.body?.code as string | undefined) : undefined;
-}
 
 export async function updateProfile(_prev: FormState, formData: FormData): Promise<FormState> {
   const user = await requireUser("/account");
@@ -113,7 +109,7 @@ export async function changePassword(_prev: FormState, formData: FormData): Prom
       headers: await headers(),
     });
   } catch (error) {
-    if (apiCode(error) === "INVALID_PASSWORD") {
+    if (authErrorCode(error) === "INVALID_PASSWORD") {
       return { errors: { currentPassword: [t("wrongCurrent")] } };
     }
     console.error("[account] password change failed", error);
@@ -139,7 +135,7 @@ export async function deleteAccount(_prev: FormState, formData: FormData): Promi
       headers: await headers(),
     });
   } catch (error) {
-    const code = apiCode(error);
+    const code = authErrorCode(error);
     if (code === "INVALID_PASSWORD") return { errors: { password: [t("wrongPassword")] } };
     if (code === "SESSION_EXPIRED" || code === "SESSION_NOT_FRESH")
       return { message: t("notFresh") };

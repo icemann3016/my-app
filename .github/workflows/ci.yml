@@ -62,6 +62,7 @@ jobs:
       # Dummy Google keys: shows the button so the redirect to Google can be tested.
       GOOGLE_CLIENT_ID: ci-dummy.apps.googleusercontent.com
       GOOGLE_CLIENT_SECRET: ci-dummy-secret
+      CRON_SECRET: ci-cron-secret
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4

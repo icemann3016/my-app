@@ -3,7 +3,7 @@ import "server-only";
 import { cache } from "react";
 import { eq } from "drizzle-orm";
 import { headers } from "next/headers";
-import { redirect } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { connection } from "next/server";
 
 import { getAuth } from "@/lib/auth/auth";
@@ -58,5 +58,15 @@ export async function requireUser(nextPath?: string) {
 export async function requireProfile(nextPath?: string) {
   const current = await getCurrentProfile();
   if (!current) redirect(loginUrl(nextPath));
+  return current;
+}
+
+/**
+ * Admin pages and actions. Non-admins get a 404, so the admin area isn't advertised.
+ * Admins are granted with `npm run admin:grant -- email@example.com`.
+ */
+export async function requireAdmin(nextPath = "/admin/verifications") {
+  const current = await requireProfile(nextPath);
+  if (!current.roles.includes("admin")) notFound();
   return current;
 }

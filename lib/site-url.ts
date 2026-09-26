@@ -1,17 +1,17 @@
-import "server-only";
-
-import { headers } from "next/headers";
-
-/** Base URL of the site for the current request, used in links inside emails. */
-export async function getSiteUrl(): Promise<string> {
-  const h = await headers();
-  const origin = h.get("origin");
-  if (origin) return origin;
-
-  const host = h.get("x-forwarded-host") ?? h.get("host");
-  if (host) {
-    const proto = host.startsWith("localhost") ? "http" : (h.get("x-forwarded-proto") ?? "https");
-    return `${proto}://${host}`;
+/**
+ * Public base URL of the site (no trailing slash), for links in emails and redirects.
+ * BETTER_AUTH_URL (e.g. https://ownaplane.eu) → the Vercel address → localhost.
+ * Works without a request, so the daily job can use it too.
+ */
+export function appUrl(): string {
+  if (process.env.BETTER_AUTH_URL) return process.env.BETTER_AUTH_URL.replace(/\/+$/, "");
+  const vercelUrl =
+    process.env.VERCEL_ENV === "production"
+      ? process.env.VERCEL_PROJECT_PRODUCTION_URL
+      : process.env.VERCEL_URL;
+  if (vercelUrl) return `https://${vercelUrl}`;
+  if (process.env.NODE_ENV === "production") {
+    console.warn("[site] BETTER_AUTH_URL is not set: links in emails may be wrong.");
   }
-  return process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+  return "http://localhost:3000";
 }

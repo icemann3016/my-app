@@ -1,0 +1,68 @@
+import type { Metadata } from "next";
+import Link from "next/link";
+import { ChevronRightIcon, InboxIcon } from "lucide-react";
+import { getLocale, getTranslations } from "next-intl/server";
+
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { getVerificationQueue } from "@/lib/admin/verifications";
+import { requireAdmin } from "@/lib/auth/session";
+import { intlLocale } from "@/lib/i18n/config";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("admin.verifications");
+  return { title: t("title") };
+}
+
+export default async function VerificationQueuePage() {
+  const { userId } = await requireAdmin("/admin/verifications");
+  const t = await getTranslations("admin.verifications");
+  const queue = await getVerificationQueue(userId);
+  const format = new Intl.DateTimeFormat(intlLocale(await getLocale()), {
+    dateStyle: "medium",
+    timeStyle: "short",
+    timeZone: "UTC",
+  });
+
+  return (
+    <div className="mx-auto grid w-full max-w-3xl gap-6 px-4 py-10">
+      <div className="grid gap-1">
+        <p className="text-sm font-medium text-primary">{t("eyebrow")}</p>
+        <h1 className="text-2xl font-semibold tracking-tight">{t("title")}</h1>
+        <p className="text-muted-foreground">{t("description")}</p>
+      </div>
+      <Card>
+        <CardHeader>
+          <CardTitle as="h2">{t("waiting", { count: queue.length })}</CardTitle>
+          <CardDescription>{t("oldestFirst")}</CardDescription>
+        </CardHeader>
+        <CardContent>
+          {queue.length === 0 ? (
+            <p className="flex items-center gap-2 text-sm text-muted-foreground">
+              <InboxIcon className="size-4" aria-hidden /> {t("empty")}
+            </p>
+          ) : (
+            <ul className="grid divide-y">
+              {queue.map((entry) => (
+                <li key={entry.userId}>
+                  <Link
+                    href={`/admin/verifications/${entry.userId}`}
+                    className="-mx-2 flex items-center gap-3 rounded-md px-2 py-3 hover:bg-accent"
+                  >
+                    <div className="grid min-w-0 gap-0.5">
+                      <span className="truncate font-medium">{entry.displayName}</span>
+                      <span className="text-sm text-muted-foreground">
+                        {t("items", { count: entry.items })} ·{" "}
+                        {t("since", { date: format.format(entry.since) })}
+                      </span>
+                    </div>
+                    <ChevronRightIcon className="ml-auto size-4 shrink-0" aria-hidden />
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          )}
+        </CardContent>
+      </Card>
+    </div>
+  );
+}

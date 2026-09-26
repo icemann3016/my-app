@@ -5,13 +5,19 @@ import {
   CircleCheckIcon,
   CircleIcon,
   PlaneIcon,
+  TriangleAlertIcon,
   UserRoundIcon,
 } from "lucide-react";
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { requireProfile } from "@/lib/auth/session";
+import { intlLocale } from "@/lib/i18n/config";
+import { credentialItems, getPilotCredentials } from "@/lib/pilot/credentials";
+import { credentialLabel, type PilotTranslate } from "@/lib/pilot/labels";
+import { pilotSummary } from "@/lib/pilot/summary";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("common.nav");
@@ -26,12 +32,57 @@ export default async function DashboardPage() {
   const isPilot = roles.includes("pilot");
   const isOwner = roles.includes("owner");
 
+  const creds = isPilot ? await getPilotCredentials(userId) : null;
+  const summary = creds ? pilotSummary(credentialItems(creds)) : null;
+  const pilotText = !summary
+    ? t("pilotTextOff")
+    : summary.verified
+      ? t("pilotTextVerified")
+      : summary.rejected
+        ? t("pilotTextRejected")
+        : summary.pending
+          ? t("pilotTextPending")
+          : t("pilotTextMissing");
+
+  // Items that expire soon or have expired, e.g. "Class 2 medical expires on 15 Oct 2026."
+  const tp = (await getTranslations("pilot")) as unknown as PilotTranslate;
+  const dateFormat = new Intl.DateTimeFormat(intlLocale(await getLocale()), {
+    dateStyle: "medium",
+    timeZone: "UTC",
+  });
+  const warnings = summary
+    ? [...summary.expired, ...summary.expiring].map((item) => {
+        const values = {
+          item: credentialLabel(item.ref!, tp),
+          date: dateFormat.format(new Date(`${item.expiresOn}T00:00:00Z`)),
+        };
+        return summary.expired.includes(item)
+          ? t("credentialExpired", values)
+          : t("credentialExpiring", values);
+      })
+    : [];
+
   return (
     <div className="mx-auto grid w-full max-w-4xl gap-6 px-4 py-10">
       <div>
         <h1 className="text-2xl font-semibold tracking-tight">{t("title", { name: firstName })}</h1>
         <p className="text-muted-foreground">{t("subtitle")}</p>
       </div>
+
+      {warnings.length > 0 && (
+        <Alert>
+          <TriangleAlertIcon className="text-warning" />
+          <AlertTitle>{t("expiryTitle")}</AlertTitle>
+          <AlertDescription>
+            {warnings.map((w) => (
+              <p key={w}>{w}</p>
+            ))}
+            <Link href="/pilot" className="text-foreground underline underline-offset-4">
+              {t("manageCredentials")}
+            </Link>
+          </AlertDescription>
+        </Alert>
+      )}
 
       <div className="grid gap-4 md:grid-cols-3">
         <StepCard
@@ -49,13 +100,21 @@ export default async function DashboardPage() {
           }
         />
         <StepCard
-          done={isPilot}
+          done={Boolean(summary?.verified)}
           labels={{ done: t("done"), todo: t("todo") }}
           icon={PlaneIcon}
           title={t("pilotTitle")}
-          text={isPilot ? t("pilotTextOn") : t("pilotTextOff")}
+          text={pilotText}
           action={
-            !isPilot && (
+            isPilot ? (
+              <Button size="sm" variant={summary?.verified ? "outline" : "default"} asChild>
+                <Link href="/pilot">
+                  {summary?.verified || summary?.pending
+                    ? t("manageCredentials")
+                    : t("addCredentials")}
+                </Link>
+              </Button>
+            ) : (
               <Button size="sm" asChild>
                 <Link href="/account#roles">{t("switchOn")}</Link>
               </Button>

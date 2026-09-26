@@ -20,6 +20,9 @@ npm run airports:import     # loads ~7,400 European airfields (about a minute)
 npm run dev
 ```
 
+To verify pilot credentials, sign up in the app and make yourself an admin:
+`npm run admin:grant -- you@example.com` (then Account menu → Admin).
+
 Open http://localhost:3000. No cloud account? Run a local Postgres with `docker compose up -d db`
 and use `DATABASE_URL=postgres://postgres:postgres@localhost:5432/ownaplane`.
 

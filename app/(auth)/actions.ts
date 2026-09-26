@@ -1,6 +1,5 @@
 "use server";
 
-import { APIError } from "better-auth/api";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
@@ -8,6 +7,7 @@ import { redirect } from "next/navigation";
 import { getLocale, getTranslations } from "next-intl/server";
 
 import { getAuth } from "@/lib/auth/auth";
+import { authErrorCode, isAuthApiError } from "@/lib/auth/errors";
 import { safeNextPath } from "@/lib/auth/redirect";
 import { getDb, isDatabaseConfigured } from "@/lib/db";
 import { userSettings } from "@/lib/db/schema";
@@ -20,11 +20,6 @@ import {
   signInSchema,
   signUpSchema,
 } from "@/lib/validation/auth";
-
-/** Better Auth error code, e.g. "USER_ALREADY_EXISTS". */
-function errorCode(error: unknown): string | undefined {
-  return error instanceof APIError ? (error.body?.code as string | undefined) : undefined;
-}
 
 type MessageKey =
   | "wrongCredentials"
@@ -68,7 +63,7 @@ async function notConfigured(values?: Record<string, string>): Promise<FormState
 }
 
 function logUnexpected(action: string, error: unknown) {
-  if (!(error instanceof APIError)) console.error(`[auth] ${action} failed`, error);
+  if (!isAuthApiError(error)) console.error(`[auth] ${action} failed`, error);
 }
 
 export async function signUp(_prev: FormState, formData: FormData): Promise<FormState> {
@@ -93,7 +88,7 @@ export async function signUp(_prev: FormState, formData: FormData): Promise<Form
       .where(eq(userSettings.userId, result.user.id));
   } catch (error) {
     logUnexpected("sign-up", error);
-    const code = errorCode(error);
+    const code = authErrorCode(error);
     return { message: await authMessage(code), code, values };
   }
 
@@ -119,7 +114,7 @@ export async function signIn(_prev: FormState, formData: FormData): Promise<Form
     if (isLocale(settings?.locale)) await setLocaleCookie(settings.locale);
   } catch (error) {
     logUnexpected("sign-in", error);
-    const code = errorCode(error);
+    const code = authErrorCode(error);
     return {
       message: await authMessage(code),
       code: code === "EMAIL_NOT_VERIFIED" ? "email_not_confirmed" : code,
@@ -171,7 +166,7 @@ export async function requestPasswordReset(
     });
   } catch (error) {
     logUnexpected("password reset request", error);
-    const code = errorCode(error);
+    const code = authErrorCode(error);
     if (code === "TOO_MANY_REQUESTS") return { message: await authMessage(code), values: raw };
   }
   // Same answer whether or not the account exists.
@@ -194,7 +189,7 @@ export async function resetPassword(_prev: FormState, formData: FormData): Promi
     });
   } catch (error) {
     logUnexpected("password reset", error);
-    return { message: await authMessage(errorCode(error)) };
+    return { message: await authMessage(authErrorCode(error)) };
   }
   redirect("/login?reset=1");
 }
@@ -212,7 +207,7 @@ export async function resendConfirmation(_prev: FormState, formData: FormData): 
     });
   } catch (error) {
     logUnexpected("resend verification", error);
-    const code = errorCode(error);
+    const code = authErrorCode(error);
     if (code === "TOO_MANY_REQUESTS") return { message: await authMessage(code), values: raw };
   }
   const t = await getTranslations("authMessages");
