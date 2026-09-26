@@ -6,9 +6,11 @@ This file tells Claude how to work in this repo. Claude reads it at the start of
 ## Project
 
 - **Name:** my-app (placeholder, rename later)
-- **What it is:** _TODO: one or two sentences on what the app does and who it's for._
+- **What it is:** A European general aviation marketplace: pilots rent aircraft from owners (with verified licences and two-way ratings), owners hire maintenance technicians, and airports take PPR, parking, hangar and service requests online.
+- **Requirements:** [`docs/business-requirements.md`](docs/business-requirements.md) is the source of truth for *what* to build. **Read it before starting any feature** and reference requirement IDs (e.g. `BKG-3`) in branches, commits and PRs.
+- **Current phase:** Phase 1 (MVP) — accounts, pilot verification, aircraft listings, search, booking requests, ratings. Don't build Phase 2–4 features unless asked.
 - **Team:** Zlati + friend, each working with our own Claude.
-- **Status:** Fresh skeleton. Nothing built yet.
+- **Status:** Skeleton + requirements draft. No features built yet.
 
 ## Tech stack
 
@@ -34,9 +36,18 @@ app/            # routes (App Router). page.tsx = page, layout.tsx = shared layo
   page.tsx
   globals.css
 public/         # static files (images, icons)
+docs/           # business requirements and other project docs
 ```
 
 When new top-level folders are added (e.g. `components/`, `lib/`), list them here.
+
+## Domain rules (aviation)
+
+- Region: **Europe / EASA** rules and terms (PPL/LAPL, Part-66, Part-ML, ARC). Not FAA.
+- Store all times in **UTC**; display airport-local time with UTC alongside on booking and PPR screens.
+- Airports are identified by **ICAO code** (e.g. `LBSF`).
+- Medical certificate data is GDPR special-category data: never expose the document, only "valid until".
+- The app never replaces official records (CRS, logbooks), ATC clearance or customs procedures. Say so in the UI where relevant.
 
 ## Conventions
 
@@ -71,4 +82,5 @@ _TODO: split areas so we don't edit the same files at the same time._
 
 Add one line per decision, newest first.
 
+- 2026-09-26: Region = Europe/EASA. MVP = aircraft rental + ratings. Payments off-platform in MVP (no money through the app); in-app payments planned for Phase 4.
 - 2026-09-25: Started with Next.js + TypeScript. Workflow is GitHub PRs, one branch per task.
