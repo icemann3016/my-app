@@ -6,6 +6,7 @@ import { getTranslations } from "next-intl/server";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { getAirport } from "@/lib/airports";
 import { avatarUrl } from "@/lib/avatar-url";
 import { requireProfile } from "@/lib/auth/session";
 import { getDb } from "@/lib/db";
@@ -36,6 +37,7 @@ export default async function AccountPage() {
     .where(and(eq(accounts.userId, userId), eq(accounts.providerId, "credential")))
     .limit(1);
   const hasPassword = Boolean(credential);
+  const homeAirport = await getAirport(profile.homeAirportIdent);
 
   return (
     <div className="mx-auto grid w-full max-w-3xl gap-6 px-4 py-10">
@@ -60,7 +62,7 @@ export default async function AccountPage() {
           <AvatarUpload name={profile.displayName} url={avatarUrl(profile.avatarKey)} />
           <ProfileForm
             displayName={profile.displayName}
-            homeAirport={profile.homeAirportIcao ?? ""}
+            homeAirport={homeAirport}
             bio={profile.bio ?? ""}
           />
         </CardContent>

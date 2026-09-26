@@ -10,6 +10,7 @@ import { UserAvatar } from "@/components/user-avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { airportPlace, getAirport } from "@/lib/airports";
 import { avatarUrl } from "@/lib/avatar-url";
 import { getUser } from "@/lib/auth/session";
 import { isDatabaseConfigured } from "@/lib/db";
@@ -32,7 +33,7 @@ const getPublicProfile = cache(async (id: string) => {
         displayName: profiles.displayName,
         bio: profiles.bio,
         avatarKey: profiles.avatarKey,
-        homeAirportIcao: profiles.homeAirportIcao,
+        homeAirportIdent: profiles.homeAirportIdent,
         ratingAvg: profiles.ratingAvg,
         ratingCount: profiles.ratingCount,
         createdAt: profiles.createdAt,
@@ -63,6 +64,7 @@ export default async function PublicProfilePage({ params }: { params: Promise<{ 
   const data = await getPublicProfile(id);
   if (!data) notFound();
   const { profile, roles } = data;
+  const homeAirport = await getAirport(profile.homeAirportIdent);
   const viewer = await getUser();
   const t = await getTranslations("profile");
   const memberSince = new Intl.DateTimeFormat(intlLocale(await getLocale()), {
@@ -113,12 +115,17 @@ export default async function PublicProfilePage({ params }: { params: Promise<{ 
             </div>
             <div>
               <dt className="text-muted-foreground">{t("homeAirfield")}</dt>
-              <dd className="flex items-center gap-1 font-medium">
-                {profile.homeAirportIcao ? (
-                  <>
-                    <MapPinIcon className="size-4 text-primary" aria-hidden />
-                    {profile.homeAirportIcao}
-                  </>
+              <dd className="font-medium">
+                {homeAirport ? (
+                  <div title={airportPlace(homeAirport)}>
+                    <span className="flex items-center gap-1">
+                      <MapPinIcon className="size-4 shrink-0 text-primary" aria-hidden />
+                      <span className="font-mono whitespace-nowrap">{homeAirport.code}</span>
+                    </span>
+                    <span className="block truncate text-xs font-normal text-muted-foreground">
+                      {homeAirport.name}
+                    </span>
+                  </div>
                 ) : (
                   t("notSet")
                 )}

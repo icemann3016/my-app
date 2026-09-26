@@ -5,14 +5,19 @@ import { useTranslations } from "next-intl";
 
 import { FormMessage } from "@/components/forms/form-message";
 import { SubmitButton } from "@/components/forms/submit-button";
+import { AirportPicker, type PickerAirport } from "@/components/airport-picker";
 import { TextAreaField, TextField } from "@/components/forms/text-field";
 import { initialFormState } from "@/lib/forms";
 import { updateProfile } from "./actions";
 
-export function ProfileForm(props: { displayName: string; homeAirport: string; bio: string }) {
+export function ProfileForm(props: {
+  displayName: string;
+  homeAirport: PickerAirport | null;
+  bio: string;
+}) {
   const t = useTranslations("account.profile");
   const [state, formAction] = useActionState(updateProfile, initialFormState);
-  const v = state.values ?? props;
+  const v = { displayName: props.displayName, bio: props.bio, ...state.values };
 
   return (
     <form action={formAction} className="grid gap-4">
@@ -26,14 +31,10 @@ export function ProfileForm(props: { displayName: string; homeAirport: string; b
         defaultValue={v.displayName}
         errors={state.errors?.displayName}
       />
-      <TextField
+      <AirportPicker
         name="homeAirport"
         label={t("homeAirfield")}
-        placeholder="LBSF"
-        maxLength={4}
-        autoCapitalize="characters"
-        className="w-32 uppercase"
-        defaultValue={v.homeAirport}
+        defaultAirport={props.homeAirport}
         errors={state.errors?.homeAirport}
         hint={t("homeAirfieldHint")}
       />

@@ -38,12 +38,17 @@ export async function updateProfile(_prev: FormState, formData: FormData): Promi
         .update(profiles)
         .set({
           displayName: parsed.data.displayName,
-          homeAirportIcao: parsed.data.homeAirport,
+          homeAirportIdent: parsed.data.homeAirport,
           bio: parsed.data.bio,
         })
         .where(eq(profiles.id, user.id)),
     );
   } catch (error) {
+    // 23503 = foreign key violation: the airport doesn't exist.
+    if ((error as { cause?: { code?: string } }).cause?.code === "23503") {
+      const v = await getTranslations("validation");
+      return { errors: { homeAirport: [v("airportUnknown")] }, values: raw };
+    }
     console.error("[account] profile update failed", error);
     return { message: t("saveFailed"), values: raw };
   }

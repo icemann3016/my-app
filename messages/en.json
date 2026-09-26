@@ -67,12 +67,18 @@
     "accountDeleted": "Your account and all its data have been deleted."
   },
   "placeholders": {
-    "search": { "title": "Find aircraft", "text": "Search aircraft by airport, dates and specs." },
+    "search": {
+      "title": "Find aircraft",
+      "text": "Search aircraft by airport, dates and specs."
+    },
     "ownerAircraft": {
       "title": "List your aircraft",
       "text": "List your aircraft, set prices and choose who can rent it."
     },
-    "terms": { "title": "Terms of service", "text": "Our terms will be published before launch." },
+    "terms": {
+      "title": "Terms of service",
+      "text": "Our terms will be published before launch."
+    },
     "privacy": {
       "title": "Privacy policy",
       "text": "Our privacy policy will be published before launch."
@@ -161,9 +167,9 @@
     "nameRequired": "Enter your name.",
     "nameMax": "Use at most 80 characters.",
     "termsRequired": "Please accept the terms to continue.",
-    "icaoInvalid": "Use a 4-character ICAO code, e.g. LBSF.",
     "bioMax": "Use at most 1000 characters.",
-    "invalid": "Please check this field."
+    "invalid": "Please check this field.",
+    "airportUnknown": "Choose an airfield from the list."
   },
   "dashboard": {
     "title": "Welcome, {name}",
@@ -191,8 +197,8 @@
       "title": "Profile",
       "description": "This is what owners and pilots see on your public profile.",
       "name": "Name",
-      "homeAirfield": "Home airfield (ICAO)",
-      "homeAirfieldHint": "The 4-letter code of the airfield you usually fly from. An airport search is coming soon.",
+      "homeAirfield": "Home airfield",
+      "homeAirfieldHint": "The airfield you usually fly from. Search by ICAO code (e.g. LBSF), name or city.",
       "bio": "About you",
       "bioPlaceholder": "e.g. PPL(A) since 2019, around 250 hours, mostly on C172 and PA-28.",
       "save": "Save profile",
@@ -279,7 +285,10 @@
     "notSet": "Not set",
     "memberSince": "Member since",
     "edit": "Edit profile",
-    "roles": { "pilot": "Pilot", "owner": "Aircraft owner" }
+    "roles": {
+      "pilot": "Pilot",
+      "owner": "Aircraft owner"
+    }
   },
   "email": {
     "linkFallback": "If the button doesn't work, copy this link into your browser:",
@@ -295,5 +304,11 @@
       "body": "We received a request to reset your {app} password. The link is valid for one hour. If you didn't ask for this, you can ignore this email.",
       "cta": "Choose a new password"
     }
+  },
+  "airportPicker": {
+    "placeholder": "Search by code, name or city",
+    "searching": "Searching…",
+    "noResults": "No airfields found",
+    "clear": "Clear"
   }
 }

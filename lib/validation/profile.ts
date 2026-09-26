@@ -5,11 +5,11 @@ import { displayNameField } from "./auth";
 
 export const profileSchema = z.object({
   displayName: displayNameField,
+  /** Airport ident from the airport picker (e.g. LBSF or BG-0004); empty = none. */
   homeAirport: z
     .string()
     .trim()
-    .toUpperCase()
-    .refine((v) => v === "" || /^[A-Z0-9]{4}$/.test(v), "icaoInvalid")
+    .max(32, "airportUnknown")
     .transform((v) => v || null),
   bio: z
     .string()

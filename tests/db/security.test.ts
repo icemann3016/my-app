@@ -36,6 +36,17 @@ describeDb("database security (RLS, grants, triggers)", () => {
         { id: ALICE, name: "Alice Pilot", email: "alice@example.com" },
         { id: BOB, name: "", email: "bob@example.com" },
       ]);
+    // Airports are imported with the owner connection.
+    await db.getDb().insert(s.airports).values({
+      ident: "LBSF",
+      type: "large_airport",
+      name: "Sofia Airport",
+      icaoCode: "LBSF",
+      country: "BG",
+      latitude: 42.69,
+      longitude: 23.41,
+      timezone: "Europe/Sofia",
+    });
   }, 60_000);
 
   it("creates a profile and settings for each new user", async () => {
@@ -80,7 +91,7 @@ describeDb("database security (RLS, grants, triggers)", () => {
     await rls.asUser(ALICE, (tx) =>
       tx
         .update(s.profiles)
-        .set({ displayName: "Alice P.", bio: "PPL(A), SEP", homeAirportIcao: "LBSF" })
+        .set({ displayName: "Alice P.", bio: "PPL(A), SEP", homeAirportIdent: "LBSF" })
         .where(eq(s.profiles.id, ALICE)),
     );
     const [row] = await db.getDb().select().from(s.profiles).where(eq(s.profiles.id, ALICE));
@@ -112,14 +123,43 @@ describeDb("database security (RLS, grants, triggers)", () => {
     ).toBe("42501");
   });
 
-  it("rejects home airfields that are not ICAO codes", async () => {
+  it("rejects home airfields that don't exist", async () => {
     expect(
       await pgCode(
         rls.asUser(ALICE, (tx) =>
-          tx.update(s.profiles).set({ homeAirportIcao: "sofia" }).where(eq(s.profiles.id, ALICE)),
+          tx.update(s.profiles).set({ homeAirportIdent: "ZZZZ" }).where(eq(s.profiles.id, ALICE)),
         ),
       ),
-    ).toBe("23514");
+    ).toBe("23503");
+  });
+
+  it("lets everyone read airports but nobody change them", async () => {
+    const found = await rls.asAnon((tx) =>
+      tx.select().from(s.airports).where(eq(s.airports.ident, "LBSF")),
+    );
+    expect(found[0]?.name).toBe("Sofia Airport");
+    expect(
+      await pgCode(
+        rls.asUser(ALICE, (tx) =>
+          tx.update(s.airports).set({ name: "Hacked" }).where(eq(s.airports.ident, "LBSF")),
+        ),
+      ),
+    ).toBe("42501");
+    expect(
+      await pgCode(
+        rls.asAnon((tx) =>
+          tx.insert(s.airports).values({
+            ident: "FAKE",
+            type: "small_airport",
+            name: "Fake",
+            country: "BG",
+            latitude: 0,
+            longitude: 0,
+            timezone: "UTC",
+          }),
+        ),
+      ),
+    ).toBe("42501");
   });
 
   it("keeps settings private to each user", async () => {

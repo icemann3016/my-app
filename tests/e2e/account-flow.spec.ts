@@ -4,7 +4,8 @@ import path from "node:path";
 import { expect, test } from "@playwright/test";
 
 // Full journey with a real database: sign up → edit profile → photo → role → log out → log in.
-// Creates a new user each run, so it only runs when E2E_FULL=1 (set in CI with a throwaway DB).
+// Creates a new user each run, so it only runs when E2E_FULL=1 (set in CI with a throwaway DB,
+// after importing tests/fixtures/airports.csv).
 test.skip(!process.env.E2E_FULL, "set E2E_FULL=1 to run against a throwaway database");
 
 test("a new pilot can sign up, set up their profile and log back in", async ({ page }) => {
@@ -23,7 +24,9 @@ test("a new pilot can sign up, set up their profile and log back in", async ({ p
 
   // Profile
   await page.goto("/account");
-  await page.getByLabel("Home airfield (ICAO)").fill("lbsf");
+  await page.getByLabel("Home airfield").fill("sofia");
+  await page.getByRole("option", { name: /LBSF/ }).click();
+  await expect(page.getByLabel("Home airfield")).toHaveValue("LBSF – Sofia Airport");
   await page.getByLabel("About you").fill("PPL(A), 120 hours on C172.");
   await page.getByRole("button", { name: "Save profile" }).click();
   await expect(page.getByText("Profile saved.")).toBeVisible();
@@ -41,7 +44,8 @@ test("a new pilot can sign up, set up their profile and log back in", async ({ p
   // Public profile shows it all
   await page.getByRole("link", { name: /View public profile/ }).click();
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("Test Pilot");
-  await expect(page.getByText("LBSF")).toBeVisible();
+  await expect(page.getByText("LBSF", { exact: true })).toBeVisible();
+  await expect(page.getByText("Sofia Airport")).toBeVisible();
   await expect(page.getByText("Pilot", { exact: true })).toBeVisible();
   await expect(page.locator("main img")).toBeVisible();
 

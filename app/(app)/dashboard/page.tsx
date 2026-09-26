@@ -22,7 +22,7 @@ export default async function DashboardPage() {
   const { userId, profile, roles } = await requireProfile("/dashboard");
   const t = await getTranslations("dashboard");
   const firstName = profile.displayName.split(/\s+/)[0] ?? profile.displayName;
-  const profileComplete = Boolean(profile.avatarKey && profile.homeAirportIcao && profile.bio);
+  const profileComplete = Boolean(profile.avatarKey && profile.homeAirportIdent && profile.bio);
   const isPilot = roles.includes("pilot");
   const isOwner = roles.includes("owner");
 

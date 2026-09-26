@@ -13,6 +13,7 @@ import {
   uuid,
 } from "drizzle-orm/pg-core";
 
+import { airports } from "./airports";
 import { users } from "./auth";
 
 export const appRole = pgEnum("app_role", ["pilot", "owner", "admin"]);
@@ -26,8 +27,9 @@ export const profiles = pgTable(
     displayName: text("display_name").notNull(),
     bio: text("bio"),
     avatarKey: text("avatar_key"),
-    // ICAO code for now; becomes a reference to airports in M2.
-    homeAirportIcao: text("home_airport_icao"),
+    homeAirportIdent: text("home_airport_ident").references(() => airports.ident, {
+      onDelete: "set null",
+    }),
     ratingAvg: numeric("rating_avg", { precision: 3, scale: 2, mode: "number" }),
     ratingCount: integer("rating_count").notNull().default(0),
     suspendedAt: timestamp("suspended_at", { withTimezone: true }),
@@ -40,7 +42,6 @@ export const profiles = pgTable(
       sql`char_length(btrim(${t.displayName})) between 1 and 80`,
     ),
     check("profiles_bio_length", sql`char_length(${t.bio}) <= 1000`),
-    check("profiles_home_airport_icao", sql`${t.homeAirportIcao} ~ '^[A-Z0-9]{4}$'`),
   ],
 ).enableRLS();
 

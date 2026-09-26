@@ -45,14 +45,11 @@ describe("changePasswordSchema", () => {
 });
 
 describe("profileSchema", () => {
-  it("upper-cases ICAO codes and turns empty fields into null", () => {
-    const r = profileSchema.parse({ displayName: "Bob", homeAirport: " lbsf ", bio: "  " });
-    expect(r).toEqual({ displayName: "Bob", homeAirport: "LBSF", bio: null });
-  });
-
-  it("rejects codes that are not 4 characters", () => {
-    expect(
-      profileSchema.safeParse({ displayName: "Bob", homeAirport: "SOF", bio: "" }).success,
-    ).toBe(false);
+  it("keeps the airport id and turns empty fields into null", () => {
+    const r = profileSchema.parse({ displayName: "Bob", homeAirport: " BG-0004 ", bio: "  " });
+    expect(r).toEqual({ displayName: "Bob", homeAirport: "BG-0004", bio: null });
+    expect(profileSchema.parse({ displayName: "Bob", homeAirport: "", bio: "" }).homeAirport).toBe(
+      null,
+    );
   });
 });
