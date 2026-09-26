@@ -4,13 +4,15 @@ We each work with our own Claude on our own computer. GitHub keeps us in sync, a
 
 ## One-time setup (each person)
 
-1. Install [Node.js 22+](https://nodejs.org) and Git.
+1. Install [Node.js 22+](https://nodejs.org), Git and the [GitHub CLI](https://cli.github.com) (`brew install gh`), then log in with `gh auth login` (GitHub.com → HTTPS → login with browser). Your normal GitHub password does **not** work on the command line.
 2. Accept the GitHub invite to the repo, then clone it:
    ```bash
-   git clone <repo-url>
+   git clone https://github.com/icemann3016/my-app.git
    cd my-app
    npm install
+   cp .env.example .env.local
    ```
+   Ask Zlati for the Supabase keys (shared via a password manager) and put them in `.env.local`.
 3. Open the folder with Claude (Claude Code in the terminal, or connect the folder in the Claude desktop app).
 
 ## Daily loop
@@ -22,7 +24,7 @@ We each work with our own Claude on our own computer. GitHub keeps us in sync, a
    git checkout -b <yourname>/<task>
    ```
 3. **Build it with Claude.** Paste in the issue or describe the task. Claude follows `CLAUDE.md`.
-4. **Check it:** `npm run typecheck && npm run build`
+4. **Check it:** `npm run typecheck && npm run lint && npm test && npm run build`
 5. **Push and open a pull request:**
    ```bash
    git push -u origin <yourname>/<task>
