@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1
 # Container image for any platform: Google Cloud Run, Azure Container Apps, AWS, a plain VM…
-#   docker build -t my-app .                         # the web app (listens on $PORT, default 8080)
-#   docker build --target migrate -t my-app-migrate .  # one-off job that applies DB migrations
+#   docker build -t ownaplane .                         # the web app (listens on $PORT, default 8080)
+#   docker build --target migrate -t ownaplane-migrate .  # one-off job that applies DB migrations
 # Runtime settings (DATABASE_URL, BETTER_AUTH_*, STORAGE_*, EMAIL_*) come from environment variables.
 
 FROM node:22-slim AS base

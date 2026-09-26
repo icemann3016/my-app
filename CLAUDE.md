@@ -7,7 +7,7 @@ This file tells Claude how to work in this repo. Claude reads it at the start of
 
 ## Project
 
-- **Name:** my-app (placeholder, rename later)
+- **Name:** ownAplane (code/technical name: `ownaplane`)
 - **What it is:** A European general aviation marketplace: pilots rent aircraft from owners (with verified licences and two-way ratings), owners hire maintenance technicians, and airports take PPR, parking, hangar and service requests online.
 - **Requirements:** [`docs/business-requirements.md`](docs/business-requirements.md) is the source of truth for *what* to build. **Read it before starting any feature** and reference requirement IDs (e.g. `BKG-3`) in branches, commits and PRs.
 - **Plan:** [`docs/implementation-plan.md`](docs/implementation-plan.md) has the architecture, data model and milestones M0–M10. Tasks are GitHub issues. **Work on the current milestone's issues in order** and follow the plan's key technical decisions (§4).
@@ -44,7 +44,7 @@ npm run db:custom -- name  # create an empty SQL migration (RLS policies, grants
 npm run db:migrate         # apply migrations to DATABASE_URL
 npm run db:studio          # browse the database in the browser
 
-docker build -t my-app .   # production container
+docker build -t ownaplane .   # production container
 docker compose up -d db    # local Postgres (no cloud account needed)
 ```
 
@@ -138,6 +138,7 @@ _TODO: split areas so we don't edit the same files at the same time._
 
 Add one line per decision, newest first.
 
+- 2026-09-26: App name is **ownAplane** (technical name `ownaplane`). Change the display name only in `lib/site.ts`.
 - 2026-09-26: **Portable stack.** Replaced Supabase Auth/SDK with Better Auth + Drizzle on plain Postgres, file storage and email behind drivers, Docker image + deployment guide, so the app can move to Google Cloud or Azure. Supabase is now only the Postgres + file host. RLS kept via the `app_user` role and `app.user_id` setting.
 - 2026-09-26: M1: forms use React 19 `useActionState` + Zod in Server Actions (no react-hook-form for now). Profiles are public; private settings live in `user_settings`. Column-level grants stop users changing ratings/suspension. Avatars upload from the browser to the `avatars` bucket (folder = user id).
 - 2026-09-26: M0: shadcn/ui components copied into components/ui (new-york style, radix-ui). Dark mode follows the OS setting. Supabase CLI installed as a dev dependency (use `npx supabase …`). Vercel region fra1 via vercel.json.

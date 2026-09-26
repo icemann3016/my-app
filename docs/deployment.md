@@ -20,8 +20,8 @@ code**, so nothing about users or security is tied to a provider.
 ## 1. The pieces in detail
 
 ### Web app
-- `docker build -t my-app .` builds a production image that listens on `$PORT` (default 8080).
-- `docker build --target migrate -t my-app-migrate .` builds a small image that runs the database
+- `docker build -t ownaplane .` builds a production image that listens on `$PORT` (default 8080).
+- `docker build --target migrate -t ownaplane-migrate .` builds a small image that runs the database
   migrations and exits. Run it as a one-off **job** before each release.
 - Health check: `GET /api/health` returns `{"status":"ok","database":"ok"}`.
 - Set `STORAGE_PUBLIC_BASE_URL` as a **build argument** too (`--build-arg STORAGE_PUBLIC_BASE_URL=…`),

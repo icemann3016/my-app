@@ -82,5 +82,5 @@ jobs:
     needs: check
     steps:
       - uses: actions/checkout@v4
-      - run: docker build --target runner -t my-app .
-      - run: docker build --target migrate -t my-app-migrate .
+      - run: docker build --target runner -t ownaplane .
+      - run: docker build --target migrate -t ownaplane-migrate .

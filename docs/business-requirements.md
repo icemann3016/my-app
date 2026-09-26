@@ -1,4 +1,4 @@
-# Business Requirements — my-app
+# Business Requirements — ownAplane
 
 > **Status:** Draft v0.1 · 2026-09-26 · Owner: Zlati
 > **Purpose:** The single source of truth for *what* we are building and *why*. Claude reads this before building any feature.
@@ -243,7 +243,7 @@ _Not legal advice. Verify each point with an aviation lawyer and the national CA
 
 | # | Question | Owner |
 |---|----------|-------|
-| Q1 | App name and brand? | Zlati + friend |
+| Q1 | ~~App name~~ **Decided: ownAplane** (2026-09-26). Logo and brand look still open. | Zlati + friend |
 | Q2 | Launch country: Bulgaria only first, or a wider EU area? | |
 | Q3 | Phase 1 revenue: free, subscription, or featured listings? | |
 | Q4 | Do we verify flight hours (logbook upload) or keep them self-declared with a label? | |

@@ -161,8 +161,8 @@ docs/                     # requirements, plan
 
 | Environment | Database + files | App | Used for |
 |-------------|------------------|--------|----------|
-| **dev** | `my-app-dev` (Frankfurt) | Preview deployments | Daily work, test data |
-| **prod** | `my-app-prod` (Frankfurt), created in M10 | Production | Real users |
+| **dev** | `ownaplane-dev` (Frankfurt) | Preview deployments | Daily work, test data |
+| **prod** | `ownaplane-prod` (Frankfurt), created in M10 | Production | Real users |
 
 **Setup (done):** Supabase project in Frankfurt (Postgres + Storage bucket `media`), Vercel project, `.env.local` from `.env.example`. Moving to Google Cloud or Azure: [deployment.md](deployment.md).
 

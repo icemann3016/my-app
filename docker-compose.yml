@@ -1,6 +1,6 @@
 # Local Postgres for development without any cloud account:
 #   docker compose up -d db
-#   DATABASE_URL=postgres://postgres:postgres@localhost:5432/myapp  (in .env.local)
+#   DATABASE_URL=postgres://postgres:postgres@localhost:5432/ownaplane  (in .env.local)
 #   npm run db:migrate && npm run dev
 # Run the production container too (reads .env.local):
 #   docker compose --profile app up --build
@@ -10,7 +10,7 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: myapp
+      POSTGRES_DB: ownaplane
     ports:
       - "5432:5432"
     volumes:
@@ -21,7 +21,7 @@ services:
     build: .
     env_file: .env.local
     environment:
-      DATABASE_URL: postgres://postgres:postgres@db:5432/myapp
+      DATABASE_URL: postgres://postgres:postgres@db:5432/ownaplane
       BETTER_AUTH_URL: http://localhost:8080
     ports:
       - "8080:8080"
