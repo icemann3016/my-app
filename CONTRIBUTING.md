@@ -7,8 +7,8 @@ We each work with our own Claude on our own computer. GitHub keeps us in sync, a
 1. Install [Node.js 22+](https://nodejs.org), Git and the [GitHub CLI](https://cli.github.com) (`brew install gh`), then log in with `gh auth login` (GitHub.com → HTTPS → login with browser). Your normal GitHub password does **not** work on the command line.
 2. Accept the GitHub invite to the repo, then clone it:
    ```bash
-   git clone https://github.com/icemann3016/my-app.git
-   cd my-app
+   git clone https://github.com/icemann3016/ownAplane.git
+   cd ownAplane
    npm install
    cp .env.example .env.local
    ```

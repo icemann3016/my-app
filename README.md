@@ -1,6 +1,6 @@
 # ownAplane
 
-[![CI](https://github.com/icemann3016/my-app/actions/workflows/ci.yml/badge.svg)](https://github.com/icemann3016/my-app/actions/workflows/ci.yml)
+[![CI](https://github.com/icemann3016/ownAplane/actions/workflows/ci.yml/badge.svg)](https://github.com/icemann3016/ownAplane/actions/workflows/ci.yml)
 
 A European general aviation marketplace: rent aircraft from verified owners, with two-way ratings.
 
@@ -11,8 +11,8 @@ A European general aviation marketplace: rent aircraft from verified owners, wit
 Requirements: Node.js 22+ and Git.
 
 ```bash
-git clone https://github.com/icemann3016/my-app.git
-cd my-app
+git clone https://github.com/icemann3016/ownAplane.git
+cd ownAplane
 npm install
 cp .env.example .env.local   # fill in DATABASE_URL and BETTER_AUTH_SECRET at least
 npm run db:migrate
