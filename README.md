@@ -4,7 +4,7 @@
 
 A European general aviation marketplace: rent aircraft from verified owners, with two-way ratings.
 
-**Live (preview):** https://my-app-zeta-gold-25.vercel.app
+**Live (preview):** https://ownaplane.eu
 
 ## Getting started
 

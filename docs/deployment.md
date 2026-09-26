@@ -57,9 +57,9 @@ code**, so nothing about users or security is tied to a provider.
 1. Google Cloud Console → create a project → **APIs & Services → OAuth consent screen** (External, app name, support email).
 2. **Credentials → Create credentials → OAuth client ID → Web application.**
 3. **Authorized redirect URIs:** `<site-url>/api/auth/callback/google` for every address the app runs on, e.g.
-   `http://localhost:3000/api/auth/callback/google` and `https://my-app-zeta-gold-25.vercel.app/api/auth/callback/google`
-   (later `https://ownaplane.eu/api/auth/callback/google`).
+   `http://localhost:3000/api/auth/callback/google` and `https://ownaplane.eu/api/auth/callback/google`.
 4. Put the client ID and secret in `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET`. The "Continue with Google" button appears automatically.
+5. People who already have an email/password account connect Google from **Account → Security** while logged in (automatic linking is refused for unverified emails, on purpose).
 
 ### Email
 - `EMAIL_DRIVER=smtp` + `SMTP_*` + `EMAIL_FROM`. Every major provider offers SMTP.
@@ -75,7 +75,7 @@ Environment variables on Vercel (Project → Settings → Environment Variables)
 |----------|-------|
 | `DATABASE_URL` | Supabase → Connect → **Transaction pooler** URI (port 6543) |
 | `BETTER_AUTH_SECRET` | output of `openssl rand -base64 32` (different from your local one) |
-| `BETTER_AUTH_URL` | `https://my-app-zeta-gold-25.vercel.app` |
+| `BETTER_AUTH_URL` | `https://ownaplane.eu` (the Vercel *.vercel.app addresses are trusted automatically) |
 | `STORAGE_DRIVER` | `s3` |
 | `S3_ENDPOINT`, `S3_REGION`, `S3_BUCKET`, `S3_ACCESS_KEY_ID`, `S3_SECRET_ACCESS_KEY` | Supabase → Storage → Settings → S3 Connection |
 | `STORAGE_PUBLIC_BASE_URL` | `https://<project-ref>.supabase.co/storage/v1/object/public/media` |
