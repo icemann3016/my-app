@@ -46,6 +46,14 @@ code**, so nothing about users or security is tied to a provider.
   Only the environment variables change (see `.env.example`).
 - Private documents (licences, medicals in M3) will go in a second, **private** bucket with signed URLs.
 
+### Google sign-in (optional)
+1. Google Cloud Console → create a project → **APIs & Services → OAuth consent screen** (External, app name, support email).
+2. **Credentials → Create credentials → OAuth client ID → Web application.**
+3. **Authorized redirect URIs:** `<site-url>/api/auth/callback/google` for every address the app runs on, e.g.
+   `http://localhost:3000/api/auth/callback/google` and `https://my-app-zeta-gold-25.vercel.app/api/auth/callback/google`
+   (later `https://ownaplane.eu/api/auth/callback/google`).
+4. Put the client ID and secret in `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET`. The "Continue with Google" button appears automatically.
+
 ### Email
 - `EMAIL_DRIVER=smtp` + `SMTP_*` + `EMAIL_FROM`. Every major provider offers SMTP.
 - Once real email works, set `AUTH_REQUIRE_EMAIL_VERIFICATION=true`.
@@ -65,6 +73,7 @@ Environment variables on Vercel (Project → Settings → Environment Variables)
 | `S3_ENDPOINT`, `S3_REGION`, `S3_BUCKET`, `S3_ACCESS_KEY_ID`, `S3_SECRET_ACCESS_KEY` | Supabase → Storage → Settings → S3 Connection |
 | `STORAGE_PUBLIC_BASE_URL` | `https://<project-ref>.supabase.co/storage/v1/object/public/media` |
 | `EMAIL_DRIVER` | `console` for now |
+| `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET` | optional, see "Google sign-in" above |
 
 Migrations are run from your Mac (`npm run db:migrate` with the Session pooler URL in `.env.local`).
 

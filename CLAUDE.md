@@ -13,7 +13,7 @@ This file tells Claude how to work in this repo. Claude reads it at the start of
 - **Plan:** [`docs/implementation-plan.md`](docs/implementation-plan.md) has the architecture, data model and milestones M0–M10. Tasks are GitHub issues. **Work on the current milestone's issues in order** and follow the plan's key technical decisions (§4).
 - **Current phase:** Phase 1 (MVP) — accounts, pilot verification, aircraft listings, search, booking requests, ratings. Don't build Phase 2–4 features unless asked.
 - **Team:** Zlati + friend, each working with our own Claude.
-- **Status:** M0 done. Live on Vercel: https://my-app-zeta-gold-25.vercel.app (every push to main deploys). **M1 in progress:** sign-up/login, password reset, profiles, roles, dashboard, public profile done and verified on the portable stack (#10, #12–#14 closed). Next: Google sign-in (#11), data export/deletion (#15), i18n (#16).
+- **Status:** M0 done. Live on Vercel: https://my-app-zeta-gold-25.vercel.app (every push to main deploys). **M1 done:** accounts, profiles, roles, public profiles, Google sign-in (needs Google keys), data export + account deletion, English/Bulgarian + units preference. Next: **M2 Airports**.
 - **Pending:** custom domain **ownaplane.eu** (waiting for DNS help from the registrar). When live: add it in Vercel → Domains, set `BETTER_AUTH_URL=https://ownaplane.eu`, update links in README/docs, then set up email (Resend SMTP) on the domain.
 - **Portability:** the app must stay movable to Google Cloud or Azure: no provider-specific SDKs outside `lib/storage` and `lib/email` drivers. See [`docs/deployment.md`](docs/deployment.md).
 
@@ -21,6 +21,7 @@ This file tells Claude how to work in this repo. Claude reads it at the start of
 
 - Next.js 16 (App Router, Server Components, Server Actions) + React 19 + TypeScript (strict), Node.js 22
 - UI: Tailwind CSS v4 + shadcn/ui (`components/ui/`, add more with `npx shadcn@latest add <name>`). Forms: Zod + `useActionState`
+- **Languages:** next-intl, English + Bulgarian (`messages/en.json`, `messages/bg.json`); language from a cookie/user setting, else the browser. No locale in URLs.
 - **Database:** PostgreSQL 14+ through **Drizzle ORM** (`postgres` driver). Hosted on Supabase today, but we use it as *plain Postgres* only. **RLS on every table.**
 - **Login:** **Better Auth** (`lib/auth/auth.ts`), users/sessions in our own tables
 - **Files:** `lib/storage` (drivers: `s3` = Supabase Storage / Google Cloud Storage / AWS / R2, `azure`, `local`)
@@ -65,7 +66,8 @@ app/
 components/
   ui/                 # shadcn/ui primitives (Button, Card, Dialog, Sheet, DropdownMenu…)
   forms/              # TextField, TextAreaField, SubmitButton, FormMessage
-  layout/             # SiteHeader, UserMenu, MobileNav, SiteFooter, Logo
+  layout/             # SiteHeader, UserMenu, MobileNav, SiteFooter, LanguageSwitcher, Logo
+  auth/               # GoogleSignIn
 lib/
   auth/               # auth.ts (Better Auth config), session.ts (getUser, requireUser…), redirect.ts
   db/                 # index.ts (connection), rls.ts (asUser/asAnon), schema/ (Drizzle tables)
@@ -73,8 +75,11 @@ lib/
   email/              # email drivers + templates
   validation/         # Zod schemas shared by forms and Server Actions
   forms.ts            # FormState type + helpers for useActionState forms
+  i18n/               # config.ts (locales, resolveLocale), server.ts (localizedFieldErrors, setLocaleCookie)
   site.ts             # app name + navigation (rename the app here)
 db/migrations/        # SQL migrations (generated + custom), applied with npm run db:migrate
+messages/             # translations: en.json (source) and bg.json (same keys)
+i18n/request.ts       # picks the language for each request
 tests/                # e2e/ (Playwright), db/ (database security tests)
 docs/                 # requirements, implementation plan, deployment guide
 Dockerfile, docker-compose.yml
@@ -104,6 +109,7 @@ Target structure for the rest of the app is in the plan, §6. When new top-level
 
 - **Auth:** protect pages, Server Actions and route handlers with `requireUser()` / `requireProfile()` (or `getUser()`) from `lib/auth/session.ts`. They redirect to `/login?next=…`. Call Better Auth on the server via `getAuth().api.*`.
 - **Forms:** a Server Action `(prev: FormState, formData) => Promise<FormState>` validates with a Zod schema from `lib/validation/`, and a client form uses `useActionState` + `TextField` + `SubmitButton` + `FormMessage`. Return `values` (never passwords) so fields refill after errors.
+- **Text & translations:** never hard-code user-facing text. Add keys to **both** `messages/en.json` and `messages/bg.json` (a unit test checks they match). Server Components: `await getTranslations("ns")`; Client Components: `useTranslations("ns")`; page titles via `generateMetadata`. Zod messages are keys from the `validation` namespace, translated with `localizedFieldErrors()`. Format dates/numbers with the user's locale (`intlLocale()`).
 - **Headings:** every page has one `h1`. `CardTitle` takes `as="h1" | "h2" | "h3"` when it's a page or section title.
 
 - TypeScript everywhere. No `any` unless there's a comment explaining why.
@@ -139,6 +145,7 @@ _TODO: split areas so we don't edit the same files at the same time._
 
 Add one line per decision, newest first.
 
+- 2026-09-26: M1 finished. i18n with next-intl without locale routing (cookie + user_settings + Accept-Language). Google sign-in via Better Auth (button hidden until GOOGLE_* keys exist). Account deletion with password + typed confirmation; data export as JSON without secrets.
 - 2026-09-26: App name is **ownAplane** (technical name `ownaplane`). Change the display name only in `lib/site.ts`.
 - 2026-09-26: **Portable stack.** Replaced Supabase Auth/SDK with Better Auth + Drizzle on plain Postgres, file storage and email behind drivers, Docker image + deployment guide, so the app can move to Google Cloud or Azure. Supabase is now only the Postgres + file host. RLS kept via the `app_user` role and `app.user_id` setting.
 - 2026-09-26: M1: forms use React 19 `useActionState` + Zod in Server Actions (no react-hook-form for now). Profiles are public; private settings live in `user_settings`. Column-level grants stop users changing ratings/suspension. Avatars upload from the browser to the `avatars` bucket (folder = user id).
