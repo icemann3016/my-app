@@ -139,11 +139,11 @@ export async function signInWithGoogle(formData: FormData) {
       provider: "google",
       callbackURL: next,
       newUserCallbackURL: "/dashboard",
-      errorCallbackURL: "/login?error=oauth",
+      errorCallbackURL: "/login",
     },
     headers: await headers(),
   });
-  if (!url) redirect("/login?error=oauth");
+  if (!url) redirect("/login?error=oauth_failed");
   redirect(url);
 }
 

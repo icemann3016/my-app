@@ -6,6 +6,7 @@ import { getTranslations } from "next-intl/server";
 import { GoogleSignIn } from "@/components/auth/google-sign-in";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { loginErrorKey } from "@/lib/auth/errors";
 import { safeNextPath } from "@/lib/auth/redirect";
 import { getUser } from "@/lib/auth/session";
 import { LoginForm } from "./login-form";
@@ -24,6 +25,7 @@ export default async function LoginPage({
   const nextPath = safeNextPath(next);
   if (await getUser()) redirect(nextPath);
   const t = await getTranslations("login");
+  const errorKey = loginErrorKey(error);
 
   return (
     <Card>
@@ -39,10 +41,13 @@ export default async function LoginPage({
             <AlertDescription>{t("passwordChanged")}</AlertDescription>
           </Alert>
         )}
-        {error && (
+        {errorKey && (
           <Alert variant="destructive">
             <AlertDescription>
-              {error === "oauth" ? t("oauthFailed") : t("linkExpired")}
+              <p>{t(errorKey)}</p>
+              {errorKey === "oauthFailed" && (
+                <p className="text-xs opacity-80">{t("errorCode", { code: error! })}</p>
+              )}
             </AlertDescription>
           </Alert>
         )}

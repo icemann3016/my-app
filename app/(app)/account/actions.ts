@@ -9,8 +9,9 @@ import { getTranslations } from "next-intl/server";
 
 import { getAuth } from "@/lib/auth/auth";
 import { requireUser } from "@/lib/auth/session";
+import { getDb } from "@/lib/db";
 import { asUser } from "@/lib/db/rls";
-import { profiles, userRoles, userSettings } from "@/lib/db/schema";
+import { accounts, profiles, userRoles, userSettings } from "@/lib/db/schema";
 import { formValues, type FormState, withoutSecrets } from "@/lib/forms";
 import { localizedFieldErrors, setLocaleCookie } from "@/lib/i18n/server";
 import { changePasswordSchema } from "@/lib/validation/auth";
@@ -148,4 +149,38 @@ export async function deleteAccount(_prev: FormState, formData: FormData): Promi
 
   revalidatePath("/", "layout");
   redirect("/?deleted=1");
+}
+
+/** Connect Google to the logged-in account (safe: the user has proven who they are). */
+export async function linkGoogle() {
+  await requireUser("/account");
+  const { url } = await getAuth().api.linkSocialAccount({
+    body: {
+      provider: "google",
+      callbackURL: "/account?linked=google",
+      errorCallbackURL: "/account",
+    },
+    headers: await headers(),
+  });
+  redirect(url);
+}
+
+/** Disconnect Google (only offered when the user can still log in with a password). */
+export async function unlinkGoogle() {
+  const user = await requireUser("/account");
+  try {
+    const [google] = await getDb()
+      .select({ accountId: accounts.accountId })
+      .from(accounts)
+      .where(and(eq(accounts.userId, user.id), eq(accounts.providerId, "google")));
+    if (google) {
+      await getAuth().api.unlinkAccount({
+        body: { accountId: google.accountId },
+        headers: await headers(),
+      });
+    }
+  } catch (error) {
+    console.error("[account] unlink google failed", error);
+  }
+  revalidatePath("/account");
 }

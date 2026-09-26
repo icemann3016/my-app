@@ -38,15 +38,31 @@ async function userLocale(userId: string): Promise<string | undefined> {
   return row?.locale;
 }
 
+/**
+ * Other addresses allowed to use login (besides BETTER_AUTH_URL): BETTER_AUTH_TRUSTED_ORIGINS
+ * plus, on Vercel, the project's own *.vercel.app addresses.
+ */
+function trustedOrigins(): string[] {
+  const vercel = [
+    process.env.VERCEL_URL,
+    process.env.VERCEL_BRANCH_URL,
+    process.env.VERCEL_PROJECT_PRODUCTION_URL,
+  ]
+    .filter(Boolean)
+    .map((host) => `https://${host}`);
+  const extra = (process.env.BETTER_AUTH_TRUSTED_ORIGINS ?? "")
+    .split(",")
+    .map((o) => o.trim())
+    .filter(Boolean);
+  return [...new Set([...extra, ...vercel])];
+}
+
 function createAuth() {
   return betterAuth({
     appName: siteConfig.name,
     baseURL: siteUrl(),
     secret: process.env.BETTER_AUTH_SECRET,
-    trustedOrigins: (process.env.BETTER_AUTH_TRUSTED_ORIGINS ?? "")
-      .split(",")
-      .map((o) => o.trim())
-      .filter(Boolean),
+    trustedOrigins: trustedOrigins(),
     database: drizzleAdapter(getDb(), {
       provider: "pg",
       schema: {

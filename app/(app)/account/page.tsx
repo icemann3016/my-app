@@ -1,13 +1,15 @@
-import { and, eq } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 import type { Metadata } from "next";
 import Link from "next/link";
-import { DownloadIcon, ExternalLinkIcon } from "lucide-react";
+import { CircleAlertIcon, CircleCheckIcon, DownloadIcon, ExternalLinkIcon } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { getAirport } from "@/lib/airports";
 import { avatarUrl } from "@/lib/avatar-url";
+import { isGoogleEnabled } from "@/lib/auth/google";
 import { requireProfile } from "@/lib/auth/session";
 import { getDb } from "@/lib/db";
 import { asUser } from "@/lib/db/rls";
@@ -17,13 +19,19 @@ import { DeleteAccount } from "./delete-account";
 import { PreferencesForm } from "./preferences-form";
 import { ProfileForm } from "./profile-form";
 import { RolesForm } from "./roles-form";
+import { SignInMethods } from "./sign-in-methods";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("account");
   return { title: t("title") };
 }
 
-export default async function AccountPage() {
+export default async function AccountPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ linked?: string; error?: string }>;
+}) {
+  const { linked, error } = await searchParams;
   const { userId, email, profile, roles } = await requireProfile("/account");
   const t = await getTranslations("account");
 
@@ -31,12 +39,12 @@ export default async function AccountPage() {
     tx.select().from(userSettings).where(eq(userSettings.userId, userId)),
   );
   // Accounts (login methods) are private auth data: read with the owner connection, own rows only.
-  const [credential] = await getDb()
-    .select({ id: accounts.id })
+  const methods = await getDb()
+    .select({ providerId: accounts.providerId })
     .from(accounts)
-    .where(and(eq(accounts.userId, userId), eq(accounts.providerId, "credential")))
-    .limit(1);
-  const hasPassword = Boolean(credential);
+    .where(eq(accounts.userId, userId));
+  const hasPassword = methods.some((m) => m.providerId === "credential");
+  const hasGoogle = methods.some((m) => m.providerId === "google");
   const homeAirport = await getAirport(profile.homeAirportIdent);
 
   return (
@@ -52,6 +60,19 @@ export default async function AccountPage() {
           </Link>
         </Button>
       </div>
+
+      {linked === "google" && (
+        <Alert variant="success">
+          <CircleCheckIcon />
+          <AlertDescription>{t("signIn.linked")}</AlertDescription>
+        </Alert>
+      )}
+      {error && (
+        <Alert variant="destructive">
+          <CircleAlertIcon />
+          <AlertDescription>{t("signIn.linkFailed", { code: error })}</AlertDescription>
+        </Alert>
+      )}
 
       <Card>
         <CardHeader>
@@ -88,19 +109,24 @@ export default async function AccountPage() {
         </CardContent>
       </Card>
 
-      {hasPassword && (
-        <Card>
-          <CardHeader>
-            <CardTitle as="h2">{t("security.title")}</CardTitle>
-            <CardDescription>{t("security.description")}</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button variant="outline" asChild>
+      <Card>
+        <CardHeader>
+          <CardTitle as="h2">{t("security.title")}</CardTitle>
+          <CardDescription>{t("signIn.description")}</CardDescription>
+        </CardHeader>
+        <CardContent className="grid gap-4">
+          <SignInMethods
+            hasPassword={hasPassword}
+            hasGoogle={hasGoogle}
+            googleEnabled={isGoogleEnabled()}
+          />
+          {hasPassword && (
+            <Button variant="outline" className="justify-self-start" asChild>
               <Link href="/account/password">{t("security.changePassword")}</Link>
             </Button>
-          </CardContent>
-        </Card>
-      )}
+          )}
+        </CardContent>
+      </Card>
 
       <Card>
         <CardHeader>

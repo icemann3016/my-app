@@ -99,7 +99,9 @@
     "resendConfirmation": "Send the confirmation email again",
     "passwordChanged": "Your password was changed. Log in with the new one.",
     "linkExpired": "That link has expired or was already used. Log in, or request a new link.",
-    "oauthFailed": "Signing in with Google didn't work. Please try again or use your email."
+    "oauthFailed": "Signing in with Google didn't work. Please try again or use your email.",
+    "accountNotLinked": "You already have an account with this email. Log in with your password, then connect Google under Account → Security.",
+    "errorCode": "Error code: {code}"
   },
   "signup": {
     "title": "Create your account",
@@ -262,6 +264,17 @@
       "wrongPassword": "Your password is not correct.",
       "notFresh": "For your security, please log out and log in again, then delete your account.",
       "failed": "Couldn't delete your account. Please try again."
+    },
+    "signIn": {
+      "description": "Ways you can log in, and your password.",
+      "password": "Email and password",
+      "active": "Active",
+      "notSet": "Not set",
+      "connected": "Connected",
+      "connectGoogle": "Connect Google",
+      "disconnect": "Disconnect",
+      "linked": "Google is now connected. Next time you can log in with Google.",
+      "linkFailed": "Couldn't connect Google (error: {code}). Please try again."
     }
   },
   "password": {
