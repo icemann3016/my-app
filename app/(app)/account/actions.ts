@@ -4,20 +4,33 @@ import { APIError } from "better-auth/api";
 import { and, eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
+import { redirect } from "next/navigation";
+import { getTranslations } from "next-intl/server";
 
 import { getAuth } from "@/lib/auth/auth";
 import { requireUser } from "@/lib/auth/session";
 import { asUser } from "@/lib/db/rls";
-import { profiles, userRoles } from "@/lib/db/schema";
-import { fieldErrors, formValues, type FormState, withoutSecrets } from "@/lib/forms";
+import { profiles, userRoles, userSettings } from "@/lib/db/schema";
+import { formValues, type FormState, withoutSecrets } from "@/lib/forms";
+import { localizedFieldErrors, setLocaleCookie } from "@/lib/i18n/server";
 import { changePasswordSchema } from "@/lib/validation/auth";
-import { profileSchema, selfServiceRoleSchema } from "@/lib/validation/profile";
+import {
+  deleteAccountSchema,
+  preferencesSchema,
+  profileSchema,
+  selfServiceRoleSchema,
+} from "@/lib/validation/profile";
+
+function apiCode(error: unknown): string | undefined {
+  return error instanceof APIError ? (error.body?.code as string | undefined) : undefined;
+}
 
 export async function updateProfile(_prev: FormState, formData: FormData): Promise<FormState> {
   const user = await requireUser("/account");
+  const t = await getTranslations("account.profile");
   const raw = formValues(formData);
   const parsed = profileSchema.safeParse(raw);
-  if (!parsed.success) return { errors: fieldErrors(parsed.error), values: raw };
+  if (!parsed.success) return { errors: await localizedFieldErrors(parsed.error), values: raw };
 
   try {
     await asUser(user.id, (tx) =>
@@ -32,11 +45,11 @@ export async function updateProfile(_prev: FormState, formData: FormData): Promi
     );
   } catch (error) {
     console.error("[account] profile update failed", error);
-    return { message: "Couldn't save your profile. Please try again.", values: raw };
+    return { message: t("saveFailed"), values: raw };
   }
 
   revalidatePath("/", "layout");
-  return { ok: true, message: "Profile saved.", values: raw };
+  return { ok: true, message: t("saved"), values: raw };
 }
 
 export async function setRole(formData: FormData) {
@@ -56,11 +69,33 @@ export async function setRole(formData: FormData) {
   revalidatePath("/", "layout");
 }
 
+export async function savePreferences(_prev: FormState, formData: FormData): Promise<FormState> {
+  const user = await requireUser("/account");
+  const raw = formValues(formData);
+  const parsed = preferencesSchema.safeParse(raw);
+  if (!parsed.success) return { errors: await localizedFieldErrors(parsed.error), values: raw };
+
+  await asUser(user.id, (tx) =>
+    tx
+      .update(userSettings)
+      .set({ locale: parsed.data.locale, units: parsed.data.units })
+      .where(eq(userSettings.userId, user.id)),
+  );
+  await setLocaleCookie(parsed.data.locale);
+  revalidatePath("/", "layout");
+  // Answer in the newly chosen language.
+  const t = await getTranslations({ locale: parsed.data.locale, namespace: "account.preferences" });
+  return { ok: true, message: t("saved"), values: raw };
+}
+
 export async function changePassword(_prev: FormState, formData: FormData): Promise<FormState> {
   await requireUser("/account/password");
+  const t = await getTranslations("password");
   const raw = formValues(formData);
   const parsed = changePasswordSchema.safeParse(raw);
-  if (!parsed.success) return { errors: fieldErrors(parsed.error), values: withoutSecrets(raw) };
+  if (!parsed.success) {
+    return { errors: await localizedFieldErrors(parsed.error), values: withoutSecrets(raw) };
+  }
 
   try {
     await getAuth().api.changePassword({
@@ -72,12 +107,40 @@ export async function changePassword(_prev: FormState, formData: FormData): Prom
       headers: await headers(),
     });
   } catch (error) {
-    const code = error instanceof APIError ? error.body?.code : undefined;
-    if (code === "INVALID_PASSWORD") {
-      return { errors: { currentPassword: ["Your current password is not correct."] } };
+    if (apiCode(error) === "INVALID_PASSWORD") {
+      return { errors: { currentPassword: [t("wrongCurrent")] } };
     }
     console.error("[account] password change failed", error);
-    return { message: "Couldn't change your password. Please try again." };
+    return { message: t("failed") };
   }
-  return { ok: true, message: "Password changed. You've been logged out on other devices." };
+  return { ok: true, message: t("changed") };
+}
+
+/** Permanently delete the account (GDPR). Profile, roles, settings and sessions cascade. */
+export async function deleteAccount(_prev: FormState, formData: FormData): Promise<FormState> {
+  await requireUser("/account");
+  const t = await getTranslations("account.data");
+  const raw = formValues(formData);
+  const parsed = deleteAccountSchema.safeParse(raw);
+  const word = t("confirmWord");
+  if (!parsed.success || parsed.data.confirm.toUpperCase() !== word.toUpperCase()) {
+    return { errors: { confirm: [t("confirmMismatch", { word })] } };
+  }
+
+  try {
+    await getAuth().api.deleteUser({
+      body: parsed.data.password ? { password: parsed.data.password } : {},
+      headers: await headers(),
+    });
+  } catch (error) {
+    const code = apiCode(error);
+    if (code === "INVALID_PASSWORD") return { errors: { password: [t("wrongPassword")] } };
+    if (code === "SESSION_EXPIRED" || code === "SESSION_NOT_FRESH")
+      return { message: t("notFresh") };
+    console.error("[account] delete failed", error);
+    return { message: t("failed") };
+  }
+
+  revalidatePath("/", "layout");
+  redirect("/?deleted=1");
 }

@@ -1,39 +1,39 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { MailCheckIcon } from "lucide-react";
+import { getTranslations } from "next-intl/server";
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ResendForm } from "./resend-form";
 
-export const metadata: Metadata = { title: "Check your email" };
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("checkEmail");
+  return { title: t("title") };
+}
 
-export default function CheckEmailPage() {
+export default async function CheckEmailPage() {
+  const t = await getTranslations("checkEmail");
   return (
     <Card>
       <CardHeader>
         <MailCheckIcon className="mb-2 size-8 text-primary" aria-hidden />
         <CardTitle as="h1" className="text-xl">
-          Check your email
+          {t("title")}
         </CardTitle>
-        <CardDescription>
-          We&apos;ve sent you a link to confirm your address. Open it to finish creating your
-          account.
-        </CardDescription>
+        <CardDescription>{t("description")}</CardDescription>
       </CardHeader>
       <CardContent className="grid gap-6">
         <div className="grid gap-3">
-          <p className="text-sm text-muted-foreground">
-            No email after a few minutes? Check your spam folder, or send it again:
-          </p>
+          <p className="text-sm text-muted-foreground">{t("noEmail")}</p>
           <ResendForm />
         </div>
         <p className="text-center text-sm text-muted-foreground">
-          Already confirmed?{" "}
+          {t("alreadyConfirmed")}{" "}
           <Link
             href="/login"
             className="font-medium text-foreground underline-offset-4 hover:underline"
           >
-            Log in
+            {t("logIn")}
           </Link>
         </p>
       </CardContent>

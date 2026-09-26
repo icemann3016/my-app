@@ -1,6 +1,7 @@
 import "server-only";
 
 import { betterAuth } from "better-auth";
+import { eq } from "drizzle-orm";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { nextCookies } from "better-auth/next-js";
 
@@ -8,6 +9,8 @@ import { getDb, schema } from "@/lib/db";
 import { sendEmail } from "@/lib/email";
 import { resetPasswordEmail, verifyEmailEmail } from "@/lib/email/templates";
 import { siteConfig } from "@/lib/site";
+import { getStorage } from "@/lib/storage";
+import { isGoogleEnabled } from "./google";
 
 /**
  * Public URL of the site, used in links inside emails. Set BETTER_AUTH_URL everywhere you deploy;
@@ -26,11 +29,16 @@ function siteUrl(): string {
   return "http://localhost:3000";
 }
 
-function createAuth() {
-  const googleConfigured = Boolean(
-    process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET,
-  );
+/** The user's chosen language, for emails. */
+async function userLocale(userId: string): Promise<string | undefined> {
+  const [row] = await getDb()
+    .select({ locale: schema.userSettings.locale })
+    .from(schema.userSettings)
+    .where(eq(schema.userSettings.userId, userId));
+  return row?.locale;
+}
 
+function createAuth() {
   return betterAuth({
     appName: siteConfig.name,
     baseURL: siteUrl(),
@@ -61,16 +69,39 @@ function createAuth() {
       requireEmailVerification: process.env.AUTH_REQUIRE_EMAIL_VERIFICATION === "true",
       revokeSessionsOnPasswordReset: true,
       sendResetPassword: async ({ user, url }) => {
-        await sendEmail({ to: user.email, ...resetPasswordEmail({ name: user.name, url }) });
+        const locale = await userLocale(user.id);
+        await sendEmail({
+          to: user.email,
+          ...resetPasswordEmail({ name: user.name, url, locale }),
+        });
       },
     },
     emailVerification: {
       autoSignInAfterVerification: true,
       sendVerificationEmail: async ({ user, url }) => {
-        await sendEmail({ to: user.email, ...verifyEmailEmail({ name: user.name, url }) });
+        const locale = await userLocale(user.id);
+        await sendEmail({ to: user.email, ...verifyEmailEmail({ name: user.name, url, locale }) });
       },
     },
-    socialProviders: googleConfigured
+    user: {
+      deleteUser: {
+        enabled: true,
+        // Profile, settings, roles and sessions are removed by the database (ON DELETE CASCADE);
+        // files in storage have to be removed here.
+        beforeDelete: async (user) => {
+          const [profile] = await getDb()
+            .select({ avatarKey: schema.profiles.avatarKey })
+            .from(schema.profiles)
+            .where(eq(schema.profiles.id, user.id));
+          if (profile?.avatarKey) {
+            await getStorage()
+              .delete(profile.avatarKey)
+              .catch((e) => console.warn("[auth] couldn't delete avatar", e));
+          }
+        },
+      },
+    },
+    socialProviders: isGoogleEnabled()
       ? {
           google: {
             clientId: process.env.GOOGLE_CLIENT_ID!,

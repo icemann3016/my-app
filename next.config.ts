@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import createNextIntlPlugin from "next-intl/plugin";
 
 // Where uploaded images are served from (Supabase Storage, Google Cloud Storage, Azure Blob…).
 const storageHost = process.env.STORAGE_PUBLIC_BASE_URL
@@ -19,4 +20,5 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+// Translations: see i18n/request.ts and messages/*.json
+export default createNextIntlPlugin()(nextConfig);

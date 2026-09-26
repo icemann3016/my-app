@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { LayoutDashboardIcon, LogOutIcon, SettingsIcon, UserRoundIcon } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { signOut } from "@/app/(auth)/actions";
 import { UserAvatar } from "@/components/user-avatar";
@@ -17,11 +18,12 @@ import {
 export type AccountSummary = { id: string; name: string; avatarUrl: string | null };
 
 export function UserMenu({ account }: { account: AccountSummary }) {
+  const t = useTranslations("common.nav");
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
         className="rounded-full outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50"
-        aria-label="Account menu"
+        aria-label={t("accountMenu")}
       >
         <UserAvatar name={account.name} url={account.avatarUrl} size={32} />
       </DropdownMenuTrigger>
@@ -30,24 +32,24 @@ export function UserMenu({ account }: { account: AccountSummary }) {
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
           <Link href="/dashboard">
-            <LayoutDashboardIcon /> Dashboard
+            <LayoutDashboardIcon /> {t("dashboard")}
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
           <Link href="/account">
-            <SettingsIcon /> Account
+            <SettingsIcon /> {t("account")}
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
           <Link href={`/u/${account.id}`}>
-            <UserRoundIcon /> Public profile
+            <UserRoundIcon /> {t("publicProfile")}
           </Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <form action={signOut}>
           <DropdownMenuItem asChild>
             <button type="submit" className="w-full">
-              <LogOutIcon /> Log out
+              <LogOutIcon /> {t("logOut")}
             </button>
           </DropdownMenuItem>
         </form>

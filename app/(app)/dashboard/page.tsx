@@ -7,16 +7,21 @@ import {
   PlaneIcon,
   UserRoundIcon,
 } from "lucide-react";
+import { getTranslations } from "next-intl/server";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { requireProfile } from "@/lib/auth/session";
 
-export const metadata: Metadata = { title: "Dashboard" };
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("common.nav");
+  return { title: t("dashboard") };
+}
 
 export default async function DashboardPage() {
   const { userId, profile, roles } = await requireProfile("/dashboard");
-  const firstName = profile.displayName.split(/\s+/)[0];
+  const t = await getTranslations("dashboard");
+  const firstName = profile.displayName.split(/\s+/)[0] ?? profile.displayName;
   const profileComplete = Boolean(profile.avatarKey && profile.homeAirportIcao && profile.bio);
   const isPilot = roles.includes("pilot");
   const isOwner = roles.includes("owner");
@@ -24,52 +29,49 @@ export default async function DashboardPage() {
   return (
     <div className="mx-auto grid w-full max-w-4xl gap-6 px-4 py-10">
       <div>
-        <h1 className="text-2xl font-semibold tracking-tight">Welcome, {firstName}</h1>
-        <p className="text-muted-foreground">Here&apos;s what to do next.</p>
+        <h1 className="text-2xl font-semibold tracking-tight">{t("title", { name: firstName })}</h1>
+        <p className="text-muted-foreground">{t("subtitle")}</p>
       </div>
 
       <div className="grid gap-4 md:grid-cols-3">
         <StepCard
           done={profileComplete}
+          labels={{ done: t("done"), todo: t("todo") }}
           icon={UserRoundIcon}
-          title="Complete your profile"
-          text="Add a photo, your home airfield and a few words about your flying."
+          title={t("profileTitle")}
+          text={t("profileText")}
           action={
             <Button size="sm" variant={profileComplete ? "outline" : "default"} asChild>
-              <Link href="/account">{profileComplete ? "Edit profile" : "Complete profile"}</Link>
+              <Link href="/account">
+                {profileComplete ? t("profileEdit") : t("profileComplete")}
+              </Link>
             </Button>
           }
         />
         <StepCard
           done={isPilot}
+          labels={{ done: t("done"), todo: t("todo") }}
           icon={PlaneIcon}
-          title="Fly as a pilot"
-          text={
-            isPilot
-              ? "Next: add your licence, ratings and medical. Coming soon."
-              : "Switch on the pilot role to rent aircraft."
-          }
+          title={t("pilotTitle")}
+          text={isPilot ? t("pilotTextOn") : t("pilotTextOff")}
           action={
             !isPilot && (
               <Button size="sm" asChild>
-                <Link href="/account#roles">Switch on</Link>
+                <Link href="/account#roles">{t("switchOn")}</Link>
               </Button>
             )
           }
         />
         <StepCard
           done={isOwner}
+          labels={{ done: t("done"), todo: t("todo") }}
           icon={CalendarCheckIcon}
-          title="List your aircraft"
-          text={
-            isOwner
-              ? "Next: create your first listing. Coming soon."
-              : "Own an aircraft? Switch on the owner role to rent it out."
-          }
+          title={t("ownerTitle")}
+          text={isOwner ? t("ownerTextOn") : t("ownerTextOff")}
           action={
             !isOwner && (
               <Button size="sm" variant="outline" asChild>
-                <Link href="/account#roles">Switch on</Link>
+                <Link href="/account#roles">{t("switchOn")}</Link>
               </Button>
             )
           }
@@ -77,9 +79,9 @@ export default async function DashboardPage() {
       </div>
 
       <p className="text-sm text-muted-foreground">
-        Your public profile:{" "}
+        {t("publicProfile")}{" "}
         <Link href={`/u/${userId}`} className="text-foreground underline underline-offset-4">
-          see what others see
+          {t("seeWhatOthersSee")}
         </Link>
       </p>
     </div>
@@ -88,12 +90,14 @@ export default async function DashboardPage() {
 
 function StepCard({
   done,
+  labels,
   icon: Icon,
   title,
   text,
   action,
 }: {
   done: boolean;
+  labels: { done: string; todo: string };
   icon: React.ComponentType<{ className?: string }>;
   title: string;
   text: string;
@@ -105,9 +109,9 @@ function StepCard({
         <div className="flex items-center justify-between">
           <Icon className="size-5 text-primary" />
           {done ? (
-            <CircleCheckIcon className="size-5 text-success" aria-label="Done" />
+            <CircleCheckIcon className="size-5 text-success" aria-label={labels.done} />
           ) : (
-            <CircleIcon className="size-5 text-muted-foreground" aria-label="To do" />
+            <CircleIcon className="size-5 text-muted-foreground" aria-label={labels.todo} />
           )}
         </div>
         <CardTitle as="h2" className="pt-2">

@@ -59,6 +59,9 @@ jobs:
           --health-cmd "pg_isready -U postgres" --health-interval 5s --health-timeout 5s --health-retries 10
     env:
       E2E_FULL: "1"
+      # Dummy Google keys: shows the button so the redirect to Google can be tested.
+      GOOGLE_CLIENT_ID: ci-dummy.apps.googleusercontent.com
+      GOOGLE_CLIENT_SECRET: ci-dummy-secret
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4

@@ -1,21 +1,24 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { getTranslations } from "next-intl/server";
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ForgotPasswordForm } from "./forgot-password-form";
 
-export const metadata: Metadata = { title: "Reset password" };
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("forgotPassword");
+  return { title: t("title") };
+}
 
-export default function ForgotPasswordPage() {
+export default async function ForgotPasswordPage() {
+  const t = await getTranslations("forgotPassword");
   return (
     <Card>
       <CardHeader>
         <CardTitle as="h1" className="text-xl">
-          Reset your password
+          {t("title")}
         </CardTitle>
-        <CardDescription>
-          Enter your email and we&apos;ll send you a link to choose a new password.
-        </CardDescription>
+        <CardDescription>{t("description")}</CardDescription>
       </CardHeader>
       <CardContent className="grid gap-6">
         <ForgotPasswordForm />
@@ -24,7 +27,7 @@ export default function ForgotPasswordPage() {
             href="/login"
             className="font-medium text-foreground underline-offset-4 hover:underline"
           >
-            Back to log in
+            {t("backToLogin")}
           </Link>
         </p>
       </CardContent>

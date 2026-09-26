@@ -1,13 +1,18 @@
 import type { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
 
 import { ComingSoon } from "@/components/coming-soon";
 
-export const metadata: Metadata = { title: "Privacy policy" };
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("placeholders.privacy");
+  return { title: t("title") };
+}
 
-export default function Page() {
+export default async function Page() {
+  const t = await getTranslations("placeholders.privacy");
   return (
-    <ComingSoon title="Privacy policy" milestone="M10">
-      Our privacy policy will be published before launch.
+    <ComingSoon title={t("title")} milestone="M10">
+      {t("text")}
     </ComingSoon>
   );
 }

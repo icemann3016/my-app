@@ -21,7 +21,7 @@ describe("signUpSchema", () => {
     const { terms: _terms, ...withoutTerms } = valid;
     const r = signUpSchema.safeParse(withoutTerms);
     expect(r.success).toBe(false);
-    expect(r.error?.issues[0]?.message).toBe("Please accept the terms to continue.");
+    expect(r.error?.issues[0]?.message).toBe("termsRequired");
   });
 
   it("rejects short passwords and bad emails", () => {

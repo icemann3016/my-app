@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState } from "react";
+import { useTranslations } from "next-intl";
 
 import { FormMessage } from "@/components/forms/form-message";
 import { SubmitButton } from "@/components/forms/submit-button";
@@ -9,6 +10,7 @@ import { initialFormState } from "@/lib/forms";
 import { resetPassword } from "../actions";
 
 export function ResetPasswordForm({ token }: { token: string }) {
+  const t = useTranslations("resetPassword");
   const [state, formAction] = useActionState(resetPassword, initialFormState);
   return (
     <form action={formAction} className="grid gap-4">
@@ -16,7 +18,7 @@ export function ResetPasswordForm({ token }: { token: string }) {
       <FormMessage state={state} />
       <TextField
         name="password"
-        label="New password"
+        label={t("newPassword")}
         type="password"
         autoComplete="new-password"
         required
@@ -26,13 +28,13 @@ export function ResetPasswordForm({ token }: { token: string }) {
       />
       <TextField
         name="confirm"
-        label="Repeat new password"
+        label={t("repeatPassword")}
         type="password"
         autoComplete="new-password"
         required
         errors={state.errors?.confirm}
       />
-      <SubmitButton pendingText="Saving…">Save new password</SubmitButton>
+      <SubmitButton pendingText={t("pending")}>{t("submit")}</SubmitButton>
     </form>
   );
 }

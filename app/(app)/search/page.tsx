@@ -1,13 +1,18 @@
 import type { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
 
 import { ComingSoon } from "@/components/coming-soon";
 
-export const metadata: Metadata = { title: "Find aircraft" };
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("placeholders.search");
+  return { title: t("title") };
+}
 
-export default function Page() {
+export default async function Page() {
+  const t = await getTranslations("placeholders.search");
   return (
-    <ComingSoon title="Find aircraft" milestone="M5">
-      Search aircraft by airport, dates and specs.
+    <ComingSoon title={t("title")} milestone="M5">
+      {t("text")}
     </ComingSoon>
   );
 }

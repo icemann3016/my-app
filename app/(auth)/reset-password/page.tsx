@@ -1,11 +1,15 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { getTranslations } from "next-intl/server";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ResetPasswordForm } from "./reset-password-form";
 
-export const metadata: Metadata = { title: "Choose a new password" };
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("resetPassword");
+  return { title: t("title") };
+}
 
 export default async function ResetPasswordPage({
   searchParams,
@@ -14,25 +18,22 @@ export default async function ResetPasswordPage({
 }) {
   const { token, error } = await searchParams;
   const valid = Boolean(token) && !error;
+  const t = await getTranslations("resetPassword");
 
   return (
     <Card>
       <CardHeader>
         <CardTitle as="h1" className="text-xl">
-          {valid ? "Choose a new password" : "This link didn't work"}
+          {valid ? t("title") : t("invalidTitle")}
         </CardTitle>
-        <CardDescription>
-          {valid
-            ? "Use at least 8 characters. A short sentence works well."
-            : "Reset links expire after an hour and can only be used once."}
-        </CardDescription>
+        <CardDescription>{valid ? t("description") : t("invalidDescription")}</CardDescription>
       </CardHeader>
       <CardContent className="grid gap-6">
         {valid ? (
           <ResetPasswordForm token={token!} />
         ) : (
           <Button asChild>
-            <Link href="/forgot-password">Send a new link</Link>
+            <Link href="/forgot-password">{t("sendNewLink")}</Link>
           </Button>
         )}
       </CardContent>

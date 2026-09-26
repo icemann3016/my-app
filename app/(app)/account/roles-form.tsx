@@ -1,4 +1,5 @@
 import { CalendarCheckIcon, CheckIcon, PlaneIcon } from "lucide-react";
+import { getTranslations } from "next-intl/server";
 
 import { SubmitButton } from "@/components/forms/submit-button";
 import type { AppRole } from "@/lib/db/schema";
@@ -6,25 +7,17 @@ import { cn } from "@/lib/utils";
 import { setRole } from "./actions";
 
 const ROLES = [
-  {
-    role: "pilot",
-    icon: PlaneIcon,
-    title: "I'm a pilot",
-    text: "Rent aircraft from owners. Next you'll add your licence and medical.",
-  },
-  {
-    role: "owner",
-    icon: CalendarCheckIcon,
-    title: "I own an aircraft",
-    text: "List your aircraft for rent and choose who can fly it.",
-  },
+  { role: "pilot", icon: PlaneIcon },
+  { role: "owner", icon: CalendarCheckIcon },
 ] as const;
 
-export function RolesForm({ roles }: { roles: AppRole[] }) {
+export async function RolesForm({ roles }: { roles: AppRole[] }) {
+  const t = await getTranslations("account.roles");
   return (
     <div className="grid gap-3 sm:grid-cols-2">
-      {ROLES.map(({ role, icon: Icon, title, text }) => {
+      {ROLES.map(({ role, icon: Icon }) => {
         const active = roles.includes(role);
+        const title = t(`${role}Title`);
         return (
           <form
             key={role}
@@ -40,21 +33,23 @@ export function RolesForm({ roles }: { roles: AppRole[] }) {
               <Icon className="size-5 text-primary" aria-hidden />
               {active && (
                 <span className="flex items-center gap-1 text-xs font-medium text-primary">
-                  <CheckIcon className="size-3.5" aria-hidden /> On
+                  <CheckIcon className="size-3.5" aria-hidden /> {t("on")}
                 </span>
               )}
             </div>
             <div>
               <p className="font-medium">{title}</p>
-              <p className="text-sm text-muted-foreground">{text}</p>
+              <p className="text-sm text-muted-foreground">{t(`${role}Text`)}</p>
             </div>
             <SubmitButton
               size="sm"
               variant={active ? "outline" : "default"}
               className="mt-auto self-start"
-              aria-label={`${active ? "Switch off" : "Switch on"}: ${title}`}
+              aria-label={
+                active ? t("switchOffLabel", { role: title }) : t("switchOnLabel", { role: title })
+              }
             >
-              {active ? "Switch off" : "Switch on"}
+              {active ? t("switchOff") : t("switchOn")}
             </SubmitButton>
           </form>
         );

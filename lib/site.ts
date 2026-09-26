@@ -1,14 +1,12 @@
-/** Site-wide settings. Rename the app here. */
+/** Site-wide settings. Rename the app here. Labels live in messages/*.json → common.nav/footer. */
 export const siteConfig = {
   name: "ownAplane",
-  description:
-    "Rent aircraft from verified owners across Europe. Pilots, owners, technicians and airports in one place.",
   mainNav: [
-    { href: "/search", label: "Find aircraft" },
-    { href: "/owner/aircraft", label: "List your aircraft" },
+    { href: "/search", key: "findAircraft" },
+    { href: "/owner/aircraft", key: "listAircraft" },
   ],
   footerNav: [
-    { href: "/terms", label: "Terms" },
-    { href: "/privacy", label: "Privacy" },
+    { href: "/terms", key: "terms" },
+    { href: "/privacy", key: "privacy" },
   ],
 } as const;

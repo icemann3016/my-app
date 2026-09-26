@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { MapPinIcon, StarIcon } from "lucide-react";
+import { getLocale, getTranslations } from "next-intl/server";
 
 import { UserAvatar } from "@/components/user-avatar";
 import { Badge } from "@/components/ui/badge";
@@ -14,9 +15,13 @@ import { getUser } from "@/lib/auth/session";
 import { isDatabaseConfigured } from "@/lib/db";
 import { asAnon } from "@/lib/db/rls";
 import { profiles, userRoles } from "@/lib/db/schema";
+import { intlLocale } from "@/lib/i18n/config";
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-const ROLE_LABELS: Record<string, string> = { pilot: "Pilot", owner: "Aircraft owner" };
+const PUBLIC_ROLES = ["pilot", "owner"] as const;
+type PublicRole = (typeof PUBLIC_ROLES)[number];
+const isPublicRole = (r: string): r is PublicRole =>
+  (PUBLIC_ROLES as readonly string[]).includes(r);
 
 const getPublicProfile = cache(async (id: string) => {
   if (!UUID.test(id) || !isDatabaseConfigured()) return null;
@@ -39,7 +44,7 @@ const getPublicProfile = cache(async (id: string) => {
       .select({ role: userRoles.role })
       .from(userRoles)
       .where(eq(userRoles.userId, id));
-    return { profile, roles: roles.map((r) => r.role).filter((r) => r in ROLE_LABELS) };
+    return { profile, roles: roles.map((r) => r.role).filter(isPublicRole) };
   });
 });
 
@@ -49,7 +54,8 @@ export async function generateMetadata({
   params: Promise<{ id: string }>;
 }): Promise<Metadata> {
   const data = await getPublicProfile((await params).id);
-  return { title: data?.profile.displayName ?? "Profile not found" };
+  const t = await getTranslations("profile");
+  return { title: data?.profile.displayName ?? t("notFound") };
 }
 
 export default async function PublicProfilePage({ params }: { params: Promise<{ id: string }> }) {
@@ -58,7 +64,8 @@ export default async function PublicProfilePage({ params }: { params: Promise<{ 
   if (!data) notFound();
   const { profile, roles } = data;
   const viewer = await getUser();
-  const memberSince = new Intl.DateTimeFormat("en-GB", {
+  const t = await getTranslations("profile");
+  const memberSince = new Intl.DateTimeFormat(intlLocale(await getLocale()), {
     month: "long",
     year: "numeric",
     timeZone: "UTC",
@@ -75,21 +82,21 @@ export default async function PublicProfilePage({ params }: { params: Promise<{ 
               <div className="flex flex-wrap gap-1.5">
                 {roles.map((role) => (
                   <Badge key={role} variant="secondary">
-                    {ROLE_LABELS[role]}
+                    {t(`roles.${role}`)}
                   </Badge>
                 ))}
               </div>
             </div>
             {viewer?.id === profile.id && (
               <Button variant="outline" size="sm" className="ml-auto" asChild>
-                <Link href="/account">Edit profile</Link>
+                <Link href="/account">{t("edit")}</Link>
               </Button>
             )}
           </div>
 
           <dl className="grid gap-4 text-sm sm:grid-cols-3">
             <div>
-              <dt className="text-muted-foreground">Rating</dt>
+              <dt className="text-muted-foreground">{t("rating")}</dt>
               <dd className="flex items-center gap-1 font-medium">
                 {profile.ratingCount > 0 && profile.ratingAvg !== null ? (
                   <>
@@ -100,12 +107,12 @@ export default async function PublicProfilePage({ params }: { params: Promise<{ 
                     </span>
                   </>
                 ) : (
-                  "No ratings yet"
+                  t("noRatings")
                 )}
               </dd>
             </div>
             <div>
-              <dt className="text-muted-foreground">Home airfield</dt>
+              <dt className="text-muted-foreground">{t("homeAirfield")}</dt>
               <dd className="flex items-center gap-1 font-medium">
                 {profile.homeAirportIcao ? (
                   <>
@@ -113,12 +120,12 @@ export default async function PublicProfilePage({ params }: { params: Promise<{ 
                     {profile.homeAirportIcao}
                   </>
                 ) : (
-                  "Not set"
+                  t("notSet")
                 )}
               </dd>
             </div>
             <div>
-              <dt className="text-muted-foreground">Member since</dt>
+              <dt className="text-muted-foreground">{t("memberSince")}</dt>
               <dd className="font-medium">{memberSince}</dd>
             </div>
           </dl>

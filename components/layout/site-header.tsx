@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { getTranslations } from "next-intl/server";
 
 import { Button } from "@/components/ui/button";
 import { avatarUrl } from "@/lib/avatar-url";
@@ -9,6 +10,7 @@ import { MobileNav } from "./mobile-nav";
 import { type AccountSummary, UserMenu } from "./user-menu";
 
 export async function SiteHeader() {
+  const t = await getTranslations("common.nav");
   const current = await getCurrentProfile();
   const account: AccountSummary | null = current
     ? {
@@ -22,10 +24,10 @@ export async function SiteHeader() {
     <header className="sticky top-0 z-40 border-b bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="mx-auto flex h-14 max-w-6xl items-center gap-6 px-4">
         <Logo />
-        <nav aria-label="Main" className="hidden items-center gap-1 md:flex">
+        <nav aria-label={t("main")} className="hidden items-center gap-1 md:flex">
           {siteConfig.mainNav.map((item) => (
             <Button key={item.href} variant="ghost" size="sm" asChild>
-              <Link href={item.href}>{item.label}</Link>
+              <Link href={item.href}>{t(item.key)}</Link>
             </Button>
           ))}
         </nav>
@@ -35,10 +37,10 @@ export async function SiteHeader() {
           ) : (
             <>
               <Button variant="ghost" size="sm" asChild>
-                <Link href="/login">Log in</Link>
+                <Link href="/login">{t("logIn")}</Link>
               </Button>
               <Button size="sm" asChild>
-                <Link href="/signup">Sign up</Link>
+                <Link href="/signup">{t("signUp")}</Link>
               </Button>
             </>
           )}

@@ -1,5 +1,6 @@
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
+import { getTranslations } from "next-intl/server";
 
 import { getUser } from "@/lib/auth/session";
 import { asUser } from "@/lib/db/rls";
@@ -37,17 +38,18 @@ async function saveAvatarKey(userId: string, key: string | null) {
 
 /** Upload a new profile photo (multipart form field "file"). */
 export async function POST(request: Request) {
+  const t = await getTranslations("account.avatar");
   const user = await getUser();
-  if (!user) return error("Please log in again.", 401);
+  if (!user) return error(t("failed"), 401);
 
   const form = await request.formData().catch(() => null);
   const file = form?.get("file");
-  if (!(file instanceof File)) return error("No file received.");
+  if (!(file instanceof File)) return error(t("failed"));
   if (!(AVATAR_TYPES as readonly string[]).includes(file.type)) {
-    return error("Please choose a JPG, PNG or WebP image.");
+    return error(t("invalidType"));
   }
   if (file.size > AVATAR_MAX_BYTES) {
-    return error("That image is larger than 2 MB. Please choose a smaller one.");
+    return error(t("tooLarge"));
   }
 
   const key = `avatars/${user.id}/${Date.now()}.${EXTENSIONS[file.type]}`;
@@ -56,15 +58,16 @@ export async function POST(request: Request) {
     await saveAvatarKey(user.id, key);
   } catch (e) {
     console.error("[avatar] upload failed", e);
-    return error("Upload failed. Please try again.", 500);
+    return error(t("failed"), 500);
   }
   return Response.json({ ok: true });
 }
 
 /** Remove the profile photo. */
 export async function DELETE() {
+  const t = await getTranslations("account.avatar");
   const user = await getUser();
-  if (!user) return error("Please log in again.", 401);
+  if (!user) return error(t("failed"), 401);
   await saveAvatarKey(user.id, null);
   return Response.json({ ok: true });
 }

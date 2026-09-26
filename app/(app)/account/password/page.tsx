@@ -1,24 +1,27 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { getTranslations } from "next-intl/server";
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { requireUser } from "@/lib/auth/session";
 import { PasswordForm } from "./password-form";
 
-export const metadata: Metadata = { title: "Change password" };
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("password");
+  return { title: t("title") };
+}
 
 export default async function PasswordPage() {
   await requireUser("/account/password");
+  const t = await getTranslations("password");
   return (
     <div className="mx-auto w-full max-w-md px-4 py-12">
       <Card>
         <CardHeader>
           <CardTitle as="h1" className="text-xl">
-            Change password
+            {t("title")}
           </CardTitle>
-          <CardDescription>
-            Use at least 8 characters. You&apos;ll stay logged in here and be logged out elsewhere.
-          </CardDescription>
+          <CardDescription>{t("description")}</CardDescription>
         </CardHeader>
         <CardContent className="grid gap-6">
           <PasswordForm />
@@ -27,7 +30,7 @@ export default async function PasswordPage() {
               href="/account"
               className="text-muted-foreground underline-offset-4 hover:underline"
             >
-              Back to account
+              {t("back")}
             </Link>
           </p>
         </CardContent>

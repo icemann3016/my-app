@@ -1,5 +1,3 @@
-import { z } from "zod";
-
 /** State returned by form Server Actions and read with useActionState. */
 export type FormState = {
   ok?: boolean;
@@ -19,10 +17,6 @@ export function formValues(formData: FormData): Record<string, string> {
     if (typeof value === "string") values[key] = value;
   }
   return values;
-}
-
-export function fieldErrors(error: z.ZodError): FormState["errors"] {
-  return z.flattenError(error).fieldErrors as FormState["errors"];
 }
 
 export function withoutSecrets(values: Record<string, string>): Record<string, string> {

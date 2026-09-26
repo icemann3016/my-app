@@ -1,0 +1,299 @@
+{
+  "common": {
+    "description": "Rent aircraft from verified owners across Europe. Pilots, owners, technicians and airports in one place.",
+    "nav": {
+      "findAircraft": "Find aircraft",
+      "listAircraft": "List your aircraft",
+      "dashboard": "Dashboard",
+      "account": "Account",
+      "publicProfile": "Public profile",
+      "logIn": "Log in",
+      "signUp": "Sign up",
+      "logOut": "Log out",
+      "openMenu": "Open menu",
+      "accountMenu": "Account menu",
+      "main": "Main",
+      "mobile": "Mobile",
+      "footer": "Footer",
+      "mainNavigation": "Main navigation"
+    },
+    "footer": {
+      "tagline": "Made for general aviation in Europe.",
+      "terms": "Terms",
+      "privacy": "Privacy",
+      "language": "Language"
+    },
+    "comingSoon": {
+      "default": "This page is coming soon.",
+      "backHome": "Back to home"
+    },
+    "notFound": {
+      "title": "Off the charts",
+      "text": "We couldn't find that page.",
+      "backHome": "Back to home"
+    },
+    "languages": {
+      "en": "English",
+      "bg": "Български"
+    }
+  },
+  "home": {
+    "badge": "Early preview · Europe",
+    "title": "Rent a plane. Fly more.",
+    "subtitle": "Find verified aircraft to rent near you and book with owners who can see your ratings. Hiring technicians and requesting airport services will follow, all in one place.",
+    "findAircraft": "Find an aircraft",
+    "listAircraft": "List your aircraft",
+    "audiencesHeading": "Who it's for",
+    "comingLater": "Coming later",
+    "pilots": {
+      "title": "Pilots",
+      "text": "Search aircraft near you by dates, see specs, price per hour and availability, and send a booking request."
+    },
+    "owners": {
+      "title": "Owners",
+      "text": "List your aircraft, manage its calendar and decide who flies it with a minimum pilot rating and experience rules."
+    },
+    "technicians": {
+      "title": "Technicians",
+      "text": "Offer 50 h and 100 h checks and other maintenance to owners nearby."
+    },
+    "airports": {
+      "title": "Airports",
+      "text": "Take PPR, apron parking, hangar, fuel and customs requests online."
+    },
+    "trustLicences": "Verified licences, ratings and medicals",
+    "trustRatings": "Two-way ratings after every flight",
+    "trustEasa": "Built for EASA rules and European airfields",
+    "accountDeleted": "Your account and all its data have been deleted."
+  },
+  "placeholders": {
+    "search": { "title": "Find aircraft", "text": "Search aircraft by airport, dates and specs." },
+    "ownerAircraft": {
+      "title": "List your aircraft",
+      "text": "List your aircraft, set prices and choose who can rent it."
+    },
+    "terms": { "title": "Terms of service", "text": "Our terms will be published before launch." },
+    "privacy": {
+      "title": "Privacy policy",
+      "text": "Our privacy policy will be published before launch."
+    }
+  },
+  "fields": {
+    "email": "Email",
+    "password": "Password"
+  },
+  "login": {
+    "title": "Log in",
+    "description": "Welcome back. Log in to rent or list aircraft.",
+    "forgotPassword": "Forgot password?",
+    "submit": "Log in",
+    "pending": "Logging in…",
+    "newHere": "New here?",
+    "createAccount": "Create an account",
+    "resendConfirmation": "Send the confirmation email again",
+    "passwordChanged": "Your password was changed. Log in with the new one.",
+    "linkExpired": "That link has expired or was already used. Log in, or request a new link.",
+    "oauthFailed": "Signing in with Google didn't work. Please try again or use your email."
+  },
+  "signup": {
+    "title": "Create your account",
+    "description": "One account for everything: rent aircraft as a pilot, or list your own as an owner.",
+    "name": "Your name",
+    "nameHint": "Shown on your public profile.",
+    "passwordHint": "At least 8 characters.",
+    "acceptTerms": "I accept the <terms>terms</terms> and <privacy>privacy policy</privacy>.",
+    "submit": "Create account",
+    "pending": "Creating account…",
+    "alreadyHaveAccount": "Already have an account?",
+    "logIn": "Log in"
+  },
+  "google": {
+    "continue": "Continue with Google",
+    "or": "or",
+    "termsNote": "By continuing with Google you accept the <terms>terms</terms> and <privacy>privacy policy</privacy>."
+  },
+  "checkEmail": {
+    "title": "Check your email",
+    "description": "We've sent you a link to confirm your address. Open it to finish creating your account.",
+    "noEmail": "No email after a few minutes? Check your spam folder, or send it again:",
+    "resend": "Resend confirmation email",
+    "pending": "Sending…",
+    "alreadyConfirmed": "Already confirmed?",
+    "logIn": "Log in"
+  },
+  "forgotPassword": {
+    "title": "Reset your password",
+    "description": "Enter your email and we'll send you a link to choose a new password.",
+    "submit": "Send reset link",
+    "pending": "Sending…",
+    "backToLogin": "Back to log in"
+  },
+  "resetPassword": {
+    "title": "Choose a new password",
+    "description": "Use at least 8 characters. A short sentence works well.",
+    "invalidTitle": "This link didn't work",
+    "invalidDescription": "Reset links expire after an hour and can only be used once.",
+    "sendNewLink": "Send a new link",
+    "newPassword": "New password",
+    "repeatPassword": "Repeat new password",
+    "submit": "Save new password",
+    "pending": "Saving…"
+  },
+  "authMessages": {
+    "notConfigured": "Accounts aren't available yet: the database isn't configured for this site.",
+    "wrongCredentials": "Wrong email or password.",
+    "emailNotVerified": "Please confirm your email address first. Check your inbox for the link.",
+    "userExists": "An account with this email already exists. Try logging in.",
+    "passwordLength": "Use a password between 8 and 72 characters.",
+    "linkExpired": "This link has expired or was already used. Please request a new one.",
+    "tooManyRequests": "Too many attempts. Please wait a minute and try again.",
+    "generic": "Something went wrong. Please try again.",
+    "resetSent": "If an account exists for that email, we've sent a link to reset your password.",
+    "verificationSent": "If that address is waiting for confirmation, we've sent a new link."
+  },
+  "validation": {
+    "emailInvalid": "Enter a valid email address.",
+    "passwordMin": "Use at least 8 characters.",
+    "passwordMax": "Use at most 72 characters.",
+    "passwordRequired": "Enter your password.",
+    "currentPasswordRequired": "Enter your current password.",
+    "passwordsMismatch": "Passwords don't match.",
+    "nameRequired": "Enter your name.",
+    "nameMax": "Use at most 80 characters.",
+    "termsRequired": "Please accept the terms to continue.",
+    "icaoInvalid": "Use a 4-character ICAO code, e.g. LBSF.",
+    "bioMax": "Use at most 1000 characters.",
+    "invalid": "Please check this field."
+  },
+  "dashboard": {
+    "title": "Welcome, {name}",
+    "subtitle": "Here's what to do next.",
+    "done": "Done",
+    "todo": "To do",
+    "profileTitle": "Complete your profile",
+    "profileText": "Add a photo, your home airfield and a few words about your flying.",
+    "profileComplete": "Complete profile",
+    "profileEdit": "Edit profile",
+    "pilotTitle": "Fly as a pilot",
+    "pilotTextOn": "Next: add your licence, ratings and medical. Coming soon.",
+    "pilotTextOff": "Switch on the pilot role to rent aircraft.",
+    "ownerTitle": "List your aircraft",
+    "ownerTextOn": "Next: create your first listing. Coming soon.",
+    "ownerTextOff": "Own an aircraft? Switch on the owner role to rent it out.",
+    "switchOn": "Switch on",
+    "publicProfile": "Your public profile:",
+    "seeWhatOthersSee": "see what others see"
+  },
+  "account": {
+    "title": "Account",
+    "viewPublicProfile": "View public profile",
+    "profile": {
+      "title": "Profile",
+      "description": "This is what owners and pilots see on your public profile.",
+      "name": "Name",
+      "homeAirfield": "Home airfield (ICAO)",
+      "homeAirfieldHint": "The 4-letter code of the airfield you usually fly from. An airport search is coming soon.",
+      "bio": "About you",
+      "bioPlaceholder": "e.g. PPL(A) since 2019, around 250 hours, mostly on C172 and PA-28.",
+      "save": "Save profile",
+      "saving": "Saving…",
+      "saved": "Profile saved.",
+      "saveFailed": "Couldn't save your profile. Please try again."
+    },
+    "avatar": {
+      "upload": "Upload photo",
+      "change": "Change photo",
+      "remove": "Remove",
+      "hint": "JPG, PNG or WebP, up to 2 MB.",
+      "choose": "Choose profile photo",
+      "invalidType": "Please choose a JPG, PNG or WebP image.",
+      "tooLarge": "That image is larger than 2 MB. Please choose a smaller one.",
+      "failed": "Something went wrong. Please try again."
+    },
+    "roles": {
+      "title": "How you'll use the app",
+      "description": "Switch on what applies to you. You can change this any time.",
+      "pilotTitle": "I'm a pilot",
+      "pilotText": "Rent aircraft from owners. Next you'll add your licence and medical.",
+      "ownerTitle": "I own an aircraft",
+      "ownerText": "List your aircraft for rent and choose who can fly it.",
+      "on": "On",
+      "switchOn": "Switch on",
+      "switchOff": "Switch off",
+      "switchOnLabel": "Switch on: {role}",
+      "switchOffLabel": "Switch off: {role}"
+    },
+    "preferences": {
+      "title": "Preferences",
+      "description": "Language of the app and emails, and the units used for weights and fuel.",
+      "language": "Language",
+      "units": "Units",
+      "metric": "Metric (kg, litres)",
+      "imperial": "Imperial (lb, US gallons)",
+      "save": "Save preferences",
+      "saving": "Saving…",
+      "saved": "Preferences saved."
+    },
+    "security": {
+      "title": "Security",
+      "description": "Change the password you use to log in.",
+      "changePassword": "Change password"
+    },
+    "data": {
+      "title": "Your data",
+      "description": "Download a copy of everything we store about you, or delete your account.",
+      "download": "Download my data",
+      "delete": "Delete account",
+      "dialogTitle": "Delete your account?",
+      "dialogDescription": "Your profile, photo, roles and settings will be deleted permanently. This can't be undone.",
+      "passwordLabel": "Your password",
+      "confirmLabel": "Type {word} to confirm",
+      "confirmWord": "DELETE",
+      "confirmMismatch": "Type {word} exactly to confirm.",
+      "cancel": "Cancel",
+      "confirm": "Delete my account",
+      "deleting": "Deleting…",
+      "wrongPassword": "Your password is not correct.",
+      "notFresh": "For your security, please log out and log in again, then delete your account.",
+      "failed": "Couldn't delete your account. Please try again."
+    }
+  },
+  "password": {
+    "title": "Change password",
+    "description": "Use at least 8 characters. You'll stay logged in here and be logged out elsewhere.",
+    "current": "Current password",
+    "new": "New password",
+    "repeat": "Repeat new password",
+    "submit": "Change password",
+    "saving": "Saving…",
+    "changed": "Password changed. You've been logged out on other devices.",
+    "wrongCurrent": "Your current password is not correct.",
+    "failed": "Couldn't change your password. Please try again.",
+    "back": "Back to account"
+  },
+  "profile": {
+    "notFound": "Profile not found",
+    "rating": "Rating",
+    "noRatings": "No ratings yet",
+    "homeAirfield": "Home airfield",
+    "notSet": "Not set",
+    "memberSince": "Member since",
+    "edit": "Edit profile",
+    "roles": { "pilot": "Pilot", "owner": "Aircraft owner" }
+  },
+  "email": {
+    "linkFallback": "If the button doesn't work, copy this link into your browser:",
+    "verify": {
+      "subject": "Confirm your email for {app}",
+      "greeting": "Hi {name},",
+      "body": "Please confirm your email address to finish setting up your {app} account.",
+      "cta": "Confirm email"
+    },
+    "reset": {
+      "subject": "Reset your {app} password",
+      "greeting": "Hi {name},",
+      "body": "We received a request to reset your {app} password. The link is valid for one hour. If you didn't ask for this, you can ignore this email.",
+      "cta": "Choose a new password"
+    }
+  }
+}

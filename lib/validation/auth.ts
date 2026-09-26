@@ -1,38 +1,29 @@
 import { z } from "zod";
 
-export const emailField = z
-  .string()
-  .trim()
-  .toLowerCase()
-  .pipe(z.email("Enter a valid email address."));
+// Error messages are translation keys in messages/*.json → "validation" (see localizedFieldErrors).
 
-export const newPasswordField = z
-  .string()
-  .min(8, "Use at least 8 characters.")
-  .max(72, "Use at most 72 characters.");
+export const emailField = z.string().trim().toLowerCase().pipe(z.email("emailInvalid"));
 
-export const displayNameField = z
-  .string()
-  .trim()
-  .min(1, "Enter your name.")
-  .max(80, "Use at most 80 characters.");
+export const newPasswordField = z.string().min(8, "passwordMin").max(72, "passwordMax");
+
+export const displayNameField = z.string().trim().min(1, "nameRequired").max(80, "nameMax");
 
 export const signUpSchema = z.object({
   displayName: displayNameField,
   email: emailField,
   password: newPasswordField,
-  terms: z.literal("on", { error: "Please accept the terms to continue." }),
+  terms: z.literal("on", { error: "termsRequired" }),
 });
 
 export const signInSchema = z.object({
   email: emailField,
-  password: z.string().min(1, "Enter your password."),
+  password: z.string().min(1, "passwordRequired"),
 });
 
 export const emailOnlySchema = z.object({ email: emailField });
 
 const passwordsMatch = (d: { password: string; confirm: string }) => d.password === d.confirm;
-const mismatch = { path: ["confirm"], error: "Passwords don't match." };
+const mismatch = { path: ["confirm"], error: "passwordsMismatch" };
 
 /** Choosing a new password from a reset link. */
 export const resetPasswordSchema = z
@@ -42,7 +33,7 @@ export const resetPasswordSchema = z
 /** Changing the password while logged in. */
 export const changePasswordSchema = z
   .object({
-    currentPassword: z.string().min(1, "Enter your current password."),
+    currentPassword: z.string().min(1, "currentPasswordRequired"),
     password: newPasswordField,
     confirm: z.string(),
   })

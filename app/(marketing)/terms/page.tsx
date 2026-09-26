@@ -1,13 +1,18 @@
 import type { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
 
 import { ComingSoon } from "@/components/coming-soon";
 
-export const metadata: Metadata = { title: "Terms of service" };
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("placeholders.terms");
+  return { title: t("title") };
+}
 
-export default function Page() {
+export default async function Page() {
+  const t = await getTranslations("placeholders.terms");
   return (
-    <ComingSoon title="Terms of service" milestone="M10">
-      Our terms will be published before launch.
+    <ComingSoon title={t("title")} milestone="M10">
+      {t("text")}
     </ComingSoon>
   );
 }

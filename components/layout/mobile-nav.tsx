@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { MenuIcon } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { signOut } from "@/app/(auth)/actions";
 import { UserAvatar } from "@/components/user-avatar";
@@ -21,23 +22,24 @@ import type { AccountSummary } from "./user-menu";
 const linkClass = "rounded-md px-3 py-2 text-base hover:bg-accent";
 
 export function MobileNav({ account }: { account: AccountSummary | null }) {
+  const t = useTranslations("common.nav");
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button variant="ghost" size="icon" aria-label="Open menu">
+        <Button variant="ghost" size="icon" aria-label={t("openMenu")}>
           <MenuIcon />
         </Button>
       </SheetTrigger>
       <SheetContent side="right">
         <SheetHeader>
           <SheetTitle>{siteConfig.name}</SheetTitle>
-          <SheetDescription className="sr-only">Main navigation</SheetDescription>
+          <SheetDescription className="sr-only">{t("mainNavigation")}</SheetDescription>
         </SheetHeader>
-        <nav aria-label="Mobile" className="flex flex-col gap-1 px-4">
+        <nav aria-label={t("mobile")} className="flex flex-col gap-1 px-4">
           {siteConfig.mainNav.map((item) => (
             <SheetClose key={item.href} asChild>
               <Link href={item.href} className={linkClass}>
-                {item.label}
+                {t(item.key)}
               </Link>
             </SheetClose>
           ))}
@@ -45,12 +47,12 @@ export function MobileNav({ account }: { account: AccountSummary | null }) {
             <>
               <SheetClose asChild>
                 <Link href="/dashboard" className={linkClass}>
-                  Dashboard
+                  {t("dashboard")}
                 </Link>
               </SheetClose>
               <SheetClose asChild>
                 <Link href="/account" className={linkClass}>
-                  Account
+                  {t("account")}
                 </Link>
               </SheetClose>
             </>
@@ -65,7 +67,7 @@ export function MobileNav({ account }: { account: AccountSummary | null }) {
               </div>
               <form action={signOut}>
                 <Button type="submit" variant="outline" className="w-full">
-                  Log out
+                  {t("logOut")}
                 </Button>
               </form>
             </>
@@ -73,12 +75,12 @@ export function MobileNav({ account }: { account: AccountSummary | null }) {
             <>
               <SheetClose asChild>
                 <Button variant="outline" asChild>
-                  <Link href="/login">Log in</Link>
+                  <Link href="/login">{t("logIn")}</Link>
                 </Button>
               </SheetClose>
               <SheetClose asChild>
                 <Button asChild>
-                  <Link href="/signup">Sign up</Link>
+                  <Link href="/signup">{t("signUp")}</Link>
                 </Button>
               </SheetClose>
             </>
