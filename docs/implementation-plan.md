@@ -1,0 +1,234 @@
+# Implementation Plan — Phase 1 (MVP)
+
+> **Status:** v0.1 · 2026-09-26 · Owner: Zlati
+> **Builds:** Phase 1 of [`business-requirements.md`](business-requirements.md): accounts, pilot verification, aircraft listings, search, booking requests, ratings, messaging, admin.
+> **Tracking:** Every task below is a GitHub issue, grouped into milestones **M0–M10**. Create them with `node scripts/create-github-issues.mjs`.
+
+---
+
+## 1. Summary
+
+We build a **Next.js** web app on **Supabase** (EU-hosted Postgres, login and file storage) and deploy it on **Vercel**. Work goes milestone by milestone, and each milestone ends with something you can click through. The order follows the dependencies: you need accounts before pilots, pilots and aircraft before search, search before booking, and bookings before ratings.
+
+```
+M0 Foundations → M1 Accounts → M2 Airports → M3 Pilot verification → M4 Aircraft listings
+   → M5 Search & availability → M6 Booking → M7 Ratings → M8 Messaging → M9 Admin → M10 Launch
+```
+
+**First "wow" moment:** end of **M5**, when a pilot can search and find a real listed aircraft with its calendar.
+**First usable product:** end of **M7**, when the full rent → fly → rate loop works.
+
+## 2. Tech stack
+
+| Layer | Choice | Why |
+|-------|--------|-----|
+| Framework | **Next.js 16** (App Router, Server Components, Server Actions) + **TypeScript** strict | Already set up. One codebase for UI and server logic |
+| UI | **Tailwind CSS v4** + **shadcn/ui** components | Fast to build, looks professional, and Claude knows it very well. Components live in our repo, so we own them |
+| Forms & validation | **Zod** + **react-hook-form** | One schema validates both the browser form and the server action |
+| Database | **Supabase Postgres** (region: Frankfurt, EU) | Real SQL, EU hosting for GDPR, and extensions we need: `btree_gist` (no double bookings), `postgis` (radius search), `pg_cron` (scheduled jobs) |
+| Auth | **Supabase Auth** via `@supabase/ssr` | Email + password, Google (Apple later), email verification, 2FA (TOTP) |
+| File storage | **Supabase Storage** | Private buckets for licences, medicals and aircraft documents. Public bucket for aircraft photos |
+| Security model | **Row Level Security (RLS)** on every table | The database itself enforces who can see what, even if app code has a bug |
+| Email | **Resend** | Transactional emails (booking requests, reminders) |
+| Maps | **MapLibre GL JS** + a hosted tile provider (e.g. MapTiler) | Open source and cheap. Decide the provider in M5 |
+| Airport data | **OurAirports** open dataset | ICAO codes, names, coordinates, runways |
+| Testing | **Vitest** (unit) + **Playwright** (end-to-end) | Playwright tests the key flows in a real browser |
+| Hosting | **Vercel** (functions in `fra1`, Frankfurt) | Zero-config for Next.js, with a preview URL for every branch or PR |
+| CI | **GitHub Actions** | typecheck + lint + tests + build on every push |
+| Monitoring (M10) | **Sentry** (errors) + **Plausible** or similar (privacy-friendly analytics) | Know when something breaks, without cookie banners for analytics |
+
+## 3. Architecture
+
+```mermaid
+flowchart LR
+  B[Browser / phone] -->|HTTPS| V[Next.js on Vercel<br/>pages + server actions]
+  V -->|supabase-js + user session| DB[(Supabase Postgres<br/>RLS on every table)]
+  V --> ST[Supabase Storage<br/>photos + private documents]
+  V --> RS[Resend<br/>emails]
+  CRON[pg_cron jobs] --> DB
+  CRON -->|pg_net call| V
+```
+
+- **Server-first:** pages are Server Components that read data with the user's session. Changes go through **Server Actions** that validate with Zod.
+- **Business rules live in the database**, when they must never be broken: no double bookings, eligibility checks and review publishing are enforced in Postgres (constraints, functions, RLS). The UI calls the same functions, so the rules exist in one place only.
+- **Service role key** (bypasses RLS) is used only in server-only admin and cron code, never in the browser.
+
+## 4. Key technical decisions
+
+### 4.1 No double bookings (SRC-5, BKG-5)
+All time an aircraft is busy lives in one table, `calendar_entries` (`aircraft_id`, `period tstzrange`, `kind` = booking / owner_use / maintenance / unavailable). A Postgres **exclusion constraint** makes overlapping active entries impossible, even if two pilots click "Book" at the same moment:
+
+```sql
+exclude using gist (aircraft_id with =, period with &&) where (active)
+```
+
+A booking request creates an active entry (the hold). If the request is declined, expires or is cancelled, the entry is deactivated.
+
+### 4.2 One eligibility check (VER-6, RAT-6/7/8, BKG-1)
+A Postgres function `check_eligibility(pilot_id, aircraft_id, period)` returns the list of **failed requirements**, each with a human-readable reason like "Requires ≥ 50 h on type, you have 12 h". It is used:
+- in search, for the "I meet the requirements" filter
+- on the aircraft page, to show what's missing
+- inside the booking function, so it can't be bypassed
+
+### 4.3 Double-blind reviews (RAT-3)
+Reviews are stored with `submitted_at` and `published_at`. RLS shows a review only to its author until `published_at` is set. A trigger publishes both reviews when the second one arrives, and a `pg_cron` job publishes after 14 days. Rating averages on profiles and aircraft update by trigger on publish.
+
+### 4.4 Documents & medical privacy (VER-3, §7 GDPR)
+- Private storage buckets, split into `pilot-documents`, `medical` and `aircraft-documents`. Files are only reachable through **short-lived signed URLs** created on the server.
+- Owners never get the medical file, only the `valid_until` date and a verified flag.
+- Admin access to documents is logged in `admin_actions`.
+
+### 4.5 Time (§7)
+All timestamps are `timestamptz`, stored in UTC. Each airport has an IANA timezone (worked out from its coordinates at import). The UI shows airport-local time with UTC next to it on booking screens.
+
+### 4.6 Scheduled jobs
+`pg_cron` (inside Supabase) runs:
+
+| Job | Frequency | What |
+|-----|-----------|------|
+| Expire booking requests | every 15 min | Requests past `expires_at` (24 h) → expired, calendar hold released |
+| Publish reviews | hourly | Publish reviews older than 14 days |
+| Document expiry | daily | Mark expired credentials/aircraft documents, auto-unlist aircraft, queue 30-day reminders |
+| Booking reminders | hourly | Queue "your flight is tomorrow" notifications |
+
+Notifications are written to a `notifications` table (in-app). A server route sends the matching emails through Resend. `pg_net` calls that route after each run.
+
+### 4.7 Search (SRC-1/2)
+Airports and aircraft home bases have a PostGIS `geography` point. A search RPC takes a location + radius + period + filters and returns aircraft that have **no overlapping active calendar entry** in that period. Filters and sorting are plain SQL. No separate search engine is needed at MVP scale.
+
+## 5. Data model (Phase 1)
+
+| Table | Key columns | Notes |
+|-------|-------------|-------|
+| `profiles` | `id` (= auth user), display_name, photo, home_airport_id, locale, units, rating_avg, rating_count, suspended_at | Created by trigger on sign-up |
+| `user_roles` | user_id, role (`pilot`/`owner`/`admin`) | One user, many roles |
+| `airports` | id, icao, name, country, lat/lon (`geography`), timezone, elevation | Imported from OurAirports |
+| `pilot_licences` | user_id, type (PPL/LAPL/CPL/ATPL), state, number, expires_on, document_id, status | |
+| `pilot_ratings` | user_id, kind (class/type/privilege), code (SEP, MEP, NIGHT, IR…), expires_on, status | |
+| `medicals` | user_id, class, valid_until, document_id, status | Restricted RLS |
+| `experience` | user_id, total_h, pic_h, last_90d_h, updated_at | Self-declared in MVP |
+| `experience_by_type` | user_id, aircraft_type, hours | |
+| `documents` | id, owner_id, bucket, path, kind, status (`pending`/`verified`/`rejected`), reviewer_id, reason | Shared by pilot and aircraft docs |
+| `aircraft` | id, owner_id, registration, manufacturer, model, year, category, seats, engine, fuel_type, fuel_burn, cruise_kt, useful_load_kg, endurance_h, equipment (jsonb), vfr/night/ifr flags, home_airport_id, price_per_hour, price_basis (wet/dry), time_basis (hobbs/tach/block), currency, min_hours_per_day, cancellation_policy, status (`draft`/`listed`/`paused`/`unlisted`/`grounded`), rating_avg, rating_count | |
+| `aircraft_photos` | aircraft_id, path, sort_order | Public bucket |
+| `aircraft_documents` | aircraft_id, kind (CofA/ARC/insurance/POH/checklist/W&B), document_id, expires_on | |
+| `rental_requirements` | aircraft_id (1:1), min_pilot_rating, allow_unrated, unrated_needs_checkout, licence_types[], required_ratings[], min_total_h, min_type_h, min_90d_h, min_age | |
+| `calendar_entries` | id, aircraft_id, period (`tstzrange`), kind, booking_id, note, active | Exclusion constraint (§4.1) |
+| `bookings` | id, aircraft_id, pilot_id, status (`requested`/`accepted`/`declined`/`expired`/`cancelled`/`in_progress`/`completed`), purpose, destinations, passengers, estimate, expires_at, cancelled_by, cancel_reason | |
+| `booking_events` | booking_id, actor_id, type, payload, created_at | History / audit |
+| `check_records` | booking_id, phase (out/in), hobbs, tach, fuel, photos, confirmed_by_owner_at | Final time and amount due |
+| `defects` | aircraft_id, booking_id, reported_by, description, photos, severity, grounded, resolved_at | |
+| `reviews` | booking_id, author_id, subject_user_id, subject_aircraft_id, direction (pilot→owner / owner→pilot), scores (jsonb), overall, comment, submitted_at, published_at, hidden_at, owner_reply | |
+| `conversations` / `messages` | conversation: booking_id or aircraft_id, participants. Message: sender, body, read_at | |
+| `notifications` | user_id, type, payload, read_at, emailed_at | |
+| `reports` | reporter_id, target_type, target_id, reason, status | |
+| `admin_actions` | admin_id, action, target, reason, created_at | Audit log |
+
+## 6. Project structure (target)
+
+```
+app/
+  (marketing)/            # landing page, about, legal pages
+  (auth)/                 # login, signup, verify, reset password
+  (app)/                  # logged-in area
+    search/               # aircraft search
+    aircraft/[id]/        # aircraft detail + booking request
+    bookings/             # my bookings (as pilot)
+    owner/aircraft/       # my aircraft, calendar, requests (as owner)
+    profile/              # my profile, credentials, settings
+    messages/
+    u/[id]/               # public profile
+  admin/                  # admin area (admin role only)
+  api/                    # cron and webhook routes only
+components/
+  ui/                     # shadcn/ui components
+  ...                     # feature components (AircraftCard, AirportPicker…)
+lib/
+  supabase/               # client.ts, server.ts, admin.ts (service role, server-only)
+  validation/             # Zod schemas
+  domain/                 # pure logic: pricing, time/UTC helpers, formatting
+  types/database.ts       # generated from Supabase
+proxy.ts                  # Next 16 request proxy (refreshes the Supabase session)
+supabase/
+  migrations/             # SQL migrations, the only way the schema changes
+  seed.sql                # demo data for development
+scripts/                  # one-off scripts (airport import, GitHub issues)
+tests/e2e/                # Playwright tests
+docs/                     # requirements, plan
+```
+
+## 7. Environments & one-time setup
+
+| Environment | Supabase project | Vercel | Used for |
+|-------------|------------------|--------|----------|
+| **dev** | `my-app-dev` (Frankfurt) | Preview deployments | Daily work, test data |
+| **prod** | `my-app-prod` (Frankfurt), created in M10 | Production | Real users |
+
+**Setup checklist for Zlati (done together in M0):**
+
+1. Create a **Supabase** account and a project `my-app-dev` in region **Frankfurt (eu-central-1)**. Save the database password in a password manager.
+2. `brew install supabase/tap/supabase`, then `supabase login` and `supabase link` in the repo.
+3. Create a **Vercel** account with GitHub, import `my-app`, set the function region to `fra1`, and add the environment variables.
+4. Copy `.env.example` → `.env.local` and fill in the Supabase URL and keys. **Never commit this file.**
+5. (M1) Google Cloud OAuth client for "Sign in with Google". (M6) Resend account + sending domain.
+
+## 8. Milestones
+
+Sizes: **S** ≈ a few hours · **M** ≈ 1–2 sessions · **L** ≈ 3+ sessions. The timeline is a rough guess at ~10 h/week with Claude, to refine after M1.
+
+| # | Milestone | Requirements | Demo at the end | Rough time |
+|---|-----------|--------------|-----------------|------------|
+| M0 | Foundations | — | App deployed on Vercel with login-ready Supabase, CI green | 1 wk |
+| M1 | Accounts & profiles | ACC-1…5 | Sign up, verify email, edit profile, switch roles, public profile | 1–2 wk |
+| M2 | Airports | (LST-4, SRC-1 base) | Type "LBSF" → Sofia, with timezone | 0.5 wk |
+| M3 | Pilot verification | VER-1…6, ADM-1 | Pilot uploads licence/medical, admin verifies, badges appear | 2 wk |
+| M4 | Aircraft listings | LST-1…8, RAT-6/7 | Owner lists an aircraft with photos, price, requirements; admin verifies docs | 2 wk |
+| M5 | Search & availability | SRC-1…5, RAT-8 | Pilot searches by airport + dates, sees map/list, opens aircraft, sees calendar and eligibility | 2–3 wk |
+| M6 | Booking | BKG-1…10, MSG-3 | Request → accept → check-out → check-in → completed, with emails | 3 wk |
+| M7 | Ratings | RAT-1…5 | Both sides rate, double-blind reveal, ratings on profiles | 1 wk |
+| M8 | Messaging | MSG-1, MSG-2 | Pilot and owner chat about a booking; contacts revealed on accept | 1 wk |
+| M9 | Admin & trust | ADM-2…4 | Admin suspends, hides, handles reports; audit log | 1 wk |
+| M10 | Launch readiness | §7, §9 of requirements | Production live, legal pages, monitoring, private beta | 2 wk |
+
+**Total:** roughly 4–5 months part-time. Each milestone's issues are on GitHub.
+
+## 9. How we build each task (with Claude)
+
+1. Pick the next open issue in the current milestone, e.g. **"Implement issue #12"**, and paste the issue or give Claude its number.
+2. Claude reads `CLAUDE.md`, this plan and the requirement IDs in the issue, then proposes a short approach for anything non-trivial **before** coding.
+3. Schema changes are **always a new migration file** in `supabase/migrations/`, followed by regenerating types.
+4. **Definition of done** for every issue:
+   - [ ] Acceptance criteria in the issue are met
+   - [ ] RLS policies added/updated for any new table, with a test that another user **can't** read or write it
+   - [ ] `npm run typecheck`, `npm run lint`, `npm test` and `npm run build` pass
+   - [ ] Works on a phone-sized screen
+   - [ ] Docs updated if something changed (`CLAUDE.md` structure, decisions log)
+5. Commit with the issue number, e.g. `Add sign-up flow (#9)`, which links the commit to the issue.
+
+## 10. Testing strategy
+
+| Level | Tool | What |
+|-------|------|------|
+| Unit | Vitest | Pure logic in `lib/domain` (price estimate, time/UTC, eligibility formatting) |
+| Database | SQL tests via Supabase CLI (pgTAP) | Exclusion constraint, `check_eligibility`, RLS "other user can't see" cases, review publishing |
+| End-to-end | Playwright | Golden paths: sign up → list aircraft → search → book → check-in → review |
+
+## 11. Risks & how we handle them
+
+| Risk | Mitigation |
+|------|------------|
+| **Chicken-and-egg:** no aircraft means no pilots | Onboard 10–20 owners personally before public launch (clubs, airfields you know). Seed data for demos |
+| **RLS mistakes leak private data** | RLS tests in the definition of done, plus a security review issue in M10 |
+| **Legal uncertainty** (operator status, insurance) | Lawyer review before M10 (see requirements §9). Clear terms: the platform is a marketplace |
+| **Scope creep** | New ideas go to the parking lot in the requirements, not into the current milestone |
+| **Beginner Git/infra friction** | Small steps, Claude explains commands, CI catches mistakes |
+
+## 12. Costs (rough)
+
+Development can run on **free tiers** (Supabase, Vercel Hobby, Resend, map tiles). At launch expect paid plans for Supabase (backups, no pausing), Vercel (the Hobby plan is for non-commercial use) and a domain, roughly tens of euros per month in total at small scale. Check current pricing when we get to M10.
+
+## 13. After Phase 1 (outline)
+
+- **Phase 2 — Maintenance:** `technician_profiles`, `organisations`, `service_offerings`, `quote_requests`, `maintenance_jobs`. Maintenance jobs create `calendar_entries` of kind `maintenance`. Hours from `check_records` drive "check due" reminders.
+- **Phase 3 — Airports:** `airport_operators` (claim + verify), `airport_services`, `airport_requests` (PPR/parking/hangar/services/customs).
+- **Phase 4 — Payments:** Stripe Connect, deposits, payouts, commission.
