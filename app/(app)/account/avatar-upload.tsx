@@ -6,29 +6,24 @@ import { Loader2Icon } from "lucide-react";
 
 import { UserAvatar } from "@/components/user-avatar";
 import { Button } from "@/components/ui/button";
-import { createClient } from "@/lib/supabase/client";
 import { AVATAR_MAX_BYTES, AVATAR_TYPES } from "@/lib/validation/profile";
-import { setAvatar } from "./actions";
 
-const EXTENSIONS: Record<string, string> = {
-  "image/jpeg": "jpg",
-  "image/png": "png",
-  "image/webp": "webp",
-};
-
-export function AvatarUpload({
-  userId,
-  name,
-  url,
-}: {
-  userId: string;
-  name: string;
-  url: string | null;
-}) {
+export function AvatarUpload({ name, url }: { name: string; url: string | null }) {
   const inputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
+
+  function send(init: RequestInit) {
+    startTransition(async () => {
+      const res = await fetch("/api/account/avatar", init).catch(() => null);
+      if (!res?.ok) {
+        const body = (await res?.json().catch(() => null)) as { error?: string } | null;
+        setError(body?.error ?? "Something went wrong. Please try again.");
+      }
+      router.refresh();
+    });
+  }
 
   function onFileChosen(file: File | undefined) {
     setError(null);
@@ -41,29 +36,9 @@ export function AvatarUpload({
       setError("That image is larger than 2 MB. Please choose a smaller one.");
       return;
     }
-
-    startTransition(async () => {
-      const path = `${userId}/${Date.now()}.${EXTENSIONS[file.type]}`;
-      const { error: uploadError } = await createClient()
-        .storage.from("avatars")
-        .upload(path, file, { contentType: file.type, cacheControl: "3600" });
-      if (uploadError) {
-        setError("Upload failed. Please try again.");
-        return;
-      }
-      const result = await setAvatar(path);
-      if (result.error) setError(result.error);
-      router.refresh();
-    });
-  }
-
-  function onRemove() {
-    setError(null);
-    startTransition(async () => {
-      const result = await setAvatar(null);
-      if (result.error) setError(result.error);
-      router.refresh();
-    });
+    const body = new FormData();
+    body.append("file", file);
+    send({ method: "POST", body });
   }
 
   return (
@@ -82,7 +57,16 @@ export function AvatarUpload({
             {url ? "Change photo" : "Upload photo"}
           </Button>
           {url && (
-            <Button type="button" variant="ghost" size="sm" disabled={pending} onClick={onRemove}>
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              disabled={pending}
+              onClick={() => {
+                setError(null);
+                send({ method: "DELETE" });
+              }}
+            >
               Remove
             </Button>
           )}

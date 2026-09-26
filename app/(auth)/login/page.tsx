@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { safeNextPath } from "@/lib/auth/redirect";
 import { getUser } from "@/lib/auth/session";
@@ -12,9 +13,9 @@ export const metadata: Metadata = { title: "Log in" };
 export default async function LoginPage({
   searchParams,
 }: {
-  searchParams: Promise<{ next?: string }>;
+  searchParams: Promise<{ next?: string; reset?: string; error?: string }>;
 }) {
-  const { next } = await searchParams;
+  const { next, reset, error } = await searchParams;
   const nextPath = safeNextPath(next);
   if (await getUser()) redirect(nextPath);
 
@@ -27,6 +28,18 @@ export default async function LoginPage({
         <CardDescription>Welcome back. Log in to rent or list aircraft.</CardDescription>
       </CardHeader>
       <CardContent className="grid gap-6">
+        {reset && (
+          <Alert variant="success">
+            <AlertDescription>Your password was changed. Log in with the new one.</AlertDescription>
+          </Alert>
+        )}
+        {error && (
+          <Alert variant="destructive">
+            <AlertDescription>
+              That link has expired or was already used. Log in, or request a new link.
+            </AlertDescription>
+          </Alert>
+        )}
         <LoginForm next={nextPath} />
         <p className="text-center text-sm text-muted-foreground">
           New here?{" "}

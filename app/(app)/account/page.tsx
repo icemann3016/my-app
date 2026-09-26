@@ -4,7 +4,7 @@ import { ExternalLinkIcon } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { avatarUrl } from "@/lib/avatar";
+import { avatarUrl } from "@/lib/avatar-url";
 import { requireProfile } from "@/lib/auth/session";
 import { AvatarUpload } from "./avatar-upload";
 import { ProfileForm } from "./profile-form";
@@ -37,14 +37,10 @@ export default async function AccountPage() {
           </CardDescription>
         </CardHeader>
         <CardContent className="grid gap-6">
-          <AvatarUpload
-            userId={userId}
-            name={profile.display_name}
-            url={avatarUrl(profile.avatar_path)}
-          />
+          <AvatarUpload name={profile.displayName} url={avatarUrl(profile.avatarKey)} />
           <ProfileForm
-            displayName={profile.display_name}
-            homeAirport={profile.home_airport_icao ?? ""}
+            displayName={profile.displayName}
+            homeAirport={profile.homeAirportIcao ?? ""}
             bio={profile.bio ?? ""}
           />
         </CardContent>

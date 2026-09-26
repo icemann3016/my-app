@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-// These tests never create real accounts, so they are safe to run against any environment.
+// These tests never create accounts, so they are safe to run against any environment.
 
 test("login page shows the form and helpful links", async ({ page }) => {
   await page.goto("/login");
@@ -41,10 +41,4 @@ for (const path of ["/dashboard", "/account", "/account/password"]) {
 test("unknown public profiles show 404", async ({ page }) => {
   const response = await page.goto("/u/not-a-real-id");
   expect(response?.status()).toBe(404);
-});
-
-test("auth link without a token shows the error page", async ({ page }) => {
-  await page.goto("/auth/confirm");
-  await expect(page).toHaveURL(/\/auth-error\?reason=/);
-  await expect(page.getByRole("heading", { name: "This link didn't work" })).toBeVisible();
 });

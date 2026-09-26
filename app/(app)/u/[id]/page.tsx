@@ -1,4 +1,5 @@
 import { cache } from "react";
+import { eq } from "drizzle-orm";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -8,29 +9,38 @@ import { UserAvatar } from "@/components/user-avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { avatarUrl } from "@/lib/avatar";
+import { avatarUrl } from "@/lib/avatar-url";
 import { getUser } from "@/lib/auth/session";
-import { getSupabaseEnv } from "@/lib/supabase/env";
-import { createClient } from "@/lib/supabase/server";
+import { isDatabaseConfigured } from "@/lib/db";
+import { asAnon } from "@/lib/db/rls";
+import { profiles, userRoles } from "@/lib/db/schema";
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const ROLE_LABELS: Record<string, string> = { pilot: "Pilot", owner: "Aircraft owner" };
 
 const getPublicProfile = cache(async (id: string) => {
-  if (!UUID.test(id) || !getSupabaseEnv()) return null;
-  const supabase = await createClient();
-  const [{ data: profile }, { data: roles }] = await Promise.all([
-    supabase
-      .from("profiles")
-      .select(
-        "id, display_name, bio, avatar_path, home_airport_icao, rating_avg, rating_count, created_at",
-      )
-      .eq("id", id)
-      .maybeSingle(),
-    supabase.from("user_roles").select("role").eq("user_id", id),
-  ]);
-  if (!profile) return null;
-  return { profile, roles: (roles ?? []).map((r) => r.role).filter((r) => r in ROLE_LABELS) };
+  if (!UUID.test(id) || !isDatabaseConfigured()) return null;
+  return asAnon(async (tx) => {
+    const [profile] = await tx
+      .select({
+        id: profiles.id,
+        displayName: profiles.displayName,
+        bio: profiles.bio,
+        avatarKey: profiles.avatarKey,
+        homeAirportIcao: profiles.homeAirportIcao,
+        ratingAvg: profiles.ratingAvg,
+        ratingCount: profiles.ratingCount,
+        createdAt: profiles.createdAt,
+      })
+      .from(profiles)
+      .where(eq(profiles.id, id));
+    if (!profile) return null;
+    const roles = await tx
+      .select({ role: userRoles.role })
+      .from(userRoles)
+      .where(eq(userRoles.userId, id));
+    return { profile, roles: roles.map((r) => r.role).filter((r) => r in ROLE_LABELS) };
+  });
 });
 
 export async function generateMetadata({
@@ -39,7 +49,7 @@ export async function generateMetadata({
   params: Promise<{ id: string }>;
 }): Promise<Metadata> {
   const data = await getPublicProfile((await params).id);
-  return { title: data?.profile.display_name ?? "Profile not found" };
+  return { title: data?.profile.displayName ?? "Profile not found" };
 }
 
 export default async function PublicProfilePage({ params }: { params: Promise<{ id: string }> }) {
@@ -52,20 +62,16 @@ export default async function PublicProfilePage({ params }: { params: Promise<{ 
     month: "long",
     year: "numeric",
     timeZone: "UTC",
-  }).format(new Date(profile.created_at));
+  }).format(profile.createdAt);
 
   return (
     <div className="mx-auto w-full max-w-2xl px-4 py-10">
       <Card>
         <CardContent className="grid gap-6">
           <div className="flex flex-wrap items-center gap-4">
-            <UserAvatar
-              name={profile.display_name}
-              url={avatarUrl(profile.avatar_path)}
-              size={80}
-            />
+            <UserAvatar name={profile.displayName} url={avatarUrl(profile.avatarKey)} size={80} />
             <div className="grid gap-1">
-              <h1 className="text-2xl font-semibold tracking-tight">{profile.display_name}</h1>
+              <h1 className="text-2xl font-semibold tracking-tight">{profile.displayName}</h1>
               <div className="flex flex-wrap gap-1.5">
                 {roles.map((role) => (
                   <Badge key={role} variant="secondary">
@@ -85,12 +91,12 @@ export default async function PublicProfilePage({ params }: { params: Promise<{ 
             <div>
               <dt className="text-muted-foreground">Rating</dt>
               <dd className="flex items-center gap-1 font-medium">
-                {profile.rating_count > 0 && profile.rating_avg !== null ? (
+                {profile.ratingCount > 0 && profile.ratingAvg !== null ? (
                   <>
                     <StarIcon className="size-4 fill-current text-amber-500" aria-hidden />
-                    {profile.rating_avg.toFixed(1)}
+                    {profile.ratingAvg.toFixed(1)}
                     <span className="font-normal text-muted-foreground">
-                      ({profile.rating_count})
+                      ({profile.ratingCount})
                     </span>
                   </>
                 ) : (
@@ -101,10 +107,10 @@ export default async function PublicProfilePage({ params }: { params: Promise<{ 
             <div>
               <dt className="text-muted-foreground">Home airfield</dt>
               <dd className="flex items-center gap-1 font-medium">
-                {profile.home_airport_icao ? (
+                {profile.homeAirportIcao ? (
                   <>
                     <MapPinIcon className="size-4 text-primary" aria-hidden />
-                    {profile.home_airport_icao}
+                    {profile.homeAirportIcao}
                   </>
                 ) : (
                   "Not set"

@@ -26,6 +26,6 @@ export function fieldErrors(error: z.ZodError): FormState["errors"] {
 }
 
 export function withoutSecrets(values: Record<string, string>): Record<string, string> {
-  const { password: _p, confirm: _c, ...rest } = values;
+  const { password: _p, confirm: _c, currentPassword: _cp, token: _t, ...rest } = values;
   return rest;
 }

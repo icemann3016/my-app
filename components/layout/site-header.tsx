@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
-import { avatarUrl } from "@/lib/avatar";
+import { avatarUrl } from "@/lib/avatar-url";
 import { getCurrentProfile } from "@/lib/auth/session";
 import { siteConfig } from "@/lib/site";
 import { Logo } from "./logo";
@@ -13,8 +13,8 @@ export async function SiteHeader() {
   const account: AccountSummary | null = current
     ? {
         id: current.userId,
-        name: current.profile.display_name,
-        avatarUrl: avatarUrl(current.profile.avatar_path),
+        name: current.profile.displayName,
+        avatarUrl: avatarUrl(current.profile.avatarKey),
       }
     : null;
 

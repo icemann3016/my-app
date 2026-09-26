@@ -1,7 +1,7 @@
 import { CalendarCheckIcon, CheckIcon, PlaneIcon } from "lucide-react";
 
 import { SubmitButton } from "@/components/forms/submit-button";
-import type { Enums } from "@/lib/types/database";
+import type { AppRole } from "@/lib/db/schema";
 import { cn } from "@/lib/utils";
 import { setRole } from "./actions";
 
@@ -20,7 +20,7 @@ const ROLES = [
   },
 ] as const;
 
-export function RolesForm({ roles }: { roles: Enums<"app_role">[] }) {
+export function RolesForm({ roles }: { roles: AppRole[] }) {
   return (
     <div className="grid gap-3 sm:grid-cols-2">
       {ROLES.map(({ role, icon: Icon, title, text }) => {

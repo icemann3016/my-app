@@ -16,8 +16,8 @@ export default function CheckEmailPage() {
           Check your email
         </CardTitle>
         <CardDescription>
-          We&apos;ve sent you a link to confirm your address. Open it on this device to finish
-          creating your account.
+          We&apos;ve sent you a link to confirm your address. Open it to finish creating your
+          account.
         </CardDescription>
       </CardHeader>
       <CardContent className="grid gap-6">

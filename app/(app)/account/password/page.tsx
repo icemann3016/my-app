@@ -14,9 +14,11 @@ export default async function PasswordPage() {
       <Card>
         <CardHeader>
           <CardTitle as="h1" className="text-xl">
-            Choose a new password
+            Change password
           </CardTitle>
-          <CardDescription>Use at least 8 characters. A short sentence works well.</CardDescription>
+          <CardDescription>
+            Use at least 8 characters. You&apos;ll stay logged in here and be logged out elsewhere.
+          </CardDescription>
         </CardHeader>
         <CardContent className="grid gap-6">
           <PasswordForm />

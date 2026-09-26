@@ -9,7 +9,7 @@ import {
   WrenchIcon,
 } from "lucide-react";
 
-import { SupabaseStatus } from "@/components/dev/supabase-status";
+import { DatabaseStatus } from "@/components/dev/database-status";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
@@ -49,7 +49,7 @@ export default function HomePage() {
     <>
       <section className="mx-auto flex max-w-6xl flex-col items-start gap-6 px-4 pt-16 pb-12 sm:pt-24">
         <Suspense fallback={null}>
-          <SupabaseStatus />
+          <DatabaseStatus />
         </Suspense>
         <span className="rounded-full bg-accent px-3 py-1 text-xs font-medium text-accent-foreground">
           Early preview · Europe

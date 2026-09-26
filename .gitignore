@@ -20,6 +20,5 @@ CLAUDE.local.md
 /playwright-report/
 /blob-report/
 /playwright/.cache/
-# supabase local state
-supabase/.temp/
-supabase/.branches/
+# local file storage (STORAGE_DRIVER=local)
+/.data/

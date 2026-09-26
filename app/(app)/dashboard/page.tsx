@@ -16,8 +16,8 @@ export const metadata: Metadata = { title: "Dashboard" };
 
 export default async function DashboardPage() {
   const { userId, profile, roles } = await requireProfile("/dashboard");
-  const firstName = profile.display_name.split(/\s+/)[0];
-  const profileComplete = Boolean(profile.avatar_path && profile.home_airport_icao && profile.bio);
+  const firstName = profile.displayName.split(/\s+/)[0];
+  const profileComplete = Boolean(profile.avatarKey && profile.homeAirportIcao && profile.bio);
   const isPilot = roles.includes("pilot");
   const isOwner = roles.includes("owner");
 

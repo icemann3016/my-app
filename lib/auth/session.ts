@@ -1,50 +1,47 @@
 import "server-only";
 
 import { cache } from "react";
+import { eq } from "drizzle-orm";
+import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { connection } from "next/server";
 
-import type { Enums, Tables } from "@/lib/types/database";
-import { getSupabaseEnv } from "@/lib/supabase/env";
-import { createClient } from "@/lib/supabase/server";
+import { getAuth } from "@/lib/auth/auth";
+import { isDatabaseConfigured } from "@/lib/db";
+import { asUser } from "@/lib/db/rls";
+import { type AppRole, type Profile, profiles, userRoles } from "@/lib/db/schema";
 
 export type CurrentProfile = {
   userId: string;
-  email: string | null;
-  profile: Tables<"profiles">;
-  roles: Enums<"app_role">[];
+  email: string;
+  profile: Profile;
+  roles: AppRole[];
 };
 
-/** The logged-in user, or null. Cached for the duration of one request. */
-export const getUser = cache(async () => {
-  // Session-dependent: always render per request (even when Supabase isn't configured yet).
+/** The logged-in user's session, or null. Cached for the duration of one request. */
+export const getSession = cache(async () => {
+  // Session-dependent: always render per request.
   await connection();
-  if (!getSupabaseEnv()) return null;
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  return user;
+  if (!isDatabaseConfigured()) return null;
+  return getAuth().api.getSession({ headers: await headers() });
 });
+
+export const getUser = cache(async () => (await getSession())?.user ?? null);
 
 /** The logged-in user's profile and roles, or null. Cached per request. */
 export const getCurrentProfile = cache(async (): Promise<CurrentProfile | null> => {
   const user = await getUser();
   if (!user) return null;
 
-  const supabase = await createClient();
-  const [{ data: profile }, { data: roles }] = await Promise.all([
-    supabase.from("profiles").select("*").eq("id", user.id).maybeSingle(),
-    supabase.from("user_roles").select("role").eq("user_id", user.id),
-  ]);
-  if (!profile) return null;
-
-  return {
-    userId: user.id,
-    email: user.email ?? null,
-    profile,
-    roles: (roles ?? []).map((r) => r.role),
-  };
+  return asUser(user.id, async (tx) => {
+    const [profile] = await tx.select().from(profiles).where(eq(profiles.id, user.id));
+    if (!profile) return null;
+    const roles = await tx
+      .select({ role: userRoles.role })
+      .from(userRoles)
+      .where(eq(userRoles.userId, user.id));
+    return { userId: user.id, email: user.email, profile, roles: roles.map((r) => r.role) };
+  });
 });
 
 function loginUrl(nextPath?: string) {

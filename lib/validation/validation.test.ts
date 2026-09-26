@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { signUpSchema, updatePasswordSchema } from "./auth";
+import { changePasswordSchema, signUpSchema } from "./auth";
 import { profileSchema } from "./profile";
 
 describe("signUpSchema", () => {
@@ -32,9 +32,13 @@ describe("signUpSchema", () => {
   });
 });
 
-describe("updatePasswordSchema", () => {
+describe("changePasswordSchema", () => {
   it("requires matching passwords", () => {
-    const r = updatePasswordSchema.safeParse({ password: "long-enough", confirm: "different" });
+    const r = changePasswordSchema.safeParse({
+      currentPassword: "old-password",
+      password: "long-enough",
+      confirm: "different",
+    });
     expect(r.success).toBe(false);
     expect(r.error?.issues[0]?.path).toEqual(["confirm"]);
   });

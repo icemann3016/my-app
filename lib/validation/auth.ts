@@ -31,6 +31,19 @@ export const signInSchema = z.object({
 
 export const emailOnlySchema = z.object({ email: emailField });
 
-export const updatePasswordSchema = z
-  .object({ password: newPasswordField, confirm: z.string() })
-  .refine((d) => d.password === d.confirm, { path: ["confirm"], error: "Passwords don't match." });
+const passwordsMatch = (d: { password: string; confirm: string }) => d.password === d.confirm;
+const mismatch = { path: ["confirm"], error: "Passwords don't match." };
+
+/** Choosing a new password from a reset link. */
+export const resetPasswordSchema = z
+  .object({ token: z.string().min(1), password: newPasswordField, confirm: z.string() })
+  .refine(passwordsMatch, mismatch);
+
+/** Changing the password while logged in. */
+export const changePasswordSchema = z
+  .object({
+    currentPassword: z.string().min(1, "Enter your current password."),
+    password: newPasswordField,
+    confirm: z.string(),
+  })
+  .refine(passwordsMatch, mismatch);
