@@ -1,7 +1,7 @@
 # Implementation Plan — Phase 1 (MVP)
 
-> **Status:** v0.2 · 2026-09-26 · Owner: Zlati. v0.2: portable stack (no provider lock-in), see [deployment.md](deployment.md).
-> **Builds:** Phase 1 of [`business-requirements.md`](business-requirements.md): accounts, pilot verification, aircraft listings, search, booking requests, ratings, messaging, admin.
+> **Status:** v0.3 · 2026-09-26 · Owner: Zlati. v0.2: portable stack (no provider lock-in), see [deployment.md](deployment.md). v0.3: flight log in M6 (§4.8).
+> **Builds:** Phase 1 of [`business-requirements.md`](business-requirements.md): accounts, pilot verification, aircraft listings, search, booking requests with a flight log, ratings, messaging, admin.
 > **Tracking:** Every task below is a GitHub issue, grouped into milestones **M0–M10**. Create them with `node scripts/create-github-issues.mjs`.
 
 ---
@@ -12,7 +12,7 @@ We build a **Next.js** web app on **standard PostgreSQL**, with our own login (*
 
 ```
 M0 Foundations → M1 Accounts → M2 Airports → M3 Pilot verification → M4 Aircraft listings
-   → M5 Search & availability → M6 Booking → M7 Ratings → M8 Messaging → M9 Admin → M10 Launch
+   → M5 Search & availability → M6 Booking & flight log → M7 Ratings → M8 Messaging → M9 Admin → M10 Launch
 ```
 
 **First "wow" moment:** end of **M5**, when a pilot can search and find a real listed aircraft with its calendar.
@@ -96,6 +96,15 @@ Notifications are written to a `notifications` table (in-app). A server route se
 ### 4.7 Search (SRC-1/2)
 Airports and aircraft home bases have a PostGIS `geography` point. A search RPC takes a location + radius + period + filters and returns aircraft that have **no overlapping active calendar entry** in that period. Filters and sorting are plain SQL. No separate search engine is needed at MVP scale.
 
+### 4.8 Flight log and the amount due (BKG-7, BKG-12…16)
+- One `flight_logs` row per booking, with one or more `flight_legs`. Status: `draft` → `submitted` → `confirmed` (or `correction_requested` → back to the pilot). Only the pilot edits a draft; only the owner confirms. Confirming completes the booking.
+- **Flown time** follows the aircraft's `time_basis`: Hobbs = Σ(hobbs_end − hobbs_start), tach = Σ(tach_end − tach_start), block = Σ(block_on − block_off). **Amount due** = flown time × rate (± minimum hours per day), then fuel: on a wet rate, fuel the pilot paid for is subtracted; on a dry rate, fuel the owner supplied is added. One tested function in `lib/domain` does this, shown to both sides before confirming.
+- **Units:** stored in SI and UTC (litres, minutes, `timestamptz`); meters as `numeric` with one or two decimals. Fuel is shown in the user's units (litres / US gal). Oil is shown in the aircraft's dipstick unit (`aircraft.oil_unit`: US quarts or litres).
+- **Sanity checks** in the database: block off ≤ engine start ≤ engine stop ≤ block on, end meters ≥ start meters, fuel/oil ≥ 0, landings ≥ 1 per leg. Unusual values (e.g. Hobbs jump > 12 h) are warnings in the UI, not errors.
+- Receipt photos use the private `documents` storage from M3; the log's photos (meters, fuel gauges) too.
+- Every change after submission is written to `booking_events`, so owner and pilot can see who changed what.
+- The log is labelled as not replacing the aircraft's journey/tech log or the pilot's logbook.
+
 ## 5. Data model (Phase 1)
 
 | Table | Key columns | Notes |
@@ -103,21 +112,24 @@ Airports and aircraft home bases have a PostGIS `geography` point. A search RPC 
 | `profiles` | `id` (= user), display_name, avatar_key, home_airport_ident → airports, rating_avg, rating_count, suspended_at | Created by trigger on sign-up. Locale/units live in `user_settings` |
 | `user_roles` | user_id, role (`pilot`/`owner`/`admin`) | One user, many roles |
 | `airports` | ident (PK: ICAO or local id), type, name, icao_code, iata_code, municipality, country, latitude, longitude, elevation_ft, timezone | Imported from OurAirports (EU airfields) with `npm run airports:import`. Plain lat/lon; PostGIS decision in M5 |
-| `pilot_licences` | user_id, type (PPL/LAPL/CPL/ATPL), state, number, expires_on, document_id, status | |
-| `pilot_ratings` | user_id, kind (class/type/privilege), code (SEP, MEP, NIGHT, IR…), expires_on, status | |
-| `medicals` | user_id, class, valid_until, document_id, status | Restricted RLS |
-| `experience` | user_id, total_h, pic_h, last_90d_h, updated_at | Self-declared in MVP |
-| `experience_by_type` | user_id, aircraft_type, hours | |
-| `documents` | id, owner_id, bucket, path, kind, status (`pending`/`verified`/`rejected`), reviewer_id, reason | Shared by pilot and aircraft docs |
-| `aircraft` | id, owner_id, registration, manufacturer, model, year, category, seats, engine, fuel_type, fuel_burn, cruise_kt, useful_load_kg, endurance_h, equipment (jsonb), vfr/night/ifr flags, home_airport_id, price_per_hour, price_basis (wet/dry), time_basis (hobbs/tach/block), currency, min_hours_per_day, cancellation_policy, status (`draft`/`listed`/`paused`/`unlisted`/`grounded`), rating_avg, rating_count | |
+| `pilot_licences` | user_id, type (LAPL/PPL/CPL/ATPL/MPL/other), issuing_state, number, issued_on, expires_on, document_id, status, rejection_reason, reviewed_by/at, reminder_sent_at | Built in M3 |
+| `pilot_ratings` | user_id, kind (class/type/privilege), code (SEP_LAND, NIGHT, IR, C510…), expires_on, document_id, status + review columns | Built in M3 |
+| `medicals` | user_id, class, issuing_state, valid_until, document_id, status + review columns | Owner + admins only (RLS). Built in M3 |
+| `pilot_experience` | user_id, total_hours, pic_hours, last_90_days_hours, updated_at | Self-declared in MVP. Built in M3 |
+| `experience_by_type` | user_id, aircraft_type, hours | Built in M3 |
+| `documents` | id, owner_id, storage_key, filename, content_type, size_bytes | Private files (M3). Review status lives on the credential / aircraft document that uses it |
+| `aircraft` | id, owner_id, registration, manufacturer, model, year, category, seats, engine, fuel_type, fuel_burn, cruise_kt, useful_load_kg, endurance_h, equipment (jsonb), vfr/night/ifr flags, home_airport_id, price_per_hour, price_basis (wet/dry), time_basis (hobbs/tach/block), oil_unit (qt/l), currency, min_hours_per_day, cancellation_policy, status (`draft`/`listed`/`paused`/`unlisted`/`grounded`), rating_avg, rating_count | |
 | `aircraft_photos` | aircraft_id, path, sort_order | Public bucket |
 | `aircraft_documents` | aircraft_id, kind (CofA/ARC/insurance/POH/checklist/W&B), document_id, expires_on | |
 | `rental_requirements` | aircraft_id (1:1), min_pilot_rating, allow_unrated, unrated_needs_checkout, licence_types[], required_ratings[], min_total_h, min_type_h, min_90d_h, min_age | |
 | `calendar_entries` | id, aircraft_id, period (`tstzrange`), kind, booking_id, note, active | Exclusion constraint (§4.1) |
 | `bookings` | id, aircraft_id, pilot_id, status (`requested`/`accepted`/`declined`/`expired`/`cancelled`/`in_progress`/`completed`), purpose, destinations, passengers, estimate, expires_at, cancelled_by, cancel_reason | |
 | `booking_events` | booking_id, actor_id, type, payload, created_at | History / audit |
-| `check_records` | booking_id, phase (out/in), hobbs, tach, fuel, photos, confirmed_by_owner_at | Final time and amount due |
-| `defects` | aircraft_id, booking_id, reported_by, description, photos, severity, grounded, resolved_at | |
+| `flight_logs` | booking_id (1:1), status (`draft`/`submitted`/`correction_requested`/`confirmed`), check-out photos, flown_minutes, amount_due, fuel_adjustment, currency, submitted_at, confirmed_by_owner_at, correction_note | Final time and amount due (§4.8) |
+| `flight_legs` | flight_log_id, seq, from_ident / to_ident → airports, block_off, engine_start, takeoff_at?, landing_at?, engine_stop, block_on, landings, hobbs_start/end, tach_start/end, fuel_before_l, fuel_after_l, oil_before_l, oil_after_l | UTC; sanity checks (§4.8) |
+| `uplifts` | flight_leg_id, kind (`fuel`/`oil`), quantity_l, fuel_type or oil_grade, airport_ident, price, currency, paid_by (`pilot`/`owner`), receipt_document_id | Refuelling and oil added |
+| `aircraft_remarks` | aircraft_id, booking_id, flight_leg_id, author_id, topic (`aircraft`/`weather`/`airfield`), text, known_item, resolved_at | Remarks / PIREPs; known items shown to renters |
+| `defects` | aircraft_id, booking_id, flight_leg_id, reported_by, description, photos, severity, grounded, resolved_at | |
 | `reviews` | booking_id, author_id, subject_user_id, subject_aircraft_id, direction (pilot→owner / owner→pilot), scores (jsonb), overall, comment, submitted_at, published_at, hidden_at, owner_reply | |
 | `conversations` / `messages` | conversation: booking_id or aircraft_id, participants. Message: sender, body, read_at | |
 | `notifications` | user_id, type, payload, read_at, emailed_at | |
@@ -178,7 +190,7 @@ Sizes: **S** ≈ a few hours · **M** ≈ 1–2 sessions · **L** ≈ 3+ session
 | M3 | Pilot verification | VER-1…6, ADM-1 | Pilot uploads licence/medical, admin verifies, badges appear | 2 wk |
 | M4 | Aircraft listings | LST-1…8, RAT-6/7 | Owner lists an aircraft with photos, price, requirements; admin verifies docs | 2 wk |
 | M5 | Search & availability | SRC-1…5, RAT-8 | Pilot searches by airport + dates, sees map/list, opens aircraft, sees calendar and eligibility | 2–3 wk |
-| M6 | Booking | BKG-1…10, MSG-3 | Request → accept → check-out → check-in → completed, with emails | 3 wk |
+| M6 | Booking & flight log | BKG-1…10, 12…16, MSG-3 | Request → accept → check-out → flight log (legs, block/engine times, fuel, oil, refuels, remarks) → owner confirms → completed, with emails | 3–4 wk |
 | M7 | Ratings | RAT-1…5 | Both sides rate, double-blind reveal, ratings on profiles | 1 wk |
 | M8 | Messaging | MSG-1, MSG-2 | Pilot and owner chat about a booking; contacts revealed on accept | 1 wk |
 | M9 | Admin & trust | ADM-2…4 | Admin suspends, hides, handles reports; audit log | 1 wk |
@@ -203,9 +215,9 @@ Sizes: **S** ≈ a few hours · **M** ≈ 1–2 sessions · **L** ≈ 3+ session
 
 | Level | Tool | What |
 |-------|------|------|
-| Unit | Vitest | Pure logic in `lib/domain` (price estimate, time/UTC, eligibility formatting) |
+| Unit | Vitest | Pure logic in `lib/domain` (price estimate, flown time and amount due, unit conversion, time/UTC, eligibility formatting) |
 | Database | Vitest against a real Postgres (`tests/db/`, `TEST_DATABASE_URL`) | Exclusion constraint, `check_eligibility`, RLS "other user can't see" cases, review publishing |
-| End-to-end | Playwright | Golden paths: sign up → list aircraft → search → book → check-in → review |
+| End-to-end | Playwright | Golden paths: sign up → list aircraft → search → book → flight log → owner confirms → review |
 
 ## 11. Risks & how we handle them
 

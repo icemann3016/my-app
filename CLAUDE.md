@@ -161,6 +161,7 @@ _TODO: split areas so we don't edit the same files at the same time._
 
 Add one line per decision, newest first.
 
+- 2026-09-26: Flight log added to M6 (BKG-7, BKG-12…16): per booking, legs with block and engine times, meters, fuel and oil before/after, refuelling and oil uplifts with receipts, remarks/PIREPs with "known items", usage history for owners. Stored in SI units and UTC; the amount due follows the aircraft's time basis (plan §4.8). Not an official journey/tech log.
 - 2026-09-26: M3: private documents are served through the app (not presigned URLs) so access checks and audit logging work the same on every provider. Uploads ≤ 4 MB (Vercel limit); big photos are shrunk in the browser; file type checked by content. Admins verify with the owner connection after `requireAdmin()`, with an optimistic check (`updated_at`) and no self-review. Scheduled work runs through `/api/cron/daily` with `CRON_SECRET` (Vercel Cron today; Cloud Scheduler / Azure later). Email for real still pending (console driver).
 - 2026-09-26: Custom domain ownaplane.eu. Google is only linked to an existing email/password account from Account → Security while logged in (Better Auth refuses implicit linking to unverified emails, which protects against account pre-hijacking).
 - 2026-09-26: M2: airports keyed by OurAirports ident; only EU large/medium/small airports (no heliports/closed). Coordinates stored as plain lat/lon (no PostGIS yet; decide in M5 for radius search). Airport data is refreshed with `npm run airports:import`; stale rows are kept, not deleted.

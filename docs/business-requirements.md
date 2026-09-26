@@ -1,6 +1,6 @@
 # Business Requirements — ownAplane
 
-> **Status:** Draft v0.1 · 2026-09-26 · Owner: Zlati
+> **Status:** Draft v0.2 · 2026-09-26 · Owner: Zlati · v0.2: flight log (BKG-7, BKG-12…16)
 > **Purpose:** The single source of truth for *what* we are building and *why*. Claude reads this before building any feature.
 > **How to change it:** Edit it in a PR like any other code. Add new ideas under [§11 Parking lot](#11-parking-lot-ideas-for-later).
 
@@ -32,7 +32,7 @@ _Numbers are placeholders to refine together._
 
 | Phase | Scope | Why this order |
 |-------|-------|----------------|
-| **Phase 1 — MVP** | Accounts & roles, pilot verification, aircraft listings, search & availability, booking requests, ratings & rental requirements, messaging, basic admin | The core two-sided marketplace. Everything else builds on these accounts, aircraft and ratings |
+| **Phase 1 — MVP** | Accounts & roles, pilot verification, aircraft listings, search & availability, booking requests with a flight log (times, fuel, oil, remarks), ratings & rental requirements, messaging, basic admin | The core two-sided marketplace. Everything else builds on these accounts, aircraft and ratings |
 | **Phase 2 — Maintenance** | Technician profiles, service catalogue, quote requests, maintenance jobs, maintenance blocks on the aircraft calendar | Owners from Phase 1 are the customers for technicians |
 | **Phase 3 — Airports** | Airport profiles, PPR requests, parking/hangar requests, ground services, customs requests | Pilots from Phase 1 are the customers for airports |
 | **Phase 4 — Payments** | In-app payments, deposits, payouts, platform commission | Deliberately postponed. See §8 |
@@ -116,11 +116,18 @@ Owners need to know who's flying their aircraft. Verification is the trust found
 | BKG-4 | S | As an owner I can enable **instant booking** for pilots who meet my requirements **and** have flown my aircraft before. |
 | BKG-5 | M | A requested slot is held (not double-bookable) until the owner responds or it expires. Accepted bookings block the calendar. |
 | BKG-6 | M | Either side can **cancel**. The owner's cancellation policy (free until X hours before) is shown at booking time. Late cancellations are recorded on the profile. |
-| BKG-7 | M | **Check-out / check-in:** At the start the pilot records Hobbs/tach and fuel, optionally with photos. At the end the pilot records the end readings, fuel added and any **defects/squawks**. The owner confirms. This produces the final flown time and amount due. |
-| BKG-8 | M | A defect reported at check-in notifies the owner immediately. The owner can mark the aircraft **grounded**, which blocks future bookings until cleared. |
+| BKG-7 | M | **Flight log (check-out / check-in):** Every booking has a flight log. At check-out the pilot records the start readings (Hobbs/tach), fuel and oil on board, optionally with photos. During and after the rental the pilot logs each leg (BKG-12), fuel and oil (BKG-13, BKG-14) and remarks or defects (BKG-15). At check-in the pilot submits the log and the owner confirms it or asks for a correction. The confirmed log gives the **final flown time** on the aircraft's time basis (Hobbs, tach or block time, LST-5) and the **amount due**. |
+| BKG-8 | M | A defect reported in the flight log (or at any time) notifies the owner immediately. The owner can mark the aircraft **grounded**, which blocks future bookings until cleared. |
 | BKG-9 | M | Both parties get notifications (email + in-app, push later) for request, accept, decline, reminder 24 h before, and check-in. |
 | BKG-10 | S | The owner can require a **checkout flight with an instructor** before a pilot's first solo rental. |
 | BKG-11 | C | Weather/NOTAM links for the booked route on the booking page. |
+| BKG-12 | M | **Legs and times:** A flight log has one or more legs (e.g. LBSF → LBPD → LBSF). For each leg: departure and arrival airport, **block off / block on** and **engine start / stop** times, optional take-off and landing times, number of landings, and Hobbs/tach at start and end. Times are stored in UTC and shown in airport-local time with UTC alongside. The pilot can fill it in on a phone right after landing, save it as a draft and finish it later. |
+| BKG-13 | M | **Fuel:** fuel on board before and after each leg (in the pilot's units; fuel type from the aircraft). **Refuelling** entries: airport, quantity, fuel type, price paid, receipt photo, and who paid (pilot or owner's account). On a wet rate, fuel the pilot paid for is subtracted from the amount due; on a dry rate, fuel the owner supplied is added. |
+| BKG-14 | M | **Oil:** oil level before and after the flight (as read on the dipstick) and **oil added** (quantity, grade). The owner sees the aircraft's oil use per engine hour over time, an early sign of engine problems. |
+| BKG-15 | M | **Remarks & PIREPs:** after each flight the pilot can add remarks about the aircraft that aren't defects (e.g. "left mag drop 150 rpm", "COM2 scratchy") and optional notes on weather or the airfield. Defects follow BKG-8. The owner sees all remarks in the aircraft's history and can mark one as a **known item** that later renters see before they fly. |
+| BKG-16 | S | **Aircraft usage history:** from confirmed flight logs the owner sees hours flown, landings, fuel and oil used per aircraft, per month and per pilot, and can export them (CSV). These hours drive the maintenance reminders in TEC-8. The pilot can export their own legs for their logbook. |
+
+> The flight log is a record between the pilot and the owner. It doesn't replace the aircraft's official journey log or technical log (Part-ML), or the pilot's logbook; the app says so on the log.
 
 ### 5.6 Ratings & rental requirements (RAT) — Phase 1
 
@@ -164,7 +171,7 @@ Owners need to know who's flying their aircraft. Verification is the trust found
 | TEC-5 | M | The technician sends a quote with price, estimated duration and available dates. The owner accepts. A **maintenance job** is created and the aircraft calendar is **blocked** for that period. |
 | TEC-6 | M | Job status: requested → quoted → accepted → in progress → completed. The technician can attach work reports. |
 | TEC-7 | M | **Important:** The app does **not** replace official maintenance records or the Certificate of Release to Service (CRS). Those stay in the aircraft's logbooks and continuing airworthiness records. The app can store a copy. |
-| TEC-8 | S | **Maintenance due reminders:** The owner enters the hours/dates of the last inspections. The app uses logged rental hours from check-in to warn "50 h check due in 6 h" and suggests nearby technicians. |
+| TEC-8 | S | **Maintenance due reminders:** The owner enters the hours/dates of the last inspections. The app uses the hours from confirmed flight logs (BKG-7, BKG-16) to warn "50 h check due in 6 h" and suggests nearby technicians. |
 | TEC-9 | S | Owners and technicians rate each other after a completed job. |
 
 ### 5.10 Airport services (APT) — Phase 3
@@ -225,14 +232,14 @@ _Not legal advice. Verify each point with an aviation lawyer and the national CA
 
 ## 10. Key entities (for the data model)
 
-`User` · `Role` · `PilotCredential` (licence, rating, medical) · `ExperienceRecord` · `Aircraft` · `AircraftDocument` · `RentalRequirements` · `Availability/CalendarBlock` · `Booking` · `CheckInOut` · `Defect` · `Review` · `Message/Conversation` · `Report` · _Phase 2:_ `TechnicianProfile` · `Organisation` · `ServiceOffering` · `QuoteRequest` · `MaintenanceJob` · `MaintenanceSchedule` · _Phase 3:_ `Airport` · `AirportService` · `AirportRequest` (PPR/parking/hangar/services)
+`User` · `Role` · `PilotCredential` (licence, rating, medical) · `ExperienceRecord` · `Aircraft` · `AircraftDocument` · `RentalRequirements` · `Availability/CalendarBlock` · `Booking` · `FlightLog` (check-out/in) · `FlightLeg` · `Uplift` (fuel/oil added) · `Remark` · `Defect` · `Review` · `Message/Conversation` · `Report` · _Phase 2:_ `TechnicianProfile` · `Organisation` · `ServiceOffering` · `QuoteRequest` · `MaintenanceJob` · `MaintenanceSchedule` · _Phase 3:_ `Airport` · `AirportService` · `AirportRequest` (PPR/parking/hangar/services)
 
 ## 11. Parking lot (ideas for later)
 
 - **Flight instructor role:** checkout flights, rental with an instructor, a natural fit with BKG-10.
 - **Flying clubs & schools:** organisation accounts with member-only aircraft and internal pricing.
-- Digital **pilot logbook**, auto-filled from bookings.
-- Aircraft **tech log** (defects, deferred items) and full maintenance tracking.
+- Digital **pilot logbook**, auto-filled from flight-log legs (BKG-12).
+- Full aircraft **tech log** (deferred defects, CRS sign-off) and maintenance tracking, building on the flight log and defects (BKG-7…16).
 - **Weather, NOTAM** and route planning integrations.
 - **Cost-sharing** flights (regulated separately, needs research).
 - **Aircraft sales / co-ownership** listings.
@@ -262,6 +269,11 @@ _Not legal advice. Verify each point with an aviation lawyer and the national CA
 | **IR** | Instrument rating |
 | **Wet / dry rate** | Hourly price with / without fuel |
 | **Hobbs / tach** | Meters that measure engine running time, used for billing |
+| **Block time** | From block off (aircraft starts moving for the flight) to block on (stops at the end), used for billing and logbooks |
+| **Engine time** | From engine start to engine stop |
+| **Uplift** | Fuel or oil added to the aircraft |
+| **PIREP / remark** | Pilot report after a flight: observations about the aircraft (and optionally weather or the airfield) |
+| **Journey log / tech log** | The aircraft's official records of flights and defects, kept by the owner/operator |
 | **ARC** | Airworthiness Review Certificate, usually valid for 1 year |
 | **CofA** | Certificate of Airworthiness |
 | **CRS** | Certificate of Release to Service, signed after maintenance |
