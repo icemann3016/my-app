@@ -13,7 +13,7 @@ This file tells Claude how to work in this repo. Claude reads it at the start of
 - **Plan:** [`docs/implementation-plan.md`](docs/implementation-plan.md) has the architecture, data model and milestones M0–M10. Tasks are GitHub issues. **Work on the current milestone's issues in order** and follow the plan's key technical decisions (§4).
 - **Current phase:** Phase 1 (MVP) — accounts, pilot verification, aircraft listings, search, booking requests, ratings. Don't build Phase 2–4 features unless asked.
 - **Team:** Zlati + friend, each working with our own Claude.
-- **Status:** M0 Foundations: code done (Tailwind/shadcn, Supabase clients, tests, CI, app shell). Live on Vercel: https://my-app-zeta-gold-25.vercel.app (every push to main deploys). Remaining: confirm Supabase connection + first migration (#4, #5). Next: **M1 Accounts**.
+- **Status:** M0 Foundations: code done (Tailwind/shadcn, Supabase clients, tests, CI, app shell). Live on Vercel: https://my-app-zeta-gold-25.vercel.app (every push to main deploys). M0 done. Now: **M1 Accounts & profiles** (#10–#16). Next: **M1 Accounts**.
 
 ## Tech stack
 
