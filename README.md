@@ -14,11 +14,15 @@ Requirements: Node.js 22+ and Git.
 git clone https://github.com/icemann3016/my-app.git
 cd my-app
 npm install
-cp .env.example .env.local   # then fill in the Supabase URL and keys
+cp .env.example .env.local   # fill in DATABASE_URL and BETTER_AUTH_SECRET at least
+npm run db:migrate
 npm run dev
 ```
 
-Open http://localhost:3000. In development the home page shows a badge saying whether the app can reach Supabase.
+Open http://localhost:3000. No cloud account? Run a local Postgres with `docker compose up -d db`
+and use `DATABASE_URL=postgres://postgres:postgres@localhost:5432/myapp`.
+
+Deploying or moving to Google Cloud / Azure: see [docs/deployment.md](docs/deployment.md).
 
 ## Working together
 

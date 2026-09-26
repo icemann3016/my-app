@@ -12,7 +12,7 @@ We each work with our own Claude on our own computer. GitHub keeps us in sync, a
    npm install
    cp .env.example .env.local
    ```
-   Ask Zlati for the Supabase keys (shared via a password manager) and put them in `.env.local`.
+   Ask Zlati for the database and storage settings (shared via a password manager) and put them in `.env.local`, or use a local Postgres (`docker compose up -d db`). Then run `npm run db:migrate`.
 3. Open the folder with Claude (Claude Code in the terminal, or connect the folder in the Claude desktop app).
 
 ## Daily loop

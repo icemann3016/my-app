@@ -13,79 +13,82 @@ This file tells Claude how to work in this repo. Claude reads it at the start of
 - **Plan:** [`docs/implementation-plan.md`](docs/implementation-plan.md) has the architecture, data model and milestones M0–M10. Tasks are GitHub issues. **Work on the current milestone's issues in order** and follow the plan's key technical decisions (§4).
 - **Current phase:** Phase 1 (MVP) — accounts, pilot verification, aircraft listings, search, booking requests, ratings. Don't build Phase 2–4 features unless asked.
 - **Team:** Zlati + friend, each working with our own Claude.
-- **Status:** M0 Foundations: code done (Tailwind/shadcn, Supabase clients, tests, CI, app shell). Live on Vercel: https://my-app-zeta-gold-25.vercel.app (every push to main deploys). M0 done. **M1 in progress:** sign-up/login, profiles, roles, dashboard and public profile built (#10, #12–#14). Next: Google sign-in (#11), data export/deletion (#15), i18n (#16). Next: **M1 Accounts**.
+- **Status:** M0 done. Live on Vercel: https://my-app-zeta-gold-25.vercel.app (every push to main deploys). **M1 in progress:** sign-up/login, profiles, roles, dashboard, public profile done on the portable stack (#10, #12–#14). Next: Google sign-in (#11), data export/deletion (#15), i18n (#16).
+- **Portability:** the app must stay movable to Google Cloud or Azure: no provider-specific SDKs outside `lib/storage` and `lib/email` drivers. See [`docs/deployment.md`](docs/deployment.md).
 
 ## Tech stack
 
-- Next.js 16 (App Router, Server Components, Server Actions) + React 19 + TypeScript (strict)
-- Node.js 22 (see `.nvmrc`)
-- **Set up:**
-  - UI: Tailwind CSS v4 + shadcn/ui (components in `components/ui/`, add more with `npx shadcn@latest add <name>`) · Forms (M1): Zod + react-hook-form
-  - Backend: **Supabase** (Postgres, Auth, Storage), region Frankfurt, via `@supabase/ssr`. **RLS on every table.**
-  - Schema changes only through SQL migrations in `supabase/migrations/`, then regenerate types
-  - Email: Resend · Maps: MapLibre GL · Tests: Vitest + Playwright · Hosting: Vercel (`fra1`) · CI: GitHub Actions
-- Ask before adding any other significant dependency.
+- Next.js 16 (App Router, Server Components, Server Actions) + React 19 + TypeScript (strict), Node.js 22
+- UI: Tailwind CSS v4 + shadcn/ui (`components/ui/`, add more with `npx shadcn@latest add <name>`). Forms: Zod + `useActionState`
+- **Database:** PostgreSQL 14+ through **Drizzle ORM** (`postgres` driver). Hosted on Supabase today, but we use it as *plain Postgres* only. **RLS on every table.**
+- **Login:** **Better Auth** (`lib/auth/auth.ts`), users/sessions in our own tables
+- **Files:** `lib/storage` (drivers: `s3` = Supabase Storage / Google Cloud Storage / AWS / R2, `azure`, `local`)
+- **Email:** `lib/email` (drivers: `smtp`, `console`)
+- Tests: Vitest (unit + database) + Playwright · Hosting: Vercel (`fra1`) today, `Dockerfile` for Cloud Run / Azure Container Apps · CI: GitHub Actions
+- Never import `@supabase/*`, Google or Azure SDKs outside the storage/email drivers. Ask before adding any other significant dependency.
 
 ## Commands
 
 ```bash
 npm install          # install dependencies
-npm run dev          # dev server at http://localhost:3000
+npm run dev          # dev server at http://localhost:3000 (emails are printed in this terminal)
 npm run typecheck    # TypeScript check (generates route types first)
 npm run lint         # ESLint
 npm run format       # Prettier: format all files (format:check in CI)
-npm test             # unit tests (Vitest), files named *.test.ts next to the code
-npm run test:e2e     # browser tests (Playwright) in tests/e2e, desktop + mobile
+npm test             # unit tests + database tests (database tests need TEST_DATABASE_URL, else skipped)
+npm run test:e2e     # browser tests (Playwright), desktop + mobile. E2E_FULL=1 adds the sign-up journey
 npm run build        # production build
 
-npm run db:new <name>  # create a new SQL migration in supabase/migrations
-npm run db:push        # apply migrations to the linked Supabase project
-npm run db:types       # regenerate lib/types/database.ts from the database
+npm run db:generate        # create a migration from changes in lib/db/schema
+npm run db:custom -- name  # create an empty SQL migration (RLS policies, grants, functions, triggers)
+npm run db:migrate         # apply migrations to DATABASE_URL
+npm run db:studio          # browse the database in the browser
+
+docker build -t my-app .   # production container
+docker compose up -d db    # local Postgres (no cloud account needed)
 ```
 
-All of typecheck, lint, format:check, test, build and test:e2e run in CI (GitHub Actions) on every push.
+CI runs typecheck, lint, format:check, unit + database tests, build, the full e2e journey against a throwaway Postgres, and a Docker build.
 
 ## Project structure
 
 ```
 app/
-  (marketing)/      # public pages: home, terms, privacy
-  (auth)/           # login, signup, forgot-password, auth-error + actions.ts (auth Server Actions)
-  (app)/            # logged-in pages: dashboard, account, u/[id] (public profile), search, owner/…
-  auth/confirm/     # route handler for links in auth emails and OAuth
-  layout.tsx        # root layout: header + footer
-  globals.css       # Tailwind + design tokens (light/dark)
+  (marketing)/        # public pages: home, terms, privacy
+  (auth)/             # login, signup, forgot/reset password + actions.ts (auth Server Actions)
+  (app)/              # logged-in pages: dashboard, account, u/[id] (public profile), search, owner/…
+  api/auth/           # Better Auth endpoints (email links, OAuth callbacks)
+  api/account/avatar/ # photo upload
+  api/health/         # health check for load balancers
+  files/              # serves uploads when STORAGE_DRIVER=local
 components/
-  ui/               # shadcn/ui primitives (Button, Card, Dialog, Sheet, DropdownMenu…)
-  forms/            # TextField, TextAreaField, SubmitButton, FormMessage
-  layout/           # SiteHeader, UserMenu, MobileNav, SiteFooter, Logo
-  dev/              # development-only helpers
+  ui/                 # shadcn/ui primitives (Button, Card, Dialog, Sheet, DropdownMenu…)
+  forms/              # TextField, TextAreaField, SubmitButton, FormMessage
+  layout/             # SiteHeader, UserMenu, MobileNav, SiteFooter, Logo
 lib/
-  supabase/         # client.ts (browser), server.ts (server, RLS), admin.ts (secret key, bypasses RLS), proxy.ts
-  auth/session.ts   # getUser(), getCurrentProfile(), requireUser(), requireProfile()
-  validation/       # Zod schemas shared by forms and Server Actions
-  forms.ts          # FormState type + helpers for useActionState forms
-  types/database.ts # generated by `npm run db:types`, don't edit by hand
-  site.ts           # app name + navigation (rename the app here)
-  utils.ts          # cn() class helper
-proxy.ts            # Next 16 proxy (formerly middleware): refreshes the Supabase session
-supabase/           # config.toml, migrations/, tests/database/ (pgTAP), seed.sql
-tests/e2e/          # Playwright tests
-docs/               # business requirements, implementation plan
-scripts/            # one-off scripts
+  auth/               # auth.ts (Better Auth config), session.ts (getUser, requireUser…), redirect.ts
+  db/                 # index.ts (connection), rls.ts (asUser/asAnon), schema/ (Drizzle tables)
+  storage/            # file storage drivers
+  email/              # email drivers + templates
+  validation/         # Zod schemas shared by forms and Server Actions
+  forms.ts            # FormState type + helpers for useActionState forms
+  site.ts             # app name + navigation (rename the app here)
+db/migrations/        # SQL migrations (generated + custom), applied with npm run db:migrate
+tests/                # e2e/ (Playwright), db/ (database security tests)
+docs/                 # requirements, implementation plan, deployment guide
+Dockerfile, docker-compose.yml
 ```
 
-Target structure for the rest of the app is in the plan, §6.
+Target structure for the rest of the app is in the plan, §6. When new top-level folders are added, list them here.
 
-When new top-level folders are added (e.g. `components/`, `lib/`), list them here.
+## Database workflow
 
-## Database workflow (Supabase)
-
-- The schema changes **only** through migration files: `npm run db:new add_profiles`, write SQL, `npm run db:push`, then `npm run db:types`. Never change tables in the Supabase dashboard.
-- Every new table gets `alter table … enable row level security;` and explicit policies in the same migration.
-- Use `lib/supabase/server.ts` in server code (acts as the user). Use `lib/supabase/admin.ts` only for trusted admin/cron code, after checking permissions.
-- Every migration with tables/policies gets pgTAP tests in `supabase/tests/database/` (run with `npx supabase test db` locally, or in CI). Test as `anon` and as a logged-in user (`set local role authenticated` + `request.jwt.claim.sub`).
-- Don't name SQL functions like pgTAP functions (`has_role`, `is`, `ok`…); we use `user_has_role()`.
+- The schema changes **only** through migrations in `db/migrations/`. Tables: edit `lib/db/schema/*.ts`, then `npm run db:generate`. RLS policies, grants, functions, triggers: `npm run db:custom -- <name>` and write SQL (separate statements with `--> statement-breakpoint`). Apply with `npm run db:migrate`. Never change tables by hand in a dashboard.
+- **Every table** has RLS enabled (`.enableRLS()` in the schema) and explicit policies `TO app_user` in a custom migration. Policies use `app.current_user_id()`. Grant `app_user` only the columns users may change.
+- **User-facing queries** go through `asUser(userId, tx => …)` or `asAnon(tx => …)` from `lib/db/rls.ts`, so RLS applies. `getDb()` (owner, bypasses RLS) only for Better Auth and trusted admin/cron code, after checking permissions.
+- Every migration with tables/policies gets tests in `tests/db/` (like `security.test.ts`): check what anonymous visitors, the owner and another user can and cannot do.
+- Use only plain PostgreSQL features available on Supabase, Cloud SQL and Azure. New extensions: note them in `docs/deployment.md`.
+- Don't name SQL functions like common helpers (`has_role`, `is`, `ok`…); we use `user_has_role()`.
 - Keys live in `.env.local` (see `.env.example`). Share them with teammates through a password manager, never in git or chat.
 
 ## Domain rules (aviation)
@@ -98,7 +101,7 @@ When new top-level folders are added (e.g. `components/`, `lib/`), list them her
 
 ## Conventions
 
-- **Auth:** protect pages and Server Actions with `requireUser()` / `requireProfile()` from `lib/auth/session.ts` (not in proxy.ts). They redirect to `/login?next=…`.
+- **Auth:** protect pages, Server Actions and route handlers with `requireUser()` / `requireProfile()` (or `getUser()`) from `lib/auth/session.ts`. They redirect to `/login?next=…`. Call Better Auth on the server via `getAuth().api.*`.
 - **Forms:** a Server Action `(prev: FormState, formData) => Promise<FormState>` validates with a Zod schema from `lib/validation/`, and a client form uses `useActionState` + `TextField` + `SubmitButton` + `FormMessage`. Return `values` (never passwords) so fields refill after errors.
 - **Headings:** every page has one `h1`. `CardTitle` takes `as="h1" | "h2" | "h3"` when it's a page or section title.
 
@@ -135,6 +138,7 @@ _TODO: split areas so we don't edit the same files at the same time._
 
 Add one line per decision, newest first.
 
+- 2026-09-26: **Portable stack.** Replaced Supabase Auth/SDK with Better Auth + Drizzle on plain Postgres, file storage and email behind drivers, Docker image + deployment guide, so the app can move to Google Cloud or Azure. Supabase is now only the Postgres + file host. RLS kept via the `app_user` role and `app.user_id` setting.
 - 2026-09-26: M1: forms use React 19 `useActionState` + Zod in Server Actions (no react-hook-form for now). Profiles are public; private settings live in `user_settings`. Column-level grants stop users changing ratings/suspension. Avatars upload from the browser to the `avatars` bucket (folder = user id).
 - 2026-09-26: M0: shadcn/ui components copied into components/ui (new-york style, radix-ui). Dark mode follows the OS setting. Supabase CLI installed as a dev dependency (use `npx supabase …`). Vercel region fra1 via vercel.json.
 - 2026-09-26: Stack = Supabase (EU) + Tailwind/shadcn + Vercel. Plan in docs/implementation-plan.md, tasks as GitHub issues (M0–M10). Solo mode: commit to main until the friend joins.

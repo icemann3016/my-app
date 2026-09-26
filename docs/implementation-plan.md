@@ -1,6 +1,6 @@
 # Implementation Plan — Phase 1 (MVP)
 
-> **Status:** v0.1 · 2026-09-26 · Owner: Zlati
+> **Status:** v0.2 · 2026-09-26 · Owner: Zlati. v0.2: portable stack (no provider lock-in), see [deployment.md](deployment.md).
 > **Builds:** Phase 1 of [`business-requirements.md`](business-requirements.md): accounts, pilot verification, aircraft listings, search, booking requests, ratings, messaging, admin.
 > **Tracking:** Every task below is a GitHub issue, grouped into milestones **M0–M10**. Create them with `node scripts/create-github-issues.mjs`.
 
@@ -8,7 +8,7 @@
 
 ## 1. Summary
 
-We build a **Next.js** web app on **Supabase** (EU-hosted Postgres, login and file storage) and deploy it on **Vercel**. Work goes milestone by milestone, and each milestone ends with something you can click through. The order follows the dependencies: you need accounts before pilots, pilots and aircraft before search, search before booking, and bookings before ratings.
+We build a **Next.js** web app on **standard PostgreSQL**, with our own login (**Better Auth**) and swappable file storage, packaged as a **Docker** image. Today it runs on **Vercel** with **Supabase** as the Postgres and file host; it can move to **Google Cloud or Azure** by changing configuration ([deployment.md](deployment.md)). Work goes milestone by milestone, and each milestone ends with something you can click through. The order follows the dependencies: you need accounts before pilots, pilots and aircraft before search, search before booking, and bookings before ratings.
 
 ```
 M0 Foundations → M1 Accounts → M2 Airports → M3 Pilot verification → M4 Aircraft listings
@@ -25,15 +25,15 @@ M0 Foundations → M1 Accounts → M2 Airports → M3 Pilot verification → M4 
 | Framework | **Next.js 16** (App Router, Server Components, Server Actions) + **TypeScript** strict | Already set up. One codebase for UI and server logic |
 | UI | **Tailwind CSS v4** + **shadcn/ui** components | Fast to build, looks professional, and Claude knows it very well. Components live in our repo, so we own them |
 | Forms & validation | **Zod** + **react-hook-form** | One schema validates both the browser form and the server action |
-| Database | **Supabase Postgres** (region: Frankfurt, EU) | Real SQL, EU hosting for GDPR, and extensions we need: `btree_gist` (no double bookings), `postgis` (radius search), `pg_cron` (scheduled jobs) |
-| Auth | **Supabase Auth** via `@supabase/ssr` | Email + password, Google (Apple later), email verification, 2FA (TOTP) |
-| File storage | **Supabase Storage** | Private buckets for licences, medicals and aircraft documents. Public bucket for aircraft photos |
-| Security model | **Row Level Security (RLS)** on every table | The database itself enforces who can see what, even if app code has a bug |
-| Email | **Resend** | Transactional emails (booking requests, reminders) |
+| Database | **PostgreSQL 14+** via **Drizzle ORM** (`postgres` driver). Hosted on Supabase (Frankfurt) today | Real SQL, portable to Cloud SQL / Azure PostgreSQL. Extensions we need: `btree_gist` (no double bookings), `postgis` (radius search), `pg_cron` (scheduled jobs) |
+| Auth | **Better Auth** (open source), users stored in our own Postgres tables | Email + password, Google (Apple later), email verification, password reset, 2FA plugin later. No auth vendor to migrate away from |
+| File storage | `lib/storage` with drivers: **S3-compatible** (Supabase Storage today, Google Cloud Storage, AWS, R2), **Azure Blob**, local (dev) | Public bucket for photos; private bucket with signed URLs for licences, medicals and aircraft documents (M3) |
+| Security model | **Row Level Security (RLS)** on every table; user queries run as role `app_user` with `app.user_id` set (`lib/db/rls.ts`) | The database itself enforces who can see what, even if app code has a bug. Plain Postgres, works on any host |
+| Email | `lib/email`: **SMTP** (Resend, SendGrid, Azure Communication Services…) or console in dev | Transactional emails (verification, password reset, booking requests, reminders) |
 | Maps | **MapLibre GL JS** + a hosted tile provider (e.g. MapTiler) | Open source and cheap. Decide the provider in M5 |
 | Airport data | **OurAirports** open dataset | ICAO codes, names, coordinates, runways |
 | Testing | **Vitest** (unit) + **Playwright** (end-to-end) | Playwright tests the key flows in a real browser |
-| Hosting | **Vercel** (functions in `fra1`, Frankfurt) | Zero-config for Next.js, with a preview URL for every branch or PR |
+| Hosting | **Vercel** (`fra1`) today; **Docker** image for Cloud Run / Azure Container Apps | Zero-config previews now; portable later |
 | CI | **GitHub Actions** | typecheck + lint + tests + build on every push |
 | Monitoring (M10) | **Sentry** (errors) + **Plausible** or similar (privacy-friendly analytics) | Know when something breaks, without cookie banners for analytics |
 
@@ -42,16 +42,16 @@ M0 Foundations → M1 Accounts → M2 Airports → M3 Pilot verification → M4 
 ```mermaid
 flowchart LR
   B[Browser / phone] -->|HTTPS| V[Next.js on Vercel<br/>pages + server actions]
-  V -->|supabase-js + user session| DB[(Supabase Postgres<br/>RLS on every table)]
-  V --> ST[Supabase Storage<br/>photos + private documents]
+  V -->|Drizzle, as app_user| DB[(PostgreSQL<br/>RLS on every table)]
+  V --> ST[File storage driver<br/>S3 / Azure Blob]
   V --> RS[Resend<br/>emails]
   CRON[pg_cron jobs] --> DB
-  CRON -->|pg_net call| V
+  CRON -->|HTTP call| V
 ```
 
 - **Server-first:** pages are Server Components that read data with the user's session. Changes go through **Server Actions** that validate with Zod.
 - **Business rules live in the database**, when they must never be broken: no double bookings, eligibility checks and review publishing are enforced in Postgres (constraints, functions, RLS). The UI calls the same functions, so the rules exist in one place only.
-- **Service role key** (bypasses RLS) is used only in server-only admin and cron code, never in the browser.
+- **Owner connection** (`getDb()`, bypasses RLS) is used only by Better Auth and trusted admin/cron code. Everything user-facing goes through `asUser()` / `asAnon()`.
 
 ## 4. Key technical decisions
 
@@ -82,7 +82,7 @@ Reviews are stored with `submitted_at` and `published_at`. RLS shows a review on
 All timestamps are `timestamptz`, stored in UTC. Each airport has an IANA timezone (worked out from its coordinates at import). The UI shows airport-local time with UTC next to it on booking screens.
 
 ### 4.6 Scheduled jobs
-`pg_cron` (inside Supabase) runs:
+`pg_cron` (supported by Supabase, Cloud SQL and Azure) runs, or the platform scheduler (Cloud Scheduler / Azure Container Apps jobs) calls an API route:
 
 | Job | Frequency | What |
 |-----|-----------|------|
@@ -91,7 +91,7 @@ All timestamps are `timestamptz`, stored in UTC. Each airport has an IANA timezo
 | Document expiry | daily | Mark expired credentials/aircraft documents, auto-unlist aircraft, queue 30-day reminders |
 | Booking reminders | hourly | Queue "your flight is tomorrow" notifications |
 
-Notifications are written to a `notifications` table (in-app). A server route sends the matching emails through Resend. `pg_net` calls that route after each run.
+Notifications are written to a `notifications` table (in-app). A server route sends the matching emails through the SMTP driver; a scheduled job calls that route.
 
 ### 4.7 Search (SRC-1/2)
 Airports and aircraft home bases have a PostGIS `geography` point. A search RPC takes a location + radius + period + filters and returns aircraft that have **no overlapping active calendar entry** in that period. Filters and sorting are plain SQL. No separate search engine is needed at MVP scale.
@@ -144,14 +144,14 @@ components/
   ui/                     # shadcn/ui components
   ...                     # feature components (AircraftCard, AirportPicker…)
 lib/
-  supabase/               # client.ts, server.ts, admin.ts (service role, server-only)
+  auth/                   # Better Auth config, session helpers
+  db/                     # Drizzle schema, connection, asUser()/asAnon() for RLS
+  storage/                # file storage drivers (s3, azure, local)
+  email/                  # email drivers (smtp, console) + templates
   validation/             # Zod schemas
   domain/                 # pure logic: pricing, time/UTC helpers, formatting
-  types/database.ts       # generated from Supabase
-proxy.ts                  # Next 16 request proxy (refreshes the Supabase session)
-supabase/
-  migrations/             # SQL migrations, the only way the schema changes
-  seed.sql                # demo data for development
+db/
+  migrations/             # SQL migrations (drizzle-kit), the only way the schema changes
 scripts/                  # one-off scripts (airport import, GitHub issues)
 tests/e2e/                # Playwright tests
 docs/                     # requirements, plan
@@ -159,18 +159,12 @@ docs/                     # requirements, plan
 
 ## 7. Environments & one-time setup
 
-| Environment | Supabase project | Vercel | Used for |
+| Environment | Database + files | App | Used for |
 |-------------|------------------|--------|----------|
 | **dev** | `my-app-dev` (Frankfurt) | Preview deployments | Daily work, test data |
 | **prod** | `my-app-prod` (Frankfurt), created in M10 | Production | Real users |
 
-**Setup checklist for Zlati (done together in M0):**
-
-1. Create a **Supabase** account and a project `my-app-dev` in region **Frankfurt (eu-central-1)**. Save the database password in a password manager.
-2. `brew install supabase/tap/supabase`, then `supabase login` and `supabase link` in the repo.
-3. Create a **Vercel** account with GitHub, import `my-app`, set the function region to `fra1`, and add the environment variables.
-4. Copy `.env.example` → `.env.local` and fill in the Supabase URL and keys. **Never commit this file.**
-5. (M1) Google Cloud OAuth client for "Sign in with Google". (M6) Resend account + sending domain.
+**Setup (done):** Supabase project in Frankfurt (Postgres + Storage bucket `media`), Vercel project, `.env.local` from `.env.example`. Moving to Google Cloud or Azure: [deployment.md](deployment.md).
 
 ## 8. Milestones
 
@@ -178,7 +172,7 @@ Sizes: **S** ≈ a few hours · **M** ≈ 1–2 sessions · **L** ≈ 3+ session
 
 | # | Milestone | Requirements | Demo at the end | Rough time |
 |---|-----------|--------------|-----------------|------------|
-| M0 | Foundations | — | App deployed on Vercel with login-ready Supabase, CI green | 1 wk |
+| M0 | Foundations | — | App deployed on Vercel with a database, CI green | 1 wk |
 | M1 | Accounts & profiles | ACC-1…5 | Sign up, verify email, edit profile, switch roles, public profile | 1–2 wk |
 | M2 | Airports | (LST-4, SRC-1 base) | Type "LBSF" → Sofia, with timezone | 0.5 wk |
 | M3 | Pilot verification | VER-1…6, ADM-1 | Pilot uploads licence/medical, admin verifies, badges appear | 2 wk |
@@ -196,7 +190,7 @@ Sizes: **S** ≈ a few hours · **M** ≈ 1–2 sessions · **L** ≈ 3+ session
 
 1. Pick the next open issue in the current milestone, e.g. **"Implement issue #12"**, and paste the issue or give Claude its number.
 2. Claude reads `CLAUDE.md`, this plan and the requirement IDs in the issue, then proposes a short approach for anything non-trivial **before** coding.
-3. Schema changes are **always a new migration file** in `supabase/migrations/`, followed by regenerating types.
+3. Schema changes are **always a migration**: edit `lib/db/schema/`, run `npm run db:generate`, and put RLS policies/grants/functions in a custom SQL migration (`npm run db:custom -- <name>`).
 4. **Definition of done** for every issue:
    - [ ] Acceptance criteria in the issue are met
    - [ ] RLS policies added/updated for any new table, with a test that another user **can't** read or write it
@@ -210,7 +204,7 @@ Sizes: **S** ≈ a few hours · **M** ≈ 1–2 sessions · **L** ≈ 3+ session
 | Level | Tool | What |
 |-------|------|------|
 | Unit | Vitest | Pure logic in `lib/domain` (price estimate, time/UTC, eligibility formatting) |
-| Database | SQL tests via Supabase CLI (pgTAP) | Exclusion constraint, `check_eligibility`, RLS "other user can't see" cases, review publishing |
+| Database | Vitest against a real Postgres (`tests/db/`, `TEST_DATABASE_URL`) | Exclusion constraint, `check_eligibility`, RLS "other user can't see" cases, review publishing |
 | End-to-end | Playwright | Golden paths: sign up → list aircraft → search → book → check-in → review |
 
 ## 11. Risks & how we handle them
@@ -225,7 +219,7 @@ Sizes: **S** ≈ a few hours · **M** ≈ 1–2 sessions · **L** ≈ 3+ session
 
 ## 12. Costs (rough)
 
-Development can run on **free tiers** (Supabase, Vercel Hobby, Resend, map tiles). At launch expect paid plans for Supabase (backups, no pausing), Vercel (the Hobby plan is for non-commercial use) and a domain, roughly tens of euros per month in total at small scale. Check current pricing when we get to M10.
+Development can run on **free tiers** (Supabase, Vercel Hobby, an SMTP provider, map tiles). At launch expect paid plans for Supabase (backups, no pausing), Vercel (the Hobby plan is for non-commercial use) and a domain, roughly tens of euros per month in total at small scale. Check current pricing when we get to M10.
 
 ## 13. After Phase 1 (outline)
 
