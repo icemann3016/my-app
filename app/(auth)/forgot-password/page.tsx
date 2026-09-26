@@ -1,35 +1,30 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { redirect } from "next/navigation";
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { getUser } from "@/lib/auth/session";
-import { SignupForm } from "./signup-form";
+import { ForgotPasswordForm } from "./forgot-password-form";
 
-export const metadata: Metadata = { title: "Sign up" };
+export const metadata: Metadata = { title: "Reset password" };
 
-export default async function SignupPage() {
-  if (await getUser()) redirect("/dashboard");
-
+export default function ForgotPasswordPage() {
   return (
     <Card>
       <CardHeader>
         <CardTitle as="h1" className="text-xl">
-          Create your account
+          Reset your password
         </CardTitle>
         <CardDescription>
-          One account for everything: rent aircraft as a pilot, or list your own as an owner.
+          Enter your email and we&apos;ll send you a link to choose a new password.
         </CardDescription>
       </CardHeader>
       <CardContent className="grid gap-6">
-        <SignupForm />
+        <ForgotPasswordForm />
         <p className="text-center text-sm text-muted-foreground">
-          Already have an account?{" "}
           <Link
             href="/login"
             className="font-medium text-foreground underline-offset-4 hover:underline"
           >
-            Log in
+            Back to log in
           </Link>
         </p>
       </CardContent>

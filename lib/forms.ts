@@ -1,0 +1,31 @@
+import { z } from "zod";
+
+/** State returned by form Server Actions and read with useActionState. */
+export type FormState = {
+  ok?: boolean;
+  message?: string;
+  /** Machine-readable reason, e.g. "email_not_confirmed". */
+  code?: string;
+  errors?: Record<string, string[] | undefined>;
+  /** Submitted values to refill the form after an error (never passwords). */
+  values?: Record<string, string>;
+};
+
+export const initialFormState: FormState = {};
+
+export function formValues(formData: FormData): Record<string, string> {
+  const values: Record<string, string> = {};
+  for (const [key, value] of formData.entries()) {
+    if (typeof value === "string") values[key] = value;
+  }
+  return values;
+}
+
+export function fieldErrors(error: z.ZodError): FormState["errors"] {
+  return z.flattenError(error).fieldErrors as FormState["errors"];
+}
+
+export function withoutSecrets(values: Record<string, string>): Record<string, string> {
+  const { password: _p, confirm: _c, ...rest } = values;
+  return rest;
+}

@@ -87,7 +87,9 @@ export default function HomePage() {
                     </span>
                   )}
                 </div>
-                <CardTitle className="pt-2">{title}</CardTitle>
+                <CardTitle as="h3" className="pt-2">
+                  {title}
+                </CardTitle>
               </CardHeader>
               <CardContent>
                 <CardDescription>{text}</CardDescription>
