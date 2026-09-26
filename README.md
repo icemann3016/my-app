@@ -2,7 +2,9 @@
 
 [![CI](https://github.com/icemann3016/my-app/actions/workflows/ci.yml/badge.svg)](https://github.com/icemann3016/my-app/actions/workflows/ci.yml)
 
-_TODO: one-line description._
+A European general aviation marketplace: rent aircraft from verified owners, with two-way ratings.
+
+**Live (preview):** https://my-app-zeta-gold-25.vercel.app
 
 ## Getting started
 
