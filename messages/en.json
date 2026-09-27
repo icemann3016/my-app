@@ -1011,7 +1011,10 @@
       "ok": "You meet the requirements.",
       "okForPeriod": "You meet the requirements for these dates.",
       "notYet": "You can't rent this aircraft yet:",
-      "updateCredentials": "Update your pilot credentials"
+      "updateCredentials": "Update your pilot credentials",
+      "aircraft_no_night": "Part of this time is at night (from 30 minutes after sunset to 30 minutes before sunrise), and this aircraft isn't approved for night VFR.",
+      "night_rating": "Part of this time is at night (from 30 minutes after sunset to 30 minutes before sunrise): you need a valid, verified Night rating.",
+      "night_flight": "Part of this time is at night (from 30 minutes after sunset to 30 minutes before sunrise). Night VFR rules apply."
     },
     "calendar": {
       "previous": "Previous month",

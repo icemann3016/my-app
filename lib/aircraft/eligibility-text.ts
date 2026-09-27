@@ -63,6 +63,9 @@ export function eligibilityText(
     case "unrated":
     case "checkout":
     case "aircraft_unavailable":
+    case "aircraft_no_night":
+    case "night_rating":
+    case "night_flight":
       return t(f.requirement);
     default:
       return t("unknown");

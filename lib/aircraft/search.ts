@@ -75,6 +75,12 @@ export async function searchAircraft(viewerId: string | null, f: SearchFilters) 
   if (f.ifr) where.push(eq(aircraft.ifr, true));
   if (f.avionics) where.push(ilike(aircraft.avionics, `%${likeEscape(f.avionics)}%`));
   if (range) where.push(sql`public.aircraft_is_free(${aircraft.id}, ${range})`);
+  // Aircraft not approved for night VFR can't fly a period that touches night at their base.
+  if (range) {
+    where.push(
+      sql`(${aircraft.nightVfr} or not public.period_needs_night(${range}, ${airports.latitude}, ${airports.longitude}))`,
+    );
+  }
   if (f.eligible && viewerId) {
     where.push(sql`public.i_meet_requirements(${aircraft.id}, ${range ?? sql`null::tstzrange`})`);
   }
