@@ -1,5 +1,6 @@
 import { timingSafeEqual } from "node:crypto";
 
+import { sendAircraftExpiryReminders, unlistExpiredAircraft } from "@/lib/aircraft/expiry";
 import { deleteOrphanDocuments } from "@/lib/documents";
 import { sendExpiryReminders } from "@/lib/pilot/reminders";
 
@@ -8,6 +9,8 @@ import { sendExpiryReminders } from "@/lib/pilot/reminders";
  * Vercel Cron (vercel.json) sends it automatically; on Google Cloud use Cloud Scheduler, on
  * Azure a Container Apps job or Logic App (see docs/deployment.md).
  * - emails pilots whose credentials expire within 30 days
+ * - emails owners whose ARC or insurance expires within 30 days, and unlists aircraft whose
+ *   ARC or insurance has expired
  * - removes uploads older than a day that were never attached to a credential
  */
 export const maxDuration = 60;
@@ -25,7 +28,10 @@ export async function GET(request: Request) {
     return Response.json({ error: "Unauthorized" }, { status: 401 });
   }
   const reminders = await sendExpiryReminders();
+  const aircraftReminders = await sendAircraftExpiryReminders();
+  const aircraft = await unlistExpiredAircraft();
   const orphanDocuments = await deleteOrphanDocuments(new Date(Date.now() - 24 * 60 * 60 * 1000));
-  console.info("[cron] daily", { reminders, orphanDocuments });
-  return Response.json({ ok: true, reminders, orphanDocuments });
+  const summary = { reminders, aircraftReminders, aircraft, orphanDocuments };
+  console.info("[cron] daily", summary);
+  return Response.json({ ok: true, ...summary });
 }

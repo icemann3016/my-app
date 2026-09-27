@@ -1,6 +1,7 @@
 import { cache } from "react";
 import { eq } from "drizzle-orm";
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { MapPinIcon, ShieldCheckIcon, StarIcon } from "lucide-react";
@@ -17,6 +18,9 @@ import { isDatabaseConfigured } from "@/lib/db";
 import { asAnon } from "@/lib/db/rls";
 import { profiles, userRoles } from "@/lib/db/schema";
 import { intlLocale } from "@/lib/i18n/config";
+import { getListedAircraftOf } from "@/lib/aircraft/queries";
+import { formatMoney } from "@/lib/aircraft/format";
+import { aircraftTitle } from "@/lib/aircraft/catalog";
 import { getPilotBadges } from "@/lib/pilot/credentials";
 import { credentialLabel, type PilotTranslate } from "@/lib/pilot/labels";
 
@@ -71,6 +75,8 @@ export default async function PublicProfilePage({ params }: { params: Promise<{ 
   const t = await getTranslations("profile");
   const isPilot = roles.includes("pilot");
   const badges = isPilot ? await getPilotBadges(profile.id) : [];
+  const fleet = roles.includes("owner") ? await getListedAircraftOf(profile.id) : [];
+  const locale = await getLocale();
   const tp = (await getTranslations("pilot")) as unknown as PilotTranslate;
   const memberSince = new Intl.DateTimeFormat(intlLocale(await getLocale()), {
     month: "long",
@@ -171,6 +177,42 @@ export default async function PublicProfilePage({ params }: { params: Promise<{ 
           )}
         </CardContent>
       </Card>
+
+      {fleet.length > 0 && (
+        <section aria-labelledby="fleet" className="mt-6 grid gap-3">
+          <h2 id="fleet" className="text-lg font-semibold">
+            {t("aircraft")}
+          </h2>
+          <ul className="grid gap-3 sm:grid-cols-2">
+            {fleet.map((a) => (
+              <li key={a.id}>
+                <Link
+                  href={`/aircraft/${a.id}`}
+                  className="flex items-center gap-3 rounded-xl border bg-card p-2 hover:bg-accent/50"
+                >
+                  <div className="relative aspect-[4/3] w-24 shrink-0 overflow-hidden rounded-md bg-muted">
+                    {a.coverUrl && (
+                      <Image src={a.coverUrl} alt="" fill sizes="96px" className="object-cover" />
+                    )}
+                  </div>
+                  <div className="grid min-w-0 gap-0.5 text-sm">
+                    <span className="truncate font-medium">{aircraftTitle(a)}</span>
+                    <span className="text-muted-foreground">
+                      <span className="font-mono">{a.registration}</span>
+                      {a.homeAirportIdent && <> · {a.homeAirportIdent}</>}
+                    </span>
+                    {a.pricePerHour !== null && (
+                      <span>
+                        {t("perHour", { price: formatMoney(a.pricePerHour, a.currency, locale) })}
+                      </span>
+                    )}
+                  </div>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
     </div>
   );
 }

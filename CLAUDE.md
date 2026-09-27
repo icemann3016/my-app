@@ -13,9 +13,23 @@ This file tells Claude how to work in this repo. Claude reads it at the start of
 - **Plan:** [`docs/implementation-plan.md`](docs/implementation-plan.md) has the architecture, data model and milestones M0–M10. Tasks are GitHub issues. **Work on the current milestone's issues in order** and follow the plan's key technical decisions (§4).
 - **Current phase:** Phase 1 (MVP) — accounts, pilot verification, aircraft listings, search, booking requests, ratings. Don't build Phase 2–4 features unless asked.
 - **Team:** Zlati + friend, each working with our own Claude.
-- **Status:** M0 done. Live at https://ownaplane.eu (every push to main deploys). **M1 done:** accounts, profiles, roles, public profiles, Google sign-in (needs Google keys), data export + account deletion, English/Bulgarian + units preference. **M2 done:** 7,392 European airfields (OurAirports) with time zones, airport search box, home airfield linked to airports. **M3 done:** pilot credentials (licences, ratings, medical, experience) with private document upload, admin verification queue with audit log, verified badges on public profiles, daily expiry reminders. Next: **M4 Aircraft listings**.
+- **Status:** M0 done. Live at https://ownaplane.eu (every push to main deploys). **M1 done:** accounts, profiles, roles, public profiles, Google sign-in (needs Google keys), data export + account deletion, English/Bulgarian + units preference. **M2 done:** 7,392 European airfields (OurAirports) with time zones, airport search box, home airfield linked to airports. **M3 done:** pilot credentials (licences, ratings, medical, experience) with private document upload, admin verification queue with audit log, verified badges on public profiles, daily expiry reminders. **M4 Aircraft listings: in progress** on branch `wip/m4-aircraft-listings` (see "Current work" below).
 - **Domain:** https://ownaplane.eu (Vercel; `BETTER_AUTH_URL=https://ownaplane.eu`). The *.vercel.app addresses keep working (trusted automatically). Next infra step: real email via SMTP (Resend) on ownaplane.eu, then switch on email verification.
 - **Portability:** the app must stay movable to Google Cloud or Azure: no provider-specific SDKs outside `lib/storage` and `lib/email` drivers. See [`docs/deployment.md`](docs/deployment.md).
+
+## Current work (hand-over, remove when M4 is merged)
+
+M4 (issues #23–#29) is on branch `wip/m4-aircraft-listings`, not on `main` yet.
+
+- **Done and tested:** tables `aircraft`, `aircraft_photos`, `aircraft_documents` (CofA/ARC/insurance, verified by admins), `aircraft_files` (POH, checklists, W&B), `rental_requirements`; RLS, listing rules and triggers in `db/migrations/0008_aircraft_security.sql` (`public.aircraft_listing_problems`, `aircraft_status_rules`); daily jobs in `lib/aircraft/expiry.ts` (30-day reminders, auto-unlist); admin review with auto-publish in `lib/admin/aircraft-review.ts`. DB tests: `tests/db/aircraft.test.ts`, `tests/db/aircraft-jobs.test.ts`.
+- **Written, not yet tried in a browser:** `/owner/aircraft` (list), `/owner/aircraft/new`, `/owner/aircraft/[id]` (overview, publish/pause/unlist/delete) and its sections (`details`, `equipment`, `base`, `pricing`, `photos`, `documents`, `requirements`), public page `/aircraft/[id]`, admin `/admin/verifications/aircraft/[id]`, aircraft on public profiles, owner card on the dashboard. Translations are in both message files.
+- **Still to do for M4:**
+  1. Click through owner → admin → listed on desktop and mobile (dev server + a local database) and fix what breaks.
+  2. Add the owner's aircraft to the data export (`app/api/account/export`).
+  3. Unit tests for `lib/validation/aircraft.ts`; Playwright test `tests/e2e/aircraft-listing.spec.ts` (owner lists, admin verifies, visitor sees the listing, documents stay 404 for others).
+  4. Security review of the M4 diff; update this file (structure, decisions) and `docs/deployment.md`.
+  5. Merge to `main` with "Closes #23 … #29". **Before pushing:** run `npm run db:migrate` against Supabase (migrations 0007 and 0008).
+- **Local database for tests:** `docker compose up -d db`, then `docker compose exec db createdb -U postgres ownaplane_test` and run `TEST_DATABASE_URL=postgres://postgres:postgres@localhost:5432/ownaplane_test npm test` (that database is wiped by the tests).
 
 ## Tech stack
 

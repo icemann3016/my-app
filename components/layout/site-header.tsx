@@ -18,6 +18,7 @@ export async function SiteHeader() {
         name: current.profile.displayName,
         avatarUrl: avatarUrl(current.profile.avatarKey),
         isPilot: current.roles.includes("pilot"),
+        isOwner: current.roles.includes("owner"),
         isAdmin: current.roles.includes("admin"),
       }
     : null;

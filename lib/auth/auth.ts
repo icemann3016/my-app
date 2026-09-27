@@ -99,8 +99,19 @@ function createAuth() {
               .delete(profile.avatarKey)
               .catch((e) => console.warn("[auth] couldn't delete avatar", e));
           }
-          // Licence and medical scans (the database rows go with the user).
+          // Licence, medical and aircraft documents, and aircraft photos (the database rows go
+          // with the user).
           await deleteAllDocumentFiles(user.id);
+          const photos = await getDb()
+            .select({ key: schema.aircraftPhotos.storageKey })
+            .from(schema.aircraftPhotos)
+            .innerJoin(schema.aircraft, eq(schema.aircraft.id, schema.aircraftPhotos.aircraftId))
+            .where(eq(schema.aircraft.ownerId, user.id));
+          for (const { key } of photos) {
+            await getStorage()
+              .delete(key)
+              .catch((e) => console.warn("[auth] couldn't delete aircraft photo", e));
+          }
         },
       },
     },

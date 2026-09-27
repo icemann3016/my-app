@@ -12,7 +12,7 @@ import { initialFormState } from "@/lib/forms";
 import type { CredentialKind } from "@/lib/pilot/labels";
 import { review } from "../actions";
 
-/** Verify / reject buttons for one credential. Rejecting asks for a reason for the pilot. */
+/** Verify / reject buttons for a credential or aircraft document. Rejecting asks for a reason. */
 export function ReviewForm({
   kind,
   id,
@@ -20,7 +20,7 @@ export function ReviewForm({
   name,
   status,
 }: {
-  kind: CredentialKind;
+  kind: CredentialKind | "aircraft_document";
   id: string;
   /** updated_at the admin is looking at (ISO). */
   version: string;

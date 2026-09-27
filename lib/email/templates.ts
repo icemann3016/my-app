@@ -152,3 +152,109 @@ export function expiryReminderEmail({
     locale,
   });
 }
+
+type AircraftDocKind = "cofa" | "arc" | "insurance";
+
+function docName(locale: string | null | undefined, kind: AircraftDocKind) {
+  const l = localeOf(locale);
+  return createTranslator({ locale: l, messages: catalogs[l], namespace: "owner.documents" })(
+    `kinds.${kind}`,
+  );
+}
+
+/** Sent to an owner when an admin verifies or rejects an aircraft document. */
+export function aircraftDocumentReviewedEmail({
+  name,
+  locale,
+  registration,
+  kind,
+  decision,
+  reason,
+  listed,
+  url,
+}: {
+  name: string;
+  locale?: string | null;
+  registration: string;
+  kind: AircraftDocKind;
+  decision: "verify" | "reject";
+  reason?: string | null;
+  listed: boolean;
+  url: string;
+}) {
+  const t = translator(locale);
+  const doc = docName(locale, kind);
+  const verified = decision === "verify";
+  return render({
+    subject: verified
+      ? t("aircraftDocument.verifiedSubject", { doc, registration })
+      : t("aircraftDocument.rejectedSubject", { doc, registration }),
+    greeting: t("aircraftDocument.greeting", { name }),
+    paragraphs: verified
+      ? [
+          t("aircraftDocument.verifiedBody", { doc, registration }),
+          ...(listed ? [t("aircraftDocument.nowListed", { registration })] : []),
+        ]
+      : [
+          t("aircraftDocument.rejectedBody", { doc, registration }),
+          t("aircraftDocument.reason", { reason: reason ?? "" }),
+          t("aircraftDocument.rejectedNext"),
+        ],
+    cta: t("aircraftDocument.cta"),
+    url,
+    locale,
+  });
+}
+
+/** 30 days before an ARC or insurance expires (once per document). */
+export function aircraftExpiryReminderEmail({
+  name,
+  locale,
+  items,
+  url,
+}: {
+  name: string;
+  locale?: string | null;
+  items: { registration: string; kind: AircraftDocKind; expiresOn: string }[];
+  url: string;
+}) {
+  const t = translator(locale);
+  return render({
+    subject: t("aircraftExpiry.subject", { count: items.length }),
+    greeting: t("aircraftExpiry.greeting", { name }),
+    paragraphs: [t("aircraftExpiry.body")],
+    list: items.map((i) =>
+      t("aircraftExpiry.item", {
+        registration: i.registration,
+        doc: docName(locale, i.kind),
+        date: formatDate(locale, i.expiresOn),
+      }),
+    ),
+    cta: t("aircraftExpiry.cta"),
+    url,
+    locale,
+  });
+}
+
+/** The daily job unlisted an aircraft because its ARC or insurance expired. */
+export function aircraftUnlistedEmail({
+  name,
+  locale,
+  registration,
+  url,
+}: {
+  name: string;
+  locale?: string | null;
+  registration: string;
+  url: string;
+}) {
+  const t = translator(locale);
+  return render({
+    subject: t("aircraftUnlisted.subject", { registration }),
+    greeting: t("aircraftUnlisted.greeting", { name }),
+    paragraphs: [t("aircraftUnlisted.body", { registration }), t("aircraftUnlisted.next")],
+    cta: t("aircraftUnlisted.cta"),
+    url,
+    locale,
+  });
+}

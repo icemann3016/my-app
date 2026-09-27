@@ -5,6 +5,7 @@ import {
   IdCardIcon,
   LayoutDashboardIcon,
   LogOutIcon,
+  PlaneIcon,
   SettingsIcon,
   ShieldCheckIcon,
   UserRoundIcon,
@@ -27,6 +28,7 @@ export type AccountSummary = {
   name: string;
   avatarUrl: string | null;
   isPilot: boolean;
+  isOwner: boolean;
   isAdmin: boolean;
 };
 
@@ -52,6 +54,13 @@ export function UserMenu({ account }: { account: AccountSummary }) {
           <DropdownMenuItem asChild>
             <Link href="/pilot">
               <IdCardIcon /> {t("pilotCredentials")}
+            </Link>
+          </DropdownMenuItem>
+        )}
+        {account.isOwner && (
+          <DropdownMenuItem asChild>
+            <Link href="/owner/aircraft">
+              <PlaneIcon /> {t("myAircraft")}
             </Link>
           </DropdownMenuItem>
         )}

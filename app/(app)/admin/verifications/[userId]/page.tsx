@@ -20,7 +20,7 @@ import { countryName } from "@/lib/pilot/catalog";
 import { getPilotCredentials } from "@/lib/pilot/credentials";
 import { type CredentialKind, credentialLabel, type PilotTranslate } from "@/lib/pilot/labels";
 import { expiryState } from "@/lib/pilot/validity";
-import { ReviewForm } from "./review-form";
+import { ReviewForm } from "../_components/review-form";
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 

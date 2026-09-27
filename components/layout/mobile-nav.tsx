@@ -57,6 +57,13 @@ export function MobileNav({ account }: { account: AccountSummary | null }) {
                   </Link>
                 </SheetClose>
               )}
+              {account.isOwner && (
+                <SheetClose asChild>
+                  <Link href="/owner/aircraft" className={linkClass}>
+                    {t("myAircraft")}
+                  </Link>
+                </SheetClose>
+              )}
               <SheetClose asChild>
                 <Link href="/account" className={linkClass}>
                   {t("account")}

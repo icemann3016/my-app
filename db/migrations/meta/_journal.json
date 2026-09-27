@@ -50,6 +50,20 @@
       "when": 1790442711406,
       "tag": "0006_pilot_security",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1790485994573,
+      "tag": "0007_aircraft",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1790486038054,
+      "tag": "0008_aircraft_security",
+      "breakpoints": true
     }
   ]
 }

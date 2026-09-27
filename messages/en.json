@@ -17,7 +17,8 @@
       "footer": "Footer",
       "mainNavigation": "Main navigation",
       "pilotCredentials": "Pilot credentials",
-      "admin": "Admin"
+      "admin": "Admin",
+      "myAircraft": "My aircraft"
     },
     "footer": {
       "tagline": "Made for general aviation in Europe.",
@@ -72,10 +73,6 @@
     "search": {
       "title": "Find aircraft",
       "text": "Search aircraft by airport, dates and specs."
-    },
-    "ownerAircraft": {
-      "title": "List your aircraft",
-      "text": "List your aircraft, set prices and choose who can rent it."
     },
     "terms": {
       "title": "Terms of service",
@@ -183,7 +180,13 @@
     "hoursInvalid": "Enter a number of hours, e.g. 125.5.",
     "hoursMoreThanTotal": "Can't be more than your total hours.",
     "aircraftTypeInvalid": "Enter an ICAO type designator, e.g. C172 or PA28.",
-    "reasonRequired": "Tell the pilot why (up to 500 characters)."
+    "reasonRequired": "Tell the pilot why (up to 500 characters).",
+    "tooLong": "That's too long.",
+    "numberInvalid": "Enter a number in the allowed range.",
+    "registrationInvalid": "Enter the registration as painted on the aircraft, e.g. LZ-ABC or D-EFGH.",
+    "registrationLocked": "The registration can't be changed after publishing. Create a new listing instead.",
+    "icaoTypeInvalid": "Enter the ICAO type designator: 2–4 letters or digits, e.g. C172 or P28A.",
+    "expiryRequired": "Enter the expiry date."
   },
   "dashboard": {
     "title": "Welcome, {name}",
@@ -197,7 +200,6 @@
     "pilotTitle": "Fly as a pilot",
     "pilotTextOff": "Switch on the pilot role to rent aircraft.",
     "ownerTitle": "List your aircraft",
-    "ownerTextOn": "Next: create your first listing. Coming soon.",
     "ownerTextOff": "Own an aircraft? Switch on the owner role to rent it out.",
     "switchOn": "Switch on",
     "publicProfile": "Your public profile:",
@@ -210,7 +212,11 @@
     "manageCredentials": "Pilot credentials",
     "expiryTitle": "Renew your credentials",
     "credentialExpiring": "{item} expires on {date}.",
-    "credentialExpired": "{item} expired on {date}."
+    "credentialExpired": "{item} expired on {date}.",
+    "ownerTextNone": "Next: list your first aircraft.",
+    "ownerTextSome": "{count, plural, one {# aircraft} other {# aircraft}}, {listed} listed.",
+    "myAircraft": "My aircraft",
+    "addAircraft": "List an aircraft"
   },
   "account": {
     "title": "Account",
@@ -323,7 +329,9 @@
       "owner": "Aircraft owner"
     },
     "verifiedCredentials": "Verified by ownAplane",
-    "noVerifiedCredentials": "Nothing verified yet"
+    "noVerifiedCredentials": "Nothing verified yet",
+    "aircraft": "Aircraft for rent",
+    "perHour": "{price} per hour"
   },
   "email": {
     "linkFallback": "If the button doesn't work, copy this link into your browser:",
@@ -355,6 +363,31 @@
       "body": "Heads up: these expire within 30 days. Once renewed, update them and upload the new document so you can keep renting aircraft.",
       "item": "{item}: valid until {date}",
       "cta": "Update credentials"
+    },
+    "aircraftDocument": {
+      "greeting": "Hi {name},",
+      "verifiedSubject": "{registration}: your {doc} is verified",
+      "verifiedBody": "We've checked the {doc} for {registration} and it's verified.",
+      "nowListed": "That was the last check: {registration} is now listed and pilots can find it.",
+      "rejectedSubject": "{registration}: we couldn't verify your {doc}",
+      "rejectedBody": "We've checked the {doc} for {registration} but couldn't verify it.",
+      "reason": "Reason: {reason}",
+      "rejectedNext": "Please upload a corrected or clearer document and we'll check it again.",
+      "cta": "Open the listing"
+    },
+    "aircraftExpiry": {
+      "subject": "{count, plural, one {An aircraft document expires soon} other {Aircraft documents expire soon}}",
+      "greeting": "Hi {name},",
+      "body": "These expire within 30 days. Upload the renewed document in time, or the aircraft will be unlisted automatically when it expires:",
+      "item": "{registration}, {doc}: valid until {date}",
+      "cta": "Open my aircraft"
+    },
+    "aircraftUnlisted": {
+      "subject": "{registration} was unlisted",
+      "greeting": "Hi {name},",
+      "body": "The ARC or insurance of {registration} has expired, so we've unlisted it. Pilots can't find it for now.",
+      "next": "Upload the renewed document. As soon as we've checked it, you can list the aircraft again.",
+      "cta": "Upload the document"
     }
   },
   "airportPicker": {
@@ -529,7 +562,9 @@
       "oldestFirst": "Oldest first. Try to answer within two working days.",
       "empty": "Nothing to review right now.",
       "items": "{count, plural, one {# item} other {# items}}",
-      "since": "waiting since {date} UTC"
+      "since": "waiting since {date} UTC",
+      "aircraftWaiting": "{count, plural, =0 {No aircraft waiting} one {# aircraft waiting} other {# aircraft waiting}}",
+      "aircraftText": "CofA, ARC and insurance to check before a listing goes live."
     },
     "review": {
       "metaTitle": "Review pilot",
@@ -569,7 +604,387 @@
         "verify": "verified {item}",
         "reject": "rejected {item}",
         "viewDocument": "opened a document"
-      }
+      },
+      "verifiedOwner": "Verified. The owner has been told.",
+      "verifiedAndListed": "Verified. That was the last check: the aircraft is now listed.",
+      "rejectedOwner": "Rejected. The owner has been told why."
+    },
+    "aircraftReview": {
+      "metaTitle": "Review aircraft",
+      "title": "Review {registration}",
+      "owner": "Owner: {name}",
+      "listing": "Listing",
+      "checklist": "Check that each document is for {registration}, is readable and valid, and that the expiry date matches. For insurance, check it covers rental. Opening a document is logged.",
+      "notUploaded": "Not uploaded yet."
+    }
+  },
+  "aircraft": {
+    "categories": {
+      "aeroplane": "Aeroplane",
+      "tmg": "Touring motor glider (TMG)",
+      "ultralight": "Ultralight / microlight",
+      "helicopter": "Helicopter"
+    },
+    "units": {
+      "litresPerHour": "L/h",
+      "usgalPerHour": "US gal/h",
+      "kg": "kg",
+      "lb": "lb",
+      "kt": "kt",
+      "h": "h"
+    },
+    "oilUnits": {
+      "us_qt": "US quarts",
+      "l": "Litres"
+    },
+    "transponders": {
+      "none": "No transponder",
+      "mode_c": "Mode C transponder",
+      "mode_s": "Mode S transponder",
+      "mode_s_es": "Mode S ES transponder"
+    },
+    "priceBases": {
+      "wet": "Wet (fuel included)",
+      "dry": "Dry (fuel not included)"
+    },
+    "timeBases": {
+      "hobbs": "Hobbs meter",
+      "tach": "Tach meter",
+      "block": "Block time"
+    },
+    "statuses": {
+      "draft": "Draft",
+      "listed": "Listed",
+      "paused": "Paused",
+      "unlisted": "Unlisted",
+      "grounded": "Grounded"
+    },
+    "specs": {
+      "category": "Category",
+      "seats": "Seats",
+      "year": "Year",
+      "icaoType": "ICAO type",
+      "engine": "Engine",
+      "fuel": "Fuel",
+      "fuelBurn": "Fuel burn",
+      "cruise": "Cruise speed",
+      "usefulLoad": "Useful load",
+      "endurance": "Endurance"
+    },
+    "equipment": {
+      "autopilot": "Autopilot",
+      "adsbOut": "ADS-B out",
+      "nightVfr": "Night VFR",
+      "ifr": "IFR certified"
+    },
+    "gallery": {
+      "carousel": "photo gallery",
+      "label": "Photos of {title}",
+      "photoOf": "{title}, photo {n} of {count}",
+      "previous": "Previous photo",
+      "next": "Next photo",
+      "thumbnails": "All photos",
+      "show": "Show photo {n}"
+    },
+    "page": {
+      "notFound": "Aircraft not found",
+      "notPublic": "This aircraft isn't listed, so only you (and our team) can see this page.",
+      "edit": "Edit listing",
+      "about": "About this aircraft",
+      "specs": "Specifications",
+      "equipment": "Equipment",
+      "requirements": "Who can rent it",
+      "requirementsBase": "A valid licence, class or type rating and medical, verified by ownAplane.",
+      "perHour": "{price} / hour",
+      "noPrice": "Price on request",
+      "priceBasis": {
+        "wet": "Wet rate: fuel is included.",
+        "dry": "Dry rate: you pay for fuel separately."
+      },
+      "timeBasis": {
+        "hobbs": "Time is measured with the Hobbs meter.",
+        "tach": "Time is measured with the tach meter.",
+        "block": "Time is measured as block time."
+      },
+      "weekendPrice": "Weekends: {price} / hour",
+      "minHoursPerDay": "Minimum {hours} h per day",
+      "cancellation": "Cancellation",
+      "freeCancellation": "Free cancellation up to {hours, plural, one {# hour} other {# hours}} before the booking.",
+      "noFreeCancellation": "No free cancellation.",
+      "requestSoon": "Booking requests open soon",
+      "paymentNote": "You'll pay the owner directly; no money goes through ownAplane.",
+      "owner": "Owner",
+      "noRatings": "No ratings yet"
+    },
+    "requirements": {
+      "minRating": "Pilot rating {rating} or higher",
+      "unrated": {
+        "allow": "Pilots with fewer than {count, plural, one {# review} other {# reviews}} are welcome.",
+        "checkout": "Pilots with fewer than {count, plural, one {# review} other {# reviews}} fly a checkout flight first.",
+        "deny": "Pilots need at least {count, plural, one {# review} other {# reviews}}."
+      },
+      "licences": "Licence: {list}",
+      "ratings": "Ratings: {list}",
+      "totalHours": "At least {hours} h total",
+      "typeHours": "At least {hours} h on type",
+      "typeHoursOn": "At least {hours} h on {type}",
+      "recentHours": "At least {hours} h in the last 90 days",
+      "minAge": "At least {age} years old"
+    }
+  },
+  "owner": {
+    "list": {
+      "title": "My aircraft",
+      "description": "Your listings. Pilots can only see and request aircraft that are listed.",
+      "add": "List an aircraft",
+      "notOwnerTitle": "Switch on the owner role",
+      "notOwnerText": "Own an aircraft? Switch on the owner role to list it for rent.",
+      "switchOn": "Switch on owner role",
+      "emptyTitle": "No aircraft yet",
+      "emptyText": "List your aircraft with photos, price and the rules for who can fly it. You can save a draft and finish it later.",
+      "todo": "{count, plural, one {# thing} other {# things}} left to fill in",
+      "goesLiveAfterCheck": "Goes live as soon as we've checked the documents.",
+      "waitingForCheck": "Waiting for the document check.",
+      "readyToPublish": "Ready to publish.",
+      "unlistedExpired": "Unlisted: the ARC or insurance has expired.",
+      "perHour": "{price}/h"
+    },
+    "new": {
+      "title": "List an aircraft",
+      "description": "Start with the basics. Everything is saved as a draft until you publish.",
+      "back": "My aircraft",
+      "detailsTitle": "Aircraft details",
+      "detailsText": "Only the registration is needed to save a draft."
+    },
+    "editor": {
+      "back": "My aircraft",
+      "viewListing": "View listing",
+      "preview": "Preview",
+      "notFound": "This aircraft no longer exists.",
+      "saved": "Saved.",
+      "saving": "Saving…",
+      "createDraft": "Save draft and continue",
+      "saveAndContinue": "Save and continue",
+      "saveAndReview": "Save and review",
+      "save": "Save"
+    },
+    "sections": {
+      "label": "Listing sections",
+      "overview": "Overview",
+      "details": "Details",
+      "equipment": "Equipment & description",
+      "base": "Home base",
+      "pricing": "Price & cancellation",
+      "photos": "Photos",
+      "documents": "Documents",
+      "requirements": "Rental requirements",
+      "done": "done",
+      "todo": "to do",
+      "waiting": "waiting for our check"
+    },
+    "sectionText": {
+      "details": "Registration, type and performance, as in the flight manual.",
+      "equipment": "What's on board, and a few words for pilots.",
+      "base": "Where pilots pick up the aircraft.",
+      "pricing": "Price per hour and your cancellation terms. Payment is arranged directly with the pilot.",
+      "photos": "At least one photo, up to 20. The first one is the cover.",
+      "documents": "We check these before the aircraft can be listed. Only you and our team can see them.",
+      "requirements": "Decide who can rent the aircraft. Pilots see this on the listing."
+    },
+    "details": {
+      "registration": "Registration",
+      "registrationHint": "As painted on the aircraft, e.g. LZ-ABC.",
+      "registrationLocked": "Locked after publishing: the documents were checked against it.",
+      "category": "Category",
+      "manufacturer": "Manufacturer",
+      "model": "Model",
+      "icaoType": "ICAO type designator",
+      "icaoTypeHint": "Used to match pilots' hours on type, e.g. C172 or P28A.",
+      "year": "Year built",
+      "seats": "Seats",
+      "performance": "Engine and performance",
+      "engine": "Engine",
+      "fuelType": "Fuel",
+      "choose": "Choose…",
+      "fuelBurn": "Fuel burn",
+      "cruise": "Cruise speed",
+      "usefulLoad": "Useful load",
+      "endurance": "Endurance",
+      "oilUnit": "Oil dipstick unit",
+      "oilUnitHint": "Used when pilots log oil before and after flights."
+    },
+    "equipment": {
+      "avionics": "Avionics",
+      "transponder": "Transponder",
+      "autopilot": "Autopilot",
+      "adsbOut": "ADS-B out",
+      "nightVfr": "Night VFR",
+      "nightVfrHint": "Equipped and approved for flights at night.",
+      "ifr": "IFR",
+      "ifrHint": "Equipped and approved for instrument flights.",
+      "notes": "Other equipment",
+      "notesPlaceholder": "e.g. ELT 406 MHz, headsets for 4, USB power, tow hook",
+      "description": "Description",
+      "descriptionHint": "What pilots should know: condition, where it's parked, how keys and fuel work."
+    },
+    "base": {
+      "homeBase": "Home airfield",
+      "homeBaseHint": "Search by ICAO code (e.g. LBSF), name or city."
+    },
+    "pricing": {
+      "pricePerHour": "Price per hour",
+      "currency": "Currency",
+      "weekendPrice": "Weekend price per hour",
+      "weekendPriceHint": "Optional. Saturdays and Sundays.",
+      "priceBasis": "Fuel",
+      "timeBasis": "Time is measured by",
+      "timeBasisHint": "What the pilot pays for.",
+      "minHoursPerDay": "Minimum hours per day",
+      "minHoursPerDayHint": "Optional, for full-day rentals.",
+      "cancellation": "Cancellation",
+      "freeCancellationHours": "Free cancellation until (hours before)",
+      "freeCancellationHoursHint": "0 = no free cancellation.",
+      "cancellationNote": "Cancellation terms",
+      "cancellationNotePlaceholder": "e.g. Later cancellations: 1 hour is charged. Weather cancellations are always free."
+    },
+    "photos": {
+      "add": "Add photos",
+      "uploading": "Uploading {done} of {total}…",
+      "hint": "{count} of {max} photos. JPG, PNG or WebP; big photos are made smaller, and location data is removed.",
+      "choose": "Choose photos",
+      "empty": "No photos yet. Add the outside, the cockpit and the panel.",
+      "photoAlt": "Photo {n}",
+      "cover": "Cover",
+      "moveEarlier": "Move photo {n} earlier",
+      "moveLater": "Move photo {n} later",
+      "makeCover": "Make photo {n} the cover",
+      "delete": "Delete photo {n}",
+      "tooMany": "An aircraft can have up to 20 photos.",
+      "invalidType": "Please choose a JPG, PNG or WebP image.",
+      "tooLarge": "That image is larger than 4 MB.",
+      "failed": "Upload failed. Please try again."
+    },
+    "documents": {
+      "intro": "Upload a scan or photo of each document. We check that they match the registration.",
+      "kinds": {
+        "cofa": "Certificate of Airworthiness (CofA)",
+        "arc": "Airworthiness Review Certificate (ARC)",
+        "insurance": "Insurance certificate"
+      },
+      "hints": {
+        "cofa": "Or the permit to fly / national certificate for ultralights.",
+        "arc": "Must be valid. When it expires, the aircraft is unlisted automatically.",
+        "insurance": "Must cover rental to other pilots and be valid. When it expires, the aircraft is unlisted automatically."
+      },
+      "missing": "Not uploaded",
+      "file": "Scan or photo",
+      "expiresOn": "Valid until",
+      "saving": "Saving…",
+      "saveLabel": "Send {name} for checking",
+      "update": "Save changes",
+      "submit": "Send for checking",
+      "delete": "Delete",
+      "deleteLabel": "Delete {name}",
+      "saved": "Saved. We'll check it soon.",
+      "notFound": "This document no longer exists."
+    },
+    "files": {
+      "title": "Documents for renters",
+      "description": "POH/AFM extract, checklists and weight & balance. Only pilots with an accepted booking will see them (once booking opens).",
+      "empty": "None yet.",
+      "kinds": {
+        "poh": "POH / AFM extract",
+        "checklist": "Checklist",
+        "weight_balance": "Weight & balance",
+        "other": "Other"
+      },
+      "addTitle": "Add a document",
+      "kind": "Type",
+      "fileTitle": "Title",
+      "titlePlaceholder": "e.g. Normal procedures",
+      "file": "File",
+      "add": "Add",
+      "deleteLabel": "Delete {name}",
+      "saved": "Added."
+    },
+    "requirements": {
+      "ratingTitle": "Pilot rating",
+      "minPilotRating": "Minimum pilot rating",
+      "minPilotRatingHint": "1–5 stars. Empty = any.",
+      "minReviews": "Reviews needed to count as rated",
+      "minReviewsHint": "Pilots with fewer reviews are \"not rated yet\".",
+      "unratedPolicy": "Pilots not rated yet",
+      "unrated": {
+        "checkout": "Allow after a checkout flight",
+        "allow": "Allow",
+        "deny": "Don't allow"
+      },
+      "licenceTypes": "Licences accepted",
+      "licenceTypesHint": "None ticked = any licence.",
+      "classRatings": "Class ratings required",
+      "privileges": "Privileges required",
+      "privilegesHint": "Night or IR are also checked for each night or IFR flight.",
+      "typeRatings": "Type ratings required",
+      "typeRatingsHint": "ICAO type designators, separated by commas, e.g. C510.",
+      "experienceTitle": "Experience",
+      "minTotalHours": "Minimum total hours",
+      "minTypeHours": "Minimum hours on type",
+      "minTypeHoursOn": "Minimum hours on {type}",
+      "min90DayHours": "Minimum hours, last 90 days",
+      "minAge": "Minimum age",
+      "emptyMeansNone": "Leave a field empty for no minimum.",
+      "saveAndReview": "Save and review",
+      "save": "Save",
+      "saving": "Saving…"
+    },
+    "status": {
+      "working": "Working…",
+      "publish": "Publish",
+      "listAgain": "List again",
+      "cancelPublish": "Don't publish automatically",
+      "pause": "Pause",
+      "unlist": "Unlist",
+      "delete": "Delete",
+      "deleteTitle": "Delete {registration}?",
+      "deleteText": "The listing, its photos and documents will be deleted permanently.",
+      "cancel": "Cancel",
+      "deleting": "Deleting…",
+      "confirmDelete": "Delete aircraft",
+      "notFound": "This aircraft no longer exists.",
+      "incomplete": "Some information is still missing: see the list above.",
+      "paused": "Paused. Pilots can't find it until you list it again.",
+      "unlisted": "Unlisted.",
+      "publishCancelled": "It won't be published automatically.",
+      "listed": "Listed! Pilots can now find your aircraft.",
+      "publishRequested": "Thanks! It goes live as soon as we've checked the documents."
+    },
+    "overview": {
+      "title": "Status",
+      "checklist": "What's missing",
+      "allDone": "Everything's filled in.",
+      "bookingsSoon": "Pilots will be able to send booking requests soon. Until then, your listing is visible on your public profile.",
+      "problems": {
+        "manufacturer": "Add the manufacturer",
+        "model": "Add the model",
+        "icao_type": "Add the ICAO type designator",
+        "seats": "Add the number of seats",
+        "fuel_type": "Choose the fuel",
+        "home_airport": "Choose the home airfield",
+        "price": "Set the price per hour",
+        "photo": "Add at least one photo"
+      },
+      "docMissing": "Upload the {name}",
+      "docPending": "{name}: waiting for our check",
+      "docRejected": "{name} wasn't accepted: see why",
+      "docExpired": "{name} expired on {date}: upload the new one",
+      "listed": "Listed since {date}. Pilots can find it.",
+      "paused": "Paused: hidden from pilots. List it again at any time.",
+      "grounded": "Grounded: can't be booked until the defect is fixed.",
+      "unlistedExpired": "Unlisted automatically because the ARC or insurance expired. Upload the new document; after our check you can list it again.",
+      "unlisted": "Unlisted: not visible to pilots.",
+      "publishRequested": "Goes live automatically as soon as we've checked the documents.",
+      "draftTodo": "Not published yet. To publish:",
+      "draftReady": "Everything is ready. Publish to let pilots find it."
     }
   }
 }
