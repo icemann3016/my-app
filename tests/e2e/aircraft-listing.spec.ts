@@ -148,7 +148,39 @@ test("an owner lists an aircraft and an admin verifies its documents", async ({
   expect((await anon.request.get(documentUrl!)).status()).toBe(404);
   await visitor.close();
 
-  // 9. Pausing hides it again
+  // 9. The owner blocks time; search only finds the aircraft when it's free (M5)
+  const day = inDays(2);
+  await page.goto(`${aircraftUrl}/calendar`);
+  await page.getByLabel("Type").selectOption("maintenance");
+  await page.getByLabel("From").fill(`${day}T10:00`);
+  await page.getByLabel("Until").fill(`${day}T12:00`);
+  await page.getByRole("button", { name: "Block time" }).last().click();
+  await expect(page.getByText("Added to the calendar.")).toBeVisible();
+  await page.getByLabel("From").fill(`${day}T11:00`);
+  await page.getByLabel("Until").fill(`${day}T13:00`);
+  await page.getByRole("button", { name: "Block time" }).last().click();
+  await expect(page.getByText("This overlaps something already in the calendar.")).toBeVisible();
+
+  const searcher = await browser.newContext();
+  const search = await searcher.newPage();
+  const searchUrl = (from: string, to: string) =>
+    `/search?airport=LBSF&radius=25&from=${day}T${from}&to=${day}T${to}`;
+  await search.goto(searchUrl("10:30", "11:30"));
+  await expect(search.getByRole("heading", { level: 1 })).toHaveText("Find aircraft");
+  await expect(search.getByText(registration)).toHaveCount(0);
+  await search.goto(searchUrl("13:00", "15:00"));
+  await expect(search.getByText(registration)).toBeVisible();
+  await search
+    .getByRole("listitem")
+    .filter({ hasText: registration })
+    .getByRole("link", { name: "Cessna 172S Skyhawk SP" })
+    .click();
+  await expect(search).toHaveURL(new RegExp(`/aircraft/${aircraftId}\\?`));
+  await expect(search.getByText(/^Free /)).toBeVisible();
+  await expect(search.getByText("Log in to see whether you meet the requirements")).toBeVisible();
+  await searcher.close();
+
+  // 10. Pausing hides it again
   await page.goto("/owner/aircraft");
   await page.getByRole("button", { name: "Pause" }).click();
   await expect(page.getByText("Paused. Pilots can't see it for now.")).toBeVisible();

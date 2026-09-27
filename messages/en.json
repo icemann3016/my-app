@@ -1005,7 +1005,13 @@
       "unrated": "The owner only rents to pilots with reviews from earlier rentals.",
       "pilot_rating": "Requires a pilot rating of at least {need}, yours is {have}.",
       "checkout": "You haven't rented on ownAplane yet: the owner asks for a checkout flight with an instructor first.",
-      "unknown": "A requirement isn't met."
+      "unknown": "A requirement isn't met.",
+      "logInText": "Log in to see whether you meet the requirements for this aircraft.",
+      "logIn": "Log in",
+      "ok": "You meet the requirements.",
+      "okForPeriod": "You meet the requirements for these dates.",
+      "notYet": "You can't rent this aircraft yet:",
+      "updateCredentials": "Update your pilot credentials"
     },
     "calendar": {
       "previous": "Previous month",
@@ -1038,6 +1044,11 @@
       "upcoming": "Coming up",
       "nothingPlanned": "Nothing planned. The aircraft is free for pilots to book.",
       "remove": "Remove {when}"
+    },
+    "availability": {
+      "title": "Availability",
+      "free": "Free {when}",
+      "busy": "Not available {when}"
     }
   },
   "search": {

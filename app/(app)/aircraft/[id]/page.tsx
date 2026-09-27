@@ -17,7 +17,10 @@ import { airportPlace, getAirport } from "@/lib/airports";
 import { avatarUrl } from "@/lib/avatar-url";
 import { getUser } from "@/lib/auth/session";
 import type { Locale } from "@/lib/i18n/config";
+import { Availability } from "./availability";
+import { EligibilityCard } from "./eligibility-card";
 import { Gallery } from "./gallery";
+import { wantedPeriod } from "./period";
 import { Specs } from "./specs";
 
 export async function generateMetadata({
@@ -36,9 +39,19 @@ export async function generateMetadata({
   };
 }
 
-/** Public listing page (SRC-4 basics): photos, specs, price, requirements and owner. */
-export default async function AircraftPage({ params }: { params: Promise<{ id: string }> }) {
+/**
+ * Public listing page (SRC-4): photos, specs, availability, price, requirements with the
+ * pilot's own eligibility, and the owner. Dates from a search are carried in the URL.
+ */
+export default async function AircraftPage({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ id: string }>;
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}) {
   const { id } = await params;
+  const query = await searchParams;
   const user = await getUser();
   const row = await getVisibleAircraft(user?.id ?? null, id);
   if (!row) notFound();
@@ -52,6 +65,8 @@ export default async function AircraftPage({ params }: { params: Promise<{ id: s
     user ? getUnits(user.id) : Promise.resolve("metric" as const),
   ]);
   const isOwner = user?.id === a.ownerId;
+  const timeZone = airport?.timezone ?? "UTC";
+  const { month, period } = await wantedPeriod(query, timeZone);
   const price = (amount: number) => formatPrice(amount, a.currency, locale);
 
   return (
@@ -106,6 +121,14 @@ export default async function AircraftPage({ params }: { params: Promise<{ id: s
               <p className="text-sm leading-relaxed whitespace-pre-line">{a.description}</p>
             </section>
           )}
+          <Availability
+            aircraftId={id}
+            viewerId={user?.id ?? null}
+            timeZone={timeZone}
+            locale={locale}
+            month={month}
+            period={period}
+          />
           <Specs aircraft={a} units={units} />
           <section className="grid gap-3">
             <h2 className="text-lg font-semibold">{t("public.requirements")}</h2>
@@ -142,6 +165,17 @@ export default async function AircraftPage({ params }: { params: Promise<{ id: s
                 </span>
                 : {t(`cancellation.${a.cancellationPolicy}.text`)}
               </p>
+              {!isOwner && (
+                <div className="mt-2 border-t pt-3">
+                  <EligibilityCard
+                    aircraftId={id}
+                    typeDesignator={a.typeDesignator}
+                    viewerId={user?.id ?? null}
+                    period={period}
+                    loginNext={`/aircraft/${id}`}
+                  />
+                </div>
+              )}
               <Button className="mt-2" disabled>
                 {t("public.requestSoon")}
               </Button>

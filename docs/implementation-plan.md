@@ -25,7 +25,7 @@ M0 Foundations → M1 Accounts → M2 Airports → M3 Pilot verification → M4 
 | Framework | **Next.js 16** (App Router, Server Components, Server Actions) + **TypeScript** strict | Already set up. One codebase for UI and server logic |
 | UI | **Tailwind CSS v4** + **shadcn/ui** components | Fast to build, looks professional, and Claude knows it very well. Components live in our repo, so we own them |
 | Forms & validation | **Zod** + **react-hook-form** | One schema validates both the browser form and the server action |
-| Database | **PostgreSQL 14+** via **Drizzle ORM** (`postgres` driver). Hosted on Supabase (Frankfurt) today | Real SQL, portable to Cloud SQL / Azure PostgreSQL. Extensions we need: `btree_gist` (no double bookings), `postgis` (radius search), `pg_cron` (scheduled jobs) |
+| Database | **PostgreSQL 14+** via **Drizzle ORM** (`postgres` driver). Hosted on Supabase (Frankfurt) today | Real SQL, portable to Cloud SQL / Azure PostgreSQL. Only extension: `btree_gist` (no double bookings); radius search is plain SQL and scheduled jobs call `/api/cron/daily` |
 | Auth | **Better Auth** (open source), users stored in our own Postgres tables | Email + password, Google (Apple later), email verification, password reset, 2FA plugin later. No auth vendor to migrate away from |
 | File storage | `lib/storage` with drivers: **S3-compatible** (Supabase Storage today, Google Cloud Storage, AWS, R2), **Azure Blob**, local (dev) | Public bucket for photos; private bucket with signed URLs for licences, medicals and aircraft documents (M3) |
 | Security model | **Row Level Security (RLS)** on every table; user queries run as role `app_user` with `app.user_id` set (`lib/db/rls.ts`) | The database itself enforces who can see what, even if app code has a bug. Plain Postgres, works on any host |
@@ -94,7 +94,7 @@ The platform scheduler (Vercel Cron today; Cloud Scheduler / Azure Container App
 Notifications are written to a `notifications` table (in-app). A server route sends the matching emails through the SMTP driver; a scheduled job calls that route.
 
 ### 4.7 Search (SRC-1/2)
-Airports and aircraft home bases have a PostGIS `geography` point. A search RPC takes a location + radius + period + filters and returns aircraft that have **no overlapping active calendar entry** in that period. Filters and sorting are plain SQL. No separate search engine is needed at MVP scale.
+Aircraft home bases are airports with latitude/longitude. The search (`lib/aircraft/search.ts`) takes an airfield + radius + period + filters and returns listed aircraft within the radius (great-circle distance in plain SQL, after a bounding-box filter) that have **no overlapping active calendar entry** in that period (`aircraft_is_free()`), and optionally only those the pilot may rent (`i_meet_requirements()`). Filters and sorting are plain SQL; no PostGIS or search engine at MVP scale.
 
 ### 4.8 Flight log and the amount due (BKG-7, BKG-12…16)
 - One `flight_logs` row per booking, with one or more `flight_legs`. Status: `draft` → `submitted` → `confirmed` (or `correction_requested` → back to the pilot). Only the pilot edits a draft; only the owner confirms. Confirming completes the booking.
