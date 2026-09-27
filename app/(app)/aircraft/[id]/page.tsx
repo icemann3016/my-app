@@ -109,7 +109,11 @@ export default async function AircraftPage({ params }: { params: Promise<{ id: s
           <Specs aircraft={a} units={units} />
           <section className="grid gap-3">
             <h2 className="text-lg font-semibold">{t("public.requirements")}</h2>
-            <RequirementsList requirements={requirements} typeDesignator={a.typeDesignator} />
+            <RequirementsList
+              requirements={requirements}
+              typeDesignator={a.typeDesignator}
+              category={a.category}
+            />
           </section>
         </div>
 

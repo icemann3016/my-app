@@ -91,6 +91,13 @@ export const experienceSchema = z
     totalHours: hours(99999),
     picHours: hours(99999),
     last90DaysHours: hours(2000),
+    birthDate: optionalDate
+      .optional()
+      .transform((v) => v ?? null)
+      .refine(
+        (v) => v === null || (v >= "1900-01-01" && v <= new Date().toISOString().slice(0, 10)),
+        "dateInvalid",
+      ),
   })
   .refine((d) => d.picHours <= d.totalHours, { path: ["picHours"], error: "hoursMoreThanTotal" })
   .refine((d) => d.last90DaysHours <= d.totalHours, {

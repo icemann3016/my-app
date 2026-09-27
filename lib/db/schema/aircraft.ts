@@ -241,4 +241,5 @@ export type AircraftPhoto = typeof aircraftPhotos.$inferSelect;
 export type AircraftDocument = typeof aircraftDocuments.$inferSelect;
 export type RentalRequirements = typeof rentalRequirements.$inferSelect;
 export type AircraftStatus = (typeof aircraftStatus.enumValues)[number];
+export type AircraftCategory = (typeof aircraftCategory.enumValues)[number];
 export type AircraftDocumentKind = (typeof aircraftDocumentKind.enumValues)[number];

@@ -127,9 +127,12 @@ export const pilotExperience = pgTable(
       scale: 1,
       mode: "number",
     }).notNull(),
+    /** Only used to check owners' minimum age (RAT-6); never shown to others. */
+    birthDate: date("birth_date"),
     updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
   },
   (t) => [
+    check("pilot_experience_birth_date", sql`${t.birthDate} between '1900-01-01' and '2100-01-01'`),
     check(
       "pilot_experience_hours",
       sql`${t.totalHours} >= 0 and ${t.picHours} >= 0 and ${t.last90DaysHours} >= 0

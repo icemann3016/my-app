@@ -14,6 +14,7 @@ export function ExperienceForm(props: {
   totalHours: string;
   picHours: string;
   last90DaysHours: string;
+  birthDate: string;
 }) {
   const t = useTranslations("pilot.experience");
   const [state, formAction] = useActionState(saveExperience, initialFormState);
@@ -38,6 +39,15 @@ export function ExperienceForm(props: {
           />
         ))}
       </div>
+      <TextField
+        name="birthDate"
+        type="date"
+        label={t("birthDate")}
+        hint={t("birthDateHint")}
+        defaultValue={v.birthDate}
+        errors={state.errors?.birthDate}
+        className="sm:max-w-56"
+      />
       <SubmitButton variant="outline" className="justify-self-start" pendingText={t("saving")}>
         {t("save")}
       </SubmitButton>

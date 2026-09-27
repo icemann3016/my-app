@@ -544,7 +544,9 @@
       "hoursValue": "{hours} h",
       "addType": "Add",
       "removeType": "Remove {type}",
-      "noTypes": "No aircraft types added yet."
+      "noTypes": "No aircraft types added yet.",
+      "birthDate": "Date of birth",
+      "birthDateHint": "Optional. Only used to check an owner's minimum age; never shown to anyone."
     },
     "errors": {
       "notFound": "This item no longer exists. Please reload the page."
@@ -962,7 +964,8 @@
       "rating": "Pilot rating {rating} or higher",
       "noUnrated": "Pilots need reviews from earlier rentals",
       "unratedCheckout": "Pilots without reviews: after a checkout flight with an instructor",
-      "unratedWelcome": "Pilots without reviews are welcome"
+      "unratedWelcome": "Pilots without reviews are welcome",
+      "verifiedNoClass": "Licence and medical verified by ownAplane and valid"
     },
     "public": {
       "preview": "Preview. Pilots can't see this aircraft now ({status}).",
@@ -984,6 +987,25 @@
       "usefulLoad": "Useful load",
       "endurance": "Endurance",
       "hours": "{hours} h"
+    },
+    "eligibility": {
+      "own_aircraft": "This is your own aircraft.",
+      "suspended": "Your account is suspended.",
+      "aircraft_unavailable": "This aircraft isn't available.",
+      "licence": "Add your pilot licence and wait until it's verified.",
+      "licence_type": "Requires one of these licences: {list}.",
+      "medical": "Your medical must be verified and valid until the end of the rental.",
+      "class_rating": "Requires a valid, verified {rating} rating.",
+      "rating": "Requires a valid, verified {rating}.",
+      "total_hours": "Requires at least {need} h in total, you have {have} h.",
+      "type_hours": "Requires at least {need} h on {type}, you have {have} h.",
+      "recent_hours": "Requires at least {need} h in the last 90 days, you have {have} h.",
+      "age_unknown": "Requires a minimum age of {need}. Add your date of birth in your pilot credentials.",
+      "age": "Requires a minimum age of {need}, you are {have}.",
+      "unrated": "The owner only rents to pilots with reviews from earlier rentals.",
+      "pilot_rating": "Requires a pilot rating of at least {need}, yours is {have}.",
+      "checkout": "You haven't rented on ownAplane yet: the owner asks for a checkout flight with an instructor first.",
+      "unknown": "A requirement isn't met."
     }
   }
 }

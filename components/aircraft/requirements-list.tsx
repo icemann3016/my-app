@@ -2,7 +2,7 @@ import { CircleCheckIcon } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 
 import { splitRatings } from "@/lib/aircraft/requirements";
-import type { RentalRequirements } from "@/lib/db/schema";
+import type { AircraftCategory, RentalRequirements } from "@/lib/db/schema";
 import { CLASS_RATINGS, LICENCE_LABELS, type LicenceTypeCode } from "@/lib/pilot/catalog";
 import { credentialLabel, type PilotTranslate } from "@/lib/pilot/labels";
 
@@ -10,13 +10,18 @@ import { credentialLabel, type PilotTranslate } from "@/lib/pilot/labels";
 export async function RequirementsList({
   requirements: r,
   typeDesignator,
+  category,
 }: {
   requirements: RentalRequirements | null;
   typeDesignator: string;
+  category: AircraftCategory;
 }) {
   const t = await getTranslations("aircraft.requirementsList");
   const tp = (await getTranslations("pilot")) as unknown as PilotTranslate;
-  const lines: string[] = [t("verified")];
+  // Aeroplanes and TMGs also need a class rating (see public.eligibility_failures).
+  const lines: string[] = [
+    category === "aeroplane" || category === "tmg" ? t("verified") : t("verifiedNoClass"),
+  ];
 
   if (r?.licenceTypes.length) {
     const names = r.licenceTypes.map(

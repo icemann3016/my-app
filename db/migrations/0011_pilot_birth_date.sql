@@ -1,0 +1,2 @@
+ALTER TABLE "pilot_experience" ADD COLUMN "birth_date" date;--> statement-breakpoint
+ALTER TABLE "pilot_experience" ADD CONSTRAINT "pilot_experience_birth_date" CHECK ("pilot_experience"."birth_date" between '1900-01-01' and '2100-01-01');

@@ -231,6 +231,7 @@ export default async function PilotPage() {
             totalHours={String(creds.experience?.totalHours ?? "")}
             picHours={String(creds.experience?.picHours ?? "")}
             last90DaysHours={String(creds.experience?.last90DaysHours ?? "")}
+            birthDate={creds.experience?.birthDate ?? ""}
           />
           <TypeHours
             rows={creds.typeHours.map((r) => ({ aircraftType: r.aircraftType, hours: r.hours }))}
