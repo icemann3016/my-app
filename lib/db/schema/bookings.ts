@@ -16,7 +16,7 @@ import {
   uuid,
 } from "drizzle-orm/pg-core";
 
-import { aircraft, priceBasis, timeBasis } from "./aircraft";
+import { aircraft, cancellationPolicy, priceBasis, timeBasis } from "./aircraft";
 import { airports } from "./airports";
 import { users } from "./auth";
 import { tstzrange } from "./calendar";
@@ -75,6 +75,8 @@ export const bookings = pgTable(
     priceBasis: priceBasis("price_basis").notNull(),
     timeBasis: timeBasis("time_basis").notNull(),
     estimate: numeric("estimate", { precision: 10, scale: 2, mode: "number" }).notNull(),
+    /** The owner's cancellation policy when requested (BKG-6). */
+    cancellationPolicy: cancellationPolicy("cancellation_policy").notNull().default("moderate"),
     /** The owner asked for a checkout flight with an instructor first (RAT-7, BKG-10). */
     checkoutRequired: boolean("checkout_required").notNull().default(false),
     /** A request the owner doesn't answer by then expires and frees the calendar (BKG-3). */

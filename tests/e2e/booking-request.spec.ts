@@ -80,4 +80,12 @@ test("a pilot requests a booking and the owner sees it", async ({ page, browser 
   await ownerContext.close();
   await page.reload();
   await expect(page.getByText("Accepted", { exact: true }).first()).toBeVisible();
+
+  // 6. The pilot cancels in time (20 days ahead: not late), giving a reason
+  await page.getByRole("button", { name: "Cancel booking" }).click();
+  const dialog = page.getByRole("dialog");
+  await expect(dialog.getByText(/free cancellation up to 3 days before/)).toBeVisible();
+  await dialog.getByLabel("Reason (the other side sees it)").fill("Plans changed");
+  await dialog.getByRole("button", { name: "Cancel booking" }).click();
+  await expect(page.getByText("Cancelled by the pilot: Plans changed")).toBeVisible();
 });

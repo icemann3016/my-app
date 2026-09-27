@@ -127,6 +127,20 @@
       "when": 1790523748709,
       "tag": "0017_booking_responses",
       "breakpoints": true
+    },
+    {
+      "idx": 18,
+      "version": "7",
+      "when": 1790524335088,
+      "tag": "0018_booking_policy",
+      "breakpoints": true
+    },
+    {
+      "idx": 19,
+      "version": "7",
+      "when": 1790524336056,
+      "tag": "0019_booking_cancellation",
+      "breakpoints": true
     }
   ]
 }

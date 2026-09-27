@@ -1,5 +1,5 @@
 import { cache } from "react";
-import { eq } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -47,7 +47,15 @@ const getPublicProfile = cache(async (id: string) => {
       .select({ role: userRoles.role })
       .from(userRoles)
       .where(eq(userRoles.userId, id));
-    return { profile, roles: roles.map((r) => r.role).filter(isPublicRole) };
+    // Late cancellations are part of a user's track record (BKG-6).
+    const [late] = (await tx.execute(
+      sql`select public.late_cancellation_count(${id}::uuid) as n`,
+    )) as unknown as { n: number }[];
+    return {
+      profile,
+      roles: roles.map((r) => r.role).filter(isPublicRole),
+      lateCancellations: late?.n ?? 0,
+    };
   });
 });
 
@@ -65,7 +73,7 @@ export default async function PublicProfilePage({ params }: { params: Promise<{ 
   const { id } = await params;
   const data = await getPublicProfile(id);
   if (!data) notFound();
-  const { profile, roles } = data;
+  const { profile, roles, lateCancellations } = data;
   const homeAirport = await getAirport(profile.homeAirportIdent);
   const viewer = await getUser();
   const t = await getTranslations("profile");
@@ -117,6 +125,11 @@ export default async function PublicProfilePage({ params }: { params: Promise<{ 
                   t("noRatings")
                 )}
               </dd>
+              {lateCancellations > 0 && (
+                <dd className="text-xs text-muted-foreground">
+                  {t("lateCancellations", { count: lateCancellations })}
+                </dd>
+              )}
             </div>
             <div>
               <dt className="text-muted-foreground">{t("homeAirfield")}</dt>

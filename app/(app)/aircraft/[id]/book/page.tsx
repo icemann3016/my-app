@@ -35,6 +35,7 @@ export default async function BookPage({
   const a = row.aircraft;
   if (a.ownerId === user.id) redirect(`/aircraft/${id}`);
   const t = await getTranslations("booking.form");
+  const ta = await getTranslations("aircraft");
   const base = await getAirport(a.homeAirportIdent);
   const from = one(query.from);
   const to = one(query.to);
@@ -50,6 +51,12 @@ export default async function BookPage({
         <h1 className="text-2xl font-semibold tracking-tight">{t("title")}</h1>
         <p className="text-muted-foreground">
           {a.manufacturer} {a.model} · <span className="font-mono">{a.registration}</span>
+        </p>
+        <p className="text-sm">
+          <span className="font-medium">
+            {t("cancellation")} {ta(`cancellation.${a.cancellationPolicy}.label`)}:
+          </span>{" "}
+          {ta(`cancellation.${a.cancellationPolicy}.text`)}
         </p>
       </div>
       <Card>

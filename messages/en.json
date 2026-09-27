@@ -335,7 +335,8 @@
       "owner": "Aircraft owner"
     },
     "verifiedCredentials": "Verified by ownAplane",
-    "noVerifiedCredentials": "Nothing verified yet"
+    "noVerifiedCredentials": "Nothing verified yet",
+    "lateCancellations": "{count, plural, one {# late cancellation} other {# late cancellations}}"
   },
   "email": {
     "linkFallback": "If the button doesn't work, copy this link into your browser:",
@@ -1142,7 +1143,8 @@
       "fuelNotIncluded": "Fuel isn't included: about {litres} L.",
       "payDirectly": "You pay the owner directly; ownAplane doesn't handle payments yet. The final amount follows the flight log.",
       "send": "Send request",
-      "sending": "Sending…"
+      "sending": "Sending…",
+      "cancellation": "Cancellation policy:"
     },
     "errors": {
       "not_eligible": "You can't book this flight yet:",
@@ -1181,7 +1183,10 @@
       "ownerNote": "Owner's note:",
       "proposed": "The owner can't do this time but suggests {when}.",
       "requestProposed": "Request this time",
-      "youProposed": "You declined and suggested {when}."
+      "youProposed": "You declined and suggested {when}.",
+      "cancelledByOwner": "Cancelled by the owner: {reason}",
+      "cancelledByPilot": "Cancelled by the pilot: {reason}",
+      "late": "Late cancellation (after the free-cancellation deadline)."
     },
     "history": {
       "title": "History",
@@ -1217,6 +1222,23 @@
         "not_open": "This request has already been answered or has expired.",
         "pilot_not_eligible": "The pilot no longer meets your requirements for this flight (for example, a credential expired), so it can't be accepted.",
         "bad_proposal": "Suggest a time in the future.",
+        "failed": "That didn't work. Please try again."
+      }
+    },
+    "cancel": {
+      "button": "Cancel booking",
+      "title": "Cancel this booking?",
+      "lateWarning": "The free-cancellation deadline has passed: this will be shown as a late cancellation on your profile.",
+      "reason": "Reason (the other side sees it)",
+      "keep": "Keep booking",
+      "confirm": "Cancel booking",
+      "cancelling": "Cancelling…",
+      "done": "Cancelled. The time is free again.",
+      "doneLate": "Cancelled (late). The time is free again.",
+      "errors": {
+        "not_found": "We couldn't find this booking.",
+        "not_cancellable": "This booking can't be cancelled any more.",
+        "reason_required": "Please give a reason.",
         "failed": "That didn't work. Please try again."
       }
     }

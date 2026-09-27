@@ -1,0 +1,1 @@
+ALTER TABLE "bookings" ADD COLUMN "cancellation_policy" "cancellation_policy" DEFAULT 'moderate' NOT NULL;

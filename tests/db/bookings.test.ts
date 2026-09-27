@@ -257,7 +257,50 @@ describeDb("booking requests", () => {
     await db
       .getDb()
       .update(s.medicals)
-      .set({ validUntil: "2099-01-01" })
+      .set({ validUntil: "2099-01-01", status: "verified" })
       .where(eq(s.medicals.userId, WEN));
+  });
+
+  async function cancel(user: string, id: string, reason = "Weather") {
+    try {
+      const rows = (await rls.asUser(user, (tx) =>
+        tx.execute(sql`select public.cancel_booking(${id}::uuid, ${reason}) as late`),
+      )) as unknown as { late: boolean }[];
+      return rows[0]!.late;
+    } catch (e) {
+      return (e as { cause?: { message?: string } }).cause?.message;
+    }
+  }
+
+  it("lets either side cancel with a reason, and frees the time", async () => {
+    const { id } = await request(WEN, { from: "2026-12-27T09:00:00Z", to: "2026-12-27T11:00:00Z" });
+    const [booking] = await db.getDb().select().from(s.bookings).where(eq(s.bookings.id, id!));
+    expect(booking!.cancellationPolicy).toBe("moderate"); // copied from the aircraft
+    expect(await cancel(XAV, id!)).toBe("not_found");
+    expect(await cancel(WEN, id!, " ")).toBe("reason_required");
+    expect(await cancel(WEN, id!)).toBe(false); // a request, not late
+    const [hold] = await db
+      .getDb()
+      .select()
+      .from(s.calendarEntries)
+      .where(eq(s.calendarEntries.bookingId, id!));
+    expect(hold!.active).toBe(false);
+    expect(await cancel(WEN, id!)).toBe("not_cancellable");
+  });
+
+  it("records a late cancellation of an accepted booking", async () => {
+    // Starts in two days (at most 57 h away): inside the moderate policy's 72 hours.
+    const start = new Date(Date.now() + 2 * 86_400_000);
+    start.setUTCHours(9, 0, 0, 0); // daytime in Sofia
+    const end = new Date(start.getTime() + 2 * 3_600_000);
+    const result = await request(WEN, { from: start.toISOString(), to: end.toISOString() });
+    expect(result).toEqual({ id: expect.any(String) });
+    const id = result.id;
+    await respond(VIC, id!, "accept");
+    expect(await cancel(VIC, id!, "Aircraft needs maintenance")).toBe(true);
+    const [row] = (await rls.asAnon((tx) =>
+      tx.execute(sql`select public.late_cancellation_count(${VIC}::uuid) as n`),
+    )) as unknown as { n: number }[];
+    expect(row!.n).toBe(1);
   });
 });

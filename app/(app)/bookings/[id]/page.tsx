@@ -19,9 +19,11 @@ import { formatPrice, formatSpan } from "@/lib/aircraft/format";
 import { isUuid } from "@/lib/aircraft/queries";
 import { requireUser } from "@/lib/auth/session";
 import { getBooking, pilotMeetsRequirements } from "@/lib/bookings/queries";
+import { FREE_CANCELLATION_HOURS } from "@/lib/bookings/respond";
 import { toRange, utcToZoned } from "@/lib/domain/time";
 import { intlLocale, type Locale } from "@/lib/i18n/config";
 import { BookingHistory } from "./booking-history";
+import { CancelBooking } from "./cancel-booking";
 import { RespondForm } from "./respond-form";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -38,8 +40,10 @@ export default async function BookingPage({ params }: { params: Promise<{ id: st
   if (!detail) notFound();
   const { booking: b, period, proposal, aircraft: plane, pilot, owner, route } = detail;
   const t = await getTranslations("booking");
+  const ta = await getTranslations("aircraft");
   const locale = (await getLocale()) as Locale;
   const isOwner = b.ownerId === user.id;
+  const now = new Date();
   const timeZone = route[0]?.timezone ?? "UTC";
   const span = formatSpan(period.from, period.to, timeZone, locale);
   const meets =
@@ -198,6 +202,28 @@ export default async function BookingPage({ params }: { params: Promise<{ id: st
           <p className="mt-4 text-xs text-muted-foreground">{t("form.payDirectly")}</p>
         </CardContent>
       </Card>
+
+      {(b.status === "requested" || b.status === "accepted") && period.from > now && (
+        <CancelBooking
+          bookingId={b.id}
+          policyText={`${ta(`cancellation.${b.cancellationPolicy}.label`)}: ${ta(`cancellation.${b.cancellationPolicy}.text`)}`}
+          late={
+            b.status === "accepted" &&
+            now.getTime() >
+              period.from.getTime() - FREE_CANCELLATION_HOURS[b.cancellationPolicy] * 3_600_000
+          }
+        />
+      )}
+      {b.status === "cancelled" && b.cancelReason && (
+        <p className="rounded-md border p-3 text-sm">
+          {t(b.cancelledBy === b.ownerId ? "detail.cancelledByOwner" : "detail.cancelledByPilot", {
+            reason: b.cancelReason,
+          })}
+          {b.lateCancellation && (
+            <span className="block text-xs text-muted-foreground">{t("detail.late")}</span>
+          )}
+        </p>
+      )}
 
       <BookingHistory events={detail.events} timeZone={timeZone} />
     </div>

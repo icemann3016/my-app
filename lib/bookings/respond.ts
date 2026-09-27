@@ -28,3 +28,27 @@ export async function respondToBooking(
     throw e;
   }
 }
+
+export type CancelOutcome = { ok: true; late: boolean } | { ok: false; error: string };
+
+/** The pilot or owner cancels an open or accepted booking before it starts (BKG-6). */
+export async function cancelBooking(
+  userId: string,
+  bookingId: string,
+  reason: string,
+): Promise<CancelOutcome> {
+  try {
+    const rows = (await asUser(userId, (tx) =>
+      tx.execute(sql`select public.cancel_booking(${bookingId}::uuid, ${reason}) as late`),
+    )) as unknown as { late: boolean }[];
+    return { ok: true, late: rows[0]!.late };
+  } catch (e) {
+    const err = e as { cause?: { code?: string; message?: string } };
+    if (err.cause?.code === "P0001" && err.cause.message)
+      return { ok: false, error: err.cause.message };
+    throw e;
+  }
+}
+
+/** Hours before the start until which cancelling is free, per policy (same as the SQL). */
+export const FREE_CANCELLATION_HOURS = { flexible: 24, moderate: 72, strict: 168 } as const;
