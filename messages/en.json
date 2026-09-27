@@ -191,7 +191,9 @@
     "priceInvalid": "Enter a price per hour, e.g. 185.",
     "minHoursInvalid": "Enter hours per day between 0.1 and 12.",
     "expiryRequired": "Enter the expiry date.",
-    "ageInvalid": "Enter an age between 16 and 99."
+    "ageInvalid": "Enter an age between 16 and 99.",
+    "dateTimeInvalid": "Enter a date and time.",
+    "endBeforeStart": "The end must be after the start."
   },
   "dashboard": {
     "title": "Welcome, {name}",
@@ -676,7 +678,8 @@
       "pricing": "Pricing",
       "photos": "Photos",
       "documents": "Documents",
-      "requirements": "Requirements"
+      "requirements": "Requirements",
+      "calendar": "Calendar"
     },
     "sectionText": {
       "details": "Registration, type and performance.",
@@ -685,7 +688,8 @@
       "pricing": "What renting costs and how flight time is measured.",
       "photos": "At least one photo, up to 20. The first one is the cover.",
       "documents": "Documents are checked by our team. The aircraft can be listed once a valid ARC and insurance are verified.",
-      "requirements": "Choose who can rent the aircraft. Pilots see these before they ask."
+      "requirements": "Choose who can rent the aircraft. Pilots see these before they ask.",
+      "calendar": "Block the times you use the aircraft yourself, maintenance and other unavailable periods. Bookings appear here automatically."
     },
     "fields": {
       "registration": "Registration",
@@ -1006,6 +1010,38 @@
       "pilot_rating": "Requires a pilot rating of at least {need}, yours is {have}.",
       "checkout": "You haven't rented on ownAplane yet: the owner asks for a checkout flight with an instructor first.",
       "unknown": "A requirement isn't met."
+    },
+    "calendar": {
+      "previous": "Previous month",
+      "next": "Next month",
+      "timeZone": "Times in {zone} (the home base's local time).",
+      "kinds": {
+        "booking": "Booking",
+        "owner_use": "Own use",
+        "maintenance": "Maintenance",
+        "unavailable": "Unavailable"
+      },
+      "states": {
+        "free": "Free",
+        "partly": "Partly booked",
+        "busy": "Booked"
+      },
+      "addTitle": "Block time",
+      "kind": "Type",
+      "from": "From",
+      "to": "Until",
+      "localHint": "Local time at the home base ({zone}).",
+      "note": "Note (only you see it)",
+      "notePlaceholder": "e.g. 50-hour check",
+      "add": "Block time",
+      "adding": "Saving…",
+      "added": "Added to the calendar.",
+      "overlaps": "This overlaps something already in the calendar.",
+      "tooLong": "A block can be at most a year long.",
+      "notFound": "We couldn't find this aircraft. Please reload the page.",
+      "upcoming": "Coming up",
+      "nothingPlanned": "Nothing planned. The aircraft is free for pilots to book.",
+      "remove": "Remove {when}"
     }
   }
 }

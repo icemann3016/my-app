@@ -15,6 +15,7 @@ export function SectionNav({ id, done }: { id: string; done: string[] }) {
   const base = `/owner/aircraft/${id}`;
   const items = [
     { href: base, key: "overview" },
+    { href: `${base}/calendar`, key: "calendar" },
     ...SECTIONS.map((s) => ({ href: `${base}/${s}`, key: s })),
   ];
 

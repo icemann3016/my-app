@@ -203,3 +203,19 @@ export const requirementsSchema = z
     unratedNeedsCheckout: d.allowUnrated && unratedNeedsCheckout,
     requiredRatings: [...new Set([...d.requiredRatings, ...(typeRating ? [typeRating] : [])])],
   }));
+
+const localDateTime = z
+  .string()
+  .trim()
+  .regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/, "dateTimeInvalid");
+
+/** An owner's calendar block (SRC-5). Times are local to the aircraft's home base. */
+export const calendarBlockSchema = z
+  .object({
+    aircraftId: z.uuid(),
+    kind: z.enum(["owner_use", "maintenance", "unavailable"], "invalid"),
+    from: localDateTime,
+    to: localDateTime,
+    note: optionalText(200, "textTooLong").optional().default(null),
+  })
+  .refine((d) => d.to > d.from, { path: ["to"], error: "endBeforeStart" });
