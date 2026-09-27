@@ -32,3 +32,16 @@ export async function prepareDatabase() {
   });
   prepared = true;
 }
+
+/**
+ * List an aircraft without its photos and documents (tests of search and calendars only need it
+ * to be visible). Skips the listing check trigger for this one update.
+ */
+export async function forceListed(aircraftId: string) {
+  const { getDb } = await import("@/lib/db");
+  await getDb().transaction(async (tx) => {
+    await tx.execute(sql`alter table public.aircraft disable trigger aircraft_check_status`);
+    await tx.execute(sql`update public.aircraft set status = 'listed' where id = ${aircraftId}`);
+    await tx.execute(sql`alter table public.aircraft enable trigger aircraft_check_status`);
+  });
+}

@@ -35,10 +35,11 @@ code**, so nothing about users or security is tied to a provider.
   that ran migrations**, run once: `GRANT app_user TO <app_login_user>;`
 - Connection poolers are fine (the driver uses `prepare: false`). Use a pooled URL for the app and,
   if the pooler is in *transaction* mode, a direct/session URL in `DATABASE_URL_MIGRATIONS`.
-- Extensions used later in the plan: `btree_gist` (M5, no double bookings), `postgis` (M2/M5, radius
-  search), `pg_cron` (scheduled jobs). Cloud SQL and Azure both support them, but you must enable them
-  first: on **Azure** add them to the server parameter `azure.extensions` (and `pg_cron` to
-  `shared_preload_libraries`); on **Cloud SQL** set the flag `cloudsql.enable_pg_cron=on` for pg_cron.
+- Extensions: only `btree_gist` (M5, no double bookings), created by migration
+  `0010_calendar_security.sql`. It ships with PostgreSQL; Supabase and Cloud SQL allow it by default,
+  on **Azure** add it to the server parameter `azure.extensions` first. Radius search uses plain SQL
+  (great-circle distance on latitude/longitude), so PostGIS isn't needed; scheduled jobs run through
+  `/api/cron/daily`, so `pg_cron` isn't needed either.
 
 ### Airport data
 - `npm run airports:import` downloads OurAirports (public domain) and upserts the European airfields

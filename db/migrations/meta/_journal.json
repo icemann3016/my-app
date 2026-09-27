@@ -64,6 +64,20 @@
       "when": 1790490931422,
       "tag": "0008_aircraft_security",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1790493551823,
+      "tag": "0009_calendar",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1790493552624,
+      "tag": "0010_calendar_security",
+      "breakpoints": true
     }
   ]
 }
