@@ -1,18 +1,102 @@
 import type { Metadata } from "next";
-import { getTranslations } from "next-intl/server";
+import { SearchXIcon } from "lucide-react";
+import { getLocale, getTranslations } from "next-intl/server";
 
-import { ComingSoon } from "@/components/coming-soon";
+import { Card, CardContent } from "@/components/ui/card";
+import { formatSpan } from "@/lib/aircraft/format";
+import { searchAircraft } from "@/lib/aircraft/search";
+import { getUser } from "@/lib/auth/session";
+import type { Locale } from "@/lib/i18n/config";
+import { parseSearch } from "@/lib/validation/search";
+import { ResultCard } from "./result-card";
+import { SearchForm } from "./search-form";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const t = await getTranslations("placeholders.search");
+  const t = await getTranslations("search");
   return { title: t("title") };
 }
 
-export default async function Page() {
-  const t = await getTranslations("placeholders.search");
+/** Find aircraft by airport, radius, dates and filters (SRC-1…3). Filters live in the URL. */
+export default async function SearchPage({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}) {
+  const params = await searchParams;
+  const filters = parseSearch(params);
+  const user = await getUser();
+  const t = await getTranslations("search");
+  const locale = (await getLocale()) as Locale;
+  const { origin, period, timeZone, results } = await searchAircraft(user?.id ?? null, {
+    ...filters,
+    eligible: filters.eligible && Boolean(user),
+  });
+  // Carry the airport and dates to the aircraft page, so it can show availability for them.
+  const carry = new URLSearchParams(
+    Object.entries({ from: filters.from, to: filters.to, airport: filters.airport }).filter(
+      (e): e is [string, string] => Boolean(e[1]),
+    ),
+  ).toString();
+  const span = period ? formatSpan(period.from, period.to, timeZone, locale) : null;
+
   return (
-    <ComingSoon title={t("title")} milestone="M5">
-      {t("text")}
-    </ComingSoon>
+    <div className="mx-auto grid w-full max-w-5xl gap-6 px-4 py-8">
+      <div className="grid gap-1">
+        <h1 className="text-2xl font-semibold tracking-tight">{t("title")}</h1>
+        <p className="text-muted-foreground">{t("description")}</p>
+      </div>
+      <Card>
+        <CardContent>
+          <SearchForm
+            filters={filters}
+            airport={
+              origin
+                ? {
+                    ident: origin.ident,
+                    code: origin.code,
+                    iataCode: origin.iataCode,
+                    name: origin.name,
+                    municipality: origin.municipality,
+                    country: origin.country,
+                  }
+                : null
+            }
+            loggedIn={Boolean(user)}
+          />
+        </CardContent>
+      </Card>
+
+      <section className="grid gap-3" aria-labelledby="results-heading">
+        <div className="grid gap-0.5">
+          <h2 id="results-heading" className="text-lg font-semibold" aria-live="polite">
+            {t("found", { count: results.length })}
+          </h2>
+          <p className="text-sm text-muted-foreground">
+            {[
+              origin ? t("near", { code: origin.code, km: filters.radius }) : t("everywhere"),
+              span ? t("freeBetween", { when: span.local }) : null,
+            ]
+              .filter(Boolean)
+              .join(" · ")}
+          </p>
+        </div>
+        {results.length === 0 ? (
+          <Card>
+            <CardContent className="flex items-start gap-3 text-sm text-muted-foreground">
+              <SearchXIcon className="size-5 shrink-0" aria-hidden />
+              {t("empty")}
+            </CardContent>
+          </Card>
+        ) : (
+          <ul className="grid gap-4">
+            {results.map((r) => (
+              <li key={r.id}>
+                <ResultCard result={r} query={carry} />
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
+    </div>
   );
 }

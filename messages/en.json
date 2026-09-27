@@ -69,10 +69,6 @@
     "accountDeleted": "Your account and all its data have been deleted."
   },
   "placeholders": {
-    "search": {
-      "title": "Find aircraft",
-      "text": "Search aircraft by airport, dates and specs."
-    },
     "terms": {
       "title": "Terms of service",
       "text": "Our terms will be published before launch."
@@ -1043,5 +1039,40 @@
       "nothingPlanned": "Nothing planned. The aircraft is free for pilots to book.",
       "remove": "Remove {when}"
     }
+  },
+  "search": {
+    "title": "Find aircraft",
+    "description": "Search aircraft by airfield, dates and what you want to fly.",
+    "airport": "Near airfield",
+    "airportHint": "Leave empty to search everywhere.",
+    "radius": "Within",
+    "km": "{km} km",
+    "from": "From",
+    "to": "Until",
+    "timesHint": "Local time at the chosen airfield. With dates, only aircraft that are free for the whole time are shown.",
+    "moreFilters": "More filters",
+    "any": "Any",
+    "seats": "Minimum seats",
+    "maxPrice": "Maximum price per hour",
+    "maxPriceHint": "In the listing's currency.",
+    "eligible": "Only aircraft I can rent",
+    "eligibleHint": "Checks your verified licence, medical, ratings and experience against each owner's requirements.",
+    "eligibleLogIn": "Log in to see only aircraft you meet the requirements for.",
+    "sort": "Sort by",
+    "sorts": {
+      "distance": "Distance",
+      "price": "Price",
+      "rating": "Rating",
+      "newest": "Newest"
+    },
+    "submit": "Search",
+    "found": "{count, plural, =0 {No aircraft found} one {# aircraft found} other {# aircraft found}}",
+    "near": "within {km} km of {code}",
+    "everywhere": "everywhere",
+    "freeBetween": "free {when}",
+    "empty": "Nothing matches yet. Try a bigger radius, other dates or fewer filters.",
+    "seatsCount": "{count, plural, one {# seat} other {# seats}}",
+    "distance": "{km} km away",
+    "noReviews": "No reviews yet"
   }
 }
