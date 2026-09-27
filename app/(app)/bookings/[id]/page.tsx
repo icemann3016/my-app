@@ -24,6 +24,7 @@ import { toRange, utcToZoned } from "@/lib/domain/time";
 import { intlLocale, type Locale } from "@/lib/i18n/config";
 import { BookingHistory } from "./booking-history";
 import { CancelBooking } from "./cancel-booking";
+import { FlightLogLink } from "./flight-log-link";
 import { RespondForm } from "./respond-form";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -32,8 +33,15 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 /** One booking, for its pilot and the aircraft's owner (BKG-1…3). */
-export default async function BookingPage({ params }: { params: Promise<{ id: string }> }) {
+export default async function BookingPage({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ id: string }>;
+  searchParams: Promise<{ checkout?: string }>;
+}) {
   const { id } = await params;
+  const { checkout } = await searchParams;
   const user = await requireUser(`/bookings/${id}`);
   if (!isUuid(id)) notFound();
   const detail = await getBooking(user.id, id);
@@ -108,6 +116,14 @@ export default async function BookingPage({ params }: { params: Promise<{ id: st
           {meets ? t("detail.meets") : t("detail.doesNotMeet")}
         </p>
       )}
+      <FlightLogLink
+        bookingId={b.id}
+        status={b.status}
+        isPilot={b.pilotId === user.id}
+        opensAt={new Date(period.from.getTime() - 2 * 3_600_000)}
+        timeZone={timeZone}
+        error={checkout}
+      />
       {b.checkoutRequired && (
         <p className="flex items-start gap-2 text-sm">
           <GraduationCapIcon className="mt-0.5 size-4 shrink-0 text-primary" aria-hidden />

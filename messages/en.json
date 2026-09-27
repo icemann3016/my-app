@@ -191,7 +191,9 @@
     "ageInvalid": "Enter an age between 16 and 99.",
     "dateTimeInvalid": "Enter a date and time.",
     "endBeforeStart": "The end must be after the start.",
-    "plannedHoursInvalid": "Enter the hours you plan to fly, e.g. 1.5."
+    "plannedHoursInvalid": "Enter the hours you plan to fly, e.g. 1.5.",
+    "timeInvalid": "Enter a time as HH:MM.",
+    "meterBackwards": "The end reading can't be lower than the start."
   },
   "dashboard": {
     "title": "Welcome, {name}",
@@ -1196,7 +1198,11 @@
         "declined": "Declined",
         "proposed": "Other time proposed",
         "expired": "Expired (no answer)",
-        "cancelled": "Cancelled"
+        "cancelled": "Cancelled",
+        "checked_out": "Checked out",
+        "log_submitted": "Flight log sent",
+        "log_correction": "Correction requested",
+        "log_confirmed": "Flight log confirmed"
       }
     },
     "respond": {
@@ -1241,6 +1247,107 @@
         "reason_required": "Please give a reason.",
         "failed": "That didn't work. Please try again."
       }
+    }
+  },
+  "flightLog": {
+    "title": "Flight log",
+    "back": "Back to the booking",
+    "open": "Flight log",
+    "startCheckout": "Check out",
+    "checkoutHint": "Checking out starts the rental and opens the flight log. Record the meters, fuel and oil before the first flight.",
+    "checkoutOpens": "Check-out opens {when}.",
+    "disclaimer": "This log is a record between you and the other party. It does not replace the aircraft's official journey log or technical log, or your pilot logbook.",
+    "statuses": {
+      "draft": "Being filled in",
+      "submitted": "Sent to the owner",
+      "correction_requested": "Correction requested",
+      "confirmed": "Confirmed"
+    },
+    "correctionNote": "The owner asked for a correction: {note}",
+    "checkout": "Check-out",
+    "hobbs": "Hobbs",
+    "tach": "Tach",
+    "fuelOnBoard": "Fuel on board ({unit})",
+    "oilLevel": "Oil level ({unit})",
+    "checkoutPhoto": "Photo of the meters (optional)",
+    "checkoutPhotoHint": "Only you can open it for now. JPEG, PNG or PDF, up to 4 MB.",
+    "saveCheckout": "Save check-out",
+    "saving": "Saving…",
+    "saved": "Saved.",
+    "legs": "Legs",
+    "noLegs": "No legs yet. Add one after each flight.",
+    "addLeg": "Add leg",
+    "editLeg": "Edit leg",
+    "edit": "Edit",
+    "delete": "Delete",
+    "editLegOf": "Edit leg {leg}",
+    "deleteLegOf": "Delete leg {leg}",
+    "legHint": "Times are local at each airfield: departure times at the departure airfield, arrival times at the arrival airfield.",
+    "from": "From",
+    "to": "To",
+    "date": "Date (block off, local)",
+    "blockOff": "Block off",
+    "engineStart": "Engine start",
+    "takeoff": "Take-off",
+    "landing": "Landing",
+    "engineStop": "Engine stop",
+    "blockOn": "Block on",
+    "optional": "{field} (optional)",
+    "landings": "Landings",
+    "hobbsStart": "Hobbs start",
+    "hobbsEnd": "Hobbs end",
+    "tachStart": "Tach start",
+    "tachEnd": "Tach end",
+    "fuelBefore": "Fuel before ({unit})",
+    "fuelAfter": "Fuel after ({unit})",
+    "oilBefore": "Oil before ({unit})",
+    "oilAfter": "Oil after ({unit})",
+    "saveLeg": "Save leg",
+    "legSaved": "Leg saved.",
+    "blockTimes": "Block {off}–{on} local",
+    "landingsCount": "{count, plural, one {# landing} other {# landings}}",
+    "summary": "Time and amount",
+    "flown": {
+      "hobbs": "Flown (Hobbs)",
+      "tach": "Flown (tach)",
+      "block": "Flown (block time)"
+    },
+    "basis": {
+      "hobbs": "Hobbs",
+      "tach": "tach",
+      "block": "block"
+    },
+    "duration": "{h} h {m} min",
+    "billed": "Billed",
+    "billedHours": "{hours} h",
+    "amountDue": "Amount due",
+    "missingMeters": "Add the {basis} start and end readings to every leg to work out the amount.",
+    "payDirectly": "Pay the owner directly. No money goes through ownAplane.",
+    "submit": "Check in and send to the owner",
+    "submitHint": "When you're back, check in: the owner checks the log and confirms the amount. You can't change it after that unless the owner asks for a correction.",
+    "waitingForOwner": "Sent. Waiting for the owner to confirm.",
+    "waitingForPilot": "The pilot is still filling in the log.",
+    "confirm": "Confirm log and amount",
+    "confirmHint": "Confirming completes the booking with the time and amount above.",
+    "correctionLabel": "What should the pilot correct?",
+    "requestCorrection": "Ask for a correction",
+    "units": {
+      "l": "L",
+      "usgal": "US gal",
+      "qt": "qt"
+    },
+    "errors": {
+      "not_found": "We couldn't find this flight log.",
+      "not_accepted": "Only an accepted booking can be checked out.",
+      "too_early": "Check-out opens 2 hours before the booked time.",
+      "not_editable": "The log can't be changed now.",
+      "no_legs": "Add at least one leg first.",
+      "not_submitted": "The log hasn't been sent yet, or it was already handled.",
+      "note_required": "Say what should be corrected.",
+      "bad_amount": "The amount isn't valid.",
+      "missing_meters": "Some meter readings are missing.",
+      "leg_checks": "Check the leg: times must be in order (block off, engine start, take-off, landing, engine stop, block on), within 24 hours, and meters can't go backwards.",
+      "failed": "Something went wrong. Please try again."
     }
   }
 }

@@ -5,7 +5,7 @@ import { sql } from "drizzle-orm";
 import { getVisibleAircraft } from "@/lib/aircraft/public";
 import { getAirport } from "@/lib/airports";
 import { asUser } from "@/lib/db/rls";
-import { addDays, toRange, zonedDay, zonedToUtc } from "@/lib/domain/time";
+import { isWeekend, localDaysTouched, toRange, zonedToUtc } from "@/lib/domain/time";
 import { estimatePrice } from "@/lib/domain/pricing";
 import type { BookingRequestInput } from "@/lib/validation/booking";
 
@@ -19,15 +19,6 @@ export type RequestOutcome =
       /** UTC period, when the request got that far (to explain eligibility). */
       period?: { from: Date; to: Date };
     };
-
-/** Local calendar days an instant range touches in a zone (a rental ending at 00:00 doesn't count the next day). */
-function daysTouched(from: Date, to: Date, timeZone: string): number {
-  const first = zonedDay(from, timeZone);
-  const last = zonedDay(new Date(to.getTime() - 1), timeZone);
-  let days = 1;
-  for (let d = first; d < last; d = addDays(d, 1)) days++;
-  return days;
-}
 
 /**
  * Send a booking request as the logged-in pilot (BKG-1, BKG-2). The database checks everything
@@ -49,8 +40,6 @@ export async function requestBooking(
   if (!from) return { ok: false, error: "dateTimeInvalid", field: "from" };
   if (!to || to <= from) return { ok: false, error: "endBeforeStart", field: "to" };
 
-  const localStart = zonedDay(from, departure.timezone);
-  const weekday = new Date(`${localStart}T00:00:00Z`).getUTCDay();
   const price = estimatePrice({
     pricePerHour: a.pricePerHour!,
     weekendPricePerHour: a.weekendPricePerHour,
@@ -58,8 +47,8 @@ export async function requestBooking(
     priceBasis: a.priceBasis,
     fuelBurnLph: a.fuelBurnLph,
     plannedHours: input.plannedHours,
-    days: daysTouched(from, to, departure.timezone),
-    weekend: weekday === 0 || weekday === 6,
+    days: localDaysTouched(from, to, departure.timezone),
+    weekend: isWeekend(from, departure.timezone),
   });
 
   try {

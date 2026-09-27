@@ -34,3 +34,15 @@ export function massToKg(value: number, units: UnitSystem): number {
 export function kgToMass(kg: number, units: UnitSystem): number {
   return Math.round(units === "imperial" ? kg / KG_PER_LB : kg);
 }
+
+export const LITRES_PER_US_QUART = 0.946352946;
+
+/** Oil as read on the dipstick (US quarts or litres) → litres, one decimal. */
+export function oilToLitres(value: number, unit: "qt" | "l"): number {
+  return round(unit === "qt" ? value * LITRES_PER_US_QUART : value, 1);
+}
+
+/** Litres → the aircraft's dipstick unit, one decimal. */
+export function litresToOil(litres: number, unit: "qt" | "l"): number {
+  return round(unit === "qt" ? litres / LITRES_PER_US_QUART : litres, 1);
+}

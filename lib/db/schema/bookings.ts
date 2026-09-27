@@ -72,6 +72,12 @@ export const bookings = pgTable(
     // Price when requested (BKG-2); payment is arranged with the owner directly in the MVP.
     pricePerHour: numeric("price_per_hour", { precision: 8, scale: 2, mode: "number" }).notNull(),
     currency: text("currency").notNull(),
+    weekendPricePerHour: numeric("weekend_price_per_hour", {
+      precision: 8,
+      scale: 2,
+      mode: "number",
+    }),
+    minHoursPerDay: numeric("min_hours_per_day", { precision: 3, scale: 1, mode: "number" }),
     priceBasis: priceBasis("price_basis").notNull(),
     timeBasis: timeBasis("time_basis").notNull(),
     estimate: numeric("estimate", { precision: 10, scale: 2, mode: "number" }).notNull(),

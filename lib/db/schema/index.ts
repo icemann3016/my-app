@@ -6,3 +6,4 @@ export * from "./pilots";
 export * from "./aircraft";
 export * from "./calendar";
 export * from "./bookings";
+export * from "./flight-logs";

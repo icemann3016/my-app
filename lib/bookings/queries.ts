@@ -56,6 +56,7 @@ export async function getBooking(viewerId: string, id: string) {
       manufacturer: aircraft.manufacturer,
       model: aircraft.model,
       typeDesignator: aircraft.typeDesignator,
+      oilUnit: aircraft.oilUnit,
     })
     .from(aircraft)
     .where(eq(aircraft.id, b.aircraftId));

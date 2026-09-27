@@ -3,7 +3,18 @@ import { getLocale, getTranslations } from "next-intl/server";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { intlLocale, type Locale } from "@/lib/i18n/config";
 
-const KNOWN = new Set(["requested", "accepted", "declined", "proposed", "expired", "cancelled"]);
+const KNOWN = new Set([
+  "requested",
+  "accepted",
+  "declined",
+  "proposed",
+  "expired",
+  "cancelled",
+  "checked_out",
+  "log_submitted",
+  "log_correction",
+  "log_confirmed",
+]);
 
 /** What happened to a booking, oldest first. */
 export async function BookingHistory({

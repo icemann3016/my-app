@@ -68,3 +68,29 @@ export async function seedVerifiedPilot(email: string) {
       values (${pilot}, 'class', 'SEP_LAND', 'verified')`;
   });
 }
+
+/**
+ * An accepted booking of `aircraftId` by the pilot, starting in `startsIn` minutes and lasting 3
+ * hours. Night VFR is allowed so the test works at any time of day.
+ */
+export async function seedAcceptedBooking(aircraftId: string, pilotEmail: string, startsIn = 30) {
+  return withDb(async (sql) => {
+    const pilot = await userId(sql, pilotEmail);
+    await sql`update aircraft set night_vfr = true where id = ${aircraftId}`;
+    await sql`insert into pilot_ratings (user_id, kind, code, status)
+      values (${pilot}, 'privilege', 'NIGHT', 'verified')`;
+    const [{ owner }] = await sql<{ owner: string }[]>`
+      select owner_id as owner from aircraft where id = ${aircraftId}`;
+    const from = new Date(Date.now() + startsIn * 60_000).toISOString();
+    const to = new Date(Date.now() + (startsIn + 180) * 60_000).toISOString();
+    return sql.begin(async (tx) => {
+      await tx`select set_config('app.user_id', ${pilot}, true)`;
+      const [{ id }] = await tx<{ id: string }[]>`
+        select public.request_booking(${aircraftId}::uuid, tstzrange(${from}, ${to}),
+          'LBSF', 'LBSF', '{}'::text[], 'local', 0, 1.5, null, 270) as id`;
+      await tx`select set_config('app.user_id', ${owner}, true)`;
+      await tx`select public.respond_to_booking(${id}::uuid, 'accept')`;
+      return id;
+    });
+  });
+}

@@ -1,0 +1,216 @@
+import { eq, sql } from "drizzle-orm";
+import { beforeAll, expect, it } from "vitest";
+
+import { describeDb, forceListed, prepareDatabase } from "./setup";
+
+let db: typeof import("@/lib/db");
+let rls: typeof import("@/lib/db/rls");
+let s: typeof import("@/lib/db/schema");
+
+const OWN = "44dd44dd-4444-4444-8444-dddddddddddd"; // owner
+const PIL = "55ee55ee-5555-4555-8555-eeeeeeeeeeee"; // pilot
+const OTH = "66ff66ff-6666-4666-8666-ffffffffffff"; // someone else
+let bookingId: string;
+let logId: string;
+
+async function call<T>(user: string, query: ReturnType<typeof sql>) {
+  try {
+    const rows = (await rls.asUser(user, (tx) => tx.execute(query))) as unknown as T[];
+    return rows[0];
+  } catch (e) {
+    const err = e as { cause?: { code?: string; message?: string } };
+    return { error: err.cause?.code === "P0001" ? err.cause.message : err.cause?.code };
+  }
+}
+
+const at = (minutes: number) => new Date(Date.now() + minutes * 60_000);
+
+describeDb("flight log", () => {
+  beforeAll(async () => {
+    await prepareDatabase();
+    db = await import("@/lib/db");
+    rls = await import("@/lib/db/rls");
+    s = await import("@/lib/db/schema");
+    const owner = db.getDb();
+    await owner.insert(s.users).values([
+      { id: OWN, name: "Own", email: "own@example.com" },
+      { id: PIL, name: "Pil", email: "pil@example.com" },
+      { id: OTH, name: "Oth", email: "oth@example.com" },
+    ]);
+    await owner.insert(s.airports).values({
+      ident: "LBSF",
+      type: "large_airport",
+      name: "Sofia",
+      country: "BG",
+      latitude: 42.6952,
+      longitude: 23.4062,
+      timezone: "Europe/Sofia",
+    });
+    const [plane] = await owner
+      .insert(s.aircraft)
+      .values({
+        ownerId: OWN,
+        registration: "LZ-LOG",
+        manufacturer: "Cessna",
+        model: "172",
+        typeDesignator: "C172",
+        seats: 4,
+        fuelType: "avgas_100ll",
+        homeAirportIdent: "LBSF",
+        pricePerHour: 180,
+        nightVfr: true, // the test runs at any time of day
+      })
+      .returning();
+    await forceListed(plane!.id);
+    await owner.insert(s.pilotLicences).values({
+      userId: PIL,
+      type: "ppl_a",
+      issuingState: "BG",
+      number: "1",
+      status: "verified",
+    });
+    await owner.insert(s.medicals).values({
+      userId: PIL,
+      class: "class2",
+      issuingState: "BG",
+      validUntil: "2099-01-01",
+      status: "verified",
+    });
+    await owner.insert(s.pilotRatings).values([
+      { userId: PIL, kind: "class", code: "SEP_LAND", status: "verified" },
+      { userId: PIL, kind: "privilege", code: "NIGHT", status: "verified" },
+    ]);
+    const period = `[${at(60).toISOString()},${at(240).toISOString()})`;
+    const [row] = (await rls.asUser(PIL, (tx) =>
+      tx.execute(sql`select public.request_booking(${plane!.id}::uuid, ${period}::tstzrange,
+        'LBSF', 'LBSF', '{}'::text[], 'local', 0, 1.5, null, 270) as id`),
+    )) as unknown as { id: string }[];
+    bookingId = row!.id;
+  }, 60_000);
+
+  it("starts at check-out, only for the pilot of an accepted booking", async () => {
+    expect(await call(PIL, sql`select public.start_flight_log(${bookingId}::uuid) as id`)).toEqual({
+      error: "not_accepted",
+    });
+    await rls.asUser(OWN, (tx) =>
+      tx.execute(sql`select public.respond_to_booking(${bookingId}::uuid, 'accept')`),
+    );
+    expect(await call(OTH, sql`select public.start_flight_log(${bookingId}::uuid) as id`)).toEqual({
+      error: "not_found",
+    });
+    const started = await call<{ id: string }>(
+      PIL,
+      sql`select public.start_flight_log(${bookingId}::uuid) as id`,
+    );
+    logId = (started as { id: string }).id;
+    const [booking] = await db
+      .getDb()
+      .select()
+      .from(s.bookings)
+      .where(eq(s.bookings.id, bookingId));
+    expect(booking!.status).toBe("in_progress");
+  });
+
+  it("lets only the pilot fill it in, and hides it from others", async () => {
+    const updated = await rls.asUser(PIL, (tx) =>
+      tx
+        .update(s.flightLogs)
+        .set({ hobbsStart: 1234.5, fuelStartL: 120 })
+        .where(eq(s.flightLogs.id, logId))
+        .returning(),
+    );
+    expect(updated).toHaveLength(1);
+    const byOwner = await rls.asUser(OWN, (tx) =>
+      tx.update(s.flightLogs).set({ hobbsStart: 1 }).where(eq(s.flightLogs.id, logId)).returning(),
+    );
+    expect(byOwner).toEqual([]);
+    expect(await rls.asUser(OWN, (tx) => tx.select().from(s.flightLogs))).toHaveLength(1);
+    expect(await rls.asUser(OTH, (tx) => tx.select().from(s.flightLogs))).toEqual([]);
+  });
+
+  const leg = (overrides: Partial<typeof s.flightLegs.$inferInsert> = {}) => ({
+    flightLogId: logId,
+    seq: 1,
+    fromIdent: "LBSF",
+    toIdent: "LBSF",
+    blockOff: at(70),
+    engineStart: at(75),
+    engineStop: at(140),
+    blockOn: at(145),
+    hobbsStart: 1234.5,
+    hobbsEnd: 1235.6,
+    ...overrides,
+  });
+
+  it("refuses times out of order and meters going backwards", async () => {
+    const code = (p: Promise<unknown>) =>
+      p.then(
+        () => undefined,
+        (e: { cause?: { code?: string } }) => e.cause?.code,
+      );
+    expect(
+      await code(
+        rls.asUser(PIL, (tx) => tx.insert(s.flightLegs).values(leg({ engineStart: at(60) }))),
+      ),
+    ).toBe("23514");
+    expect(
+      await code(rls.asUser(PIL, (tx) => tx.insert(s.flightLegs).values(leg({ hobbsEnd: 1200 })))),
+    ).toBe("23514");
+    expect(await code(rls.asUser(OWN, (tx) => tx.insert(s.flightLegs).values(leg())))).toBe(
+      "42501",
+    );
+  });
+
+  it("goes from draft to submitted to correction and back, then confirmed", async () => {
+    expect(await call(PIL, sql`select public.submit_flight_log(${logId}::uuid)`)).toEqual({
+      error: "no_legs",
+    });
+    await rls.asUser(PIL, (tx) => tx.insert(s.flightLegs).values(leg()));
+    await call(PIL, sql`select public.submit_flight_log(${logId}::uuid)`);
+    // Submitted: the pilot can't change it any more.
+    const changed = await rls.asUser(PIL, (tx) =>
+      tx
+        .update(s.flightLegs)
+        .set({ landings: 3 })
+        .where(eq(s.flightLegs.flightLogId, logId))
+        .returning(),
+    );
+    expect(changed).toEqual([]);
+
+    expect(
+      await call(PIL, sql`select public.request_log_correction(${logId}::uuid, 'Hobbs end?')`),
+    ).toEqual({ error: "not_found" });
+    await call(OWN, sql`select public.request_log_correction(${logId}::uuid, 'Hobbs end?')`);
+    const fixed = await rls.asUser(PIL, (tx) =>
+      tx
+        .update(s.flightLegs)
+        .set({ hobbsEnd: 1235.8 })
+        .where(eq(s.flightLegs.flightLogId, logId))
+        .returning(),
+    );
+    expect(fixed).toHaveLength(1);
+    await call(PIL, sql`select public.submit_flight_log(${logId}::uuid)`);
+
+    await call(OWN, sql`select public.confirm_flight_log(${logId}::uuid, 78, 234, 0)`);
+    const [log] = await db.getDb().select().from(s.flightLogs).where(eq(s.flightLogs.id, logId));
+    expect(log).toMatchObject({ status: "confirmed", flownMinutes: 78, amountDue: 234 });
+    const [booking] = await db
+      .getDb()
+      .select()
+      .from(s.bookings)
+      .where(eq(s.bookings.id, bookingId));
+    expect(booking!.status).toBe("completed");
+    const events = await rls.asUser(PIL, (tx) =>
+      tx.select().from(s.bookingEvents).where(eq(s.bookingEvents.bookingId, bookingId)),
+    );
+    expect(events.map((e) => e.type)).toEqual([
+      "requested",
+      "accepted",
+      "checked_out",
+      "log_submitted",
+      "log_correction",
+      "log_submitted",
+      "log_confirmed",
+    ]);
+  });
+});

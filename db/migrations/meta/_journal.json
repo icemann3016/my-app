@@ -141,6 +141,34 @@
       "when": 1790524336056,
       "tag": "0019_booking_cancellation",
       "breakpoints": true
+    },
+    {
+      "idx": 20,
+      "version": "7",
+      "when": 1790524641172,
+      "tag": "0020_flight_logs",
+      "breakpoints": true
+    },
+    {
+      "idx": 21,
+      "version": "7",
+      "when": 1790524642312,
+      "tag": "0021_flight_log_security",
+      "breakpoints": true
+    },
+    {
+      "idx": 22,
+      "version": "7",
+      "when": 1790524718965,
+      "tag": "0022_booking_price_terms",
+      "breakpoints": true
+    },
+    {
+      "idx": 23,
+      "version": "7",
+      "when": 1790524720050,
+      "tag": "0023_booking_price_snapshot",
+      "breakpoints": true
     }
   ]
 }

@@ -92,3 +92,18 @@ export function addDays(day: string, n: number): string {
 export function toRange(from: Date, to: Date): string {
   return `[${from.toISOString()},${to.toISOString()})`;
 }
+
+/** Local calendar days an instant range [from, to) touches in a zone (at least 1). */
+export function localDaysTouched(from: Date, to: Date, timeZone: string): number {
+  const first = zonedDay(from, timeZone);
+  const last = zonedDay(new Date(Math.max(to.getTime() - 1, from.getTime())), timeZone);
+  let days = 1;
+  for (let d = first; d < last; d = addDays(d, 1)) days++;
+  return days;
+}
+
+/** Whether an instant falls on a Saturday or Sunday in a zone. */
+export function isWeekend(instant: Date, timeZone: string): boolean {
+  const day = new Date(`${zonedDay(instant, timeZone)}T00:00:00Z`).getUTCDay();
+  return day === 0 || day === 6;
+}
