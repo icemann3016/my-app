@@ -1084,6 +1084,15 @@
     "empty": "Nothing matches yet. Try a bigger radius, other dates or fewer filters.",
     "seatsCount": "{count, plural, one {# seat} other {# seats}}",
     "distance": "{km} km away",
-    "noReviews": "No reviews yet"
+    "noReviews": "No reviews yet",
+    "view": {
+      "label": "Show results as",
+      "list": "List",
+      "map": "Map"
+    },
+    "map": {
+      "label": "Map of the aircraft found",
+      "marker": "{code}: {count, plural, one {# aircraft} other {# aircraft}}"
+    }
   }
 }

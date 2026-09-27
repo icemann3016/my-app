@@ -17,10 +17,13 @@ export async function SearchForm({
   filters: f,
   airport,
   loggedIn,
+  view,
 }: {
   filters: SearchFilters;
   airport: PickerAirport | null;
   loggedIn: boolean;
+  /** Keep the chosen list/map view when searching again. */
+  view: "list" | "map";
 }) {
   const t = await getTranslations("search");
   const ta = await getTranslations("aircraft");
@@ -30,6 +33,7 @@ export async function SearchForm({
 
   return (
     <Form action="/search" className="grid gap-4">
+      {view === "map" && <input type="hidden" name="view" value="map" />}
       <div className="grid gap-4 sm:grid-cols-[2fr_1fr]">
         <AirportPicker
           name="airport"

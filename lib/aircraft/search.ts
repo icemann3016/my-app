@@ -42,7 +42,9 @@ export async function searchAircraft(viewerId: string | null, f: SearchFilters) 
     ? sql`tstzrange(${period.from.toISOString()}::timestamptz, ${period.to.toISOString()}::timestamptz, '[)')`
     : null;
 
-  if (!isDatabaseConfigured()) return { origin, period, timeZone, results: [] };
+  if (!isDatabaseConfigured()) {
+    return { origin, originCoords, period, timeZone, results: [] as never[] };
+  }
 
   // Great-circle distance from the search airport, in km (no PostGIS needed at our scale).
   const distance = originCoords
@@ -101,6 +103,8 @@ export async function searchAircraft(viewerId: string | null, f: SearchFilters) 
         airportIdent: airports.ident,
         airportCode: sql<string>`coalesce(${airports.icaoCode}, ${airports.ident})`,
         airportName: airports.name,
+        latitude: airports.latitude,
+        longitude: airports.longitude,
         municipality: airports.municipality,
         distanceKm: distance,
         cover: sql<string | null>`(
@@ -120,5 +124,5 @@ export async function searchAircraft(viewerId: string | null, f: SearchFilters) 
     distanceKm: distanceKm === null ? null : Math.round(Number(distanceKm)),
     coverUrl: photoUrl(cover),
   }));
-  return { origin, period, timeZone, results };
+  return { origin, originCoords, period, timeZone, results };
 }
