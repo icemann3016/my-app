@@ -17,7 +17,8 @@
       "footer": "Footer",
       "mainNavigation": "Main navigation",
       "pilotCredentials": "Pilot credentials",
-      "admin": "Admin"
+      "admin": "Admin",
+      "bookings": "Bookings"
     },
     "footer": {
       "tagline": "Made for general aviation in Europe.",
@@ -189,7 +190,8 @@
     "expiryRequired": "Enter the expiry date.",
     "ageInvalid": "Enter an age between 16 and 99.",
     "dateTimeInvalid": "Enter a date and time.",
-    "endBeforeStart": "The end must be after the start."
+    "endBeforeStart": "The end must be after the start.",
+    "plannedHoursInvalid": "Enter the hours you plan to fly, e.g. 1.5."
   },
   "dashboard": {
     "title": "Welcome, {name}",
@@ -845,7 +847,8 @@
       "text": "The listing, its photos and documents are deleted. This can't be undone.",
       "cancel": "Cancel",
       "deleting": "Deleting…",
-      "confirm": "Delete"
+      "confirm": "Delete",
+      "hasBookings": "This aircraft has upcoming bookings. Cancel or finish them first."
     },
     "photos": {
       "add": "Add photos",
@@ -976,7 +979,6 @@
       "requirements": "Who can rent it",
       "weekend": "Weekends: {price}/h",
       "minHours": "Minimum {hours} h per day",
-      "requestSoon": "Booking requests open soon",
       "owner": "Owner",
       "photos": "Photos of {name}",
       "photoAlt": "{name}, photo {number} of {total}",
@@ -986,7 +988,8 @@
       "cruise": "Cruise speed",
       "usefulLoad": "Useful load",
       "endurance": "Endurance",
-      "hours": "{hours} h"
+      "hours": "{hours} h",
+      "request": "Request booking"
     },
     "eligibility": {
       "own_aircraft": "This is your own aircraft.",
@@ -1096,6 +1099,126 @@
     "map": {
       "label": "Map of the aircraft found",
       "marker": "{code}: {count, plural, one {# aircraft} other {# aircraft}}"
+    }
+  },
+  "booking": {
+    "statuses": {
+      "requested": "Requested",
+      "accepted": "Accepted",
+      "declined": "Declined",
+      "expired": "Expired",
+      "cancelled": "Cancelled",
+      "in_progress": "In progress",
+      "completed": "Completed"
+    },
+    "form": {
+      "title": "Request a booking",
+      "back": "Back to the aircraft",
+      "from": "From",
+      "to": "Until",
+      "timesHint": "Local time at the departure airfield. The owner has 24 hours to answer; the time is held for you meanwhile.",
+      "route": "Route",
+      "departure": "Departure",
+      "arrival": "Arrival",
+      "arrivalHint": "Usually back at the departure airfield.",
+      "stop": "Stop {number}",
+      "addStop": "Add a stop",
+      "removeStop": "Remove the last stop",
+      "airfieldsHint": "Night and weather are checked for these airfields.",
+      "purpose": "Purpose",
+      "purposes": {
+        "local": "Local flight",
+        "cross_country": "Cross-country",
+        "training": "Training",
+        "other": "Other"
+      },
+      "passengers": "Passengers",
+      "plannedHours": "Planned flight time (h)",
+      "message": "Message to the owner",
+      "messagePlaceholder": "Anything the owner should know: your plans, experience on type…",
+      "estimate": "Estimated price",
+      "estimateDetail": "{hours} h × {rate}",
+      "estimateEmpty": "Enter the times and planned flight time to see an estimate.",
+      "fuelNotIncluded": "Fuel isn't included: about {litres} L.",
+      "payDirectly": "You pay the owner directly; ownAplane doesn't handle payments yet. The final amount follows the flight log.",
+      "send": "Send request",
+      "sending": "Sending…"
+    },
+    "errors": {
+      "not_eligible": "You can't book this flight yet:",
+      "too_many_passengers": "This aircraft takes at most {max} passengers.",
+      "period_in_past": "Choose a time in the future.",
+      "period_length": "A booking is between 30 minutes and 14 days.",
+      "not_free": "That time isn't free any more. Please choose another.",
+      "aircraft_unavailable": "This aircraft can't be booked right now.",
+      "failed": "That didn't work. Please try again."
+    },
+    "list": {
+      "title": "Bookings",
+      "description": "Your booking requests and rentals.",
+      "asOwner": "For my aircraft",
+      "asPilot": "My rentals",
+      "emptyPilot": "No bookings yet. Find an aircraft and send a request."
+    },
+    "detail": {
+      "metaTitle": "Booking",
+      "back": "All bookings",
+      "pilotIs": "Pilot: {name}",
+      "ownerIs": "Owner: {name}",
+      "deletedUser": "deleted account",
+      "answerBy": "Please answer by {date}; after that the request expires and the time is freed.",
+      "waiting": "Waiting for the owner, who has until {date} to answer.",
+      "meets": "The pilot meets your requirements for this flight.",
+      "doesNotMeet": "The pilot doesn't meet your requirements for this flight any more.",
+      "checkout": "The owner asks for a checkout flight with an instructor before the first solo rental.",
+      "flight": "Flight",
+      "when": "When",
+      "route": "Route",
+      "basis": {
+        "wet": "fuel included",
+        "dry": "fuel not included"
+      },
+      "ownerNote": "Owner's note:",
+      "proposed": "The owner can't do this time but suggests {when}.",
+      "requestProposed": "Request this time",
+      "youProposed": "You declined and suggested {when}."
+    },
+    "history": {
+      "title": "History",
+      "types": {
+        "requested": "Requested",
+        "accepted": "Accepted",
+        "declined": "Declined",
+        "proposed": "Other time proposed",
+        "expired": "Expired (no answer)",
+        "cancelled": "Cancelled"
+      }
+    },
+    "respond": {
+      "title": "Your answer",
+      "note": "Note to the pilot (optional)",
+      "notePlaceholder": "e.g. The keys are in the club house.",
+      "accept": "Accept",
+      "decline": "Decline",
+      "propose": "Suggest another time",
+      "proposeText": "Suggest a time that works for you (local time at the departure airfield, {zone}). The request is declined and the pilot can request your time with one tap.",
+      "from": "From",
+      "to": "Until",
+      "sendProposal": "Decline and suggest",
+      "cancel": "Cancel",
+      "sending": "Sending…",
+      "done": {
+        "accept": "Accepted. The time is booked for the pilot.",
+        "decline": "Declined. The time is free again.",
+        "propose": "Declined with your suggestion. The time is free again."
+      },
+      "errors": {
+        "not_found": "We couldn't find this request.",
+        "not_open": "This request has already been answered or has expired.",
+        "pilot_not_eligible": "The pilot no longer meets your requirements for this flight (for example, a credential expired), so it can't be accepted.",
+        "bad_proposal": "Suggest a time in the future.",
+        "failed": "That didn't work. Please try again."
+      }
     }
   }
 }

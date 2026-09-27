@@ -1,6 +1,6 @@
 "use server";
 
-import { and, eq } from "drizzle-orm";
+import { and, eq, inArray } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
@@ -11,7 +11,7 @@ import { deletePhotoFiles } from "@/lib/aircraft/photos";
 import { getUnits } from "@/lib/aircraft/queries";
 import { requireProfile, requireUser } from "@/lib/auth/session";
 import { asUser } from "@/lib/db/rls";
-import { aircraft, aircraftDocuments, aircraftPhotos } from "@/lib/db/schema";
+import { aircraft, aircraftDocuments, aircraftPhotos, bookings } from "@/lib/db/schema";
 import { deleteDocumentIfUnused } from "@/lib/documents";
 import { type FormState, formValues } from "@/lib/forms";
 import { localizedFieldErrors } from "@/lib/i18n/server";
@@ -168,9 +168,26 @@ export async function setAircraftStatus(_prev: FormState, formData: FormData): P
 }
 
 /** Delete an aircraft with its photos and documents. */
-export async function deleteAircraft(formData: FormData) {
+export async function deleteAircraft(_prev: FormState, formData: FormData): Promise<FormState> {
   const user = await requireUser(BASE);
   const id = idSchema.parse(formData.get("id"));
+  // Pilots rely on upcoming bookings: those have to be cancelled first.
+  const upcoming = await asUser(user.id, (tx) =>
+    tx
+      .select({ id: bookings.id })
+      .from(bookings)
+      .where(
+        and(
+          eq(bookings.aircraftId, id),
+          inArray(bookings.status, ["requested", "accepted", "in_progress"]),
+        ),
+      )
+      .limit(1),
+  );
+  if (upcoming.length) {
+    const t = await getTranslations("aircraft.delete");
+    return { message: t("hasBookings") };
+  }
   const { photos, documentIds } = await asUser(user.id, async (tx) => {
     const photos = await tx
       .select({ key: aircraftPhotos.storageKey })

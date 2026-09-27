@@ -1,0 +1,205 @@
+import type { Metadata } from "next";
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import {
+  ArrowLeftIcon,
+  CalendarClockIcon,
+  CircleAlertIcon,
+  CircleCheckIcon,
+  GraduationCapIcon,
+  InfoIcon,
+} from "lucide-react";
+import { getLocale, getTranslations } from "next-intl/server";
+
+import { BookingStatusBadge } from "@/components/bookings/booking-status-badge";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { formatPrice, formatSpan } from "@/lib/aircraft/format";
+import { isUuid } from "@/lib/aircraft/queries";
+import { requireUser } from "@/lib/auth/session";
+import { getBooking, pilotMeetsRequirements } from "@/lib/bookings/queries";
+import { toRange, utcToZoned } from "@/lib/domain/time";
+import { intlLocale, type Locale } from "@/lib/i18n/config";
+import { BookingHistory } from "./booking-history";
+import { RespondForm } from "./respond-form";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("booking.detail");
+  return { title: t("metaTitle") };
+}
+
+/** One booking, for its pilot and the aircraft's owner (BKG-1…3). */
+export default async function BookingPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const user = await requireUser(`/bookings/${id}`);
+  if (!isUuid(id)) notFound();
+  const detail = await getBooking(user.id, id);
+  if (!detail) notFound();
+  const { booking: b, period, proposal, aircraft: plane, pilot, owner, route } = detail;
+  const t = await getTranslations("booking");
+  const locale = (await getLocale()) as Locale;
+  const isOwner = b.ownerId === user.id;
+  const timeZone = route[0]?.timezone ?? "UTC";
+  const span = formatSpan(period.from, period.to, timeZone, locale);
+  const meets =
+    isOwner && b.status === "requested"
+      ? await pilotMeetsRequirements(
+          user.id,
+          { pilotId: b.pilotId, aircraftId: b.aircraftId, period: toRange(period.from, period.to) },
+          route.map((r) => r.ident),
+        )
+      : null;
+  const expires = new Intl.DateTimeFormat(intlLocale(locale), {
+    dateStyle: "medium",
+    timeStyle: "short",
+    timeZone,
+  }).format(b.expiresAt);
+
+  return (
+    <div className="mx-auto grid w-full max-w-3xl gap-6 px-4 py-10">
+      <Button variant="ghost" size="sm" className="-ml-3 justify-self-start" asChild>
+        <Link href="/bookings">
+          <ArrowLeftIcon aria-hidden /> {t("detail.back")}
+        </Link>
+      </Button>
+      <div className="grid gap-1">
+        <div className="flex flex-wrap items-center gap-3">
+          <h1 className="text-2xl font-semibold tracking-tight">
+            {plane.manufacturer} {plane.model}
+          </h1>
+          <BookingStatusBadge status={b.status} label={t(`statuses.${b.status}`)} />
+        </div>
+        <p className="text-muted-foreground">
+          <span className="font-mono">{plane.registration}</span> ·{" "}
+          {isOwner
+            ? t("detail.pilotIs", { name: pilot?.displayName ?? t("detail.deletedUser") })
+            : t("detail.ownerIs", { name: owner.displayName })}
+        </p>
+      </div>
+
+      {b.status === "requested" && (
+        <Alert>
+          <InfoIcon />
+          <AlertDescription>
+            {isOwner
+              ? t("detail.answerBy", { date: expires })
+              : t("detail.waiting", { date: expires })}
+          </AlertDescription>
+        </Alert>
+      )}
+      {isOwner && meets !== null && (
+        <p
+          className={
+            meets
+              ? "flex items-center gap-2 text-sm text-success"
+              : "flex items-center gap-2 text-sm text-destructive"
+          }
+        >
+          {meets ? (
+            <CircleCheckIcon className="size-4" aria-hidden />
+          ) : (
+            <CircleAlertIcon className="size-4" aria-hidden />
+          )}
+          {meets ? t("detail.meets") : t("detail.doesNotMeet")}
+        </p>
+      )}
+      {b.checkoutRequired && (
+        <p className="flex items-start gap-2 text-sm">
+          <GraduationCapIcon className="mt-0.5 size-4 shrink-0 text-primary" aria-hidden />
+          {t("detail.checkout")}
+        </p>
+      )}
+
+      {isOwner && b.status === "requested" && (
+        <Card>
+          <CardHeader>
+            <CardTitle as="h2">{t("respond.title")}</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <RespondForm bookingId={b.id} timeZone={timeZone} />
+          </CardContent>
+        </Card>
+      )}
+      {b.ownerNote && (
+        <p className="rounded-md border p-3 text-sm">
+          <span className="font-medium">{t("detail.ownerNote")}</span> {b.ownerNote}
+        </p>
+      )}
+      {proposal && b.status === "declined" && (
+        <Alert>
+          <CalendarClockIcon />
+          <AlertDescription className="grid gap-2">
+            <span>
+              {t(isOwner ? "detail.youProposed" : "detail.proposed", {
+                when: formatSpan(proposal.from, proposal.to, timeZone, locale).local,
+              })}
+            </span>
+            {!isOwner && (
+              <Button size="sm" className="justify-self-start" asChild>
+                <Link
+                  href={`/aircraft/${b.aircraftId}/book?${new URLSearchParams({
+                    from: utcToZoned(proposal.from, timeZone),
+                    to: utcToZoned(proposal.to, timeZone),
+                  })}`}
+                >
+                  {t("detail.requestProposed")}
+                </Link>
+              </Button>
+            )}
+          </AlertDescription>
+        </Alert>
+      )}
+
+      <Card>
+        <CardHeader>
+          <CardTitle as="h2">{t("detail.flight")}</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <dl className="grid gap-3 text-sm sm:grid-cols-2">
+            <div className="sm:col-span-2">
+              <dt className="text-muted-foreground">{t("detail.when")}</dt>
+              <dd className="font-medium">{span.local}</dd>
+              <dd className="text-xs text-muted-foreground">{span.utc}</dd>
+            </div>
+            <div className="sm:col-span-2">
+              <dt className="text-muted-foreground">{t("detail.route")}</dt>
+              <dd className="font-medium">
+                {route.map((r) => `${r.code} (${r.name})`).join(" → ")}
+              </dd>
+            </div>
+            <div>
+              <dt className="text-muted-foreground">{t("form.purpose")}</dt>
+              <dd className="font-medium">{t(`form.purposes.${b.purpose}`)}</dd>
+            </div>
+            <div>
+              <dt className="text-muted-foreground">{t("form.passengers")}</dt>
+              <dd className="font-medium">{b.passengers}</dd>
+            </div>
+            <div>
+              <dt className="text-muted-foreground">{t("form.plannedHours")}</dt>
+              <dd className="font-medium">{b.plannedHours}</dd>
+            </div>
+            <div>
+              <dt className="text-muted-foreground">{t("form.estimate")}</dt>
+              <dd className="font-medium">{formatPrice(b.estimate, b.currency, locale)}</dd>
+              <dd className="text-xs text-muted-foreground">
+                {formatPrice(b.pricePerHour, b.currency, locale)}/h ·{" "}
+                {t(`detail.basis.${b.priceBasis}`)}
+              </dd>
+            </div>
+            {b.message && (
+              <div className="sm:col-span-2">
+                <dt className="text-muted-foreground">{t("form.message")}</dt>
+                <dd className="whitespace-pre-line">{b.message}</dd>
+              </div>
+            )}
+          </dl>
+          <p className="mt-4 text-xs text-muted-foreground">{t("form.payDirectly")}</p>
+        </CardContent>
+      </Card>
+
+      <BookingHistory events={detail.events} timeZone={timeZone} />
+    </div>
+  );
+}

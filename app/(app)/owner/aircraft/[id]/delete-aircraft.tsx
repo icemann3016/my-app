@@ -1,8 +1,10 @@
 "use client";
 
+import { useActionState } from "react";
 import { Trash2Icon } from "lucide-react";
 import { useTranslations } from "next-intl";
 
+import { FormMessage } from "@/components/forms/form-message";
 import { SubmitButton } from "@/components/forms/submit-button";
 import { Button } from "@/components/ui/button";
 import {
@@ -15,10 +17,12 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { initialFormState } from "@/lib/forms";
 import { deleteAircraft } from "../actions";
 
 export function DeleteAircraft({ id, registration }: { id: string; registration: string }) {
   const t = useTranslations("aircraft.delete");
+  const [state, formAction] = useActionState(deleteAircraft, initialFormState);
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -31,7 +35,8 @@ export function DeleteAircraft({ id, registration }: { id: string; registration:
           <DialogTitle>{t("title", { registration })}</DialogTitle>
           <DialogDescription>{t("text")}</DialogDescription>
         </DialogHeader>
-        <form action={deleteAircraft}>
+        <form action={formAction} className="grid gap-4">
+          <FormMessage state={state} />
           <input type="hidden" name="id" value={id} />
           <DialogFooter>
             <DialogClose asChild>

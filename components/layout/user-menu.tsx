@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import {
+  CalendarDaysIcon,
   IdCardIcon,
   LayoutDashboardIcon,
   LogOutIcon,
@@ -46,6 +47,11 @@ export function UserMenu({ account }: { account: AccountSummary }) {
         <DropdownMenuItem asChild>
           <Link href="/dashboard">
             <LayoutDashboardIcon /> {t("dashboard")}
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <Link href="/bookings">
+            <CalendarDaysIcon /> {t("bookings")}
           </Link>
         </DropdownMenuItem>
         {account.isPilot && (

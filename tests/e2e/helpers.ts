@@ -1,0 +1,70 @@
+import { expect, type Page } from "@playwright/test";
+import postgres from "postgres";
+
+export const PASSWORD = "blue-skies-2026";
+
+export const unique = () => `${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
+
+export function inDays(days: number) {
+  const d = new Date();
+  d.setUTCDate(d.getUTCDate() + days);
+  return d.toISOString().slice(0, 10);
+}
+
+export async function signUp(page: Page, name: string, email: string) {
+  await page.goto("/signup");
+  await page.getByLabel("Your name").fill(name);
+  await page.getByLabel("Email").fill(email);
+  await page.getByLabel("Password").fill(PASSWORD);
+  await page.getByRole("checkbox").check();
+  await page.getByRole("button", { name: "Create account" }).click();
+  await expect(page).toHaveURL(/\/dashboard$/);
+}
+
+/**
+ * Direct access to the throwaway test database, to prepare data that other tests already cover
+ * through the UI (listing an aircraft, verifying credentials). Never used against real data.
+ */
+export async function withDb<T>(fn: (sql: postgres.Sql) => Promise<T>): Promise<T> {
+  const sql = postgres(process.env.DATABASE_URL!, { max: 1, onnotice: () => undefined });
+  try {
+    return await fn(sql);
+  } finally {
+    await sql.end();
+  }
+}
+
+export const userId = (sql: postgres.Sql, email: string) =>
+  sql<{ id: string }[]>`select id from users where email = ${email}`.then((r) => r[0]!.id);
+
+/** A listed aircraft at LBSF owned by `ownerEmail` (skips the listing checks). */
+export async function seedListedAircraft(ownerEmail: string, registration: string) {
+  return withDb(async (sql) => {
+    const owner = await userId(sql, ownerEmail);
+    await sql`insert into user_roles (user_id, role) values (${owner}, 'owner') on conflict do nothing`;
+    const [plane] = await sql<{ id: string }[]>`
+      insert into aircraft (owner_id, registration, manufacturer, model, type_designator, seats,
+        fuel_type, home_airport_ident, price_per_hour)
+      values (${owner}, ${registration}, 'Cessna', '172S', 'C172', 4, 'avgas_100ll', 'LBSF', 180)
+      returning id`;
+    await sql.begin(async (tx) => {
+      await tx`alter table aircraft disable trigger aircraft_check_status`;
+      await tx`update aircraft set status = 'listed' where id = ${plane!.id}`;
+      await tx`alter table aircraft enable trigger aircraft_check_status`;
+    });
+    return plane!.id;
+  });
+}
+
+/** A PPL(A) with a Class 2 medical and SEP (land), all verified. */
+export async function seedVerifiedPilot(email: string) {
+  await withDb(async (sql) => {
+    const pilot = await userId(sql, email);
+    await sql`insert into pilot_licences (user_id, type, issuing_state, number, status)
+      values (${pilot}, 'ppl_a', 'BG', 'BG.E2E', 'verified')`;
+    await sql`insert into medicals (user_id, class, issuing_state, valid_until, status)
+      values (${pilot}, 'class2', 'BG', '2099-01-01', 'verified')`;
+    await sql`insert into pilot_ratings (user_id, kind, code, status)
+      values (${pilot}, 'class', 'SEP_LAND', 'verified')`;
+  });
+}

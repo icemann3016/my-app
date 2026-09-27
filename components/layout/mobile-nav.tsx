@@ -50,6 +50,11 @@ export function MobileNav({ account }: { account: AccountSummary | null }) {
                   {t("dashboard")}
                 </Link>
               </SheetClose>
+              <SheetClose asChild>
+                <Link href="/bookings" className={linkClass}>
+                  {t("bookings")}
+                </Link>
+              </SheetClose>
               {account.isPilot && (
                 <SheetClose asChild>
                   <Link href="/pilot" className={linkClass}>

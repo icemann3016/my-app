@@ -39,6 +39,13 @@ export async function generateMetadata({
   };
 }
 
+/** Carry searched dates to the booking form. */
+function bookQuery(query: Record<string, string | string[] | undefined>) {
+  const from = typeof query.from === "string" ? query.from : null;
+  const to = typeof query.to === "string" ? query.to : null;
+  return from && to ? `?${new URLSearchParams({ from, to })}` : "";
+}
+
 /**
  * Public listing page (SRC-4): photos, specs, availability, price, requirements with the
  * pilot's own eligibility, and the owner. Dates from a search are carried in the URL.
@@ -176,9 +183,13 @@ export default async function AircraftPage({
                   />
                 </div>
               )}
-              <Button className="mt-2" disabled>
-                {t("public.requestSoon")}
-              </Button>
+              {a.status === "listed" && !isOwner && (
+                <Button className="mt-2" asChild>
+                  <Link href={`/aircraft/${id}/book${bookQuery(query)}`}>
+                    {t("public.request")}
+                  </Link>
+                </Button>
+              )}
               <p className="text-xs text-muted-foreground">{t("fields.paymentNote")}</p>
             </CardContent>
           </Card>

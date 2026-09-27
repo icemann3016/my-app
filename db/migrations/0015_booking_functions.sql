@@ -1,0 +1,361 @@
+-- M6 booking requests (BKG-1, BKG-2, BKG-3, BKG-5). Users never write bookings directly: the
+-- functions below check eligibility, hold the calendar (the exclusion constraint makes double
+-- bookings impossible) and record every step in booking_events.
+
+ALTER TABLE public.calendar_entries ADD CONSTRAINT calendar_entries_booking_id_fk
+  FOREIGN KEY (booking_id) REFERENCES public.bookings(id) ON DELETE CASCADE;
+--> statement-breakpoint
+CREATE TRIGGER bookings_set_updated_at BEFORE UPDATE ON public.bookings
+  FOR EACH ROW EXECUTE FUNCTION public.set_updated_at();
+--> statement-breakpoint
+
+-- Read access: the pilot, the aircraft's owner and admins.
+GRANT SELECT ON public.bookings, public.booking_events TO app_user;
+--> statement-breakpoint
+CREATE POLICY bookings_select ON public.bookings FOR SELECT TO app_user
+  USING (pilot_id = app.current_user_id() OR owner_id = app.current_user_id()
+    OR public.user_has_role('admin'));
+--> statement-breakpoint
+CREATE POLICY booking_events_select ON public.booking_events FOR SELECT TO app_user
+  USING (EXISTS (SELECT 1 FROM public.bookings b WHERE b.id = booking_id));
+--> statement-breakpoint
+
+-- Eligibility now takes the flight's airfields (night is checked at each of them). The old
+-- signatures are replaced, not overloaded, so calls stay unambiguous.
+DROP FUNCTION public.my_eligibility(uuid, tstzrange);
+--> statement-breakpoint
+DROP FUNCTION public.i_meet_requirements(uuid, tstzrange);
+--> statement-breakpoint
+DROP FUNCTION public.pilot_meets_requirements(uuid, uuid, tstzrange);
+--> statement-breakpoint
+DROP FUNCTION public.eligibility_failures(uuid, uuid, tstzrange);
+--> statement-breakpoint
+CREATE OR REPLACE FUNCTION public.eligibility_failures(
+  pilot uuid, target uuid, wanted tstzrange, airfields text[] DEFAULT NULL)
+RETURNS TABLE (requirement text, blocking boolean, need text, have text)
+LANGUAGE plpgsql
+STABLE
+SECURITY DEFINER
+SET search_path = ''
+AS $$
+DECLARE
+  plane public.aircraft%ROWTYPE;
+  req public.rental_requirements%ROWTYPE;
+  has_req boolean;
+  prof public.profiles%ROWTYPE;
+  xp public.pilot_experience%ROWTYPE;
+  on_day date := (coalesce(upper(wanted), now()) AT TIME ZONE 'utc')::date;
+  wanted_code text;
+  type_hours numeric;
+  years int;
+  field record;
+  is_night boolean := false;
+BEGIN
+  SELECT * INTO plane FROM public.aircraft WHERE id = target;
+  IF NOT FOUND THEN
+    RETURN QUERY SELECT 'aircraft_unavailable', true, NULL::text, NULL::text;
+    RETURN;
+  END IF;
+  SELECT * INTO req FROM public.rental_requirements WHERE aircraft_id = target;
+  has_req := FOUND;
+  SELECT * INTO prof FROM public.profiles WHERE id = pilot;
+  SELECT * INTO xp FROM public.pilot_experience WHERE user_id = pilot;
+
+  IF plane.owner_id = pilot THEN
+    RETURN QUERY SELECT 'own_aircraft', true, NULL::text, NULL::text;
+  END IF;
+  IF prof.suspended_at IS NOT NULL THEN
+    RETURN QUERY SELECT 'suspended', true, NULL::text, NULL::text;
+  END IF;
+
+  -- Licence: verified and valid; one of the accepted types if the owner chose some.
+  IF NOT EXISTS (
+    SELECT 1 FROM public.pilot_licences l
+    WHERE l.user_id = pilot AND l.status = 'verified'
+      AND (l.expires_on IS NULL OR l.expires_on >= on_day)) THEN
+    RETURN QUERY SELECT 'licence', true, NULL::text, NULL::text;
+  ELSIF has_req AND cardinality(req.licence_types) > 0 AND NOT EXISTS (
+    SELECT 1 FROM public.pilot_licences l
+    WHERE l.user_id = pilot AND l.status = 'verified'
+      AND (l.expires_on IS NULL OR l.expires_on >= on_day)
+      AND l.type = ANY (req.licence_types)) THEN
+    RETURN QUERY SELECT 'licence_type', true, array_to_string(req.licence_types, ','), NULL::text;
+  END IF;
+
+  -- Medical: verified and valid until the end of the rental.
+  IF NOT EXISTS (
+    SELECT 1 FROM public.medicals m
+    WHERE m.user_id = pilot AND m.status = 'verified' AND m.valid_until >= on_day) THEN
+    RETURN QUERY SELECT 'medical', true, NULL::text, NULL::text;
+  END IF;
+
+  -- Class rating for the category: aeroplanes need SEP or MEP (land), TMGs a TMG or SEP (land)
+  -- rating. Ultralights (national licences) and helicopters (type ratings) are left to the
+  -- owner's required ratings.
+  IF plane.category IN ('aeroplane', 'tmg') AND NOT EXISTS (
+    SELECT 1 FROM public.pilot_ratings pr
+    WHERE pr.user_id = pilot AND pr.status = 'verified'
+      AND (pr.expires_on IS NULL OR pr.expires_on >= on_day)
+      AND pr.code = ANY (CASE plane.category WHEN 'aeroplane' THEN ARRAY['SEP_LAND', 'MEP_LAND']
+                              ELSE ARRAY['TMG', 'SEP_LAND'] END)) THEN
+    RETURN QUERY SELECT 'class_rating', true,
+      CASE plane.category WHEN 'aeroplane' THEN 'SEP_LAND' ELSE 'TMG' END, NULL::text;
+  END IF;
+
+  -- Ratings and privileges the owner requires (class, privilege or type rating codes).
+  IF has_req THEN
+    FOREACH wanted_code IN ARRAY req.required_ratings LOOP
+      IF NOT EXISTS (
+        SELECT 1 FROM public.pilot_ratings pr
+        WHERE pr.user_id = pilot AND pr.status = 'verified'
+          AND (pr.expires_on IS NULL OR pr.expires_on >= on_day) AND pr.code = wanted_code) THEN
+        RETURN QUERY SELECT 'rating', true, wanted_code, NULL::text;
+      END IF;
+    END LOOP;
+  END IF;
+
+  -- Night (30 min after sunset to 30 min before sunrise) at any airfield of the flight: the
+  -- aircraft must be approved for night VFR and the pilot needs a verified, valid Night rating.
+  -- Before a booking exists the aircraft's base stands in for the flight's airfields.
+  IF wanted IS NOT NULL THEN
+    FOR field IN
+      SELECT a.latitude, a.longitude FROM public.airports a
+      WHERE a.ident = ANY (coalesce(airfields, ARRAY[plane.home_airport_ident]))
+    LOOP
+      IF public.period_needs_night(wanted, field.latitude, field.longitude) THEN
+        is_night := true;
+        EXIT;
+      END IF;
+    END LOOP;
+    IF is_night THEN
+      IF NOT plane.night_vfr THEN
+        RETURN QUERY SELECT 'aircraft_no_night', true, NULL::text, NULL::text;
+      ELSIF NOT EXISTS (
+        SELECT 1 FROM public.pilot_ratings pr
+        WHERE pr.user_id = pilot AND pr.status = 'verified'
+          AND (pr.expires_on IS NULL OR pr.expires_on >= on_day) AND pr.code = 'NIGHT') THEN
+        RETURN QUERY SELECT 'night_rating', true, NULL::text, NULL::text;
+      ELSE
+        RETURN QUERY SELECT 'night_flight', false, NULL::text, NULL::text;
+      END IF;
+    END IF;
+  END IF;
+
+  IF NOT has_req THEN
+    RETURN;
+  END IF;
+
+  -- Experience (self-declared).
+  IF req.min_total_hours > coalesce(xp.total_hours, 0) THEN
+    RETURN QUERY SELECT 'total_hours', true, req.min_total_hours::text,
+      coalesce(xp.total_hours, 0)::text;
+  END IF;
+  IF req.min_type_hours IS NOT NULL THEN
+    SELECT e.hours INTO type_hours FROM public.experience_by_type e
+    WHERE e.user_id = pilot AND e.aircraft_type = plane.type_designator;
+    IF req.min_type_hours > coalesce(type_hours, 0) THEN
+      RETURN QUERY SELECT 'type_hours', true, req.min_type_hours::text,
+        coalesce(type_hours, 0)::text;
+    END IF;
+  END IF;
+  IF req.min_90_days_hours > coalesce(xp.last_90_days_hours, 0) THEN
+    RETURN QUERY SELECT 'recent_hours', true, req.min_90_days_hours::text,
+      coalesce(xp.last_90_days_hours, 0)::text;
+  END IF;
+
+  -- Age on the day of the rental.
+  IF req.min_age IS NOT NULL THEN
+    IF xp.birth_date IS NULL THEN
+      RETURN QUERY SELECT 'age_unknown', true, req.min_age::text, NULL::text;
+    ELSE
+      years := extract(year FROM age(on_day, xp.birth_date))::int;
+      IF years < req.min_age THEN
+        RETURN QUERY SELECT 'age', true, req.min_age::text, years::text;
+      END IF;
+    END IF;
+  END IF;
+
+  -- Pilot rating from earlier rentals (RAT-7 for pilots without reviews).
+  IF coalesce(prof.rating_count, 0) = 0 THEN
+    IF NOT req.allow_unrated THEN
+      RETURN QUERY SELECT 'unrated', true, NULL::text, NULL::text;
+    ELSIF req.unrated_needs_checkout THEN
+      RETURN QUERY SELECT 'checkout', false, NULL::text, NULL::text;
+    END IF;
+  ELSIF req.min_pilot_rating > prof.rating_avg THEN
+    RETURN QUERY SELECT 'pilot_rating', true, req.min_pilot_rating::text, prof.rating_avg::text;
+  END IF;
+END;
+$$;
+--> statement-breakpoint
+REVOKE ALL ON FUNCTION public.eligibility_failures(uuid, uuid, tstzrange, text[]) FROM PUBLIC;
+--> statement-breakpoint
+CREATE OR REPLACE FUNCTION public.my_eligibility(
+  target uuid, wanted tstzrange DEFAULT NULL, airfields text[] DEFAULT NULL)
+RETURNS TABLE (requirement text, blocking boolean, need text, have text)
+LANGUAGE sql
+STABLE
+SECURITY DEFINER
+SET search_path = ''
+AS $$
+  SELECT f.requirement, f.blocking, f.need, f.have
+  FROM public.eligibility_failures(app.current_user_id(), target, wanted, airfields) f
+  WHERE app.current_user_id() IS NOT NULL AND public.aircraft_visible(target)
+$$;
+--> statement-breakpoint
+REVOKE ALL ON FUNCTION public.my_eligibility(uuid, tstzrange, text[]) FROM PUBLIC;
+--> statement-breakpoint
+GRANT EXECUTE ON FUNCTION public.my_eligibility(uuid, tstzrange, text[]) TO app_user;
+--> statement-breakpoint
+CREATE OR REPLACE FUNCTION public.i_meet_requirements(
+  target uuid, wanted tstzrange DEFAULT NULL, airfields text[] DEFAULT NULL)
+RETURNS boolean
+LANGUAGE sql
+STABLE
+SECURITY DEFINER
+SET search_path = ''
+AS $$
+  SELECT app.current_user_id() IS NOT NULL AND public.aircraft_visible(target) AND NOT EXISTS (
+    SELECT 1 FROM public.eligibility_failures(app.current_user_id(), target, wanted, airfields) f
+    WHERE f.blocking)
+$$;
+--> statement-breakpoint
+REVOKE ALL ON FUNCTION public.i_meet_requirements(uuid, tstzrange, text[]) FROM PUBLIC;
+--> statement-breakpoint
+GRANT EXECUTE ON FUNCTION public.i_meet_requirements(uuid, tstzrange, text[]) TO app_user;
+--> statement-breakpoint
+CREATE OR REPLACE FUNCTION public.pilot_meets_requirements(
+  pilot uuid, target uuid, wanted tstzrange DEFAULT NULL, airfields text[] DEFAULT NULL)
+RETURNS boolean
+LANGUAGE sql
+STABLE
+SECURITY DEFINER
+SET search_path = ''
+AS $$
+  SELECT CASE WHEN EXISTS (
+    SELECT 1 FROM public.aircraft a
+    WHERE a.id = target AND (a.owner_id = app.current_user_id() OR public.user_has_role('admin')))
+  THEN NOT EXISTS (
+    SELECT 1 FROM public.eligibility_failures(pilot, target, wanted, airfields) f
+    WHERE f.blocking)
+  END
+$$;
+--> statement-breakpoint
+REVOKE ALL ON FUNCTION public.pilot_meets_requirements(uuid, uuid, tstzrange, text[]) FROM PUBLIC;
+--> statement-breakpoint
+GRANT EXECUTE ON FUNCTION public.pilot_meets_requirements(uuid, uuid, tstzrange, text[])
+  TO app_user;
+--> statement-breakpoint
+
+-- Requests nobody answered in time expire and free the calendar (BKG-3). Called by the booking
+-- functions, the booking pages and the daily job.
+CREATE OR REPLACE FUNCTION public.expire_booking_requests()
+RETURNS integer
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = ''
+AS $$
+DECLARE
+  n integer;
+BEGIN
+  WITH expired AS (
+    UPDATE public.bookings SET status = 'expired'
+    WHERE status = 'requested' AND expires_at <= now()
+    RETURNING id
+  ), released AS (
+    UPDATE public.calendar_entries c SET active = false
+    FROM expired e WHERE c.booking_id = e.id
+  ), logged AS (
+    INSERT INTO public.booking_events (booking_id, actor_id, type)
+    SELECT id, NULL, 'expired' FROM expired
+  )
+  SELECT count(*) INTO n FROM expired;
+  RETURN n;
+END;
+$$;
+--> statement-breakpoint
+REVOKE ALL ON FUNCTION public.expire_booking_requests() FROM PUBLIC;
+--> statement-breakpoint
+GRANT EXECUTE ON FUNCTION public.expire_booking_requests() TO app_user;
+--> statement-breakpoint
+
+-- A pilot asks to rent an aircraft (BKG-1): checks it's listed, the time, passengers and every
+-- rental requirement for the flight's airfields, then creates the request and holds the time.
+-- Errors are raised with a code as the message (and details) for the app to explain.
+CREATE OR REPLACE FUNCTION public.request_booking(
+  target uuid,
+  wanted tstzrange,
+  departure text,
+  arrival text,
+  stops text[],
+  purpose public.booking_purpose,
+  passengers integer,
+  planned_hours numeric,
+  message text,
+  estimate numeric)
+RETURNS uuid
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = ''
+AS $$
+DECLARE
+  me uuid := app.current_user_id();
+  plane public.aircraft%ROWTYPE;
+  fields text[] := ARRAY[departure] || coalesce(stops, '{}') || ARRAY[arrival];
+  failed text;
+  new_id uuid;
+BEGIN
+  IF me IS NULL THEN
+    RAISE EXCEPTION 'not_logged_in' USING ERRCODE = '42501';
+  END IF;
+  PERFORM public.expire_booking_requests();
+  SELECT * INTO plane FROM public.aircraft WHERE id = target;
+  IF NOT FOUND OR plane.status <> 'listed' OR plane.price_per_hour IS NULL THEN
+    RAISE EXCEPTION 'aircraft_unavailable';
+  END IF;
+  IF wanted IS NULL OR isempty(wanted) OR lower(wanted) < now() THEN
+    RAISE EXCEPTION 'period_in_past';
+  END IF;
+  IF upper(wanted) - lower(wanted) < interval '30 minutes'
+     OR upper(wanted) - lower(wanted) > interval '14 days' THEN
+    RAISE EXCEPTION 'period_length';
+  END IF;
+  IF passengers < 0 OR passengers > plane.seats - 1 THEN
+    RAISE EXCEPTION 'too_many_passengers' USING DETAIL = (plane.seats - 1)::text;
+  END IF;
+  IF (SELECT count(*) FROM public.airports a WHERE a.ident = ANY (fields))
+     < (SELECT count(DISTINCT f) FROM unnest(fields) f) THEN
+    RAISE EXCEPTION 'unknown_airfield';
+  END IF;
+  SELECT string_agg(f.requirement, ',') INTO failed
+  FROM public.eligibility_failures(me, target, wanted, fields) f WHERE f.blocking;
+  IF failed IS NOT NULL THEN
+    RAISE EXCEPTION 'not_eligible' USING DETAIL = failed;
+  END IF;
+
+  INSERT INTO public.bookings (
+    aircraft_id, pilot_id, owner_id, period, departure_ident, arrival_ident, stops, purpose,
+    passengers, planned_hours, message, price_per_hour, currency, price_basis, time_basis,
+    estimate, checkout_required, expires_at)
+  VALUES (
+    target, me, plane.owner_id, wanted, departure, arrival, coalesce(stops, '{}'), purpose,
+    passengers, planned_hours, nullif(btrim(message), ''), plane.price_per_hour, plane.currency,
+    plane.price_basis, plane.time_basis, estimate,
+    EXISTS (SELECT 1 FROM public.eligibility_failures(me, target, wanted, fields) f
+            WHERE f.requirement = 'checkout'),
+    least(now() + interval '24 hours', lower(wanted)))
+  RETURNING id INTO new_id;
+  -- Holds the time; a clash with another entry raises exclusion_violation (23P01).
+  INSERT INTO public.calendar_entries (aircraft_id, period, kind, booking_id, created_by)
+  VALUES (target, wanted, 'booking', new_id, me);
+  INSERT INTO public.booking_events (booking_id, actor_id, type, payload)
+  VALUES (new_id, me, 'requested', jsonb_build_object('estimate', estimate));
+  RETURN new_id;
+END;
+$$;
+--> statement-breakpoint
+REVOKE ALL ON FUNCTION public.request_booking(uuid, tstzrange, text, text, text[],
+  public.booking_purpose, integer, numeric, text, numeric) FROM PUBLIC;
+--> statement-breakpoint
+GRANT EXECUTE ON FUNCTION public.request_booking(uuid, tstzrange, text, text, text[],
+  public.booking_purpose, integer, numeric, text, numeric) TO app_user;

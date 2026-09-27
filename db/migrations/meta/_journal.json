@@ -99,6 +99,34 @@
       "when": 1790513540155,
       "tag": "0013_night",
       "breakpoints": true
+    },
+    {
+      "idx": 14,
+      "version": "7",
+      "when": 1790523147311,
+      "tag": "0014_bookings",
+      "breakpoints": true
+    },
+    {
+      "idx": 15,
+      "version": "7",
+      "when": 1790523148232,
+      "tag": "0015_booking_functions",
+      "breakpoints": true
+    },
+    {
+      "idx": 16,
+      "version": "7",
+      "when": 1790523747276,
+      "tag": "0016_booking_proposal",
+      "breakpoints": true
+    },
+    {
+      "idx": 17,
+      "version": "7",
+      "when": 1790523748709,
+      "tag": "0017_booking_responses",
+      "breakpoints": true
     }
   ]
 }
