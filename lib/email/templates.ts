@@ -1,6 +1,7 @@
 import { createTranslator } from "next-intl";
 
 import { defaultLocale, intlLocale, isLocale, type Locale } from "@/lib/i18n/config";
+import type { AircraftDocumentKind } from "@/lib/db/schema";
 import { type CredentialRef, credentialLabel } from "@/lib/pilot/labels";
 import { siteConfig } from "@/lib/site";
 import bg from "@/messages/bg.json";
@@ -148,6 +149,107 @@ export function expiryReminderEmail({
       }),
     ),
     cta: t("expiryReminder.cta"),
+    url,
+    locale,
+  });
+}
+
+/** Aircraft document names ("Airworthiness Review Certificate (ARC)") in the email's language. */
+function aircraftDocumentLabel(locale: string | null | undefined, kind: AircraftDocumentKind) {
+  const l = localeOf(locale);
+  const t = createTranslator({ locale: l, messages: catalogs[l], namespace: "aircraft.documents" });
+  return t(`kinds.${kind}`);
+}
+
+/** Sent to an owner when an admin verifies or rejects an aircraft document. */
+export function aircraftDocumentReviewedEmail({
+  name,
+  locale,
+  registration,
+  kind,
+  decision,
+  reason,
+  url,
+}: {
+  name: string;
+  locale?: string | null;
+  registration: string;
+  kind: AircraftDocumentKind;
+  decision: "verify" | "reject";
+  reason?: string | null;
+  url: string;
+}) {
+  const t = translator(locale);
+  const item = aircraftDocumentLabel(locale, kind);
+  const verified = decision === "verify";
+  return render({
+    subject: verified
+      ? t("aircraftDocumentReviewed.verifiedSubject", { item, registration })
+      : t("aircraftDocumentReviewed.rejectedSubject", { item, registration }),
+    greeting: t("aircraftDocumentReviewed.greeting", { name }),
+    paragraphs: verified
+      ? [t("aircraftDocumentReviewed.verifiedBody", { item, registration })]
+      : [
+          t("aircraftDocumentReviewed.rejectedBody", { item, registration }),
+          t("aircraftDocumentReviewed.reason", { reason: reason ?? "" }),
+          t("aircraftDocumentReviewed.rejectedNext"),
+        ],
+    cta: t("aircraftDocumentReviewed.cta"),
+    url,
+    locale,
+  });
+}
+
+/** Sent once per aircraft document, 30 days (or less) before it expires. */
+export function aircraftExpiryReminderEmail({
+  name,
+  locale,
+  items,
+  url,
+}: {
+  name: string;
+  locale?: string | null;
+  items: { registration: string; kind: AircraftDocumentKind; expiresOn: string }[];
+  url: string;
+}) {
+  const t = translator(locale);
+  return render({
+    subject: t("aircraftExpiryReminder.subject", { count: items.length }),
+    greeting: t("aircraftExpiryReminder.greeting", { name }),
+    paragraphs: [t("aircraftExpiryReminder.body")],
+    list: items.map((i) =>
+      t("aircraftExpiryReminder.item", {
+        registration: i.registration,
+        item: aircraftDocumentLabel(locale, i.kind),
+        date: formatDate(locale, i.expiresOn),
+      }),
+    ),
+    cta: t("aircraftExpiryReminder.cta"),
+    url,
+    locale,
+  });
+}
+
+/** Sent when the daily job unlists an aircraft because its ARC or insurance expired. */
+export function aircraftUnlistedEmail({
+  name,
+  locale,
+  registration,
+  reason,
+  url,
+}: {
+  name: string;
+  locale?: string | null;
+  registration: string;
+  reason: "arc" | "insurance";
+  url: string;
+}) {
+  const t = translator(locale);
+  return render({
+    subject: t("aircraftUnlisted.subject", { registration }),
+    greeting: t("aircraftUnlisted.greeting", { name }),
+    paragraphs: [t(`aircraftUnlisted.${reason}`, { registration }), t("aircraftUnlisted.next")],
+    cta: t("aircraftUnlisted.cta"),
     url,
     locale,
   });

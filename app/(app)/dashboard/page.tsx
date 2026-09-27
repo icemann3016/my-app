@@ -13,6 +13,7 @@ import { getLocale, getTranslations } from "next-intl/server";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { listOwnAircraft } from "@/lib/aircraft/queries";
 import { requireProfile } from "@/lib/auth/session";
 import { intlLocale } from "@/lib/i18n/config";
 import { credentialItems, getPilotCredentials } from "@/lib/pilot/credentials";
@@ -33,6 +34,15 @@ export default async function DashboardPage() {
   const isOwner = roles.includes("owner");
 
   const creds = isPilot ? await getPilotCredentials(userId) : null;
+  const myAircraft = isOwner ? await listOwnAircraft(userId) : [];
+  const listed = myAircraft.filter((a) => a.status === "listed").length;
+  const ownerText = !isOwner
+    ? t("ownerTextOff")
+    : listed
+      ? t("ownerTextListed", { count: listed })
+      : myAircraft.length
+        ? t("ownerTextDraft")
+        : t("ownerTextOn");
   const summary = creds ? pilotSummary(credentialItems(creds)) : null;
   const pilotText = !summary
     ? t("pilotTextOff")
@@ -122,13 +132,19 @@ export default async function DashboardPage() {
           }
         />
         <StepCard
-          done={isOwner}
+          done={listed > 0}
           labels={{ done: t("done"), todo: t("todo") }}
           icon={CalendarCheckIcon}
           title={t("ownerTitle")}
-          text={isOwner ? t("ownerTextOn") : t("ownerTextOff")}
+          text={ownerText}
           action={
-            !isOwner && (
+            isOwner ? (
+              <Button size="sm" variant={listed ? "outline" : "default"} asChild>
+                <Link href={myAircraft.length ? "/owner/aircraft" : "/owner/aircraft/new"}>
+                  {myAircraft.length ? t("myAircraft") : t("addAircraft")}
+                </Link>
+              </Button>
+            ) : (
               <Button size="sm" variant="outline" asChild>
                 <Link href="/account#roles">{t("switchOn")}</Link>
               </Button>

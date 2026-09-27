@@ -12,20 +12,26 @@ import { initialFormState } from "@/lib/forms";
 import type { CredentialKind } from "@/lib/pilot/labels";
 import { review } from "../actions";
 
-/** Verify / reject buttons for one credential. Rejecting asks for a reason for the pilot. */
+/**
+ * Verify / reject buttons for one credential or aircraft document. Rejecting asks for a reason
+ * for the pilot or owner.
+ */
 export function ReviewForm({
   kind,
   id,
   version,
   name,
   status,
+  recipient = "pilot",
 }: {
-  kind: CredentialKind;
+  kind: CredentialKind | "aircraftDocument";
   id: string;
   /** updated_at the admin is looking at (ISO). */
   version: string;
   name: string;
   status: "pending" | "verified" | "rejected";
+  /** Who is told about a rejection. */
+  recipient?: "pilot" | "owner";
 }) {
   const t = useTranslations("admin.review");
   const [state, formAction] = useActionState(review, initialFormState);
@@ -43,7 +49,7 @@ export function ReviewForm({
           <TextAreaField
             name="reason"
             id={`reason-${id}`}
-            label={t("reason")}
+            label={recipient === "owner" ? t("reasonOwner") : t("reason")}
             placeholder={t("reasonPlaceholder")}
             maxLength={500}
             rows={3}
@@ -54,7 +60,8 @@ export function ReviewForm({
           />
           <div className="flex flex-wrap gap-2">
             <SubmitButton variant="destructive" size="sm" pendingText={t("rejecting")}>
-              <XIcon aria-hidden /> {t("confirmReject")}
+              <XIcon aria-hidden />{" "}
+              {recipient === "owner" ? t("confirmRejectOwner") : t("confirmReject")}
             </SubmitButton>
             <Button type="button" variant="ghost" size="sm" onClick={() => setRejecting(false)}>
               {t("cancel")}

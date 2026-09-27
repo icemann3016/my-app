@@ -1985,10 +1985,6 @@
         "aircraft_currency": {
           "name": "aircraft_currency",
           "value": "\"aircraft\".\"currency\" ~ '^[A-Z]{3}$'"
-        },
-        "aircraft_ifr_needs_night": {
-          "name": "aircraft_ifr_needs_night",
-          "value": "not \"aircraft\".\"ifr\" or \"aircraft\".\"night_vfr\""
         }
       },
       "isRLSEnabled": true

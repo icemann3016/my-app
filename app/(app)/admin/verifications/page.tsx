@@ -4,6 +4,7 @@ import { ChevronRightIcon, InboxIcon } from "lucide-react";
 import { getLocale, getTranslations } from "next-intl/server";
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { getAircraftQueue } from "@/lib/admin/aircraft";
 import { getVerificationQueue } from "@/lib/admin/verifications";
 import { requireAdmin } from "@/lib/auth/session";
 import { intlLocale } from "@/lib/i18n/config";
@@ -17,6 +18,7 @@ export default async function VerificationQueuePage() {
   const { userId } = await requireAdmin("/admin/verifications");
   const t = await getTranslations("admin.verifications");
   const queue = await getVerificationQueue(userId);
+  const aircraftQueue = await getAircraftQueue(userId);
   const format = new Intl.DateTimeFormat(intlLocale(await getLocale()), {
     dateStyle: "medium",
     timeStyle: "short",
@@ -50,6 +52,41 @@ export default async function VerificationQueuePage() {
                   >
                     <div className="grid min-w-0 gap-0.5">
                       <span className="truncate font-medium">{entry.displayName}</span>
+                      <span className="text-sm text-muted-foreground">
+                        {t("items", { count: entry.items })} ·{" "}
+                        {t("since", { date: format.format(entry.since) })}
+                      </span>
+                    </div>
+                    <ChevronRightIcon className="ml-auto size-4 shrink-0" aria-hidden />
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          )}
+        </CardContent>
+      </Card>
+      <Card>
+        <CardHeader>
+          <CardTitle as="h2">{t("aircraftWaiting", { count: aircraftQueue.length })}</CardTitle>
+          <CardDescription>{t("aircraftText")}</CardDescription>
+        </CardHeader>
+        <CardContent>
+          {aircraftQueue.length === 0 ? (
+            <p className="flex items-center gap-2 text-sm text-muted-foreground">
+              <InboxIcon className="size-4" aria-hidden /> {t("empty")}
+            </p>
+          ) : (
+            <ul className="grid divide-y">
+              {aircraftQueue.map((entry) => (
+                <li key={entry.aircraftId}>
+                  <Link
+                    href={`/admin/verifications/aircraft/${entry.aircraftId}`}
+                    className="-mx-2 flex items-center gap-3 rounded-md px-2 py-3 hover:bg-accent"
+                  >
+                    <div className="grid min-w-0 gap-0.5">
+                      <span className="truncate font-medium">
+                        <span className="font-mono">{entry.registration}</span> · {entry.ownerName}
+                      </span>
                       <span className="text-sm text-muted-foreground">
                         {t("items", { count: entry.items })} ·{" "}
                         {t("since", { date: format.format(entry.since) })}

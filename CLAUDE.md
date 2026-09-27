@@ -13,7 +13,7 @@ This file tells Claude how to work in this repo. Claude reads it at the start of
 - **Plan:** [`docs/implementation-plan.md`](docs/implementation-plan.md) has the architecture, data model and milestones M0–M10. Tasks are GitHub issues. **Work on the current milestone's issues in order** and follow the plan's key technical decisions (§4).
 - **Current phase:** Phase 1 (MVP) — accounts, pilot verification, aircraft listings, search, booking requests, ratings. Don't build Phase 2–4 features unless asked.
 - **Team:** Zlati + friend, each working with our own Claude.
-- **Status:** M0 done. Live at https://ownaplane.eu (every push to main deploys). **M1 done:** accounts, profiles, roles, public profiles, Google sign-in (needs Google keys), data export + account deletion, English/Bulgarian + units preference. **M2 done:** 7,392 European airfields (OurAirports) with time zones, airport search box, home airfield linked to airports. **M3 done:** pilot credentials (licences, ratings, medical, experience) with private document upload, admin verification queue with audit log, verified badges on public profiles, daily expiry reminders. Next: **M4 Aircraft listings**.
+- **Status:** M0 done. Live at https://ownaplane.eu (every push to main deploys). **M1 done:** accounts, profiles, roles, public profiles, Google sign-in (needs Google keys), data export + account deletion, English/Bulgarian + units preference. **M2 done:** 7,392 European airfields (OurAirports) with time zones, airport search box, home airfield linked to airports. **M3 done:** pilot credentials (licences, ratings, medical, experience) with private document upload, admin verification queue with audit log, verified badges on public profiles, daily expiry reminders. **M4 done:** aircraft listings (step-by-step form saved as a draft, photos, CofA/ARC/insurance verified by admins, reference documents, rental requirements), My aircraft dashboard, public aircraft page, auto-unlist when the ARC or insurance expires. Next: **M5 Search & availability**.
 - **Domain:** https://ownaplane.eu (Vercel; `BETTER_AUTH_URL=https://ownaplane.eu`). The *.vercel.app addresses keep working (trusted automatically). Next infra step: real email via SMTP (Resend) on ownaplane.eu, then switch on email verification.
 - **Portability:** the app must stay movable to Google Cloud or Azure: no provider-specific SDKs outside `lib/storage` and `lib/email` drivers. See [`docs/deployment.md`](docs/deployment.md).
 
@@ -61,10 +61,12 @@ app/
   (marketing)/        # public pages: home, terms, privacy
   (auth)/             # login, signup, forgot/reset password + actions.ts (auth Server Actions)
   (app)/              # logged-in pages: dashboard, account, pilot (credentials), admin/verifications,
-                      #   u/[id] (public profile), search, owner/…
+                      #   u/[id] (public profile), aircraft/[id] (public listing), search,
+                      #   owner/aircraft (my aircraft, new, [id]/details…requirements)
   api/auth/           # Better Auth endpoints (email links, OAuth callbacks)
   api/account/avatar/ # photo upload
   api/documents/      # private document upload (POST) and viewing ([id], owner/admin only)
+  api/aircraft/[id]/photos/ # aircraft photo upload (owner only)
   api/cron/daily/     # daily job (expiry reminders, clean-up), needs CRON_SECRET
   api/health/         # health check for load balancers
   files/              # serves uploads when STORAGE_DRIVER=local
@@ -72,14 +74,17 @@ components/
   ui/                 # shadcn/ui primitives (Button, Card, Dialog, Sheet, DropdownMenu…)
   forms/              # TextField, TextAreaField, SelectField, SubmitButton, FormMessage
   pilot/              # StatusBadge, ExpiryText
+  aircraft/           # AircraftStatusBadge, RequirementsList, SectionHeading…
   document-field.tsx  # upload a private document in a form (submits its id)
   layout/             # SiteHeader, UserMenu, MobileNav, SiteFooter, LanguageSwitcher, Logo
   auth/               # GoogleSignIn
   airport-picker.tsx  # airport search box (combobox), submits the airport ident
 lib/
   auth/               # auth.ts (Better Auth config), session.ts (getUser, requireUser, requireAdmin…), errors.ts
-  admin/              # verification queue + reviewCredential() (trusted admin code)
+  admin/              # verification queues + reviewCredential(), reviewAircraftDocument() (trusted admin code)
   pilot/              # catalog (licence types, ratings), labels, validity/summary, credentials, reminders
+  aircraft/           # catalog, queries, photos, documents, requirements, expiry (daily job), public page data
+  domain/             # pure logic: units (L/US gal, kg/lb)
   documents.ts        # save/read/delete private documents (checks file content, logs admin views)
   files/sniff.ts      # detect file type from content
   db/                 # index.ts (connection), rls.ts (asUser/asAnon), schema/ (Drizzle tables)
@@ -161,6 +166,7 @@ _TODO: split areas so we don't edit the same files at the same time._
 
 Add one line per decision, newest first.
 
+- 2026-09-27: M4 aircraft listings. An aircraft can only be **listed** with a home base, price, ≥ 1 photo and a verified, unexpired ARC and insurance (`aircraft_listing_gaps()` + trigger); drafts never come back. Renewed ARC/insurance are added as new documents (the old one counts until the new one is verified); edits or deletions that would leave a listed aircraft without them are refused. The daily job unlists aircraft whose ARC/insurance expired and reminds owners 30 days before. Photos are public files (`aircraft/<id>/…`, max 20, shrunk in the browser); documents reuse the private `documents` storage. Quantities stored in SI (L/h, kg) and shown in the user's units. Registrations are unique among non-draft aircraft. Reference documents (POH, checklists, W&B) will be shared with renters once bookings exist (M6).
 - 2026-09-26: Flight log added to M6 (BKG-7, BKG-12…16): per booking, legs with block and engine times, meters, fuel and oil before/after, refuelling and oil uplifts with receipts, remarks/PIREPs with "known items", usage history for owners. Stored in SI units and UTC; the amount due follows the aircraft's time basis (plan §4.8). Not an official journey/tech log.
 - 2026-09-26: M3: private documents are served through the app (not presigned URLs) so access checks and audit logging work the same on every provider. Uploads ≤ 4 MB (Vercel limit); big photos are shrunk in the browser; file type checked by content. Admins verify with the owner connection after `requireAdmin()`, with an optimistic check (`updated_at`) and no self-review. Scheduled work runs through `/api/cron/daily` with `CRON_SECRET` (Vercel Cron today; Cloud Scheduler / Azure later). Email for real still pending (console driver).
 - 2026-09-26: Custom domain ownaplane.eu. Google is only linked to an existing email/password account from Account → Security while logged in (Better Auth refuses implicit linking to unverified emails, which protects against account pre-hijacking).

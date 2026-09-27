@@ -134,7 +134,6 @@ export const aircraft = pgTable(
         and ${t.minHoursPerDay} > 0 and ${t.minHoursPerDay} <= 12`,
     ),
     check("aircraft_currency", sql`${t.currency} ~ '^[A-Z]{3}$'`),
-    check("aircraft_ifr_needs_night", sql`not ${t.ifr} or ${t.nightVfr}`),
   ],
 ).enableRLS();
 

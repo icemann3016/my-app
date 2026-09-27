@@ -56,8 +56,7 @@ CREATE TABLE "aircraft" (
 	CONSTRAINT "aircraft_description" CHECK (char_length("aircraft"."description") <= 4000),
 	CONSTRAINT "aircraft_prices" CHECK ("aircraft"."price_per_hour" > 0 and "aircraft"."weekend_price_per_hour" > 0
         and "aircraft"."min_hours_per_day" > 0 and "aircraft"."min_hours_per_day" <= 12),
-	CONSTRAINT "aircraft_currency" CHECK ("aircraft"."currency" ~ '^[A-Z]{3}$'),
-	CONSTRAINT "aircraft_ifr_needs_night" CHECK (not "aircraft"."ifr" or "aircraft"."night_vfr")
+	CONSTRAINT "aircraft_currency" CHECK ("aircraft"."currency" ~ '^[A-Z]{3}$')
 );
 --> statement-breakpoint
 ALTER TABLE "aircraft" ENABLE ROW LEVEL SECURITY;--> statement-breakpoint
