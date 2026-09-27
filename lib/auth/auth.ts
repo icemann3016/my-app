@@ -6,6 +6,7 @@ import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { nextCookies } from "better-auth/next-js";
 
 import { getDb, schema } from "@/lib/db";
+import { deleteAllAircraftPhotoFiles } from "@/lib/aircraft/photos";
 import { deleteAllDocumentFiles } from "@/lib/documents";
 import { sendEmail } from "@/lib/email";
 import { resetPasswordEmail, verifyEmailEmail } from "@/lib/email/templates";
@@ -99,8 +100,10 @@ function createAuth() {
               .delete(profile.avatarKey)
               .catch((e) => console.warn("[auth] couldn't delete avatar", e));
           }
-          // Licence and medical scans (the database rows go with the user).
+          // Licence, medical and aircraft documents, and aircraft photos (the database rows go
+          // with the user).
           await deleteAllDocumentFiles(user.id);
+          await deleteAllAircraftPhotoFiles(user.id);
         },
       },
     },

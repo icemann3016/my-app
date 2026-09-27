@@ -6,7 +6,14 @@ import { and, count, eq, lt, sql } from "drizzle-orm";
 
 import { getDb } from "@/lib/db";
 import { asUser } from "@/lib/db/rls";
-import { adminActions, documents, medicals, pilotLicences, pilotRatings } from "@/lib/db/schema";
+import {
+  adminActions,
+  aircraftDocuments,
+  documents,
+  medicals,
+  pilotLicences,
+  pilotRatings,
+} from "@/lib/db/schema";
 import { EXTENSIONS, safeFilename, sniffFileType } from "@/lib/files/sniff";
 import { getStorage } from "@/lib/storage";
 import { DOCUMENT_MAX_BYTES } from "@/lib/validation/pilot";
@@ -84,9 +91,10 @@ const referenced = (id: typeof documents.id) => sql`(
   exists (select 1 from ${pilotLicences} where ${pilotLicences.documentId} = ${id})
   or exists (select 1 from ${pilotRatings} where ${pilotRatings.documentId} = ${id})
   or exists (select 1 from ${medicals} where ${medicals.documentId} = ${id})
+  or exists (select 1 from ${aircraftDocuments} where ${aircraftDocuments.documentId} = ${id})
 )`;
 
-/** Delete the user's document if no credential uses it any more (row and file). */
+/** Delete the user's document if no credential or aircraft uses it any more (row and file). */
 export async function deleteDocumentIfUnused(userId: string, documentId: string | null) {
   if (!documentId) return;
   const deleted = await asUser(userId, (tx) =>
@@ -109,7 +117,8 @@ export async function deleteDocumentIfUnused(userId: string, documentId: string 
 }
 
 /**
- * Remove uploads that were never attached to a credential (e.g. the form was abandoned).
+ * Remove uploads that were never attached to a credential or aircraft (e.g. the form was
+ * abandoned).
  * Trusted code (daily job): uses the owner connection.
  */
 export async function deleteOrphanDocuments(olderThan: Date): Promise<number> {

@@ -1,9 +1,12 @@
-import { eq } from "drizzle-orm";
+import { eq, inArray } from "drizzle-orm";
 
 import { getUser } from "@/lib/auth/session";
 import { getDb } from "@/lib/db";
 import {
   accounts,
+  aircraft,
+  aircraftDocuments,
+  aircraftPhotos,
   documents,
   experienceByType,
   medicals,
@@ -11,6 +14,7 @@ import {
   pilotLicences,
   pilotRatings,
   profiles,
+  rentalRequirements,
   sessions,
   userRoles,
   userSettings,
@@ -82,6 +86,30 @@ export async function GET() {
       .where(eq(documents.ownerId, user.id)),
   };
 
+  const myAircraft = await db.select().from(aircraft).where(eq(aircraft.ownerId, user.id));
+  const aircraftIds = myAircraft.map((a) => a.id);
+  const owner = {
+    aircraft: myAircraft,
+    photos: aircraftIds.length
+      ? await db
+          .select()
+          .from(aircraftPhotos)
+          .where(inArray(aircraftPhotos.aircraftId, aircraftIds))
+      : [],
+    documents: aircraftIds.length
+      ? await db
+          .select()
+          .from(aircraftDocuments)
+          .where(inArray(aircraftDocuments.aircraftId, aircraftIds))
+      : [],
+    rentalRequirements: aircraftIds.length
+      ? await db
+          .select()
+          .from(rentalRequirements)
+          .where(inArray(rentalRequirements.aircraftId, aircraftIds))
+      : [],
+  };
+
   const data = {
     exportedAt: new Date().toISOString(),
     account,
@@ -91,6 +119,7 @@ export async function GET() {
     loginMethods,
     sessions: activeSessions,
     pilot,
+    owner,
   };
   const date = new Date().toISOString().slice(0, 10);
   return new Response(JSON.stringify(data, null, 2), {
