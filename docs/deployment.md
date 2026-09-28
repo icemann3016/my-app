@@ -87,6 +87,15 @@ code**, so nothing about users or security is tied to a provider.
 - `EMAIL_DRIVER=smtp` + `SMTP_*` + `EMAIL_FROM`. Every major provider offers SMTP.
 - Once real email works, set `AUTH_REQUIRE_EMAIL_VERIFICATION=true`.
 
+### Monitoring (optional)
+- **Errors**: `SENTRY_DSN` of any Sentry-compatible service (Sentry with EU data region, or a
+  self-hosted GlitchTip). Server errors (pages, routes, Server Actions via `instrumentation.ts`)
+  and browser errors (`app/error.tsx` → `/api/errors`) are sent without cookies, headers, query
+  strings or user data. No SDK: `lib/monitoring` speaks the envelope API directly.
+- **Page statistics**: a cookie-less service, e.g. Plausible (`NEXT_PUBLIC_ANALYTICS_SRC=https://plausible.io/js/script.js`,
+  `NEXT_PUBLIC_ANALYTICS_DOMAIN=ownaplane.eu`) or Umami (`…_SRC` + `…_WEBSITE_ID`). No cookie
+  banner needed; the cookie policy already says so.
+
 ---
 
 ## 2. Today: Vercel + Supabase
@@ -107,6 +116,31 @@ Environment variables on Vercel (Project → Settings → Environment Variables)
 | `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET` | optional, see "Google sign-in" above |
 
 Migrations are run from your Mac (`npm run db:migrate` with the Session pooler URL in `.env.local`).
+| `SENTRY_DSN`, `NEXT_PUBLIC_ANALYTICS_*` | optional, see "Monitoring" above |
+
+### Production checklist (KAN-72)
+
+The live site (https://ownaplane.eu) runs on the Supabase project in Frankfurt. Before inviting
+real owners:
+
+1. **Separate databases**: keep the production Supabase project for ownaplane.eu only; use a
+   second project (or `docker compose up -d db`) for development and Vercel preview deployments
+   (Vercel → Settings → Environment Variables: set `DATABASE_URL` etc. per environment).
+2. **Backups**: Supabase → Database → Backups. The Pro plan keeps daily backups for 7 days;
+   add **Point-in-Time Recovery** for the production project. Once a month, test a restore into
+   the development project. Files: Storage has no backups of its own; copy the buckets with
+   `rclone sync` (see §5) on a schedule, or accept that photos can be re-uploaded.
+3. **Migrations first**: every push to main deploys, so run `npm run db:migrate` against
+   production **before** `git push origin main`.
+4. **Secrets**: production `BETTER_AUTH_SECRET` and `CRON_SECRET` differ from development; only
+   admins of the Vercel and Supabase projects can see them.
+5. **Email**: real SMTP (e.g. Resend on ownaplane.eu, with SPF/DKIM), then
+   `AUTH_REQUIRE_EMAIL_VERIFICATION=true`.
+6. **Monitoring**: `SENTRY_DSN` and page statistics (above); Vercel → Settings → Cron Jobs shows
+   whether the daily job runs.
+7. **Health**: https://ownaplane.eu/api/health answers `{"status":"ok","database":"ok"}` when
+   the app can reach the database (point an uptime monitor at it).
+8. **Security**: go through `docs/security-review.md` once more.
 
 ---
 

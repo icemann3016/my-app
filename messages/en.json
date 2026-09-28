@@ -38,6 +38,12 @@
     "languages": {
       "en": "English",
       "bg": "Български"
+    },
+    "error": {
+      "title": "Something went wrong",
+      "text": "Sorry, this page ran into a problem. We have been told about it. Please try again.",
+      "reference": "Reference: {digest}",
+      "retry": "Try again"
     }
   },
   "home": {
