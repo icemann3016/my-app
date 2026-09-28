@@ -5,6 +5,7 @@ import {
   CalendarDaysIcon,
   LayoutDashboardIcon,
   LogOutIcon,
+  LifeBuoyIcon,
   SettingsIcon,
   ShieldCheckIcon,
   UserRoundIcon,
@@ -61,6 +62,11 @@ export function UserMenu({ account }: { account: AccountSummary }) {
         <DropdownMenuItem asChild>
           <Link href={`/u/${account.id}`}>
             <UserRoundIcon /> {t("publicProfile")}
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <Link href="/help">
+            <LifeBuoyIcon /> {t("help")}
           </Link>
         </DropdownMenuItem>
         {account.isAdmin && (

@@ -60,6 +60,11 @@ export function MobileNav({ account }: { account: AccountSummary | null }) {
                   {t("account")}
                 </Link>
               </SheetClose>
+              <SheetClose asChild>
+                <Link href="/help" className={linkClass}>
+                  {t("help")}
+                </Link>
+              </SheetClose>
               {account.isAdmin && (
                 <SheetClose asChild>
                   <Link href="/admin/verifications" className={linkClass}>

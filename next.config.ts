@@ -14,6 +14,8 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [{ source: "/pilot", destination: "/account/credentials", permanent: true }];
   },
+  // Help articles are read from content/help at request time; ship them with the server.
+  outputFileTracingIncludes: { "/help/**": ["./content/help/**/*"] },
   images: {
     remotePatterns: [
       { protocol: "https", hostname: "*.supabase.co" },

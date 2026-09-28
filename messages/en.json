@@ -18,13 +18,15 @@
       "mainNavigation": "Main navigation",
       "pilotCredentials": "Pilot credentials",
       "admin": "Admin",
-      "bookings": "Bookings"
+      "bookings": "Bookings",
+      "help": "Help"
     },
     "footer": {
       "tagline": "Made for general aviation in Europe.",
       "terms": "Terms",
       "privacy": "Privacy",
-      "language": "Language"
+      "language": "Language",
+      "help": "Help"
     },
     "comingSoon": {
       "default": "This page is coming soon.",
@@ -1666,5 +1668,23 @@
     "saving": "Saving…",
     "saved": "Checkout flight recorded.",
     "failed": "That didn't work. Please try again."
+  },
+  "help": {
+    "title": "Help",
+    "description": "How ownAplane works for pilots, aircraft owners and admins.",
+    "search": "Search",
+    "searchPlaceholder": "Search the help, e.g. cancellation or flight log",
+    "results": "{count, plural, =0 {No articles} one {# article} other {# articles}} for “{query}”",
+    "noResults": "Nothing found. Try other words, or clear the search to see all articles.",
+    "allArticles": "All help articles",
+    "onThisPage": "On this page",
+    "moreArticles": "More articles",
+    "categories": {
+      "start": "Getting started",
+      "pilots": "For pilots",
+      "owners": "For aircraft owners",
+      "everyone": "For everyone",
+      "admins": "For admins"
+    }
   }
 }
