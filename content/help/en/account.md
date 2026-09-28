@@ -13,6 +13,12 @@
   verified licence types and ratings, and how many bookings you cancelled late. Licence numbers,
   documents and medical details are never public.
 
+## Contact phone
+
+Optional, in international format (e.g. +359 88 123 4567). It's never on your public profile:
+only the other side of an **accepted** booking sees it, together with your email (see
+[Messages and contact details](/help/messages)).
+
 ## Preferences
 
 - **Language:** English or Bulgarian, for the app and for emails.

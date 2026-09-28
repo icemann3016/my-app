@@ -13,8 +13,18 @@ export const HELP_CATEGORIES = [
   { key: "start", slugs: ["getting-started", "account"] },
   { key: "pilots", slugs: ["pilot-credentials", "finding-and-booking", "flying-and-flight-log"] },
   { key: "owners", slugs: ["listing-an-aircraft", "owner-bookings-and-history"] },
-  { key: "everyone", slugs: ["notifications", "rules", "questions-and-answers", "coming-soon"] },
-  { key: "admins", slugs: ["admin-verification"] },
+  {
+    key: "everyone",
+    slugs: [
+      "notifications",
+      "messages",
+      "reviews",
+      "rules",
+      "questions-and-answers",
+      "coming-soon",
+    ],
+  },
+  { key: "admins", slugs: ["admin-verification", "admin-moderation"] },
 ] as const;
 
 export type HelpCategory = (typeof HELP_CATEGORIES)[number]["key"];

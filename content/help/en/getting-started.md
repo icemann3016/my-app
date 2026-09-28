@@ -27,11 +27,13 @@ General**.
 
 - **Find aircraft**: search for aircraft to rent.
 - **List your aircraft**: your aircraft as an owner (**My aircraft**).
+- **Speech bubble**: your [messages](/help/messages), with the number of unread conversations.
 - **🔔 Bell**: your notifications, with the number of unread ones.
-- **Your picture** opens the account menu: **Dashboard**, **Bookings**, **Account**, **Public
-  profile**, **Help**, **Admin** (admins only) and **Log out**.
+- **Your picture** opens the account menu: **Dashboard**, **Bookings**, **Messages**, **Account**,
+  **Public profile**, **Help**, **Admin** (admins only) and **Log out**.
 
-On a phone the same items are behind the **☰** menu button; the bell stays visible.
+On a phone the same items are behind the **☰** menu button; the speech bubble and the bell stay
+visible.
 
 ## The dashboard
 
