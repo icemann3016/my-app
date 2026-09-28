@@ -682,7 +682,8 @@
       "documents": "Documents",
       "requirements": "Requirements",
       "calendar": "Calendar",
-      "remarks": "Remarks"
+      "remarks": "Remarks",
+      "usage": "Usage"
     },
     "sectionText": {
       "details": "Registration, type and performance.",
@@ -693,7 +694,8 @@
       "documents": "Documents are checked by our team. The aircraft can be listed once a valid ARC and insurance are verified.",
       "requirements": "Choose who can rent the aircraft. Pilots see these before they ask.",
       "calendar": "Block the times you use the aircraft yourself, maintenance and other unavailable periods. Bookings appear here automatically.",
-      "remarks": "What pilots noted after their flights. Mark aircraft remarks as known items so later renters see them before they fly."
+      "remarks": "What pilots noted after their flights. Mark aircraft remarks as known items so later renters see them before they fly.",
+      "usage": "Hours, landings, fuel and oil from confirmed flight logs, per month and per pilot."
     },
     "fields": {
       "registration": "Registration",
@@ -1165,7 +1167,9 @@
       "description": "Your booking requests and rentals.",
       "asOwner": "For my aircraft",
       "asPilot": "My rentals",
-      "emptyPilot": "No bookings yet. Find an aircraft and send a request."
+      "emptyPilot": "No bookings yet. Find an aircraft and send a request.",
+      "exportLegs": "Export my flights (CSV)",
+      "exportLegsHint": "Your legs from sent and confirmed flight logs, in logbook order, times in UTC. A help for filling in your logbook, not a replacement for it."
     },
     "detail": {
       "metaTitle": "Booking",
@@ -1250,6 +1254,61 @@
         "reason_required": "Please give a reason.",
         "failed": "That didn't work. Please try again."
       }
+    }
+  },
+  "usage": {
+    "none": "No confirmed flight logs yet. Usage appears here once you confirm a pilot's log.",
+    "total": "Total",
+    "allFlights": "All flights",
+    "byMonth": "By month",
+    "byPilot": "By pilot",
+    "export": "Export legs (CSV)",
+    "deletedPilot": "Deleted account",
+    "flights": "Flights",
+    "block": "Block time",
+    "engine": "Engine time",
+    "landings": "Landings",
+    "fuel": "Fuel used ({unit})",
+    "oil": "Oil used ({unit})",
+    "oilRate": "Oil per engine hour ({unit})",
+    "note": "Fuel and oil used are worked out from the levels before and after each leg, only where both were entered. A rising oil use per engine hour can be an early sign of engine trouble. Not an official technical log.",
+    "csv": {
+      "date": "Date (UTC)",
+      "booking": "Booking",
+      "pilot": "Pilot",
+      "from": "From",
+      "to": "To",
+      "blockOff": "Block off (UTC)",
+      "blockOn": "Block on (UTC)",
+      "blockMinutes": "Block time (min)",
+      "engineStart": "Engine start (UTC)",
+      "engineStop": "Engine stop (UTC)",
+      "engineMinutes": "Engine time (min)",
+      "takeoff": "Take-off (UTC)",
+      "landing": "Landing (UTC)",
+      "landings": "Landings",
+      "hobbsStart": "Hobbs start",
+      "hobbsEnd": "Hobbs end",
+      "tachStart": "Tach start",
+      "tachEnd": "Tach end",
+      "fuelBefore": "Fuel before (L)",
+      "fuelAfter": "Fuel after (L)",
+      "oilBefore": "Oil before (L)",
+      "oilAfter": "Oil after (L)",
+      "deletedPilot": "Deleted account"
+    },
+    "logbook": {
+      "date": "Date (UTC)",
+      "departure": "Departure",
+      "offBlock": "Off block (UTC)",
+      "arrival": "Arrival",
+      "onBlock": "On block (UTC)",
+      "type": "Type",
+      "registration": "Registration",
+      "takeoff": "Take-off (UTC)",
+      "landing": "Landing (UTC)",
+      "blockTime": "Block time (h:mm)",
+      "landings": "Landings"
     }
   },
   "flightLog": {

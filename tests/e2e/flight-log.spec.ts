@@ -100,5 +100,29 @@ test("a pilot fills in the flight log and the owner confirms it", async ({ page,
   await owner.getByRole("button", { name: "Mark as known item" }).click();
   await expect(owner.getByText("Known items on this aircraft")).toBeVisible();
   await expect(owner.getByRole("button", { name: "Mark as fixed" })).toBeVisible();
+
+  // 8. Usage history from confirmed logs, with a CSV of the legs (BKG-16)
+  await owner.goto(`/owner/aircraft/${aircraftId}/usage`);
+  const total = owner.getByRole("table", { name: "Total" });
+  await expect(total.getByRole("row", { name: /All flights/ })).toContainText("1 h 12 min");
+  // Fetched with the owner's session (browser downloads differ between desktop and mobile).
+  const usageLink = owner.getByRole("link", { name: "Export legs (CSV)" });
+  await expect(usageLink).toHaveAttribute("href", `/api/aircraft/${aircraftId}/usage`);
+  const usageResponse = await owner.request.get(`/api/aircraft/${aircraftId}/usage`);
+  expect(usageResponse.headers()["content-type"]).toContain("text/csv");
+  const usageText = await usageResponse.text();
+  expect(usageText).toContain("Block off (UTC)");
+  expect(usageText).toContain(`Pilot ${id}`);
   await ownerContext.close();
+
+  // 9. The pilot exports their own legs for the logbook
+  await page.goto("/bookings");
+  await expect(page.getByRole("link", { name: "Export my flights (CSV)" })).toHaveAttribute(
+    "href",
+    "/api/pilot/legs",
+  );
+  const legsText = await (await page.request.get("/api/pilot/legs")).text();
+  expect(legsText).toMatch(/LBSF,\d\d:\d\d,LBSF,\d\d:\d\d,C172,LZ-L/);
+  // …but not the owner's usage of the aircraft.
+  expect((await page.request.get(`/api/aircraft/${aircraftId}/usage`)).status()).toBe(404);
 });

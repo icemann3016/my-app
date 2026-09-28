@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ChevronRightIcon } from "lucide-react";
+import { ChevronRightIcon, DownloadIcon } from "lucide-react";
 import { getLocale, getTranslations } from "next-intl/server";
 
 import { BookingStatusBadge } from "@/components/bookings/booking-status-badge";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { formatPrice, formatSpan } from "@/lib/aircraft/format";
 import { requireUser } from "@/lib/auth/session";
@@ -31,6 +32,16 @@ export default async function BookingsPage() {
       </div>
       {asOwner.length > 0 && <Section title={t("asOwner")} items={asOwner} />}
       <Section title={t("asPilot")} items={asPilot} empty={t("emptyPilot")} />
+      {asPilot.some((b) => b.status === "completed" || b.status === "in_progress") && (
+        <div className="grid gap-1">
+          <Button variant="outline" size="sm" className="justify-self-start" asChild>
+            <a href="/api/pilot/legs" download>
+              <DownloadIcon aria-hidden /> {t("exportLegs")}
+            </a>
+          </Button>
+          <p className="text-xs text-muted-foreground">{t("exportLegsHint")}</p>
+        </div>
+      )}
     </div>
   );
 }
