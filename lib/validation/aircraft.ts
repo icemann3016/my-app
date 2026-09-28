@@ -185,6 +185,7 @@ export const requirementsSchema = z
       .transform((v) => (v ? Number(v) : null)),
     allowUnrated: checkbox,
     unratedNeedsCheckout: checkbox,
+    checkoutFirstRental: checkbox,
     licenceTypes: z.array(z.enum(LICENCE_TYPES, "invalid")).max(LICENCE_TYPES.length),
     requiredRatings: z.array(z.enum([...CLASS_RATINGS, ...PRIVILEGES], "invalid")).max(10),
     typeRating: z

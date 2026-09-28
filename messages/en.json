@@ -1056,7 +1056,9 @@
       "minTypeHours": "Minimum hours on this type",
       "min90DaysHours": "Minimum hours in the last 90 days",
       "minAge": "Minimum age",
-      "nightIfrNote": "Night and IFR flights always need the matching privilege (Night, IR), checked when a pilot asks for such a flight."
+      "nightIfrNote": "Night and IFR flights always need the matching privilege (Night, IR), checked when a pilot asks for such a flight.",
+      "checkoutFirstRental": "Every pilot new to this aircraft needs a checkout flight with an instructor first",
+      "checkoutFirstRentalHint": "Once you record a pilot's checkout flight (on their booking), they don't need another one."
     },
     "requirementsList": {
       "verified": "Licence, class rating and medical verified by ownAplane and valid",
@@ -1070,7 +1072,8 @@
       "noUnrated": "Pilots need reviews from earlier rentals",
       "unratedCheckout": "Pilots without reviews: after a checkout flight with an instructor",
       "unratedWelcome": "Pilots without reviews are welcome",
-      "verifiedNoClass": "Licence and medical verified by ownAplane and valid"
+      "verifiedNoClass": "Licence and medical verified by ownAplane and valid",
+      "checkoutFirstRental": "Pilots new to this aircraft: after a checkout flight with an instructor"
     },
     "public": {
       "preview": "Preview. Pilots can't see this aircraft now ({status}).",
@@ -1109,7 +1112,7 @@
       "age": "Requires a minimum age of {need}, you are {have}.",
       "unrated": "The owner only rents to pilots with reviews from earlier rentals.",
       "pilot_rating": "Requires a pilot rating of at least {need}, yours is {have}.",
-      "checkout": "You haven't rented on ownAplane yet: the owner asks for a checkout flight with an instructor first.",
+      "checkout": "The owner asks for a checkout flight with an instructor before your first solo rental of this aircraft.",
       "unknown": "A requirement isn't met.",
       "logInText": "Log in to see whether you meet the requirements for this aircraft.",
       "logIn": "Log in",
@@ -1639,5 +1642,20 @@
       "reminder": "Reminder: {registration} is booked from {when}.",
       "other": "Update on the booking of {registration}."
     }
+  },
+  "checkoutFlight": {
+    "neededPilot": "The owner asks for a checkout flight with an instructor before your first solo rental of this aircraft. Arrange it with the owner.",
+    "neededOwner": "You asked for a checkout flight with an instructor before this pilot's first solo rental. Record it here once it's done.",
+    "done": "Checkout flight on this aircraft recorded on {date}",
+    "instructorIs": "instructor {name}",
+    "recordTitle": "Checkout flight done?",
+    "recordHint": "Record it and the pilot won't need another checkout on this aircraft.",
+    "doneOn": "Date of the checkout flight",
+    "instructor": "Instructor (optional)",
+    "note": "Note (optional)",
+    "record": "Record checkout flight",
+    "saving": "Saving…",
+    "saved": "Checkout flight recorded.",
+    "failed": "That didn't work. Please try again."
   }
 }

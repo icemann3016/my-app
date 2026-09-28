@@ -36,6 +36,7 @@ export function requirementsFormValues(r: RentalRequirements | null): Record<str
     minPilotRating: str(r?.minPilotRating),
     allowUnrated: (r?.allowUnrated ?? true) ? "on" : "",
     unratedNeedsCheckout: r?.unratedNeedsCheckout ? "on" : "",
+    checkoutFirstRental: r?.checkoutFirstRental ? "on" : "",
     licenceTypes: (r?.licenceTypes ?? []).join(","),
     requiredRatings: listed.join(","),
     typeRating: types[0] ?? "",

@@ -11,6 +11,7 @@ import {
   numeric,
   pgEnum,
   pgTable,
+  primaryKey,
   smallint,
   text,
   timestamp,
@@ -195,6 +196,33 @@ export const aircraftDocuments = pgTable(
   ],
 ).enableRLS();
 
+/**
+ * Pilots whose checkout flight on the aircraft the owner has recorded (BKG-10); they no longer
+ * need one before renting it. RLS: db/migrations/0034_checkout_security.sql.
+ */
+export const aircraftCheckouts = pgTable(
+  "aircraft_checkouts",
+  {
+    aircraftId: uuid("aircraft_id")
+      .notNull()
+      .references(() => aircraft.id, { onDelete: "cascade" }),
+    pilotId: uuid("pilot_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    doneOn: date("done_on").notNull(),
+    instructor: text("instructor"),
+    note: text("note"),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [
+    primaryKey({ columns: [t.aircraftId, t.pilotId] }),
+    check(
+      "aircraft_checkouts_text",
+      sql`char_length(${t.instructor}) <= 100 and char_length(${t.note}) <= 500`,
+    ),
+  ],
+).enableRLS();
+
 /** Who may rent the aircraft (RAT-6, RAT-7). One row per aircraft; empty = no requirement. */
 export const rentalRequirements = pgTable(
   "rental_requirements",
@@ -208,6 +236,8 @@ export const rentalRequirements = pgTable(
     allowUnrated: boolean("allow_unrated").notNull().default(true),
     /** …but only after a checkout flight with an instructor. */
     unratedNeedsCheckout: boolean("unrated_needs_checkout").notNull().default(false),
+    /** Every pilot new to this aircraft needs a checkout flight with an instructor (BKG-10). */
+    checkoutFirstRental: boolean("checkout_first_rental").notNull().default(false),
     /** Accepted licences; empty = any. */
     licenceTypes: licenceType("licence_types")
       .array()

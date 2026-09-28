@@ -232,6 +232,20 @@
       "when": 1790621737099,
       "tag": "0032_notification_security",
       "breakpoints": true
+    },
+    {
+      "idx": 33,
+      "version": "7",
+      "when": 1790622214514,
+      "tag": "0033_checkouts",
+      "breakpoints": true
+    },
+    {
+      "idx": 34,
+      "version": "7",
+      "when": 1790622215280,
+      "tag": "0034_checkout_security",
+      "breakpoints": true
     }
   ]
 }

@@ -53,6 +53,7 @@ export async function RequirementsList({
   if (r?.minPilotRating) lines.push(t("rating", { rating: r.minPilotRating.toFixed(1) }));
   if (r && !r.allowUnrated) lines.push(t("noUnrated"));
   else if (r?.unratedNeedsCheckout) lines.push(t("unratedCheckout"));
+  if (r?.checkoutFirstRental) lines.push(t("checkoutFirstRental"));
   else lines.push(t("unratedWelcome"));
 
   return (

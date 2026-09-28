@@ -1,4 +1,4 @@
-import { eq, sql } from "drizzle-orm";
+import { sql } from "drizzle-orm";
 import { beforeAll, expect, it } from "vitest";
 
 import { describeDb, forceListed, prepareDatabase } from "./setup";
@@ -14,15 +14,6 @@ const OTH = "c4c4c4c4-4444-4444-8444-c4c4c4c4c4c4"; // someone else
 let planeId: string;
 let bookingId: string;
 let requestId: string;
-
-async function call<T>(user: string, query: ReturnType<typeof sql>) {
-  try {
-    return (await rls.asUser(user, (tx) => tx.execute(query))) as unknown as T[];
-  } catch (e) {
-    const err = e as { cause?: { code?: string; message?: string } };
-    return { error: err.cause?.code === "P0001" ? err.cause.message : err.cause?.code };
-  }
-}
 
 const at = (minutes: number) => new Date(Date.now() + minutes * 60_000).toISOString();
 

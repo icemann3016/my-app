@@ -6,7 +6,6 @@ import {
   CalendarClockIcon,
   CircleAlertIcon,
   CircleCheckIcon,
-  GraduationCapIcon,
   InfoIcon,
   TriangleAlertIcon,
 } from "lucide-react";
@@ -28,6 +27,7 @@ import { toRange, utcToZoned } from "@/lib/domain/time";
 import { intlLocale, type Locale } from "@/lib/i18n/config";
 import { BookingHistory } from "./booking-history";
 import { CancelBooking } from "./cancel-booking";
+import { CheckoutRecord } from "./checkout-record";
 import { FlightLogLink } from "./flight-log-link";
 import { RespondForm } from "./respond-form";
 
@@ -138,10 +138,15 @@ export default async function BookingPage({
         <KnownItems items={await getKnownItems(user.id, b.aircraftId)} />
       )}
       {b.checkoutRequired && (
-        <p className="flex items-start gap-2 text-sm">
-          <GraduationCapIcon className="mt-0.5 size-4 shrink-0 text-primary" aria-hidden />
-          {t("detail.checkout")}
-        </p>
+        <CheckoutRecord
+          viewerId={user.id}
+          isOwner={isOwner}
+          bookingId={b.id}
+          aircraftId={b.aircraftId}
+          pilotId={b.pilotId}
+          defaultDate={utcToZoned(period.from, timeZone).slice(0, 10)}
+          canRecord={["accepted", "in_progress", "completed"].includes(b.status)}
+        />
       )}
 
       {isOwner && b.status === "requested" && (

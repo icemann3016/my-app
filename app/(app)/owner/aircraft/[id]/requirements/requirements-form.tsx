@@ -68,6 +68,12 @@ export function RequirementsForm({
             />
           </div>
         )}
+        <CheckboxField
+          name="checkoutFirstRental"
+          label={t("checkoutFirstRental")}
+          hint={t("checkoutFirstRentalHint")}
+          defaultChecked={v.checkoutFirstRental === "on"}
+        />
       </fieldset>
 
       <fieldset className="grid gap-2">
