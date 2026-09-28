@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { EyeIcon, MapPinIcon, PencilIcon, StarIcon } from "lucide-react";
+import { EyeIcon, MapPinIcon, MessagesSquareIcon, PencilIcon, StarIcon } from "lucide-react";
 import { getLocale, getTranslations } from "next-intl/server";
 
 import { RequirementsList } from "@/components/aircraft/requirements-list";
@@ -67,6 +67,7 @@ export default async function AircraftPage({
   const { aircraft: a, owner } = row;
   const t = await getTranslations("aircraft");
   const tr = await getTranslations("reviews");
+  const tm = await getTranslations("messages");
   const locale = (await getLocale()) as Locale;
   const [photos, requirements, airport, units, reviews, categories] = await Promise.all([
     getPhotos(user?.id ?? null, id),
@@ -201,6 +202,19 @@ export default async function AircraftPage({
                 <Button className="mt-2" asChild>
                   <Link href={`/aircraft/${id}/book${bookQuery(query)}`}>
                     {t("public.request")}
+                  </Link>
+                </Button>
+              )}
+              {a.status === "listed" && !isOwner && (
+                <Button variant="outline" asChild>
+                  <Link
+                    href={
+                      user
+                        ? `/messages/new?aircraft=${id}`
+                        : `/login?next=${encodeURIComponent(`/messages/new?aircraft=${id}`)}`
+                    }
+                  >
+                    <MessagesSquareIcon aria-hidden /> {tm("askOwner")}
                   </Link>
                 </Button>
               )}

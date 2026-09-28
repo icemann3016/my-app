@@ -345,3 +345,28 @@ export function bookingNotificationEmail({
     locale,
   });
 }
+
+/** A new message (MSG-1): one email per unread streak, without the text (read it in the app). */
+export function newMessageEmail({
+  name,
+  locale,
+  sender,
+  registration,
+  url,
+}: {
+  name: string;
+  locale?: string | null;
+  sender: string;
+  registration: string;
+  url: string;
+}) {
+  const t = translator(locale);
+  return render({
+    subject: t("newMessage.subject", { sender, registration }),
+    greeting: t("newMessage.greeting", { name }),
+    paragraphs: [t("newMessage.body", { sender, registration })],
+    cta: t("newMessage.cta"),
+    url,
+    locale,
+  });
+}

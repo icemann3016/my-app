@@ -7,6 +7,7 @@ import {
   CircleAlertIcon,
   CircleCheckIcon,
   InfoIcon,
+  MessagesSquareIcon,
   TriangleAlertIcon,
 } from "lucide-react";
 import { getLocale, getTranslations } from "next-intl/server";
@@ -89,6 +90,14 @@ export default async function BookingPage({
             ? t("detail.pilotIs", { name: pilot?.displayName ?? t("detail.deletedUser") })
             : t("detail.ownerIs", { name: owner.displayName })}
         </p>
+        {b.pilotId && (
+          <Button variant="outline" size="sm" className="mt-1 justify-self-start" asChild>
+            <Link href={`/messages/new?booking=${b.id}`}>
+              <MessagesSquareIcon aria-hidden />{" "}
+              {t(isOwner ? "detail.messagePilot" : "detail.messageOwner")}
+            </Link>
+          </Button>
+        )}
       </div>
 
       {b.status === "requested" && (

@@ -19,7 +19,8 @@
       "pilotCredentials": "Pilot credentials",
       "admin": "Admin",
       "bookings": "Bookings",
-      "help": "Help"
+      "help": "Help",
+      "messages": "Messages"
     },
     "footer": {
       "tagline": "Made for general aviation in Europe.",
@@ -199,7 +200,8 @@
     "remarkRequired": "Write the remark (up to 1000 characters).",
     "defectRequired": "Describe the defect (up to 2000 characters).",
     "scoreRequired": "Choose 1 to 5 stars.",
-    "replyRequired": "Write a few words."
+    "replyRequired": "Write a few words.",
+    "messageRequired": "Write a message."
   },
   "dashboard": {
     "title": "Welcome, {name}",
@@ -510,6 +512,12 @@
         "subject": "{other} replied to your review of {registration}",
         "body": "{other} replied publicly to your review of {registration}. You can read the reply on the booking."
       }
+    },
+    "newMessage": {
+      "subject": "New message from {sender} about {registration}",
+      "greeting": "Hi {name},",
+      "body": "{sender} sent you a message about {registration}. Open ownAplane to read it and reply.",
+      "cta": "Read the message"
     }
   },
   "airportPicker": {
@@ -1330,7 +1338,9 @@
       "cancelledByOwner": "Cancelled by the owner: {reason}",
       "cancelledByPilot": "Cancelled by the pilot: {reason}",
       "late": "Late cancellation (after the free-cancellation deadline).",
-      "grounded": "The owner has grounded this aircraft. It can't be flown until the owner lists it again."
+      "grounded": "The owner has grounded this aircraft. It can't be flown until the owner lists it again.",
+      "messagePilot": "Message the pilot",
+      "messageOwner": "Message the owner"
     },
     "history": {
       "title": "History",
@@ -1825,5 +1835,34 @@
     "sent": "Thanks, we'll take a look.",
     "alreadyReported": "You've already reported this. We'll take a look.",
     "notFound": "This can't be reported any more."
+  },
+  "messages": {
+    "title": "Messages",
+    "description": "Your conversations with pilots and owners, about bookings and listings.",
+    "none": "No messages yet. You can message an owner from an aircraft page, or the other side from a booking.",
+    "iconUnread": "Messages ({count} unread)",
+    "unread": "Unread:",
+    "deletedUser": "Former member",
+    "aboutBooking": "Booking",
+    "aboutListing": "Question about the listing",
+    "bookingFrom": "Booking from {when}",
+    "back": "All messages",
+    "thread": "Messages",
+    "you": "You",
+    "empty": "No messages yet. Say hello!",
+    "closed": "The other member has left ownAplane, so you can't reply.",
+    "label": "Your message",
+    "placeholder": "Write a message…",
+    "hint": "Share phone numbers and emails only after the booking is accepted; they're shown on the booking then.",
+    "send": "Send",
+    "sending": "Sending…",
+    "newTitle": "New message",
+    "askTitle": "Ask {name}",
+    "askText": "Questions about the aircraft, availability or requirements? The owner gets an email.",
+    "askOwner": "Ask the owner",
+    "errors": {
+      "not_found": "You can't send messages in this conversation.",
+      "failed": "Couldn't send your message. Please try again."
+    }
   }
 }

@@ -10,6 +10,7 @@ import {
   documents,
   experienceByType,
   medicals,
+  messages,
   pilotExperience,
   pilotLicences,
   pilotRatings,
@@ -134,6 +135,14 @@ export async function GET() {
       })
       .from(reviews)
       .where(eq(reviews.authorId, user.id)),
+    messagesSent: await db
+      .select({
+        conversationId: messages.conversationId,
+        body: messages.body,
+        createdAt: messages.createdAt,
+      })
+      .from(messages)
+      .where(eq(messages.senderId, user.id)),
   };
   const date = new Date().toISOString().slice(0, 10);
   return new Response(JSON.stringify(data, null, 2), {

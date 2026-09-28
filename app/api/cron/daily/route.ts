@@ -3,6 +3,7 @@ import { timingSafeEqual } from "node:crypto";
 import { sendAircraftExpiryReminders, unlistExpiredAircraft } from "@/lib/aircraft/expiry";
 import { expireBookingRequests } from "@/lib/bookings/queries";
 import { deleteOrphanDocuments } from "@/lib/documents";
+import { deliverMessageEmails } from "@/lib/messages/emails";
 import { createBookingReminders, deliverNotificationEmails } from "@/lib/notifications";
 import { sendExpiryReminders } from "@/lib/pilot/reminders";
 import { publishDueReviews } from "@/lib/reviews/jobs";
@@ -17,6 +18,7 @@ import { publishDueReviews } from "@/lib/reviews/jobs";
  * - removes uploads older than a day that were never attached to a credential or aircraft
  * - reminds pilot and owner of bookings starting within 36 hours, and emails notifications
  *   that weren't sent right away
+ * - emails about unread messages not emailed yet (MSG-1)
  * - publishes reviews whose 14-day window has closed (RAT-3)
  */
 export const maxDuration = 60;
@@ -41,6 +43,7 @@ export async function GET(request: Request) {
   const publishedReviews = await publishDueReviews();
   const bookingReminders = await createBookingReminders();
   const notificationEmails = await deliverNotificationEmails(500);
+  const messageEmails = await deliverMessageEmails(500);
   const result = {
     expiredRequests,
     reminders,
@@ -50,6 +53,7 @@ export async function GET(request: Request) {
     publishedReviews,
     bookingReminders,
     notificationEmails,
+    messageEmails,
   };
   console.info("[cron] daily", result);
   return Response.json({ ok: true, ...result });

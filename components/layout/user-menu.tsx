@@ -6,6 +6,7 @@ import {
   LayoutDashboardIcon,
   LogOutIcon,
   LifeBuoyIcon,
+  MessagesSquareIcon,
   SettingsIcon,
   ShieldCheckIcon,
   UserRoundIcon,
@@ -52,6 +53,11 @@ export function UserMenu({ account }: { account: AccountSummary }) {
         <DropdownMenuItem asChild>
           <Link href="/bookings">
             <CalendarDaysIcon /> {t("bookings")}
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <Link href="/messages">
+            <MessagesSquareIcon /> {t("messages")}
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>

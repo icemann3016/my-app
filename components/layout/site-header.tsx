@@ -7,6 +7,7 @@ import { getCurrentProfile } from "@/lib/auth/session";
 import { siteConfig } from "@/lib/site";
 import { Logo } from "./logo";
 import { MobileNav } from "./mobile-nav";
+import { MessagesLink } from "./messages-link";
 import { NotificationBell } from "./notification-bell";
 import { type AccountSummary, UserMenu } from "./user-menu";
 
@@ -37,6 +38,7 @@ export async function SiteHeader() {
         <div className="ml-auto hidden items-center gap-2 md:flex">
           {account ? (
             <>
+              <MessagesLink userId={account.id} />
               <NotificationBell userId={account.id} />
               <UserMenu account={account} />
             </>
@@ -52,6 +54,7 @@ export async function SiteHeader() {
           )}
         </div>
         <div className="ml-auto flex items-center gap-1 md:hidden">
+          {account && <MessagesLink userId={account.id} />}
           {account && <NotificationBell userId={account.id} />}
           <MobileNav account={account} />
         </div>
