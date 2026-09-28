@@ -39,7 +39,7 @@ export function SearchMap({
   useEffect(() => {
     let map: import("maplibre-gl").Map | undefined;
     let cancelled = false;
-    void import("maplibre-gl").then(({ default: maplibregl }) => {
+    void import("maplibre-gl").then((maplibregl) => {
       if (cancelled || !container.current) return;
       map = new maplibregl.Map({
         container: container.current,
