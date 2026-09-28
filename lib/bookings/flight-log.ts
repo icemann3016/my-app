@@ -3,9 +3,9 @@ import "server-only";
 import { asc, eq } from "drizzle-orm";
 
 import { asUser } from "@/lib/db/rls";
-import { flightLegs, flightLogs, flightUplifts } from "@/lib/db/schema";
+import { flightLegs, flightLogs, flightRemarks, flightUplifts } from "@/lib/db/schema";
 
-/** The booking's flight log, legs and uplifts as the viewer may see them (pilot, owner, admin), or null. */
+/** The booking's flight log, legs, uplifts and remarks as the viewer may see them (pilot, owner, admin), or null. */
 export async function getFlightLog(viewerId: string, bookingId: string) {
   return asUser(viewerId, async (tx) => {
     const [log] = await tx.select().from(flightLogs).where(eq(flightLogs.bookingId, bookingId));
@@ -20,7 +20,12 @@ export async function getFlightLog(viewerId: string, bookingId: string) {
       .from(flightUplifts)
       .where(eq(flightUplifts.flightLogId, log.id))
       .orderBy(asc(flightUplifts.createdAt));
-    return { log, legs, uplifts };
+    const remarks = await tx
+      .select()
+      .from(flightRemarks)
+      .where(eq(flightRemarks.flightLogId, log.id))
+      .orderBy(asc(flightRemarks.createdAt));
+    return { log, legs, uplifts, remarks };
   });
 }
 

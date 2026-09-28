@@ -12,6 +12,7 @@ import {
 import { getLocale, getTranslations } from "next-intl/server";
 
 import { BookingStatusBadge } from "@/components/bookings/booking-status-badge";
+import { KnownItems } from "@/components/bookings/known-items";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -19,6 +20,7 @@ import { formatPrice, formatSpan } from "@/lib/aircraft/format";
 import { isUuid } from "@/lib/aircraft/queries";
 import { requireUser } from "@/lib/auth/session";
 import { getBooking, pilotMeetsRequirements } from "@/lib/bookings/queries";
+import { getKnownItems } from "@/lib/bookings/remarks";
 import { FREE_CANCELLATION_HOURS } from "@/lib/bookings/respond";
 import { toRange, utcToZoned } from "@/lib/domain/time";
 import { intlLocale, type Locale } from "@/lib/i18n/config";
@@ -124,6 +126,9 @@ export default async function BookingPage({
         timeZone={timeZone}
         error={checkout}
       />
+      {["requested", "accepted", "in_progress"].includes(b.status) && (
+        <KnownItems items={await getKnownItems(user.id, b.aircraftId)} />
+      )}
       {b.checkoutRequired && (
         <p className="flex items-start gap-2 text-sm">
           <GraduationCapIcon className="mt-0.5 size-4 shrink-0 text-primary" aria-hidden />

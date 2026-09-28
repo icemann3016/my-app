@@ -73,12 +73,18 @@ test("a pilot fills in the flight log and the owner confirms it", async ({ page,
   await expect(page.getByText("-€100", { exact: true })).toBeVisible();
   await expect(page.getByText("€116", { exact: true })).toBeVisible();
 
-  // 4. Check-in: the pilot can't change it any more
+  // 4. A remark about the aircraft (BKG-15)
+  await page.getByLabel("Remark", { exact: true }).fill("Left mag drop 150 rpm");
+  await page.getByRole("button", { name: "Add remark" }).click();
+  await expect(page.getByText("Remark added.")).toBeVisible();
+  await expect(page.getByText("Left mag drop 150 rpm", { exact: true })).toBeVisible();
+
+  // 5. Check-in: the pilot can't change it any more
   await page.getByRole("button", { name: "Check in and send to the owner" }).click();
   await expect(page.getByText("Sent. Waiting for the owner to confirm.")).toBeVisible();
   await expect(page.getByRole("button", { name: "Add leg" })).toHaveCount(0);
 
-  // 5. The owner confirms; the booking is completed
+  // 6. The owner confirms; the booking is completed
   await owner.goto(`/bookings/${bookingId}`);
   await owner.getByRole("link", { name: "Flight log" }).click();
   await expect(owner.getByText("€116", { exact: true })).toBeVisible();
@@ -87,5 +93,12 @@ test("a pilot fills in the flight log and the owner confirms it", async ({ page,
   await owner.goto(`/bookings/${bookingId}`);
   await expect(owner.getByText("Completed", { exact: true }).first()).toBeVisible();
   await expect(owner.getByText("Flight log confirmed")).toBeVisible();
+
+  // 7. The owner marks the remark as a known item in the aircraft's history
+  await owner.goto(`/owner/aircraft/${aircraftId}/remarks`);
+  await expect(owner.getByText("Left mag drop 150 rpm", { exact: true })).toBeVisible();
+  await owner.getByRole("button", { name: "Mark as known item" }).click();
+  await expect(owner.getByText("Known items on this aircraft")).toBeVisible();
+  await expect(owner.getByRole("button", { name: "Mark as fixed" })).toBeVisible();
   await ownerContext.close();
 });

@@ -141,3 +141,13 @@ export function upliftSchema(units: UnitSystem, oilUnit: "qt" | "l") {
       oilGrade: kind === "oil" && oilGrade ? oilGrade : null,
     }));
 }
+
+export const REMARK_KINDS = ["aircraft", "weather", "airfield"] as const;
+
+/** A remark or PIREP after a flight (BKG-15). */
+export const remarkSchema = z.object({
+  logId: z.uuid(),
+  kind: z.enum(REMARK_KINDS),
+  airport: z.string().trim().max(10).optional().default(""),
+  body: z.string().trim().min(1, "remarkRequired").max(1000, "textTooLong"),
+});

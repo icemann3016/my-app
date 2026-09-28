@@ -193,7 +193,8 @@
     "endBeforeStart": "The end must be after the start.",
     "plannedHoursInvalid": "Enter the hours you plan to fly, e.g. 1.5.",
     "timeInvalid": "Enter a time as HH:MM.",
-    "meterBackwards": "The end reading can't be lower than the start."
+    "meterBackwards": "The end reading can't be lower than the start.",
+    "remarkRequired": "Write the remark (up to 1000 characters)."
   },
   "dashboard": {
     "title": "Welcome, {name}",
@@ -680,7 +681,8 @@
       "photos": "Photos",
       "documents": "Documents",
       "requirements": "Requirements",
-      "calendar": "Calendar"
+      "calendar": "Calendar",
+      "remarks": "Remarks"
     },
     "sectionText": {
       "details": "Registration, type and performance.",
@@ -690,7 +692,8 @@
       "photos": "At least one photo, up to 20. The first one is the cover.",
       "documents": "Documents are checked by our team. The aircraft can be listed once a valid ARC and insurance are verified.",
       "requirements": "Choose who can rent the aircraft. Pilots see these before they ask.",
-      "calendar": "Block the times you use the aircraft yourself, maintenance and other unavailable periods. Bookings appear here automatically."
+      "calendar": "Block the times you use the aircraft yourself, maintenance and other unavailable periods. Bookings appear here automatically.",
+      "remarks": "What pilots noted after their flights. Mark aircraft remarks as known items so later renters see them before they fly."
     },
     "fields": {
       "registration": "Registration",
@@ -1383,6 +1386,36 @@
     },
     "unpriced": "{count, plural, one {One fuel or oil entry has} other {# fuel or oil entries have}} no price, so {count, plural, one {it isn't} other {they aren't}} counted in the amount.",
     "fuelAdjustment": "Fuel and oil",
-    "checkoutPhotoLink": "Photo of the meters"
+    "checkoutPhotoLink": "Photo of the meters",
+    "remarks": {
+      "title": "Remarks and PIREPs",
+      "pilotHint": "Anything the owner or the next pilot should know: things about the aircraft that aren't defects (e.g. \"left mag drop 150 rpm\", \"COM2 scratchy\"), and notes on the weather or an airfield.",
+      "ownerHint": "What the pilot noted. Mark an aircraft remark as a known item so later renters see it before they fly.",
+      "none": "No remarks.",
+      "noneYet": "No remarks yet. They appear here when pilots add them to their flight logs.",
+      "kind": "About",
+      "kinds": {
+        "aircraft": "Aircraft",
+        "weather": "Weather",
+        "airfield": "Airfield"
+      },
+      "airport": "Airfield (optional)",
+      "body": "Remark",
+      "bodyHint": "Defects that affect airworthiness are reported separately.",
+      "add": "Add remark",
+      "saving": "Saving…",
+      "delete": "Delete",
+      "deleteLabel": "Delete remark",
+      "known": "Known item",
+      "fixed": "Fixed",
+      "markKnown": "Mark as known item",
+      "markFixed": "Mark as fixed"
+    },
+    "knownItems": {
+      "title": "Known items on this aircraft",
+      "text": "The owner knows about these. Check them before you fly.",
+      "since": "since {date}"
+    },
+    "remarkSaved": "Remark added."
   }
 }

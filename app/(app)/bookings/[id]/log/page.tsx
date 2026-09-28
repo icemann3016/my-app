@@ -4,6 +4,7 @@ import { notFound, redirect } from "next/navigation";
 import { ArrowLeftIcon, InfoIcon, TriangleAlertIcon } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 
+import { KnownItems } from "@/components/bookings/known-items";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -13,6 +14,7 @@ import { requireUser } from "@/lib/auth/session";
 import { bookingAmount } from "@/lib/bookings/amount";
 import { getFlightLog } from "@/lib/bookings/flight-log";
 import { getBooking } from "@/lib/bookings/queries";
+import { getKnownItems } from "@/lib/bookings/remarks";
 import { logAirports, logDocuments } from "@/lib/bookings/log-view";
 import { fuelSettlement } from "@/lib/domain/flight-log";
 import { zonedDay } from "@/lib/domain/time";
@@ -21,6 +23,7 @@ import { CheckoutCard } from "./checkout-card";
 import { LegDialog } from "./leg-dialog";
 import { LegList } from "./leg-list";
 import { LogSummary } from "./log-summary";
+import { RemarksCard } from "./remarks-card";
 import { UpliftDialog } from "./uplift-dialog";
 import { UpliftList } from "./uplift-list";
 
@@ -32,7 +35,10 @@ export async function generateMetadata(): Promise<Metadata> {
 const num = (v: number | null, round = (x: number) => x) =>
   v === null ? "" : String(Math.round(round(v) * 10) / 10);
 
-/** The flight log of a rental: check-out, legs, check-in and the owner's confirmation (BKG-7, BKG-12). */
+/**
+ * The flight log of a rental: check-out, legs, fuel and oil, remarks, check-in and the owner's
+ * confirmation (BKG-7, BKG-12…15).
+ */
 export default async function FlightLogPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const user = await requireUser(`/bookings/${id}/log`);
@@ -44,7 +50,7 @@ export default async function FlightLogPage({ params }: { params: Promise<{ id: 
   if (!role) notFound();
   const data = await getFlightLog(user.id, id);
   if (!data) redirect(`/bookings/${id}`);
-  const { log, legs, uplifts } = data;
+  const { log, legs, uplifts, remarks } = data;
   const t = await getTranslations("flightLog");
   const units = await getUnits(user.id);
   const fuelUnit = t(units === "metric" ? "units.l" : "units.usgal");
@@ -65,7 +71,10 @@ export default async function FlightLogPage({ params }: { params: Promise<{ id: 
     b.departureIdent,
     ...legs.flatMap((l) => [l.fromIdent, l.toIdent]),
     ...uplifts.map((u) => u.airportIdent),
+    ...remarks.flatMap((r) => (r.airportIdent ? [r.airportIdent] : [])),
   ]);
+  const knownItems = await getKnownItems(user.id, plane.id);
+  const lastAirport = airports[legs.at(-1)?.toIdent ?? b.departureIdent] ?? null;
   const common = { bookingId: b.id, logId: log.id, fuelUnit, oilUnit };
   const ta = await getTranslations("aircraft");
   const upliftProps = {
@@ -91,6 +100,7 @@ export default async function FlightLogPage({ params }: { params: Promise<{ id: 
         <InfoIcon />
         <AlertDescription>{t("disclaimer")}</AlertDescription>
       </Alert>
+      {role === "pilot" && <KnownItems items={knownItems} />}
       {log.correctionNote && log.status === "correction_requested" && (
         <Alert variant="destructive">
           <TriangleAlertIcon />
@@ -116,7 +126,7 @@ export default async function FlightLogPage({ params }: { params: Promise<{ id: 
           {editable && legs.length < 50 && (
             <LegDialog
               {...common}
-              from={airports[legs.at(-1)?.toIdent ?? b.departureIdent] ?? null}
+              from={lastAirport}
               to={null}
               values={{ date: zonedDay(new Date(), timeZone), landings: "1" }}
             />
@@ -140,7 +150,7 @@ export default async function FlightLogPage({ params }: { params: Promise<{ id: 
           {editable && (
             <UpliftDialog
               {...upliftProps}
-              airport={airports[legs.at(-1)?.toIdent ?? b.departureIdent] ?? null}
+              airport={lastAirport}
               receipt={null}
               values={{ kind: "fuel", fuelType: plane.fuelType, paidBy: "pilot" }}
             />
@@ -158,6 +168,16 @@ export default async function FlightLogPage({ params }: { params: Promise<{ id: 
           />
         </CardContent>
       </Card>
+
+      <RemarksCard
+        bookingId={b.id}
+        logId={log.id}
+        remarks={remarks}
+        airports={airports}
+        role={role}
+        editable={editable}
+        defaultAirport={lastAirport}
+      />
 
       <LogSummary
         bookingId={b.id}

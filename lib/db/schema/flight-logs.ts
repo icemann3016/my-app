@@ -16,7 +16,7 @@ import {
   uuid,
 } from "drizzle-orm/pg-core";
 
-import { fuelType } from "./aircraft";
+import { aircraft, fuelType } from "./aircraft";
 import { airports } from "./airports";
 import { bookings } from "./bookings";
 import { documents } from "./documents";
@@ -164,7 +164,42 @@ export const flightUplifts = pgTable(
   ],
 ).enableRLS();
 
+export const remarkKind = pgEnum("remark_kind", ["aircraft", "weather", "airfield"]);
+
+// Remarks and PIREPs after a flight (BKG-15): notes on the aircraft that aren't defects, and on
+// the weather or an airfield. The owner can mark an aircraft remark as a known item, which later
+// renters see (known_items_for_aircraft()) until the owner marks it fixed.
+export const flightRemarks = pgTable(
+  "flight_remarks",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    flightLogId: uuid("flight_log_id")
+      .notNull()
+      .references(() => flightLogs.id, { onDelete: "cascade" }),
+    // Set by a trigger from the log's booking, for the aircraft's history.
+    aircraftId: uuid("aircraft_id")
+      .notNull()
+      .references(() => aircraft.id, { onDelete: "cascade" }),
+    kind: remarkKind("kind").notNull(),
+    airportIdent: text("airport_ident").references(() => airports.ident),
+    body: text("body").notNull(),
+    knownSince: timestamp("known_since", { withTimezone: true }),
+    resolvedAt: timestamp("resolved_at", { withTimezone: true }),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [
+    index("flight_remarks_log_idx").on(t.flightLogId),
+    index("flight_remarks_aircraft_idx").on(t.aircraftId, t.createdAt),
+    check(
+      "flight_remarks_values",
+      sql`char_length(btrim(${t.body})) between 1 and 1000
+        and (${t.knownSince} is null or ${t.kind} = 'aircraft')`,
+    ),
+  ],
+).enableRLS();
+
 export type FlightLog = typeof flightLogs.$inferSelect;
 export type FlightLeg = typeof flightLegs.$inferSelect;
 export type FlightUplift = typeof flightUplifts.$inferSelect;
+export type FlightRemark = typeof flightRemarks.$inferSelect;
 export type FlightLogStatus = (typeof flightLogStatus.enumValues)[number];
