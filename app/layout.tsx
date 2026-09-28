@@ -25,12 +25,21 @@ export const viewport: Viewport = {
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const locale = await getLocale();
+  const t = await getTranslations("common");
   return (
     <html lang={locale}>
       <body className="flex min-h-dvh flex-col">
         <NextIntlClientProvider>
+          <a
+            href="#main"
+            className="sr-only z-50 rounded-md bg-background px-3 py-2 text-sm font-medium shadow focus:not-sr-only focus:fixed focus:top-2 focus:left-2"
+          >
+            {t("skipToContent")}
+          </a>
           <SiteHeader />
-          <main className="flex-1">{children}</main>
+          <main id="main" tabIndex={-1} className="flex-1 outline-none">
+            {children}
+          </main>
           <SiteFooter />
         </NextIntlClientProvider>
         <Analytics />

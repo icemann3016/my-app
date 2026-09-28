@@ -91,3 +91,17 @@
     @apply bg-background text-foreground antialiased;
   }
 }
+
+/* WCAG 2.3.3: respect "reduce motion" (spinners keep turning, slower). */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+  }
+  .animate-spin {
+    animation: spin 2s linear infinite !important;
+  }
+}
