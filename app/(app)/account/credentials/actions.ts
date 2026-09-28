@@ -26,7 +26,7 @@ import {
   typeHoursSchema,
 } from "@/lib/validation/pilot";
 
-const PATH = "/pilot";
+const PATH = "/account/credentials";
 
 const tables = { licence: pilotLicences, rating: pilotRatings, medical: medicals } as const;
 

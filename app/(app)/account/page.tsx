@@ -4,6 +4,7 @@ import Link from "next/link";
 import { CircleAlertIcon, CircleCheckIcon, DownloadIcon, ExternalLinkIcon } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 
+import { AccountTabs } from "@/components/account/account-tabs";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -50,6 +51,7 @@ export default async function AccountPage({
 
   return (
     <div className="mx-auto grid w-full max-w-3xl gap-6 px-4 py-10">
+      <AccountTabs />
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
           <h1 className="text-2xl font-semibold tracking-tight">{t("title")}</h1>

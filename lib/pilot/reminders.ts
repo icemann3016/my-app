@@ -145,7 +145,7 @@ export async function sendExpiryReminders(
             name: to.name,
             locale: to.locale,
             items,
-            url: `${appUrl()}/pilot`,
+            url: `${appUrl()}/account/credentials`,
           }),
         });
       }

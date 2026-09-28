@@ -323,6 +323,11 @@
       "disconnect": "Disconnect",
       "linked": "Google is now connected. Next time you can log in with Google.",
       "linkFailed": "Couldn't connect Google (error: {code}). Please try again."
+    },
+    "tabs": {
+      "label": "Account sections",
+      "general": "General",
+      "credentials": "Pilot credentials"
     }
   },
   "password": {
@@ -1164,7 +1169,8 @@
       "payDirectly": "You pay the owner directly; ownAplane doesn't handle payments yet. The final amount follows the flight log.",
       "send": "Send request",
       "sending": "Sending…",
-      "cancellation": "Cancellation policy:"
+      "cancellation": "Cancellation policy:",
+      "updateCredentials": "Go to your pilot credentials"
     },
     "errors": {
       "not_eligible": "You can't book this flight yet:",

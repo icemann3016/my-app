@@ -62,7 +62,7 @@ export async function EligibilityCard({
             ))}
           </ul>
           <Button variant="link" size="sm" className="justify-self-start px-0" asChild>
-            <Link href="/pilot">{t("updateCredentials")}</Link>
+            <Link href="/account/credentials">{t("updateCredentials")}</Link>
           </Button>
         </>
       )}

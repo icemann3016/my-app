@@ -34,7 +34,7 @@ test("a pilot's licence and medical are verified by an admin", async ({ page, br
 
   // 1. The pilot adds a licence and a medical
   await signUp(page, pilotName, `pilot-${id}@example.com`);
-  await page.goto("/pilot");
+  await page.goto("/account/credentials");
   await page.getByRole("button", { name: "Switch on pilot role" }).click();
 
   await page.getByRole("button", { name: "Add licence" }).click();

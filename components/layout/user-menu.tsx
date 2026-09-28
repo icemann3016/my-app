@@ -3,7 +3,6 @@
 import Link from "next/link";
 import {
   CalendarDaysIcon,
-  IdCardIcon,
   LayoutDashboardIcon,
   LogOutIcon,
   SettingsIcon,
@@ -54,13 +53,6 @@ export function UserMenu({ account }: { account: AccountSummary }) {
             <CalendarDaysIcon /> {t("bookings")}
           </Link>
         </DropdownMenuItem>
-        {account.isPilot && (
-          <DropdownMenuItem asChild>
-            <Link href="/pilot">
-              <IdCardIcon /> {t("pilotCredentials")}
-            </Link>
-          </DropdownMenuItem>
-        )}
         <DropdownMenuItem asChild>
           <Link href="/account">
             <SettingsIcon /> {t("account")}

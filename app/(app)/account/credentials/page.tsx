@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import { getLocale, getTranslations } from "next-intl/server";
 
+import { AccountTabs } from "@/components/account/account-tabs";
 import { SubmitButton } from "@/components/forms/submit-button";
 import { ExpiryText, StatusBadge } from "@/components/pilot/status-badge";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -21,7 +22,7 @@ import { credentialItems, getPilotCredentials } from "@/lib/pilot/credentials";
 import { type CredentialKind, credentialLabel, type PilotTranslate } from "@/lib/pilot/labels";
 import { pilotSummary } from "@/lib/pilot/summary";
 import { expiryState } from "@/lib/pilot/validity";
-import { setRole } from "../account/actions";
+import { setRole } from "../actions";
 import { type Country, CredentialDialog } from "./credential-dialog";
 import { DeleteCredential } from "./delete-credential";
 import { ExperienceForm, TypeHours } from "./experience-form";
@@ -44,7 +45,7 @@ type Row = {
 };
 
 export default async function PilotPage() {
-  const { userId, roles } = await requireProfile("/pilot");
+  const { userId, roles } = await requireProfile("/account/credentials");
   const t = await getTranslations("pilot");
   const locale = await getLocale();
   const tl = t as unknown as PilotTranslate;
@@ -52,6 +53,7 @@ export default async function PilotPage() {
   if (!roles.includes("pilot")) {
     return (
       <div className="mx-auto grid w-full max-w-3xl gap-6 px-4 py-10">
+        <AccountTabs />
         <h1 className="text-2xl font-semibold tracking-tight">{t("title")}</h1>
         <Card>
           <CardHeader>
@@ -150,6 +152,7 @@ export default async function PilotPage() {
 
   return (
     <div className="mx-auto grid w-full max-w-3xl gap-6 px-4 py-10">
+      <AccountTabs />
       <div className="grid gap-1">
         <h1 className="text-2xl font-semibold tracking-tight">{t("title")}</h1>
         <p className="text-muted-foreground">{t("description")}</p>

@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useActionState, useState } from "react";
 import { CircleAlertIcon, PlusIcon, XIcon } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
@@ -77,11 +78,19 @@ export function BookingForm({
     <form action={formAction} className="grid gap-5">
       <FormMessage state={state} />
       {e.eligibility?.length ? (
-        <ul className="grid list-disc gap-1 pl-5 text-sm text-destructive" role="alert">
-          {e.eligibility.map((reason) => (
-            <li key={reason}>{reason}</li>
-          ))}
-        </ul>
+        <div className="grid gap-2" role="alert">
+          <ul className="grid list-disc gap-1 pl-5 text-sm text-destructive">
+            {e.eligibility.map((reason) => (
+              <li key={reason}>{reason}</li>
+            ))}
+          </ul>
+          <Link
+            href="/account/credentials"
+            className="justify-self-start text-sm font-medium underline underline-offset-4"
+          >
+            {t("updateCredentials")}
+          </Link>
+        </div>
       ) : null}
       <input type="hidden" name="aircraftId" value={a.id} />
 

@@ -87,7 +87,10 @@ export default async function DashboardPage() {
             {warnings.map((w) => (
               <p key={w}>{w}</p>
             ))}
-            <Link href="/pilot" className="text-foreground underline underline-offset-4">
+            <Link
+              href="/account/credentials"
+              className="text-foreground underline underline-offset-4"
+            >
               {t("manageCredentials")}
             </Link>
           </AlertDescription>
@@ -118,7 +121,7 @@ export default async function DashboardPage() {
           action={
             isPilot ? (
               <Button size="sm" variant={summary?.verified ? "outline" : "default"} asChild>
-                <Link href="/pilot">
+                <Link href="/account/credentials">
                   {summary?.verified || summary?.pending
                     ? t("manageCredentials")
                     : t("addCredentials")}

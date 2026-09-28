@@ -10,6 +10,10 @@ const nextConfig: NextConfig = {
   // Self-contained server build for Docker (Cloud Run, Azure Container Apps…): the Dockerfile
   // sets NEXT_OUTPUT=standalone. Vercel and `npm run start` use the normal build.
   output: process.env.NEXT_OUTPUT === "standalone" ? "standalone" : undefined,
+  // Pilot credentials moved under Account (links in older emails still work).
+  async redirects() {
+    return [{ source: "/pilot", destination: "/account/credentials", permanent: true }];
+  },
   images: {
     remotePatterns: [
       { protocol: "https", hostname: "*.supabase.co" },

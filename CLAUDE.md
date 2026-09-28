@@ -60,7 +60,7 @@ CI runs typecheck, lint, format:check, unit + database tests, build, the full e2
 app/
   (marketing)/        # public pages: home, terms, privacy
   (auth)/             # login, signup, forgot/reset password + actions.ts (auth Server Actions)
-  (app)/              # logged-in pages: dashboard, account, pilot (credentials), admin/verifications,
+  (app)/              # logged-in pages: dashboard, account (+ credentials tab), admin/verifications,
                       #   u/[id] (public profile), aircraft/[id] (public listing + availability),
                       #   search, owner/aircraft (my aircraft, new, [id]/calendar, details…requirements)
   api/auth/           # Better Auth endpoints (email links, OAuth callbacks)

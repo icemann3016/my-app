@@ -158,7 +158,7 @@ async function notifyPilot(
         item,
         decision,
         reason,
-        url: `${appUrl()}/pilot`,
+        url: `${appUrl()}/account/credentials`,
       }),
     });
   } catch (e) {
