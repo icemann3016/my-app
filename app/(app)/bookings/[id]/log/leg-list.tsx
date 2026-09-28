@@ -44,8 +44,8 @@ export async function LegList({
       {legs.map((leg) => {
         const from = airports[leg.fromIdent];
         const to = airports[leg.toIdent];
-        const fromZone = from?.timezone ?? "UTC";
-        const toZone = to?.timezone ?? "UTC";
+        const fromZone = "UTC";
+        const toZone = fromZone;
         const title = `${from?.code ?? leg.fromIdent} → ${to?.code ?? leg.toIdent}`;
         return (
           <li key={leg.id} className="grid gap-1 rounded-md border p-3 text-sm">
@@ -94,14 +94,8 @@ export async function LegList({
               )}
             </div>
             <p>
-              {t("blockTimes", {
-                off: clock(leg.blockOff, fromZone),
-                on: clock(leg.blockOn, toZone),
-              })}{" "}
-              <span className="text-muted-foreground">
-                ({utcToZoned(leg.blockOff, "UTC").replace("T", " ")}–{clock(leg.blockOn, "UTC")}{" "}
-                UTC)
-              </span>
+              {utcToZoned(leg.blockOff, "UTC").slice(0, 10)} ·{" "}
+              {t("blockTimes", { off: clock(leg.blockOff, "UTC"), on: clock(leg.blockOn, "UTC") })}
             </p>
             <p className="text-muted-foreground">
               {t("landingsCount", { count: leg.landings })}

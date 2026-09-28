@@ -4,7 +4,7 @@ import { and, asc, eq, sql } from "drizzle-orm";
 
 import type { Tx } from "@/lib/db";
 import { asAnon, asUser } from "@/lib/db/rls";
-import { calendarEntries, type CalendarEntryKind } from "@/lib/db/schema";
+import { bookings, calendarEntries, type CalendarEntryKind, profiles } from "@/lib/db/schema";
 
 export type CalendarItem = {
   id: string;
@@ -12,6 +12,10 @@ export type CalendarItem = {
   from: Date;
   to: Date;
   note: string | null;
+  /** For bookings: the booking, its status and the pilot's name. */
+  bookingId: string | null;
+  bookingStatus: string | null;
+  pilotName: string | null;
 };
 
 const rangeOf = (from: Date, to: Date) =>
@@ -32,8 +36,13 @@ export async function getCalendarEntries(
         note: calendarEntries.note,
         from: sql<string>`lower(${calendarEntries.period})`,
         to: sql<string>`upper(${calendarEntries.period})`,
+        bookingId: calendarEntries.bookingId,
+        bookingStatus: bookings.status,
+        pilotName: profiles.displayName,
       })
       .from(calendarEntries)
+      .leftJoin(bookings, eq(bookings.id, calendarEntries.bookingId))
+      .leftJoin(profiles, eq(profiles.id, bookings.pilotId))
       .where(
         and(
           eq(calendarEntries.aircraftId, aircraftId),
@@ -47,19 +56,35 @@ export async function getCalendarEntries(
   return rows.map((r) => ({ ...r, from: new Date(r.from), to: new Date(r.to) }));
 }
 
-/** When a visible aircraft is busy within [from, to): periods only (SRC-4). */
+export type BusyPeriod = {
+  from: Date;
+  to: Date;
+  kind: CalendarEntryKind;
+  /** A booking that's only requested, not accepted yet. */
+  pending: boolean;
+};
+
+/**
+ * When a visible aircraft is busy within [from, to), and for what kind of entry (SRC-4). Never
+ * notes or who booked it.
+ */
 export async function getBusyPeriods(
   viewerId: string | null,
   aircraftId: string,
   from: Date,
   to: Date,
-): Promise<{ from: Date; to: Date }[]> {
+): Promise<BusyPeriod[]> {
   const query = (tx: Tx) =>
     tx.execute(sql`
-      select lower(period) as "from", upper(period) as "to"
-      from public.aircraft_busy_periods(${aircraftId}::uuid, ${rangeOf(from, to)})`) as unknown as Promise<
-      { from: string; to: string }[]
+      select lower(period) as "from", upper(period) as "to", kind, pending
+      from public.aircraft_calendar_view(${aircraftId}::uuid, ${rangeOf(from, to)})`) as unknown as Promise<
+      { from: string; to: string; kind: CalendarEntryKind; pending: boolean }[]
     >;
   const rows = viewerId ? await asUser(viewerId, query) : await asAnon(query);
-  return rows.map((r) => ({ from: new Date(r.from), to: new Date(r.to) }));
+  return rows.map((r) => ({
+    from: new Date(r.from),
+    to: new Date(r.to),
+    kind: r.kind,
+    pending: r.pending,
+  }));
 }

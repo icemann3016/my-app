@@ -12,7 +12,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { requireOwnAircraft } from "@/lib/aircraft/owner";
 import { getAircraftDefects } from "@/lib/bookings/defects";
-import { intlLocale, type Locale } from "@/lib/i18n/config";
+import { formatUtc } from "@/lib/aircraft/format";
+import type { Locale } from "@/lib/i18n/config";
 import { groundAircraft, resolveDefect } from "./actions";
 import { ClearGrounding } from "./clear-grounding";
 
@@ -30,10 +31,8 @@ export default async function DefectsPage({ params }: { params: Promise<{ id: st
   const rows = await getAircraftDefects(user.id, id);
   const open = rows.filter((r) => !r.defect.resolvedAt);
   const fixed = rows.filter((r) => r.defect.resolvedAt);
-  const format = new Intl.DateTimeFormat(intlLocale((await getLocale()) as Locale), {
-    dateStyle: "medium",
-    timeStyle: "short",
-  });
+  const locale = (await getLocale()) as Locale;
+  const format = { format: (d: Date) => formatUtc(d, locale) };
   const grounded = aircraft.status === "grounded";
 
   return (

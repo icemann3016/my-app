@@ -83,9 +83,7 @@ async function Section({
                       </span>
                       <BookingStatusBadge status={b.status} label={t(`statuses.${b.status}`)} />
                     </div>
-                    <span className="text-sm">
-                      {formatSpan(b.from, b.to, b.timeZone, locale).local}
-                    </span>
+                    <span className="text-sm">{formatSpan(b.from, b.to, locale)}</span>
                     <span className="text-xs text-muted-foreground">
                       {b.departureIdent} → {b.arrivalIdent} ·{" "}
                       {formatPrice(b.estimate, b.currency, locale)}

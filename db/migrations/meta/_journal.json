@@ -260,6 +260,13 @@
       "when": 1790622583802,
       "tag": "0036_instant_booking_functions",
       "breakpoints": true
+    },
+    {
+      "idx": 37,
+      "version": "7",
+      "when": 1790624013071,
+      "tag": "0037_calendar_view",
+      "breakpoints": true
     }
   ]
 }

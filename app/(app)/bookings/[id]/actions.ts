@@ -4,9 +4,7 @@ import { revalidatePath } from "next/cache";
 import { getTranslations } from "next-intl/server";
 import { z } from "zod";
 
-import { getAirport } from "@/lib/airports";
 import { requireUser } from "@/lib/auth/session";
-import { getBooking } from "@/lib/bookings/queries";
 import { cancelBooking, respondToBooking } from "@/lib/bookings/respond";
 import { zonedToUtc } from "@/lib/domain/time";
 import { type FormState, formValues } from "@/lib/forms";
@@ -25,8 +23,7 @@ export async function answerBooking(_prev: FormState, formData: FormData): Promi
 
   let proposal: { from: Date; to: Date } | null = null;
   if (decision === "propose") {
-    const detail = await getBooking(user.id, bookingId);
-    const zone = (await getAirport(detail?.booking.departureIdent))?.timezone ?? "UTC";
+    const zone = "UTC";
     const from = zonedToUtc(parsed.data.proposeFrom!, zone);
     const to = zonedToUtc(parsed.data.proposeTo!, zone);
     if (!from || !to || to <= from) {

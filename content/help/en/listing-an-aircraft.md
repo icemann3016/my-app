@@ -55,5 +55,11 @@ valid on the last day of the rental.
 
 ## Calendar
 
-Block time for **own use**, **maintenance** or **unavailable**, with an optional note. Blocks and
-bookings can never overlap. Pilots only see that a time is busy.
+Your calendar shows every booking and block, in UTC. **Hover over or tap a day** for the details:
+times, the pilot of each booking (with a link to it) and the note of each block (e.g. "50 h
+check").
+
+Block time for **own use**, **maintenance** or **unavailable**, with an optional note: click the
+first and last day on the calendar, set the times and **Block this time** (the form below is
+filled in), or fill in the form directly. Blocks and bookings can never overlap. Pilots see the
+times and the kind of each entry, never your notes or who booked it.

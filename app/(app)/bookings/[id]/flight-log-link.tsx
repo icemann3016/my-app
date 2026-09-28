@@ -5,7 +5,8 @@ import { getLocale, getTranslations } from "next-intl/server";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import type { BookingStatus } from "@/lib/db/schema";
-import { intlLocale, type Locale } from "@/lib/i18n/config";
+import { formatUtc } from "@/lib/aircraft/format";
+import type { Locale } from "@/lib/i18n/config";
 import { startCheckout } from "./log/actions";
 
 const ERRORS = new Set(["not_found", "not_accepted", "too_early", "aircraft_grounded"]);
@@ -16,7 +17,6 @@ export async function FlightLogLink({
   status,
   isPilot,
   opensAt,
-  timeZone,
   error,
 }: {
   bookingId: string;
@@ -24,8 +24,6 @@ export async function FlightLogLink({
   isPilot: boolean;
   /** Check-out opens 2 hours before the booked time. */
   opensAt: Date;
-  /** Airfield time zone to show the time in. */
-  timeZone: string;
   error?: string;
 }) {
   const t = await getTranslations("flightLog");
@@ -43,11 +41,7 @@ export async function FlightLogLink({
     ? t(`errors.${ERRORS.has(error) ? error : "failed"}` as "errors.failed")
     : null;
   if (new Date() < opensAt) {
-    const when = new Intl.DateTimeFormat(intlLocale((await getLocale()) as Locale), {
-      dateStyle: "medium",
-      timeStyle: "short",
-      timeZone,
-    }).format(opensAt);
+    const when = formatUtc(opensAt, (await getLocale()) as Locale);
     return <p className="text-sm text-muted-foreground">{t("checkoutOpens", { when })}</p>;
   }
   return (

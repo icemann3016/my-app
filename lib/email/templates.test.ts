@@ -76,12 +76,12 @@ describe("pilot credential emails", () => {
       type: "requested",
       registration: "LZ-ABC",
       from: new Date("2026-10-01T07:00:00Z"),
-      timeZone: "Europe/Sofia",
+      timeZone: "UTC",
       other: "Ana",
       url: "https://ownaplane.eu/bookings/1",
       locale: "en",
     });
     expect(email.subject).toBe("New booking request for LZ-ABC");
-    expect(email.text).toContain("Ana asked to rent LZ-ABC from 1 Oct 2026, 10:00.");
+    expect(email.text).toContain("Ana asked to rent LZ-ABC from 1 Oct 2026, 07:00 UTC.");
   });
 });

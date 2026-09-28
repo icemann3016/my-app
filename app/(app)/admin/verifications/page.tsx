@@ -54,7 +54,7 @@ export default async function VerificationQueuePage() {
                       <span className="truncate font-medium">{entry.displayName}</span>
                       <span className="text-sm text-muted-foreground">
                         {t("items", { count: entry.items })} ·{" "}
-                        {t("since", { date: format.format(entry.since) })}
+                        {t("since", { date: `${format.format(entry.since)} UTC` })}
                       </span>
                     </div>
                     <ChevronRightIcon className="ml-auto size-4 shrink-0" aria-hidden />
@@ -89,7 +89,7 @@ export default async function VerificationQueuePage() {
                       </span>
                       <span className="text-sm text-muted-foreground">
                         {t("items", { count: entry.items })} ·{" "}
-                        {t("since", { date: format.format(entry.since) })}
+                        {t("since", { date: `${format.format(entry.since)} UTC` })}
                       </span>
                     </div>
                     <ChevronRightIcon className="ml-auto size-4 shrink-0" aria-hidden />

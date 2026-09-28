@@ -46,7 +46,7 @@ export default async function FlightLogPage({ params }: { params: Promise<{ id: 
   if (!isUuid(id)) notFound();
   const detail = await getBooking(user.id, id);
   if (!detail) notFound();
-  const { booking: b, period, aircraft: plane, route } = detail;
+  const { booking: b, period, aircraft: plane } = detail;
   const role = b.pilotId === user.id ? "pilot" : b.ownerId === user.id ? "owner" : null;
   if (!role) notFound();
   const data = await getFlightLog(user.id, id);
@@ -58,7 +58,7 @@ export default async function FlightLogPage({ params }: { params: Promise<{ id: 
   const oilUnit = t(plane.oilUnit === "qt" ? "units.qt" : "units.l");
   const editable =
     role === "pilot" && (log.status === "draft" || log.status === "correction_requested");
-  const timeZone = route[0]?.timezone ?? "UTC";
+  const timeZone = "UTC";
   // Confirmed logs keep the fuel settlement agreed then; open ones follow the entries.
   const fuel = fuelSettlement(uplifts, b.priceBasis);
   const adjustment = log.status === "confirmed" ? (log.fuelAdjustment ?? 0) : fuel.adjustment;

@@ -325,11 +325,13 @@ export function bookingNotificationEmail({
   url: string;
 }) {
   const t = translator(locale);
-  const when = new Intl.DateTimeFormat(intlLocale(localeOf(locale)), {
+  // Aviation runs on UTC: times in emails are UTC too.
+  const when = `${new Intl.DateTimeFormat(intlLocale(localeOf(locale)), {
     dateStyle: "medium",
     timeStyle: "short",
     timeZone,
-  }).format(from);
+    hourCycle: "h23",
+  }).format(from)} UTC`;
   const values = { registration, when, other: other || t("booking.someone") };
   return render({
     subject: t(`booking.${type}.subject`, values),

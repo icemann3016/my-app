@@ -9,15 +9,26 @@ export function formatPrice(amount: number, currency: string, locale: Locale): s
   }).format(amount);
 }
 
-/** "1 Oct 2026, 08:00 – 12:00" in the airport's zone, and the same span in UTC. */
-export function formatSpan(
-  from: Date,
-  to: Date,
-  timeZone: string,
-  locale: Locale,
-): { local: string; utc: string } {
-  const options = { dateStyle: "medium", timeStyle: "short" } as const;
-  const local = new Intl.DateTimeFormat(intlLocale(locale), { ...options, timeZone });
-  const utc = new Intl.DateTimeFormat(intlLocale(locale), { ...options, timeZone: "UTC" });
-  return { local: local.formatRange(from, to), utc: `${utc.formatRange(from, to)} UTC` };
+// Aviation runs on UTC: every date and time in the app is shown (and entered) in UTC, on a
+// 24-hour clock, and labelled "UTC".
+const utcOptions = { timeZone: "UTC", hourCycle: "h23" } as const;
+
+/** "1 Oct 2026, 08:00 – 12:00 UTC". */
+export function formatSpan(from: Date, to: Date, locale: Locale): string {
+  const format = new Intl.DateTimeFormat(intlLocale(locale), {
+    dateStyle: "medium",
+    timeStyle: "short",
+    ...utcOptions,
+  });
+  return `${format.formatRange(from, to)} UTC`;
+}
+
+/** "1 Oct 2026, 08:00 UTC" (or only the date with `dateOnly`). */
+export function formatUtc(date: Date, locale: Locale, { dateOnly = false } = {}): string {
+  const format = new Intl.DateTimeFormat(intlLocale(locale), {
+    dateStyle: "medium",
+    ...(dateOnly ? {} : { timeStyle: "short" }),
+    ...utcOptions,
+  });
+  return dateOnly ? format.format(date) : `${format.format(date)} UTC`;
 }

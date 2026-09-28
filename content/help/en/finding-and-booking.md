@@ -5,8 +5,7 @@
 **Find aircraft** lets you search by:
 
 - **Airfield** (from the airport list) and **Within** a radius in km.
-- **From / Until**: local time at the chosen airfield. With dates, only aircraft free for the
-  whole time are shown.
+- **From / Until** in UTC. With dates, only aircraft free for the whole time are shown.
 - **More filters:** minimum seats, maximum price per hour, and **Only aircraft I can rent**
   (checks your verified credentials against each owner's requirements).
 - **Sort** by distance, price, rating or newest.
@@ -17,9 +16,19 @@ A search at night only shows aircraft approved for night VFR.
 
 ## The aircraft page
 
-Photos, specifications, equipment, price and terms, the home base, the owner, a calendar of
-free and busy times (you see only *busy*, never other people's details) and the owner's
-**requirements**.
+Photos, specifications, equipment, price and terms, the home base, the owner, the
+**availability calendar** and the owner's **requirements**.
+
+## The availability calendar
+
+- Each day shows whether it's free, partly busy or fully busy, with coloured dots for what's on
+  it: **booking**, **own use**, **maintenance** or **unavailable**.
+- **Hover over or tap a day** to see each entry's times (UTC) and kind; a booking that's only
+  requested says so. You never see who booked it or the owner's notes.
+- **Pick dates like on a hotel site:** click the first day, then the last day, and set the start
+  and end times (UTC). Then **Check availability** (the page shows whether that time is free and
+  whether you can rent it) or **Request booking** (the booking form opens with your dates filled
+  in).
 
 Under the price, the page tells you whether you meet the requirements (for the times you picked,
 if any). If not, it lists the reasons and links to your pilot credentials. Some things are **conditions**
@@ -29,7 +38,7 @@ rather than refusals, for example a checkout flight with an instructor (see belo
 
 **Request booking** on the aircraft page opens the form:
 
-- **From / Until** (local time at the departure airfield; UTC is shown alongside).
+- **From / Until** in UTC.
 - **Departure** and **arrival** airfields, and optional **stops**.
 - **Purpose** (local flight, cross-country, training, other), **passengers** (up to seats − 1),
   **planned flight time** and a **message to the owner**.

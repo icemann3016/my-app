@@ -72,8 +72,7 @@ export default async function AircraftPage({
     user ? getUnits(user.id) : Promise.resolve("metric" as const),
   ]);
   const isOwner = user?.id === a.ownerId;
-  const timeZone = airport?.timezone ?? "UTC";
-  const { month, period } = await wantedPeriod(query, timeZone);
+  const { month, period } = await wantedPeriod(query);
   const price = (amount: number) => formatPrice(amount, a.currency, locale);
 
   return (
@@ -131,7 +130,7 @@ export default async function AircraftPage({
           <Availability
             aircraftId={id}
             viewerId={user?.id ?? null}
-            timeZone={timeZone}
+            canBook={a.status === "listed" && a.pricePerHour !== null && !isOwner}
             locale={locale}
             month={month}
             period={period}

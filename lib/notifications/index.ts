@@ -4,7 +4,7 @@ import { and, count, desc, eq, inArray, isNull, sql } from "drizzle-orm";
 
 import { getDb } from "@/lib/db";
 import { asUser } from "@/lib/db/rls";
-import { aircraft, airports, bookings, notifications, profiles } from "@/lib/db/schema";
+import { aircraft, bookings, notifications, profiles } from "@/lib/db/schema";
 import { sendEmail } from "@/lib/email";
 import { getRecipient } from "@/lib/email/recipient";
 import { bookingNotificationEmail } from "@/lib/email/templates";
@@ -39,16 +39,14 @@ async function bookingContext(ids: string[]) {
       id: bookings.id,
       registration: aircraft.registration,
       from: sql<string>`lower(${bookings.period})`,
-      timeZone: airports.timezone,
     })
     .from(bookings)
     .innerJoin(aircraft, eq(aircraft.id, bookings.aircraftId))
-    .leftJoin(airports, eq(airports.ident, bookings.departureIdent))
     .where(inArray(bookings.id, ids));
   return new Map(
     rows.map((r) => [
       r.id,
-      { registration: r.registration, from: new Date(r.from), timeZone: r.timeZone ?? "UTC" },
+      { registration: r.registration, from: new Date(r.from), timeZone: "UTC" },
     ]),
   );
 }

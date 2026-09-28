@@ -110,8 +110,8 @@ export async function saveLeg(_prev: FormState, formData: FormData): Promise<For
   if (!toAirport) return { errors: { to: [v("airportUnknown")] }, values: raw };
   const times = legTimesToUtc({
     date,
-    fromZone: fromAirport.timezone,
-    toZone: toAirport.timezone,
+    fromZone: "UTC",
+    toZone: "UTC",
     blockOff,
     engineStart,
     takeoff,
@@ -218,7 +218,7 @@ export async function confirmLog(_prev: FormState, formData: FormData): Promise<
   const detail = await getBooking(user.id, raw.bookingId ?? "");
   const data = detail ? await getFlightLog(user.id, detail.booking.id) : null;
   if (!detail || !data) return { message: t("errors.not_found") };
-  const zone = detail.route[0]?.timezone ?? "UTC";
+  const zone = "UTC";
   const fuel = fuelSettlement(data.uplifts, detail.booking.priceBasis);
   const result = bookingAmount(detail.booking, detail.period, zone, data.legs, fuel.adjustment);
   if (!result) return { message: t("errors.missing_meters") };

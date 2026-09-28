@@ -63,8 +63,8 @@ test("a pilot requests a booking and the owner sees it", async ({ page, browser 
   await expect(owner.getByText("The pilot meets your requirements for this flight.")).toBeVisible();
   await expect(owner.getByText("Local flight around Sofia.")).toBeVisible();
   await owner.getByRole("button", { name: "Suggest another time" }).click();
-  await owner.getByLabel("From").fill(`${day}T15:00`);
-  await owner.getByLabel("Until").fill(`${day}T17:00`);
+  await owner.getByLabel("From").fill(`${day}T07:00`);
+  await owner.getByLabel("Until").fill(`${day}T09:00`);
   await owner.getByRole("button", { name: "Decline and suggest" }).click();
   await expect(owner.getByText(/You declined and suggested/)).toBeVisible();
 
@@ -72,7 +72,7 @@ test("a pilot requests a booking and the owner sees it", async ({ page, browser 
   await page.goto(bookingUrl);
   await expect(page.getByText(/The owner can't do this time but suggests/)).toBeVisible();
   await page.getByRole("link", { name: "Request this time" }).click();
-  await expect(page.getByLabel("From")).toHaveValue(`${day}T15:00`);
+  await expect(page.getByLabel("From")).toHaveValue(`${day}T07:00`);
   await page.getByRole("button", { name: "Send request" }).click();
   await expect(page).toHaveURL(/\/bookings\/[0-9a-f-]{36}$/);
   const secondUrl = new URL(page.url()).pathname;

@@ -132,21 +132,21 @@ describeDb("aircraft search", () => {
       kind: "maintenance",
       period: "[2030-06-01T06:00:00Z,2030-06-01T10:00:00Z)",
     });
-    // 11:00–12:00 local in Sofia (UTC+3 in summer) = 08:00–09:00 UTC: overlaps.
+    // Search times are UTC: 08:00–09:00 overlaps the maintenance, 11:00–13:00 doesn't.
     expect(
       await regs({
         airport: "LBSF",
         radius: "200",
-        from: "2030-06-01T11:00",
-        to: "2030-06-01T12:00",
+        from: "2030-06-01T08:00",
+        to: "2030-06-01T09:00",
       }),
     ).toEqual(["LZ-SOF"]);
     expect(
       await regs({
         airport: "LBSF",
         radius: "200",
-        from: "2030-06-01T13:00",
-        to: "2030-06-01T15:00",
+        from: "2030-06-01T11:00",
+        to: "2030-06-01T13:00",
       }),
     ).toEqual(["LZ-SOF", "LZ-PDV"]);
   });

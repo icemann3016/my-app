@@ -5,7 +5,6 @@ import { revalidatePath } from "next/cache";
 import { getTranslations } from "next-intl/server";
 import { z } from "zod";
 
-import { getAirport } from "@/lib/airports";
 import { requireUser } from "@/lib/auth/session";
 import { asUser } from "@/lib/db/rls";
 import { aircraft, calendarEntries } from "@/lib/db/schema";
@@ -42,8 +41,8 @@ export async function addCalendarBlock(_prev: FormState, formData: FormData): Pr
     return row;
   });
   if (!home) return { message: t("notFound"), values: raw };
-  // Times are entered in the home base's local time.
-  const timeZone = (await getAirport(home.ident))?.timezone ?? "UTC";
+  // Times are entered in UTC (aviation convention).
+  const timeZone = "UTC";
   const from = zonedToUtc(parsed.data.from, timeZone);
   const to = zonedToUtc(parsed.data.to, timeZone);
   const v = await getTranslations("validation");

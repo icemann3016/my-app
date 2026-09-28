@@ -1,7 +1,8 @@
 import { getLocale, getTranslations } from "next-intl/server";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { intlLocale, type Locale } from "@/lib/i18n/config";
+import { formatUtc } from "@/lib/aircraft/format";
+import type { Locale } from "@/lib/i18n/config";
 
 const KNOWN = new Set([
   "requested",
@@ -21,17 +22,12 @@ const KNOWN = new Set([
 /** What happened to a booking, oldest first. */
 export async function BookingHistory({
   events,
-  timeZone,
 }: {
   events: { id: string; type: string; createdAt: Date }[];
-  timeZone: string;
 }) {
   const t = await getTranslations("booking.history");
-  const format = new Intl.DateTimeFormat(intlLocale((await getLocale()) as Locale), {
-    dateStyle: "medium",
-    timeStyle: "short",
-    timeZone,
-  });
+  const locale = (await getLocale()) as Locale;
+  const format = { format: (d: Date) => formatUtc(d, locale) };
   return (
     <Card>
       <CardHeader>

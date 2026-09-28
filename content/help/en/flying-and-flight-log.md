@@ -14,9 +14,8 @@ Hobbs and tach, fuel on board, oil level, and optionally a photo of the meters.
 Add one **leg** per flight (**Add leg**), for example LBSF → LBPD → LBSF as two legs:
 
 - **From / To** airfields and the **date**.
-- **Block off, engine start, take-off, landing, engine stop, block on**: local time at each
-  airfield (departure times at the departure airfield, arrival times at the arrival airfield).
-  Take-off and landing are optional. Times past midnight are handled.
+- **Block off, engine start, take-off, landing, engine stop, block on**, all in UTC. Take-off
+  and landing are optional. Times past midnight (UTC) are handled.
 - **Landings**, **Hobbs** and **tach** at start and end, **fuel** and **oil** before and after.
 
 The app refuses times out of order, legs longer than 24 hours and meters that go backwards. You

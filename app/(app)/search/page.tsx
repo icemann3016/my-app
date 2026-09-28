@@ -29,13 +29,10 @@ export default async function SearchPage({
   const user = await getUser();
   const t = await getTranslations("search");
   const locale = (await getLocale()) as Locale;
-  const { origin, originCoords, period, timeZone, results } = await searchAircraft(
-    user?.id ?? null,
-    {
-      ...filters,
-      eligible: filters.eligible && Boolean(user),
-    },
-  );
+  const { origin, originCoords, period, results } = await searchAircraft(user?.id ?? null, {
+    ...filters,
+    eligible: filters.eligible && Boolean(user),
+  });
   // Carry the airport and dates to the aircraft page, so it can show availability for them.
   const carry = new URLSearchParams(
     Object.entries({ from: filters.from, to: filters.to, airport: filters.airport }).filter(
@@ -76,7 +73,7 @@ export default async function SearchPage({
       href: `/aircraft/${r.id}${carry ? `?${carry}` : ""}`,
     });
   }
-  const span = period ? formatSpan(period.from, period.to, timeZone, locale) : null;
+  const span = period ? formatSpan(period.from, period.to, locale) : null;
 
   return (
     <div className="mx-auto grid w-full max-w-5xl gap-6 px-4 py-8">
@@ -115,7 +112,7 @@ export default async function SearchPage({
             <p className="text-sm text-muted-foreground">
               {[
                 origin ? t("near", { code: origin.code, km: filters.radius }) : t("everywhere"),
-                span ? t("freeBetween", { when: span.local }) : null,
+                span ? t("freeBetween", { when: span }) : null,
               ]
                 .filter(Boolean)
                 .join(" · ")}

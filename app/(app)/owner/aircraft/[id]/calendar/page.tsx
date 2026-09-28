@@ -10,7 +10,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { getCalendarEntries } from "@/lib/aircraft/calendar";
 import { formatSpan } from "@/lib/aircraft/format";
 import { requireOwnAircraft } from "@/lib/aircraft/owner";
-import { getAirport } from "@/lib/airports";
 import { addDays, addMonths, zonedDay, zonedToUtc } from "@/lib/domain/time";
 import type { Locale } from "@/lib/i18n/config";
 import { deleteCalendarBlock } from "./actions";
@@ -27,15 +26,19 @@ export default async function CalendarPage({
   searchParams,
 }: {
   params: Promise<{ id: string }>;
-  searchParams: Promise<{ month?: string }>;
+  searchParams: Promise<{ month?: string; from?: string; to?: string }>;
 }) {
   const { id } = await params;
-  const { user, aircraft } = await requireOwnAircraft(id, "calendar");
+  const { user } = await requireOwnAircraft(id, "calendar");
   const t = await getTranslations("aircraft");
   const locale = (await getLocale()) as Locale;
-  const timeZone = (await getAirport(aircraft.homeAirportIdent))?.timezone ?? "UTC";
+  const timeZone = "UTC";
   const now = new Date();
-  const requested = (await searchParams).month;
+  const query = await searchParams;
+  const requested = query.month;
+  // Dates picked on the calendar pre-fill the block form (UTC, YYYY-MM-DDTHH:MM).
+  const picked = (v: string | undefined) =>
+    v && /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(v) ? v : undefined;
   const month = /^\d{4}-(0[1-9]|1[0-2])$/.test(requested ?? "")
     ? requested!
     : zonedDay(now, timeZone).slice(0, 7);
@@ -59,21 +62,26 @@ export default async function CalendarPage({
         <CardContent>
           <MonthCalendar
             month={month}
-            timeZone={timeZone}
             locale={locale}
-            spans={inMonth}
+            spans={inMonth.map((e) => ({
+              ...e,
+              pending: e.bookingStatus === "requested",
+              detail: e.pilotName ?? e.note,
+              href: e.bookingId ? `/bookings/${e.bookingId}` : null,
+            }))}
             mode="owner"
             basePath={`/owner/aircraft/${id}/calendar`}
+            select={{ kind: "block", aircraftId: id }}
           />
         </CardContent>
       </Card>
 
-      <Card>
+      <Card id="block" className="scroll-mt-20">
         <CardHeader>
           <CardTitle as="h2">{t("calendar.addTitle")}</CardTitle>
         </CardHeader>
         <CardContent>
-          <BlockForm aircraftId={id} timeZone={timeZone} />
+          <BlockForm aircraftId={id} initial={{ from: picked(query.from), to: picked(query.to) }} />
         </CardContent>
       </Card>
 
@@ -87,15 +95,14 @@ export default async function CalendarPage({
           ) : (
             <ul className="grid divide-y">
               {upcoming.map((entry) => {
-                const span = formatSpan(entry.from, entry.to, timeZone, locale);
+                const span = formatSpan(entry.from, entry.to, locale);
                 return (
                   <li key={entry.id} className="flex items-start gap-3 py-3 first:pt-0 last:pb-0">
                     <div className="grid min-w-0 flex-1 gap-1">
                       <div className="flex flex-wrap items-center gap-2">
                         <Badge variant="outline">{t(`calendar.kinds.${entry.kind}`)}</Badge>
-                        <span className="text-sm font-medium">{span.local}</span>
+                        <span className="text-sm font-medium">{span}</span>
                       </div>
-                      <span className="text-xs text-muted-foreground">{span.utc}</span>
                       {entry.note && <p className="text-sm break-words">{entry.note}</p>}
                     </div>
                     {entry.kind !== "booking" && (
@@ -106,7 +113,7 @@ export default async function CalendarPage({
                           variant="ghost"
                           size="icon"
                           className="text-destructive"
-                          aria-label={t("calendar.remove", { when: span.local })}
+                          aria-label={t("calendar.remove", { when: span })}
                         >
                           <Trash2Icon aria-hidden />
                         </SubmitButton>

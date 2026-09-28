@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { requireOwnAircraft } from "@/lib/aircraft/owner";
 import { getUnits } from "@/lib/aircraft/queries";
-import { getAirport } from "@/lib/airports";
 import { getAircraftUsage, pilotNames } from "@/lib/bookings/usage";
 import { usageByMonth, usageByPilot, usageTotals } from "@/lib/domain/usage";
 import { intlLocale, type Locale } from "@/lib/i18n/config";
@@ -25,12 +24,11 @@ export default async function UsagePage({ params }: { params: Promise<{ id: stri
   const t = await getTranslations("usage");
   const ta = await getTranslations("aircraft");
   const locale = (await getLocale()) as Locale;
-  const [{ flights }, units, home] = await Promise.all([
+  const [{ flights }, units] = await Promise.all([
     getAircraftUsage(user.id, id),
     getUnits(user.id),
-    getAirport(aircraft.homeAirportIdent),
   ]);
-  const timeZone = home?.timezone ?? "UTC";
+  const timeZone = "UTC";
   const months = usageByMonth(flights, timeZone);
   const pilots = usageByPilot(flights);
   const names = await pilotNames(

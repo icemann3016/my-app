@@ -11,16 +11,23 @@ import { addCalendarBlock } from "./actions";
 
 const KINDS = ["owner_use", "maintenance", "unavailable"] as const;
 
-/** Block time on the calendar, in the home base's local time. */
-export function BlockForm({ aircraftId, timeZone }: { aircraftId: string; timeZone: string }) {
+/** Block time on the calendar, in UTC; dates picked on the calendar arrive as `initial`. */
+export function BlockForm({
+  aircraftId,
+  initial,
+}: {
+  aircraftId: string;
+  initial: { from?: string; to?: string };
+}) {
   const t = useTranslations("aircraft.calendar");
   const [state, formAction] = useActionState(addCalendarBlock, initialFormState);
   // After a successful save the form starts empty again.
-  const v = state.ok ? {} : (state.values ?? {});
+  const v: Record<string, string | undefined> = state.ok ? {} : (state.values ?? initial);
   const e = state.errors ?? {};
 
   return (
-    <form action={formAction} className="grid gap-4">
+    // Picking other dates on the calendar remounts the form with them.
+    <form key={`${initial.from}-${initial.to}`} action={formAction} className="grid gap-4">
       <FormMessage state={state} />
       <input type="hidden" name="aircraftId" value={aircraftId} />
       <SelectField
@@ -48,7 +55,7 @@ export function BlockForm({ aircraftId, timeZone }: { aircraftId: string; timeZo
           required
         />
       </div>
-      <p className="-mt-2 text-xs text-muted-foreground">{t("localHint", { zone: timeZone })}</p>
+      <p className="-mt-2 text-xs text-muted-foreground">{t("localHint")}</p>
       <TextField
         name="note"
         label={t("note")}

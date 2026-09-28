@@ -8,7 +8,6 @@ import { KnownItems } from "@/components/bookings/known-items";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { requireOwnAircraft } from "@/lib/aircraft/owner";
-import { getAirport } from "@/lib/airports";
 import { getAircraftRemarks, getKnownItems } from "@/lib/bookings/remarks";
 import { intlLocale, type Locale } from "@/lib/i18n/config";
 
@@ -20,14 +19,14 @@ export async function generateMetadata(): Promise<Metadata> {
 /** Everything pilots noted about this aircraft; the owner picks the known items (BKG-15). */
 export default async function RemarksPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const { user, aircraft } = await requireOwnAircraft(id, "remarks");
+  const { user } = await requireOwnAircraft(id, "remarks");
   const t = await getTranslations("aircraft");
   const tr = await getTranslations("flightLog.remarks");
   const [rows, known] = await Promise.all([
     getAircraftRemarks(user.id, id),
     getKnownItems(user.id, id),
   ]);
-  const timeZone = (await getAirport(aircraft.homeAirportIdent))?.timezone ?? "UTC";
+  const timeZone = "UTC";
   const format = new Intl.DateTimeFormat(intlLocale((await getLocale()) as Locale), {
     dateStyle: "medium",
     timeZone,

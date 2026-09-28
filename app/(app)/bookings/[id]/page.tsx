@@ -17,14 +17,14 @@ import { ReportDefectDialog } from "@/components/bookings/report-defect-dialog";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { formatPrice, formatSpan } from "@/lib/aircraft/format";
+import { formatPrice, formatSpan, formatUtc } from "@/lib/aircraft/format";
 import { isUuid } from "@/lib/aircraft/queries";
 import { requireUser } from "@/lib/auth/session";
 import { getBooking, pilotMeetsRequirements } from "@/lib/bookings/queries";
 import { getKnownItems } from "@/lib/bookings/remarks";
 import { FREE_CANCELLATION_HOURS } from "@/lib/bookings/respond";
 import { toRange, utcToZoned } from "@/lib/domain/time";
-import { intlLocale, type Locale } from "@/lib/i18n/config";
+import type { Locale } from "@/lib/i18n/config";
 import { BookingHistory } from "./booking-history";
 import { CancelBooking } from "./cancel-booking";
 import { CheckoutRecord } from "./checkout-record";
@@ -56,8 +56,8 @@ export default async function BookingPage({
   const locale = (await getLocale()) as Locale;
   const isOwner = b.ownerId === user.id;
   const now = new Date();
-  const timeZone = route[0]?.timezone ?? "UTC";
-  const span = formatSpan(period.from, period.to, timeZone, locale);
+  const timeZone = "UTC";
+  const span = formatSpan(period.from, period.to, locale);
   const meets =
     isOwner && b.status === "requested"
       ? await pilotMeetsRequirements(
@@ -66,11 +66,7 @@ export default async function BookingPage({
           route.map((r) => r.ident),
         )
       : null;
-  const expires = new Intl.DateTimeFormat(intlLocale(locale), {
-    dateStyle: "medium",
-    timeStyle: "short",
-    timeZone,
-  }).format(b.expiresAt);
+  const expires = formatUtc(b.expiresAt, locale);
 
   return (
     <div className="mx-auto grid w-full max-w-3xl gap-6 px-4 py-10">
@@ -125,7 +121,6 @@ export default async function BookingPage({
         status={b.status}
         isPilot={b.pilotId === user.id}
         opensAt={new Date(period.from.getTime() - 2 * 3_600_000)}
-        timeZone={timeZone}
         error={checkout}
       />
       {plane.status === "grounded" && ["requested", "accepted"].includes(b.status) && (
@@ -155,7 +150,7 @@ export default async function BookingPage({
             <CardTitle as="h2">{t("respond.title")}</CardTitle>
           </CardHeader>
           <CardContent>
-            <RespondForm bookingId={b.id} timeZone={timeZone} />
+            <RespondForm bookingId={b.id} />
           </CardContent>
         </Card>
       )}
@@ -170,7 +165,7 @@ export default async function BookingPage({
           <AlertDescription className="grid gap-2">
             <span>
               {t(isOwner ? "detail.youProposed" : "detail.proposed", {
-                when: formatSpan(proposal.from, proposal.to, timeZone, locale).local,
+                when: formatSpan(proposal.from, proposal.to, locale),
               })}
             </span>
             {!isOwner && (
@@ -197,8 +192,7 @@ export default async function BookingPage({
           <dl className="grid gap-3 text-sm sm:grid-cols-2">
             <div className="sm:col-span-2">
               <dt className="text-muted-foreground">{t("detail.when")}</dt>
-              <dd className="font-medium">{span.local}</dd>
-              <dd className="text-xs text-muted-foreground">{span.utc}</dd>
+              <dd className="font-medium">{span}</dd>
             </div>
             <div className="sm:col-span-2">
               <dt className="text-muted-foreground">{t("detail.route")}</dt>
@@ -263,7 +257,7 @@ export default async function BookingPage({
         <ReportDefectDialog aircraftId={b.aircraftId} bookingId={b.id} />
       )}
 
-      <BookingHistory events={detail.events} timeZone={timeZone} />
+      <BookingHistory events={detail.events} />
     </div>
   );
 }

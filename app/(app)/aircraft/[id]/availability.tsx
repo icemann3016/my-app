@@ -12,25 +12,24 @@ import { cn } from "@/lib/utils";
 export async function Availability({
   aircraftId,
   viewerId,
-  timeZone,
+  canBook,
   locale,
   month,
   period,
 }: {
   aircraftId: string;
   viewerId: string | null;
-  timeZone: string;
+  /** The viewer may request a booking (listed aircraft, not their own). */
+  canBook: boolean;
   locale: Locale;
   /** YYYY-MM to show; defaults to the period's month or this month. */
   month: string | null;
   period: { from: Date; to: Date } | null;
 }) {
   const t = await getTranslations("aircraft.availability");
-  const shown =
-    month ??
-    (period ? zonedDay(period.from, timeZone) : zonedDay(new Date(), timeZone)).slice(0, 7);
-  const start = zonedToUtc(`${shown}-01`, timeZone)!;
-  const end = zonedToUtc(`${addMonths(shown, 1)}-01`, timeZone)!;
+  const shown = month ?? zonedDay(period ? period.from : new Date(), "UTC").slice(0, 7);
+  const start = zonedToUtc(`${shown}-01`, "UTC")!;
+  const end = zonedToUtc(`${addMonths(shown, 1)}-01`, "UTC")!;
   const busy = await getBusyPeriods(viewerId, aircraftId, start, end);
 
   let periodFree: boolean | null = null;
@@ -38,7 +37,7 @@ export async function Availability({
     const overlapping = await getBusyPeriods(viewerId, aircraftId, period.from, period.to);
     periodFree = overlapping.length === 0;
   }
-  const span = period ? formatSpan(period.from, period.to, timeZone, locale) : null;
+  const span = period ? formatSpan(period.from, period.to, locale) : null;
 
   return (
     <section className="grid gap-3">
@@ -57,20 +56,17 @@ export async function Availability({
           ) : (
             <CalendarXIcon className="mt-0.5 size-4 shrink-0" aria-hidden />
           )}
-          <span>
-            {periodFree ? t("free", { when: span.local }) : t("busy", { when: span.local })}
-            <span className="block text-xs opacity-80">{span.utc}</span>
-          </span>
+          <span>{periodFree ? t("free", { when: span }) : t("busy", { when: span })}</span>
         </p>
       )}
       <div className="rounded-lg border p-3 sm:max-w-md">
         <MonthCalendar
           month={shown}
-          timeZone={timeZone}
           locale={locale}
           spans={busy}
           mode="public"
           basePath={`/aircraft/${aircraftId}`}
+          select={{ kind: "book", aircraftId, canBook }}
         />
       </div>
     </section>

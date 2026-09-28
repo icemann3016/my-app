@@ -4,8 +4,9 @@ import { getLocale, getTranslations } from "next-intl/server";
 
 import { Card, CardContent } from "@/components/ui/card";
 import { requireUser } from "@/lib/auth/session";
-import { intlLocale, type Locale } from "@/lib/i18n/config";
+import type { Locale } from "@/lib/i18n/config";
 import { knownType, listNotifications, markAllRead } from "@/lib/notifications";
+import { formatUtc } from "@/lib/aircraft/format";
 import { cn } from "@/lib/utils";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -20,12 +21,7 @@ export default async function NotificationsPage() {
   const locale = (await getLocale()) as Locale;
   const items = await listNotifications(user.id);
   await markAllRead(user.id);
-  const format = (d: Date, timeZone?: string) =>
-    new Intl.DateTimeFormat(intlLocale(locale), {
-      dateStyle: "medium",
-      timeStyle: "short",
-      timeZone,
-    }).format(d);
+  const format = (d: Date) => formatUtc(d, locale);
 
   return (
     <div className="mx-auto grid w-full max-w-3xl gap-6 px-4 py-10">
@@ -42,7 +38,7 @@ export default async function NotificationsPage() {
               {items.map((n) => {
                 const values = {
                   registration: n.booking?.registration ?? "",
-                  when: n.booking ? format(n.booking.from, n.booking.timeZone) : "",
+                  when: n.booking ? format(n.booking.from) : "",
                   other: n.actor ?? t("someone"),
                 };
                 const text = t(`types.${knownType(n.type)}`, values);

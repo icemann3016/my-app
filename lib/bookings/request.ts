@@ -35,8 +35,8 @@ export async function requestBooking(
   const a = row.aircraft;
   const departure = await getAirport(input.departure);
   if (!departure) return { ok: false, error: "unknown_airfield", field: "departure" };
-  const from = zonedToUtc(input.from, departure.timezone);
-  const to = zonedToUtc(input.to, departure.timezone);
+  const from = zonedToUtc(input.from, "UTC");
+  const to = zonedToUtc(input.to, "UTC");
   if (!from) return { ok: false, error: "dateTimeInvalid", field: "from" };
   if (!to || to <= from) return { ok: false, error: "endBeforeStart", field: "to" };
 
@@ -47,8 +47,8 @@ export async function requestBooking(
     priceBasis: a.priceBasis,
     fuelBurnLph: a.fuelBurnLph,
     plannedHours: input.plannedHours,
-    days: localDaysTouched(from, to, departure.timezone),
-    weekend: isWeekend(from, departure.timezone),
+    days: localDaysTouched(from, to, "UTC"),
+    weekend: isWeekend(from, "UTC"),
   });
 
   try {

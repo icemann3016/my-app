@@ -34,7 +34,7 @@ export async function searchAircraft(viewerId: string | null, f: SearchFilters) 
         return row ?? null;
       })
     : null;
-  const timeZone = origin?.timezone ?? "UTC";
+  const timeZone = "UTC";
   const from = f.from ? zonedToUtc(f.from, timeZone) : null;
   const to = f.to ? zonedToUtc(f.to, timeZone) : null;
   const period = from && to && to > from ? { from, to } : null;

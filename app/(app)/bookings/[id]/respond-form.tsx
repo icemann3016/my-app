@@ -12,7 +12,7 @@ import { initialFormState } from "@/lib/forms";
 import { answerBooking } from "./actions";
 
 /** Accept, decline or suggest another time for a booking request (owner, BKG-3). */
-export function RespondForm({ bookingId, timeZone }: { bookingId: string; timeZone: string }) {
+export function RespondForm({ bookingId }: { bookingId: string }) {
   const t = useTranslations("booking.respond");
   const [state, formAction] = useActionState(answerBooking, initialFormState);
   const [proposing, setProposing] = useState(false);
@@ -33,7 +33,7 @@ export function RespondForm({ bookingId, timeZone }: { bookingId: string; timeZo
       />
       {proposing && (
         <div className="grid gap-4 rounded-md border p-3">
-          <p className="text-sm">{t("proposeText", { zone: timeZone })}</p>
+          <p className="text-sm">{t("proposeText")}</p>
           <div className="grid gap-4 sm:grid-cols-2">
             <TextField
               name="proposeFrom"
