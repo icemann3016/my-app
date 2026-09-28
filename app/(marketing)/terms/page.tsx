@@ -1,18 +1,7 @@
-import type { Metadata } from "next";
-import { getTranslations } from "next-intl/server";
+import { LegalPageView, legalMetadata } from "@/components/legal-page";
 
-import { ComingSoon } from "@/components/coming-soon";
+export const generateMetadata = () => legalMetadata("terms");
 
-export async function generateMetadata(): Promise<Metadata> {
-  const t = await getTranslations("placeholders.terms");
-  return { title: t("title") };
-}
-
-export default async function Page() {
-  const t = await getTranslations("placeholders.terms");
-  return (
-    <ComingSoon title={t("title")} milestone="M10">
-      {t("text")}
-    </ComingSoon>
-  );
+export default function Page() {
+  return <LegalPageView page="terms" />;
 }

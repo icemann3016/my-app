@@ -1,7 +1,7 @@
 import { LegalPageView, legalMetadata } from "@/components/legal-page";
 
-export const generateMetadata = () => legalMetadata("privacy");
+export const generateMetadata = () => legalMetadata("cookies");
 
 export default function Page() {
-  return <LegalPageView page="privacy" />;
+  return <LegalPageView page="cookies" />;
 }

@@ -9,5 +9,6 @@ export const siteConfig = {
     { href: "/help", key: "help" },
     { href: "/terms", key: "terms" },
     { href: "/privacy", key: "privacy" },
+    { href: "/cookies", key: "cookies" },
   ],
 } as const;

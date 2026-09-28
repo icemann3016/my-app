@@ -15,7 +15,12 @@ const nextConfig: NextConfig = {
     return [{ source: "/pilot", destination: "/account/credentials", permanent: true }];
   },
   // Help articles are read from content/help at request time; ship them with the server.
-  outputFileTracingIncludes: { "/help/**": ["./content/help/**/*"] },
+  outputFileTracingIncludes: {
+    "/help/**": ["./content/help/**/*"],
+    "/terms": ["./content/legal/**/*"],
+    "/privacy": ["./content/legal/**/*"],
+    "/cookies": ["./content/legal/**/*"],
+  },
   images: {
     remotePatterns: [
       { protocol: "https", hostname: "*.supabase.co" },

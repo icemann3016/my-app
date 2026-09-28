@@ -27,11 +27,8 @@
       "terms": "Terms",
       "privacy": "Privacy",
       "language": "Language",
-      "help": "Help"
-    },
-    "comingSoon": {
-      "default": "This page is coming soon.",
-      "backHome": "Back to home"
+      "help": "Help",
+      "cookies": "Cookies"
     },
     "notFound": {
       "title": "Off the charts",
@@ -71,16 +68,6 @@
     "trustRatings": "Two-way ratings after every flight",
     "trustEasa": "Built for EASA rules and European airfields",
     "accountDeleted": "Your account and all its data have been deleted."
-  },
-  "placeholders": {
-    "terms": {
-      "title": "Terms of service",
-      "text": "Our terms will be published before launch."
-    },
-    "privacy": {
-      "title": "Privacy policy",
-      "text": "Our privacy policy will be published before launch."
-    }
   },
   "fields": {
     "email": "Email",
@@ -2022,5 +2009,8 @@
       "not_found": "You can't send messages in this conversation.",
       "failed": "Couldn't send your message. Please try again."
     }
+  },
+  "legal": {
+    "draft": "Draft: this text is still being reviewed by our lawyer and may change before launch."
   }
 }
