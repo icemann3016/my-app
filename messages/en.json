@@ -431,6 +431,63 @@
       },
       "next": "If it shouldn't fly, ground it in the app: pilots then can't book it or check it out until you list it again.",
       "cta": "See the defect"
+    },
+    "booking": {
+      "greeting": "Hi {name},",
+      "cta": "Open the booking",
+      "someone": "Someone",
+      "requested": {
+        "subject": "New booking request for {registration}",
+        "body": "{other} asked to rent {registration} from {when}."
+      },
+      "accepted": {
+        "subject": "Booking accepted: {registration}",
+        "body": "{other} accepted your booking of {registration} from {when}."
+      },
+      "declined": {
+        "subject": "Booking declined: {registration}",
+        "body": "{other} declined your booking of {registration} from {when}."
+      },
+      "proposed": {
+        "subject": "Another time suggested for {registration}",
+        "body": "{other} declined your booking of {registration} and suggested another time."
+      },
+      "expired": {
+        "subject": "Booking request expired: {registration}",
+        "body": "The request for {registration} from {when} expired without an answer."
+      },
+      "cancelled": {
+        "subject": "Booking cancelled: {registration}",
+        "body": "{other} cancelled the booking of {registration} from {when}."
+      },
+      "checked_out": {
+        "subject": "{registration} checked out",
+        "body": "{other} checked out {registration}."
+      },
+      "log_submitted": {
+        "subject": "Flight log to confirm: {registration}",
+        "body": "{other} sent the flight log of {registration} for you to confirm."
+      },
+      "log_correction": {
+        "subject": "Flight log correction requested: {registration}",
+        "body": "{other} asked for a correction to the flight log of {registration}."
+      },
+      "log_confirmed": {
+        "subject": "Flight log confirmed: {registration}",
+        "body": "{other} confirmed the flight log of {registration}. The booking is complete."
+      },
+      "defect_reported": {
+        "subject": "Defect reported on {registration}",
+        "body": "{other} reported a defect on {registration}."
+      },
+      "reminder": {
+        "subject": "Coming up: {registration} from {when}",
+        "body": "Reminder: {registration} is booked from {when}."
+      },
+      "other": {
+        "subject": "Booking update: {registration}",
+        "body": "Update on the booking of {registration}."
+      }
     }
   },
   "airportPicker": {
@@ -1558,5 +1615,29 @@
     "markFixed": "Mark as fixed",
     "fixedOn": "fixed {date}",
     "disclaimer": "A record between you and your renters, not the aircraft's technical log. Airworthiness and certificates of release to service stay with you and your maintenance organisation."
+  },
+  "notifications": {
+    "title": "Notifications",
+    "description": "Booking requests, answers, flight logs and reminders. You also get them by email.",
+    "none": "No notifications yet.",
+    "bell": "Notifications",
+    "bellUnread": "Notifications, {count} unread",
+    "someone": "Someone",
+    "new": "New:",
+    "types": {
+      "requested": "{other} asked to rent {registration} from {when}.",
+      "accepted": "{other} accepted your booking of {registration} from {when}.",
+      "declined": "{other} declined your booking of {registration} from {when}.",
+      "proposed": "{other} declined your booking of {registration} and suggested another time.",
+      "expired": "The request for {registration} from {when} expired without an answer.",
+      "cancelled": "{other} cancelled the booking of {registration} from {when}.",
+      "checked_out": "{other} checked out {registration}.",
+      "log_submitted": "{other} sent the flight log of {registration} for you to confirm.",
+      "log_correction": "{other} asked for a correction to the flight log of {registration}.",
+      "log_confirmed": "{other} confirmed the flight log of {registration}. The booking is complete.",
+      "defect_reported": "{other} reported a defect on {registration}.",
+      "reminder": "Reminder: {registration} is booked from {when}.",
+      "other": "Update on the booking of {registration}."
+    }
   }
 }

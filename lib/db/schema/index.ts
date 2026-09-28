@@ -8,3 +8,4 @@ export * from "./calendar";
 export * from "./bookings";
 export * from "./flight-logs";
 export * from "./defects";
+export * from "./notifications";

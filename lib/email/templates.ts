@@ -288,3 +288,54 @@ export function defectReportedEmail({
     locale,
   });
 }
+
+/** A booking notification by email (BKG-9): what happened, which aircraft and when. */
+export function bookingNotificationEmail({
+  name,
+  locale,
+  type,
+  registration,
+  from,
+  timeZone,
+  other,
+  url,
+}: {
+  name: string;
+  locale?: string | null;
+  type:
+    | "requested"
+    | "accepted"
+    | "declined"
+    | "proposed"
+    | "expired"
+    | "cancelled"
+    | "checked_out"
+    | "log_submitted"
+    | "log_correction"
+    | "log_confirmed"
+    | "defect_reported"
+    | "reminder"
+    | "other";
+  registration: string;
+  from: Date;
+  timeZone: string;
+  /** Who did it (empty when the system did). */
+  other: string;
+  url: string;
+}) {
+  const t = translator(locale);
+  const when = new Intl.DateTimeFormat(intlLocale(localeOf(locale)), {
+    dateStyle: "medium",
+    timeStyle: "short",
+    timeZone,
+  }).format(from);
+  const values = { registration, when, other: other || t("booking.someone") };
+  return render({
+    subject: t(`booking.${type}.subject`, values),
+    greeting: t("booking.greeting", { name }),
+    paragraphs: [t(`booking.${type}.body`, values)],
+    cta: t("booking.cta"),
+    url,
+    locale,
+  });
+}

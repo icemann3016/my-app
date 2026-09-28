@@ -12,6 +12,7 @@ import { zonedToUtc } from "@/lib/domain/time";
 import { type FormState, formValues } from "@/lib/forms";
 import { localizedFieldErrors } from "@/lib/i18n/server";
 import { bookingResponseSchema } from "@/lib/validation/booking";
+import { sendNotificationsSoon } from "@/lib/notifications/soon";
 
 /** The owner accepts, declines or suggests another time (BKG-3). */
 export async function answerBooking(_prev: FormState, formData: FormData): Promise<FormState> {
@@ -35,6 +36,7 @@ export async function answerBooking(_prev: FormState, formData: FormData): Promi
     proposal = { from, to };
   }
 
+  sendNotificationsSoon();
   const outcome = await respondToBooking(
     user.id,
     bookingId,
@@ -77,6 +79,7 @@ export async function cancelBookingAction(
   const raw = formValues(formData);
   const parsed = cancelSchema.safeParse(raw);
   if (!parsed.success) return { errors: await localizedFieldErrors(parsed.error), values: raw };
+  sendNotificationsSoon();
   const outcome = await cancelBooking(user.id, parsed.data.bookingId, parsed.data.reason);
   if (!outcome.ok) {
     const known = ["not_found", "not_cancellable", "reason_required"];

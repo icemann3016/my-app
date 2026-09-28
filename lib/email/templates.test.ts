@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  bookingNotificationEmail,
   credentialReviewedEmail,
   defectReportedEmail,
   expiryReminderEmail,
@@ -67,5 +68,20 @@ describe("pilot credential emails", () => {
     expect(email.text).toContain("Ana reported a defect on LZ-ABC:");
     expect(email.html).toContain("Oil &#60;leak&#62; &#38; smoke");
     expect(email.html).not.toContain("<leak>");
+  });
+
+  it("words booking notifications with the aircraft and the local time", () => {
+    const email = bookingNotificationEmail({
+      name: "Zlati",
+      type: "requested",
+      registration: "LZ-ABC",
+      from: new Date("2026-10-01T07:00:00Z"),
+      timeZone: "Europe/Sofia",
+      other: "Ana",
+      url: "https://ownaplane.eu/bookings/1",
+      locale: "en",
+    });
+    expect(email.subject).toBe("New booking request for LZ-ABC");
+    expect(email.text).toContain("Ana asked to rent LZ-ABC from 1 Oct 2026, 10:00.");
   });
 });

@@ -53,6 +53,9 @@ test("a pilot requests a booking and the owner sees it", async ({ page, browser 
 
   // 4. The owner sees it, with a yes/no on the requirements (never the pilot's documents), and
   // suggests another time
+  // The owner is notified (BKG-9)
+  await owner.goto("/notifications");
+  await expect(owner.getByText(new RegExp(`asked to rent ${registration}`))).toBeVisible();
   await owner.goto("/bookings");
   await expect(owner.getByRole("heading", { name: "For my aircraft" })).toBeVisible();
   await owner.getByRole("link", { name: new RegExp(registration) }).click();

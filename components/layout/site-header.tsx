@@ -7,6 +7,7 @@ import { getCurrentProfile } from "@/lib/auth/session";
 import { siteConfig } from "@/lib/site";
 import { Logo } from "./logo";
 import { MobileNav } from "./mobile-nav";
+import { NotificationBell } from "./notification-bell";
 import { type AccountSummary, UserMenu } from "./user-menu";
 
 export async function SiteHeader() {
@@ -35,7 +36,10 @@ export async function SiteHeader() {
         </nav>
         <div className="ml-auto hidden items-center gap-2 md:flex">
           {account ? (
-            <UserMenu account={account} />
+            <>
+              <NotificationBell userId={account.id} />
+              <UserMenu account={account} />
+            </>
           ) : (
             <>
               <Button variant="ghost" size="sm" asChild>
@@ -47,7 +51,8 @@ export async function SiteHeader() {
             </>
           )}
         </div>
-        <div className="ml-auto md:hidden">
+        <div className="ml-auto flex items-center gap-1 md:hidden">
+          {account && <NotificationBell userId={account.id} />}
           <MobileNav account={account} />
         </div>
       </div>

@@ -19,6 +19,7 @@ import { legTimesToUtc } from "@/lib/domain/leg-times";
 import { type FormState, formValues } from "@/lib/forms";
 import { localizedFieldErrors } from "@/lib/i18n/server";
 import { checkoutSchema, legSchema } from "@/lib/validation/flight-log";
+import { sendNotificationsSoon } from "@/lib/notifications/soon";
 
 const idSchema = z.uuid();
 
@@ -44,6 +45,7 @@ async function context(userId: string, bookingId: string) {
 export async function startCheckout(formData: FormData) {
   const user = await requireUser("/bookings");
   const bookingId = idSchema.parse(formData.get("bookingId"));
+  sendNotificationsSoon();
   try {
     await asUser(user.id, (tx) =>
       tx.execute(sql`select public.start_flight_log(${bookingId}::uuid)`),
@@ -164,6 +166,7 @@ async function statusChange(
   run: (logId: string, raw: Record<string, string>) => ReturnType<typeof sql>,
 ): Promise<FormState> {
   const user = await requireUser("/bookings");
+  sendNotificationsSoon();
   const t = await getTranslations("flightLog");
   const raw = formValues(formData);
   const logId = idSchema.safeParse(raw.logId);

@@ -3,6 +3,7 @@ import { timingSafeEqual } from "node:crypto";
 import { sendAircraftExpiryReminders, unlistExpiredAircraft } from "@/lib/aircraft/expiry";
 import { expireBookingRequests } from "@/lib/bookings/queries";
 import { deleteOrphanDocuments } from "@/lib/documents";
+import { createBookingReminders, deliverNotificationEmails } from "@/lib/notifications";
 import { sendExpiryReminders } from "@/lib/pilot/reminders";
 
 /**
@@ -13,6 +14,8 @@ import { sendExpiryReminders } from "@/lib/pilot/reminders";
  * - emails pilots whose credentials expire within 30 days
  * - unlists aircraft whose ARC or insurance expired, and reminds owners 30 days before
  * - removes uploads older than a day that were never attached to a credential or aircraft
+ * - reminds pilot and owner of bookings starting within 36 hours, and emails notifications
+ *   that weren't sent right away
  */
 export const maxDuration = 60;
 
@@ -33,12 +36,16 @@ export async function GET(request: Request) {
   const unlistedAircraft = await unlistExpiredAircraft();
   const aircraftReminders = await sendAircraftExpiryReminders();
   const orphanDocuments = await deleteOrphanDocuments(new Date(Date.now() - 24 * 60 * 60 * 1000));
+  const bookingReminders = await createBookingReminders();
+  const notificationEmails = await deliverNotificationEmails(500);
   const result = {
     expiredRequests,
     reminders,
     unlistedAircraft,
     aircraftReminders,
     orphanDocuments,
+    bookingReminders,
+    notificationEmails,
   };
   console.info("[cron] daily", result);
   return Response.json({ ok: true, ...result });

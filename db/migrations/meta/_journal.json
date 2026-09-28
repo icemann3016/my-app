@@ -218,6 +218,20 @@
       "when": 1790610433902,
       "tag": "0030_defect_security",
       "breakpoints": true
+    },
+    {
+      "idx": 31,
+      "version": "7",
+      "when": 1790621736286,
+      "tag": "0031_notifications",
+      "breakpoints": true
+    },
+    {
+      "idx": 32,
+      "version": "7",
+      "when": 1790621737099,
+      "tag": "0032_notification_security",
+      "breakpoints": true
     }
   ]
 }

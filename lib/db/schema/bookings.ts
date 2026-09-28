@@ -96,6 +96,8 @@ export const bookings = pgTable(
     cancelReason: text("cancel_reason"),
     /** Cancelled after the policy's free-cancellation deadline (BKG-6). */
     lateCancellation: boolean("late_cancellation").notNull().default(false),
+    // The 24-hour reminder (BKG-9) went out; set by the daily job.
+    reminderSentAt: timestamp("reminder_sent_at", { withTimezone: true }),
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
     updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
   },

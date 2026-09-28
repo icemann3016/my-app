@@ -12,6 +12,7 @@ import { type FormState, formValues } from "@/lib/forms";
 import { localizedFieldErrors } from "@/lib/i18n/server";
 import type { PilotTranslate } from "@/lib/pilot/labels";
 import { bookingRequestSchema } from "@/lib/validation/booking";
+import { sendNotificationsSoon } from "@/lib/notifications/soon";
 
 /** Send a booking request (BKG-1). On success, go to the booking. */
 export async function submitBookingRequest(
@@ -26,6 +27,7 @@ export async function submitBookingRequest(
   const parsed = bookingRequestSchema.safeParse({ ...raw, stops });
   if (!parsed.success) return { errors: await localizedFieldErrors(parsed.error), values };
 
+  sendNotificationsSoon();
   const outcome = await requestBooking(user.id, parsed.data);
   if (outcome.ok) redirect(`/bookings/${outcome.id}`);
 

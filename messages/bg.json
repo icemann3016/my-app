@@ -431,6 +431,63 @@
       },
       "next": "Ако не бива да лети, спрете го от полети в приложението: тогава пилотите не могат да го резервират или поемат, докато не го обявите отново.",
       "cta": "Вижте дефекта"
+    },
+    "booking": {
+      "greeting": "Здравейте, {name},",
+      "cta": "Отворете резервацията",
+      "someone": "Някой",
+      "requested": {
+        "subject": "Нова заявка за {registration}",
+        "body": "{other} иска да наеме {registration} от {when}."
+      },
+      "accepted": {
+        "subject": "Резервацията е приета: {registration}",
+        "body": "{other} прие резервацията ви за {registration} от {when}."
+      },
+      "declined": {
+        "subject": "Резервацията е отказана: {registration}",
+        "body": "{other} отказа резервацията ви за {registration} от {when}."
+      },
+      "proposed": {
+        "subject": "Предложено е друго време за {registration}",
+        "body": "{other} отказа резервацията ви за {registration} и предложи друго време."
+      },
+      "expired": {
+        "subject": "Заявката изтече: {registration}",
+        "body": "Заявката за {registration} от {when} изтече без отговор."
+      },
+      "cancelled": {
+        "subject": "Резервацията е отменена: {registration}",
+        "body": "{other} отмени резервацията за {registration} от {when}."
+      },
+      "checked_out": {
+        "subject": "{registration} е поет",
+        "body": "{other} пое {registration}."
+      },
+      "log_submitted": {
+        "subject": "Дневник за потвърждение: {registration}",
+        "body": "{other} изпрати дневника на {registration} за потвърждение."
+      },
+      "log_correction": {
+        "subject": "Поискана корекция на дневника: {registration}",
+        "body": "{other} поиска корекция в дневника на {registration}."
+      },
+      "log_confirmed": {
+        "subject": "Дневникът е потвърден: {registration}",
+        "body": "{other} потвърди дневника на {registration}. Резервацията е приключена."
+      },
+      "defect_reported": {
+        "subject": "Докладван дефект на {registration}",
+        "body": "{other} докладва дефект на {registration}."
+      },
+      "reminder": {
+        "subject": "Скоро: {registration} от {when}",
+        "body": "Напомняне: {registration} е резервиран от {when}."
+      },
+      "other": {
+        "subject": "Промяна по резервацията: {registration}",
+        "body": "Промяна по резервацията за {registration}."
+      }
     }
   },
   "airportPicker": {
@@ -1558,5 +1615,29 @@
     "markFixed": "Маркирай като отстранен",
     "fixedOn": "отстранен {date}",
     "disclaimer": "Запис между вас и наемателите, не техническият дневник на самолета. Летателната годност и удостоверенията за пускане в експлоатация остават отговорност на вас и организацията ви по поддръжка."
+  },
+  "notifications": {
+    "title": "Известия",
+    "description": "Заявки, отговори, дневници и напомняния. Получавате ги и по имейл.",
+    "none": "Още няма известия.",
+    "bell": "Известия",
+    "bellUnread": "Известия, {count} непрочетени",
+    "someone": "Някой",
+    "new": "Ново:",
+    "types": {
+      "requested": "{other} иска да наеме {registration} от {when}.",
+      "accepted": "{other} прие резервацията ви за {registration} от {when}.",
+      "declined": "{other} отказа резервацията ви за {registration} от {when}.",
+      "proposed": "{other} отказа резервацията ви за {registration} и предложи друго време.",
+      "expired": "Заявката за {registration} от {when} изтече без отговор.",
+      "cancelled": "{other} отмени резервацията за {registration} от {when}.",
+      "checked_out": "{other} пое {registration}.",
+      "log_submitted": "{other} изпрати дневника на {registration} за потвърждение.",
+      "log_correction": "{other} поиска корекция в дневника на {registration}.",
+      "log_confirmed": "{other} потвърди дневника на {registration}. Резервацията е приключена.",
+      "defect_reported": "{other} докладва дефект на {registration}.",
+      "reminder": "Напомняне: {registration} е резервиран от {when}.",
+      "other": "Промяна по резервацията за {registration}."
+    }
   }
 }
