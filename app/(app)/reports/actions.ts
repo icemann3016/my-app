@@ -17,5 +17,6 @@ export async function reportAction(_prev: FormState, formData: FormData): Promis
   if (!parsed.success) return { errors: await localizedFieldErrors(parsed.error), values: raw };
   const result = await createReport(user.id, parsed.data);
   if (result === "not_found") return { message: t("notFound"), values: raw };
+  if (result === "too_many") return { message: t("tooMany"), values: raw };
   return { ok: true, message: t(result === "duplicate" ? "alreadyReported" : "sent") };
 }

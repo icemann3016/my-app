@@ -21,7 +21,11 @@ export async function sendMessageAction(_prev: FormState, formData: FormData): P
   const result = await sendMessage(user.id, parsed.data.conversationId, parsed.data.body);
   if (!result.ok) {
     return {
-      message: t(result.error === "not_found" ? "errors.not_found" : "errors.failed"),
+      message: t(
+        (["not_found", "too_many_messages"].includes(result.error)
+          ? `errors.${result.error}`
+          : "errors.failed") as "errors.failed",
+      ),
       values: raw,
     };
   }
@@ -44,7 +48,11 @@ export async function startEnquiryAction(_prev: FormState, formData: FormData): 
   );
   if (!result.ok) {
     return {
-      message: t(result.error === "not_found" ? "errors.not_found" : "errors.failed"),
+      message: t(
+        (["not_found", "too_many_messages"].includes(result.error)
+          ? `errors.${result.error}`
+          : "errors.failed") as "errors.failed",
+      ),
       values: raw,
     };
   }

@@ -10,15 +10,16 @@ import { reports, type ReportReason, type ReportTarget } from "@/lib/db/schema";
 export async function createReport(
   userId: string,
   r: { targetType: ReportTarget; targetId: string; reason: ReportReason; details: string },
-): Promise<"ok" | "duplicate" | "not_found"> {
+): Promise<"ok" | "duplicate" | "not_found" | "too_many"> {
   try {
     await asUser(userId, (tx) =>
       tx.insert(reports).values({ reporterId: userId, ...r, details: r.details || null }),
     );
     return "ok";
   } catch (e) {
-    const code = (e as { cause?: { code?: string } }).cause?.code;
+    const { code, message } = (e as { cause?: { code?: string; message?: string } }).cause ?? {};
     if (code === "23505") return "duplicate";
+    if (code === "P0001" && message === "too_many_reports") return "too_many";
     if (code === "42501") return "not_found";
     throw e;
   }

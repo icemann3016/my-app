@@ -1979,7 +1979,8 @@
     "sending": "Sending…",
     "sent": "Thanks, we'll take a look.",
     "alreadyReported": "You've already reported this. We'll take a look.",
-    "notFound": "This can't be reported any more."
+    "notFound": "This can't be reported any more.",
+    "tooMany": "You have sent many reports today. Please try again tomorrow or contact us."
   },
   "messages": {
     "title": "Messages",
@@ -2007,7 +2008,8 @@
     "askOwner": "Ask the owner",
     "errors": {
       "not_found": "You can't send messages in this conversation.",
-      "failed": "Couldn't send your message. Please try again."
+      "failed": "Couldn't send your message. Please try again.",
+      "too_many_messages": "You have sent a lot of messages in a short time. Please wait a few minutes."
     }
   },
   "legal": {

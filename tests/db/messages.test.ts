@@ -251,4 +251,10 @@ describeDb("messages", () => {
     // Other people's settings stay private.
     expect(await rls.asUser(OWN, (tx) => tx.select().from(s.userSettings))).toHaveLength(1);
   });
+
+  it("limits how many messages one person sends in a short time", async () => {
+    await db.getDb().execute(sql`delete from public.messages where sender_id = ${OTH}::uuid`);
+    for (let i = 0; i < 30; i++) expect(await send(OTH, enquiry, `Spam ${i}`)).toHaveLength(1);
+    expect(await send(OTH, enquiry, "One more")).toEqual({ error: "too_many_messages" });
+  });
 });
