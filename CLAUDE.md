@@ -13,7 +13,7 @@ This file tells Claude how to work in this repo. Claude reads it at the start of
 - **Plan:** [`docs/implementation-plan.md`](docs/implementation-plan.md) has the architecture, data model and milestones M0–M10. Tasks are GitHub issues. **Work on the current milestone's issues in order** and follow the plan's key technical decisions (§4).
 - **Current phase:** Phase 1 (MVP) — accounts, pilot verification, aircraft listings, search, booking requests, ratings. Don't build Phase 2–4 features unless asked.
 - **Team:** Zlati + friend, each working with our own Claude.
-- **Status:** M0 done. Live at https://ownaplane.eu (every push to main deploys). **M1 done:** accounts, profiles, roles, public profiles, Google sign-in (needs Google keys), data export + account deletion, English/Bulgarian + units preference. **M2 done:** 7,392 European airfields (OurAirports) with time zones, airport search box, home airfield linked to airports. **M3 done:** pilot credentials (licences, ratings, medical, experience) with private document upload, admin verification queue with audit log, verified badges on public profiles, daily expiry reminders. **M4 done:** aircraft listings (step-by-step form saved as a draft, photos, CofA/ARC/insurance verified by admins, reference documents, rental requirements), My aircraft dashboard, public aircraft page, auto-unlist when the ARC or insurance expires. **M5 done:** aircraft calendar with a no-overlap constraint and owner calendar page, eligibility check (`my_eligibility()`, incl. the night rule), search by airfield/radius/dates/filters with list and map (MapLibre + OpenFreeMap), aircraft page with availability and "can I rent this". **M6 done (except weather):** booking requests with owner answers, expiry and cancellation policies, flight log (check-out, legs, fuel/oil with receipts, remarks and known items, check-in, owner confirmation, amount due), defects and grounding, usage history with CSV exports, notifications (in-app + email, reminders), checkout flights, instant booking. Open: IFR/weather warnings (METAR/TAF), see decisions. Next: **M7 Ratings**. User guide: the in-app **Help** section at `/help`, articles in `content/help/{en,bg}/*.md` (update both languages with every feature).
+- **Status:** M0 done. Live at https://ownaplane.eu (every push to main deploys). **M1 done:** accounts, profiles, roles, public profiles, Google sign-in (needs Google keys), data export + account deletion, English/Bulgarian + units preference. **M2 done:** 7,392 European airfields (OurAirports) with time zones, airport search box, home airfield linked to airports. **M3 done:** pilot credentials (licences, ratings, medical, experience) with private document upload, admin verification queue with audit log, verified badges on public profiles, daily expiry reminders. **M4 done:** aircraft listings (step-by-step form saved as a draft, photos, CofA/ARC/insurance verified by admins, reference documents, rental requirements), My aircraft dashboard, public aircraft page, auto-unlist when the ARC or insurance expires. **M5 done:** aircraft calendar with a no-overlap constraint and owner calendar page, eligibility check (`my_eligibility()`, incl. the night rule), search by airfield/radius/dates/filters with list and map (MapLibre + OpenFreeMap), aircraft page with availability and "can I rent this". **M6 done (except weather):** booking requests with owner answers, expiry and cancellation policies, flight log (check-out, legs, fuel/oil with receipts, remarks and known items, check-in, owner confirmation, amount due), defects and grounding, usage history with CSV exports, notifications (in-app + email, reminders), checkout flights, instant booking. Open: IFR/weather warnings (METAR/TAF), see decisions. **M7 done:** double-blind two-way reviews with category scores, owner replies, rating averages. **M8 done:** messages (booking and listing conversations, one email per unread streak), contact details after acceptance. **M9 done:** reports queue, suspend/unlist/hide with audit log, admin dashboard. **M10 prepared:** draft terms/privacy/cookies (lawyer review pending), security review (`docs/security-review.md`), error monitoring + cookie-less analytics hooks (need keys), accessibility checks (`docs/accessibility.md`), production checklist (`docs/deployment.md`), demo data + beta plan (`docs/private-beta.md`). User guide: the in-app **Help** section at `/help`, articles in `content/help/{en,bg}/*.md` (update both languages with every feature).
 - **Domain:** https://ownaplane.eu (Vercel; `BETTER_AUTH_URL=https://ownaplane.eu`). The *.vercel.app addresses keep working (trusted automatically). Next infra step: real email via SMTP (Resend) on ownaplane.eu, then switch on email verification.
 - **Portability:** the app must stay movable to Google Cloud or Azure: no provider-specific SDKs outside `lib/storage` and `lib/email` drivers. See [`docs/deployment.md`](docs/deployment.md).
 
@@ -59,18 +59,22 @@ CI runs typecheck, lint, format:check, unit + database tests, build, the full e2
 
 ```
 app/
-  (marketing)/        # public pages: home, terms, privacy, help (knowledge base)
+  (marketing)/        # public pages: home, terms, privacy, cookies (content/legal), help (knowledge base)
   (auth)/             # login, signup, forgot/reset password + actions.ts (auth Server Actions)
   (app)/              # logged-in pages: dashboard, account (+ credentials tab), admin/verifications,
                       #   u/[id] (public profile), aircraft/[id] (public listing + availability),
                       #   search, owner/aircraft (my aircraft, new, [id]/calendar, details…requirements,
-                      #   defects, remarks, usage), bookings/[id] (+ log), notifications
+                      #   defects, remarks, usage), bookings/[id] (+ log, reviews, contact), notifications,
+                      #   messages (+ [id], new), reports (actions), admin (dashboard, verifications,
+                      #   reports, users, aircraft, audit)
   api/auth/           # Better Auth endpoints (email links, OAuth callbacks)
   api/account/avatar/ # photo upload
   api/documents/      # private document upload (POST) and viewing ([id], owner/admin only)
   api/aircraft/[id]/photos/ # aircraft photo upload (owner only)
   api/cron/daily/     # daily job (expiry reminders, clean-up), needs CRON_SECRET
   api/health/         # health check for load balancers
+  api/errors/         # browser errors → error monitoring
+  error.tsx           # error page (reports browser errors)
   files/              # serves uploads when STORAGE_DRIVER=local
 components/
   ui/                 # shadcn/ui primitives (Button, Card, Dialog, Sheet, DropdownMenu…)
@@ -83,7 +87,13 @@ components/
   airport-picker.tsx  # airport search box (combobox), submits the airport ident
 lib/
   auth/               # auth.ts (Better Auth config), session.ts (getUser, requireUser, requireAdmin…), errors.ts
-  admin/              # verification queues + reviewCredential(), reviewAircraftDocument() (trusted admin code)
+  admin/              # verification queues, moderation (suspend, unlist, hide, reports), queries, metrics
+                      #   (trusted admin code, after requireAdmin())
+  reviews/            # review queries, submit/reply, daily publishing
+  messages/           # conversations, unread counts, message emails
+  reports/            # createReport()
+  monitoring/         # reportError() → any Sentry-compatible service (SENTRY_DSN), no SDK
+  legal.ts            # terms/privacy/cookie pages from content/legal
   pilot/              # catalog (licence types, ratings), labels, validity/summary, credentials, reminders
   aircraft/           # catalog, queries, photos, documents, requirements, expiry (daily job), public page data,
                       #   calendar, eligibility (+ eligibility-text), search
@@ -106,6 +116,8 @@ scripts/              # import-airports.mjs (+ airports/transform.mjs), grant-ad
 tests/                # e2e/ (Playwright), db/ (database security tests), fixtures/ (test airports)
 docs/                 # requirements, implementation plan, deployment guide
 content/help/         # help articles (Markdown, en/ + bg/), shown at /help
+content/legal/        # terms, privacy, cookies (Markdown, en/ + bg/), drafts until lawyer review
+instrumentation.ts    # server errors → lib/monitoring
 Dockerfile, docker-compose.yml
 ```
 
@@ -171,6 +183,10 @@ _TODO: split areas so we don't edit the same files at the same time._
 
 Add one line per decision, newest first.
 
+- 2026-09-28: **M10 preparation.** Legal pages are Markdown drafts (content/legal) with a "draft" note until a lawyer signs off; only strictly necessary cookies, so no banner. Error monitoring without an SDK: `lib/monitoring` posts to any Sentry-compatible envelope endpoint (`SENTRY_DSN`, e.g. Sentry EU or GlitchTip) without cookies, headers, queries or user data; analytics only cookie-less (Plausible/Umami via `NEXT_PUBLIC_ANALYTICS_*`). Security review guards run in `npm test` (RLS everywhere, SECURITY DEFINER hygiene, every Server Action checks the caller); security headers in `next.config.ts` (no full CSP yet). Spam limits in the database (30 messages/10 min, 20 reports/day). Accessibility basics checked by e2e without axe. Demo data only via `npm run demo:seed` on non-production databases.
+- 2026-09-28: **M9 admin (ADM-2…4).** Admins act with the owner connection after `requireAdmin()` and every action goes to `admin_actions`. Suspending deletes sessions, a Better Auth session hook refuses new ones (`ACCOUNT_SUSPENDED`), triggers refuse messages/reviews, eligibility refuses requests, and listed aircraft are unlisted (`unlisted_reason = 'suspended'`). An admin-unlisted aircraft (`'admin'`) can't be relisted by the owner until an admin allows it (status trigger). Reports: one table for reviews/users/aircraft/messages, anyone logged in reports what RLS lets them see, one open report per person and target; acting from a report resolves it. Dashboard numbers are plain SQL counts (30 days).
+- 2026-09-28: **M8 messaging (MSG-1, MSG-2).** One conversation per booking (its pilot and owner) or per enquiry (person + listed aircraft); only the two participants read it (RLS), written through `start_conversation()` / `send_message()`, admins see a message only when reported. Read markers per side; one email per unread streak (after sending and in the daily job), no text in the email. Pages refresh every 20 s (no websockets). Phone (optional, `user_settings.phone`) and email go to the other side only for accepted/running/completed bookings via `booking_contacts()`.
+- 2026-09-28: **M7 reviews (RAT-1…5).** One review per side per completed booking within 14 days of the owner confirming the flight log; category scores 1–5 (pilot→owner: aircraft condition, communication, value; owner→pilot: airmanship, punctuality, communication, condition returned), overall = average. Double-blind: visible only to the author until both reviewed (published at once) or the window closed (daily job; up to a day late). Averages by trigger on publish/hide: `profiles.rating_*` = as pilot (used by RAT-6), `profiles.owner_rating_*` = as owner, `aircraft.rating_*`. Only the owner replies (once, publicly); reviews can't be edited. Admins hide rule-breaking reviews, never just negative ones.
 - 2026-09-28: **UTC everywhere** (Zlati: "no one in aviation uses local time"): replaces the earlier "airport-local time with UTC alongside" rule. Booking, search, calendar blocks, proposals and flight-log legs are entered in UTC; every date-time shown is UTC and labelled. Interactive calendar: everyone sees each entry's UTC times and kind (booking, pending request, own use, maintenance, unavailable) via `aircraft_calendar_view()`, never notes or pilots; owners also see the pilot (with a link) and block notes. Picking a first and last day pre-fills a booking request (pilots) or a calendar block (owners). Help centre at `/help` from Markdown in `content/help/{en,bg}`.
 - 2026-09-28: Instant booking (BKG-4): an option in the rental requirements (`instant_booking`). `request_booking()` accepts at once when the pilot meets every requirement, no checkout flight is pending (a night flight note doesn't count) and the pilot has a **completed** booking of that aircraft; recorded as one `instant_booked` event, so the owner gets one notification. Grounded or unlisted aircraft can't be requested at all.
 - 2026-09-28: Checkout flights (BKG-10): the owner can require a checkout flight with an instructor for every pilot new to the aircraft (`checkout_first_rental`), besides RAT-7's pilots without reviews. The owner records it on the booking (`aircraft_checkouts`: date, instructor, note; only for pilots who booked the aircraft); once recorded, `eligibility_failures()` no longer asks that pilot for one on that aircraft. It stays a condition shown to both sides, not a refusal; the app doesn't schedule the checkout flight itself.
