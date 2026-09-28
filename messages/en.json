@@ -194,7 +194,8 @@
     "plannedHoursInvalid": "Enter the hours you plan to fly, e.g. 1.5.",
     "timeInvalid": "Enter a time as HH:MM.",
     "meterBackwards": "The end reading can't be lower than the start.",
-    "remarkRequired": "Write the remark (up to 1000 characters)."
+    "remarkRequired": "Write the remark (up to 1000 characters).",
+    "defectRequired": "Describe the defect (up to 2000 characters)."
   },
   "dashboard": {
     "title": "Welcome, {name}",
@@ -414,6 +415,22 @@
       "insurance": "The insurance of {registration} has expired, so we've unlisted the aircraft. Pilots can't find it for now.",
       "next": "Upload the renewed document. Once we've verified it, you can list the aircraft again.",
       "cta": "Upload documents"
+    },
+    "defectReported": {
+      "subject": {
+        "minor": "Defect reported on {registration}",
+        "major": "Defect reported on {registration}",
+        "unsafe": "Urgent: {registration} reported unsafe to fly"
+      },
+      "greeting": "Hi {name},",
+      "body": "{reporter} reported a defect on {registration}:",
+      "severity": {
+        "minor": "Minor: can wait for the next maintenance.",
+        "major": "Major: should be fixed before long.",
+        "unsafe": "Unsafe: the pilot thinks the aircraft shouldn't fly."
+      },
+      "next": "If it shouldn't fly, ground it in the app: pilots then can't book it or check it out until you list it again.",
+      "cta": "See the defect"
     }
   },
   "airportPicker": {
@@ -701,7 +718,8 @@
       "requirements": "Requirements",
       "calendar": "Calendar",
       "remarks": "Remarks",
-      "usage": "Usage"
+      "usage": "Usage",
+      "defects": "Defects"
     },
     "sectionText": {
       "details": "Registration, type and performance.",
@@ -713,7 +731,8 @@
       "requirements": "Choose who can rent the aircraft. Pilots see these before they ask.",
       "calendar": "Block the times you use the aircraft yourself, maintenance and other unavailable periods. Bookings appear here automatically.",
       "remarks": "What pilots noted after their flights. Mark aircraft remarks as known items so later renters see them before they fly.",
-      "usage": "Hours, landings, fuel and oil from confirmed flight logs, per month and per pilot."
+      "usage": "Hours, landings, fuel and oil from confirmed flight logs, per month and per pilot.",
+      "defects": "Defects reported by renters or by you. Ground the aircraft if it shouldn't fly."
     },
     "fields": {
       "registration": "Registration",
@@ -1214,7 +1233,8 @@
       "youProposed": "You declined and suggested {when}.",
       "cancelledByOwner": "Cancelled by the owner: {reason}",
       "cancelledByPilot": "Cancelled by the pilot: {reason}",
-      "late": "Late cancellation (after the free-cancellation deadline)."
+      "late": "Late cancellation (after the free-cancellation deadline).",
+      "grounded": "The owner has grounded this aircraft. It can't be flown until the owner lists it again."
     },
     "history": {
       "title": "History",
@@ -1228,7 +1248,8 @@
         "checked_out": "Checked out",
         "log_submitted": "Flight log sent",
         "log_correction": "Correction requested",
-        "log_confirmed": "Flight log confirmed"
+        "log_confirmed": "Flight log confirmed",
+        "defect_reported": "Defect reported"
       }
     },
     "respond": {
@@ -1254,7 +1275,8 @@
         "not_open": "This request has already been answered or has expired.",
         "pilot_not_eligible": "The pilot no longer meets your requirements for this flight (for example, a credential expired), so it can't be accepted.",
         "bad_proposal": "Suggest a time in the future.",
-        "failed": "That didn't work. Please try again."
+        "failed": "That didn't work. Please try again.",
+        "aircraft_grounded": "The aircraft is grounded. List it again before accepting."
       }
     },
     "cancel": {
@@ -1428,7 +1450,8 @@
       "bad_amount": "The amount isn't valid.",
       "missing_meters": "Some meter readings are missing.",
       "leg_checks": "Check the leg: times must be in order (block off, engine start, take-off, landing, engine stop, block on), within 24 hours, and meters can't go backwards.",
-      "failed": "Something went wrong. Please try again."
+      "failed": "Something went wrong. Please try again.",
+      "aircraft_grounded": "The aircraft is grounded by the owner, so it can't be checked out."
     },
     "uplifts": "Fuel and oil added",
     "noUplifts": "Nothing added yet. Record each refuelling or oil top-up with its receipt.",
@@ -1495,5 +1518,45 @@
       "since": "since {date}"
     },
     "remarkSaved": "Remark added."
+  },
+  "defects": {
+    "report": "Report a defect",
+    "reportTitle": "Report a defect",
+    "reportHint": "Something wrong with the aircraft that may affect its airworthiness. The owner is told straight away. Remarks that aren't defects go in the flight log.",
+    "severity": "How serious is it?",
+    "severities": {
+      "minor": "Minor: can wait for the next maintenance",
+      "major": "Major: should be fixed before long",
+      "unsafe": "Unsafe: the aircraft shouldn't fly"
+    },
+    "description": "What's wrong?",
+    "descriptionHint": "Where, what you noticed and when (e.g. \"oil on the left cowl after landing at LBPD\").",
+    "photo": "Photo (optional)",
+    "send": "Send to the owner",
+    "sending": "Sending…",
+    "reported": "Defect reported. The owner has been told.",
+    "errors": {
+      "not_found": "You can't report a defect on this aircraft.",
+      "description_required": "Describe the defect.",
+      "bad_photo": "That photo can't be used. Please upload it again.",
+      "failed": "That didn't work. Please try again."
+    },
+    "groundedTitle": "This aircraft is grounded",
+    "groundedText": "Pilots can't book it, and bookings can't be accepted or checked out until you list it again.",
+    "clear": "Clear grounding and list again",
+    "groundHint": "Ground the aircraft if it shouldn't fly: pilots can't book it and accepted bookings can't be checked out until you list it again.",
+    "ground": "Ground the aircraft",
+    "open": "Open defects",
+    "noneOpen": "No open defects.",
+    "fixed": "Fixed",
+    "reportedBy": "Reported by {name}, {date}",
+    "deletedUser": "a deleted account",
+    "booking": "Booking",
+    "photoLink": "Photo",
+    "resolution": "What was done",
+    "resolutionPlaceholder": "What was done (optional)",
+    "markFixed": "Mark as fixed",
+    "fixedOn": "fixed {date}",
+    "disclaimer": "A record between you and your renters, not the aircraft's technical log. Airworthiness and certificates of release to service stay with you and your maintenance organisation."
   }
 }

@@ -8,7 +8,7 @@ import type { BookingStatus } from "@/lib/db/schema";
 import { intlLocale, type Locale } from "@/lib/i18n/config";
 import { startCheckout } from "./log/actions";
 
-const ERRORS = new Set(["not_found", "not_accepted", "too_early"]);
+const ERRORS = new Set(["not_found", "not_accepted", "too_early", "aircraft_grounded"]);
 
 /** Check-out button for the pilot of an accepted booking, or the link to its flight log (BKG-7). */
 export async function FlightLogLink({

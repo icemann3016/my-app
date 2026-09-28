@@ -5,6 +5,7 @@ import { ArrowLeftIcon, InfoIcon, TriangleAlertIcon } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 
 import { KnownItems } from "@/components/bookings/known-items";
+import { ReportDefectDialog } from "@/components/bookings/report-defect-dialog";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -178,6 +179,8 @@ export default async function FlightLogPage({ params }: { params: Promise<{ id: 
         editable={editable}
         defaultAirport={lastAirport}
       />
+
+      {role === "pilot" && <ReportDefectDialog aircraftId={plane.id} bookingId={b.id} />}
 
       <LogSummary
         bookingId={b.id}

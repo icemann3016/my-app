@@ -9,6 +9,7 @@ import { asUser } from "@/lib/db/rls";
 import {
   adminActions,
   aircraftDocuments,
+  defects,
   documents,
   flightLogs,
   flightUplifts,
@@ -103,6 +104,7 @@ const referenced = (id: typeof documents.id) => sql`(
   or exists (select 1 from ${aircraftDocuments} where ${aircraftDocuments.documentId} = ${id})
   or exists (select 1 from ${flightLogs} where ${flightLogs.checkoutPhotoId} = ${id})
   or exists (select 1 from ${flightUplifts} where ${flightUplifts.receiptId} = ${id})
+  or exists (select 1 from ${defects} where ${defects.photoId} = ${id})
 )`;
 
 /** Delete the user's document if no credential or aircraft uses it any more (row and file). */

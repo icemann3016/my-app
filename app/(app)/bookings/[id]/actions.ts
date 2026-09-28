@@ -43,7 +43,13 @@ export async function answerBooking(_prev: FormState, formData: FormData): Promi
     proposal,
   );
   if (!outcome.ok) {
-    const known = ["not_found", "not_open", "pilot_not_eligible", "bad_proposal"];
+    const known = [
+      "not_found",
+      "not_open",
+      "pilot_not_eligible",
+      "bad_proposal",
+      "aircraft_grounded",
+    ];
     return {
       message: t(
         `errors.${known.includes(outcome.error) ? outcome.error : "failed"}` as "errors.failed",

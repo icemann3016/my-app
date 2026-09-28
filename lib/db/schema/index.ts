@@ -7,3 +7,4 @@ export * from "./aircraft";
 export * from "./calendar";
 export * from "./bookings";
 export * from "./flight-logs";
+export * from "./defects";

@@ -1,6 +1,11 @@
 import { describe, expect, it } from "vitest";
 
-import { credentialReviewedEmail, expiryReminderEmail, resetPasswordEmail } from "./templates";
+import {
+  credentialReviewedEmail,
+  defectReportedEmail,
+  expiryReminderEmail,
+  resetPasswordEmail,
+} from "./templates";
 
 describe("email templates", () => {
   it("writes the email in the user's language", () => {
@@ -47,5 +52,20 @@ describe("pilot credential emails", () => {
     expect(email.subject).toBe("Pilot credentials expire soon");
     expect(email.text).toContain("- Class 2 medical: valid until 15 October 2026");
     expect(email.html).toContain("<li>SEP (land): valid until 20 October 2026</li>");
+  });
+
+  it("tells the owner about a defect, escaping what the pilot wrote", () => {
+    const email = defectReportedEmail({
+      name: "Zlati",
+      registration: "LZ-ABC",
+      reporter: "Ana",
+      severity: "unsafe",
+      description: "Oil <leak> & smoke",
+      url: "https://ownaplane.eu/owner/aircraft/1/defects",
+    });
+    expect(email.subject).toBe("Urgent: LZ-ABC reported unsafe to fly");
+    expect(email.text).toContain("Ana reported a defect on LZ-ABC:");
+    expect(email.html).toContain("Oil &#60;leak&#62; &#38; smoke");
+    expect(email.html).not.toContain("<leak>");
   });
 });

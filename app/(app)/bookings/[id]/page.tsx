@@ -8,11 +8,13 @@ import {
   CircleCheckIcon,
   GraduationCapIcon,
   InfoIcon,
+  TriangleAlertIcon,
 } from "lucide-react";
 import { getLocale, getTranslations } from "next-intl/server";
 
 import { BookingStatusBadge } from "@/components/bookings/booking-status-badge";
 import { KnownItems } from "@/components/bookings/known-items";
+import { ReportDefectDialog } from "@/components/bookings/report-defect-dialog";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -126,6 +128,12 @@ export default async function BookingPage({
         timeZone={timeZone}
         error={checkout}
       />
+      {plane.status === "grounded" && ["requested", "accepted"].includes(b.status) && (
+        <Alert variant="destructive">
+          <TriangleAlertIcon />
+          <AlertDescription>{t("detail.grounded")}</AlertDescription>
+        </Alert>
+      )}
       {["requested", "accepted", "in_progress"].includes(b.status) && (
         <KnownItems items={await getKnownItems(user.id, b.aircraftId)} />
       )}
@@ -244,6 +252,10 @@ export default async function BookingPage({
             <span className="block text-xs text-muted-foreground">{t("detail.late")}</span>
           )}
         </p>
+      )}
+
+      {["accepted", "in_progress", "completed"].includes(b.status) && b.pilotId === user.id && (
+        <ReportDefectDialog aircraftId={b.aircraftId} bookingId={b.id} />
       )}
 
       <BookingHistory events={detail.events} timeZone={timeZone} />

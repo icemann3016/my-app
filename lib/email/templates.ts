@@ -254,3 +254,37 @@ export function aircraftUnlistedEmail({
     locale,
   });
 }
+
+/** Sent to the owner as soon as a defect is reported on their aircraft (BKG-8). */
+export function defectReportedEmail({
+  name,
+  locale,
+  registration,
+  reporter,
+  severity,
+  description,
+  url,
+}: {
+  name: string;
+  locale?: string | null;
+  registration: string;
+  reporter: string;
+  severity: "minor" | "major" | "unsafe";
+  description: string;
+  url: string;
+}) {
+  const t = translator(locale);
+  return render({
+    subject: t(`defectReported.subject.${severity}`, { registration }),
+    greeting: t("defectReported.greeting", { name }),
+    paragraphs: [
+      t("defectReported.body", { registration, reporter }),
+      t(`defectReported.severity.${severity}`),
+      description,
+      t("defectReported.next"),
+    ],
+    cta: t("defectReported.cta"),
+    url,
+    locale,
+  });
+}
