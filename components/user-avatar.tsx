@@ -3,7 +3,7 @@ import Image from "next/image";
 import { initials } from "@/lib/avatar";
 import { cn } from "@/lib/utils";
 
-/** Round avatar: the uploaded photo, or the person's initials. */
+/** Round avatar: the uploaded photo or chosen ready-made avatar, or the person's initials. */
 export function UserAvatar({
   name,
   url,
@@ -23,6 +23,8 @@ export function UserAvatar({
         alt=""
         width={size}
         height={size}
+        // Ready-made avatars are small SVGs in public/avatars; they don't need resizing.
+        unoptimized={url.endsWith(".svg")}
         style={style}
         className={cn("shrink-0 rounded-full bg-muted object-cover", className)}
       />

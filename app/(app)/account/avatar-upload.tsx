@@ -7,9 +7,21 @@ import { useTranslations } from "next-intl";
 
 import { UserAvatar } from "@/components/user-avatar";
 import { Button } from "@/components/ui/button";
+import type { AvatarPreset } from "@/lib/avatar-presets";
 import { AVATAR_MAX_BYTES, AVATAR_TYPES } from "@/lib/validation/profile";
+import { AvatarPresets } from "./avatar-presets";
 
-export function AvatarUpload({ name, url }: { name: string; url: string | null }) {
+/** Profile picture: upload a photo, or pick one of the ready-made avatars. */
+export function AvatarUpload({
+  name,
+  url,
+  preset,
+}: {
+  name: string;
+  url: string | null;
+  /** The chosen ready-made avatar, if that's what `url` shows. */
+  preset: AvatarPreset | null;
+}) {
   const t = useTranslations("account.avatar");
   const inputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
@@ -43,53 +55,68 @@ export function AvatarUpload({ name, url }: { name: string; url: string | null }
     send({ method: "POST", body });
   }
 
+  const hasPhoto = Boolean(url) && !preset;
   return (
-    <div className="flex items-center gap-4">
-      <UserAvatar name={name} url={url} size={72} />
-      <div className="grid gap-2">
-        <div className="flex flex-wrap gap-2">
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            disabled={pending}
-            onClick={() => inputRef.current?.click()}
-          >
-            {pending && <Loader2Icon className="animate-spin" aria-hidden />}
-            {url ? t("change") : t("upload")}
-          </Button>
-          {url && (
+    <div className="grid gap-4">
+      <div className="flex items-center gap-4">
+        <UserAvatar name={name} url={url} size={72} />
+        <div className="grid gap-2">
+          <div className="flex flex-wrap gap-2">
             <Button
               type="button"
-              variant="ghost"
+              variant="outline"
               size="sm"
               disabled={pending}
-              onClick={() => {
-                setError(null);
-                send({ method: "DELETE" });
-              }}
+              onClick={() => inputRef.current?.click()}
             >
-              {t("remove")}
+              {pending && <Loader2Icon className="animate-spin" aria-hidden />}
+              {hasPhoto ? t("change") : t("upload")}
             </Button>
+            {url && (
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                disabled={pending}
+                onClick={() => {
+                  setError(null);
+                  send({ method: "DELETE" });
+                }}
+              >
+                {t("remove")}
+              </Button>
+            )}
+          </div>
+          <p className="text-xs text-muted-foreground">{t("hint")}</p>
+          {error && (
+            <p role="alert" className="text-sm text-destructive">
+              {error}
+            </p>
           )}
         </div>
-        <p className="text-xs text-muted-foreground">{t("hint")}</p>
-        {error && (
-          <p role="alert" className="text-sm text-destructive">
-            {error}
-          </p>
-        )}
+        <input
+          ref={inputRef}
+          type="file"
+          accept={AVATAR_TYPES.join(",")}
+          className="sr-only"
+          tabIndex={-1}
+          aria-label={t("choose")}
+          onChange={(e) => {
+            onFileChosen(e.target.files?.[0]);
+            e.target.value = "";
+          }}
+        />
       </div>
-      <input
-        ref={inputRef}
-        type="file"
-        accept={AVATAR_TYPES.join(",")}
-        className="sr-only"
-        tabIndex={-1}
-        aria-label={t("choose")}
-        onChange={(e) => {
-          onFileChosen(e.target.files?.[0]);
-          e.target.value = "";
+      <AvatarPresets
+        current={preset}
+        disabled={pending}
+        onChoose={(chosen) => {
+          setError(null);
+          send({
+            method: "PUT",
+            headers: { "content-type": "application/json" },
+            body: JSON.stringify({ preset: chosen }),
+          });
         }}
       />
     </div>

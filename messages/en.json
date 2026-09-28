@@ -251,7 +251,20 @@
       "choose": "Choose profile photo",
       "invalidType": "Please choose a JPG, PNG or WebP image.",
       "tooLarge": "That image is larger than 2 MB. Please choose a smaller one.",
-      "failed": "Something went wrong. Please try again."
+      "failed": "Something went wrong. Please try again.",
+      "presetsTitle": "Or choose one of ours",
+      "presets": {
+        "light-aircraft": "Light aircraft",
+        "biplane": "Biplane",
+        "jet": "Jet",
+        "helicopter": "Helicopter",
+        "glider": "Glider",
+        "balloon": "Hot-air balloon",
+        "propeller": "Propeller",
+        "windsock": "Windsock",
+        "compass": "Compass rose",
+        "headset": "Headset"
+      }
     },
     "roles": {
       "title": "How you'll use the app",

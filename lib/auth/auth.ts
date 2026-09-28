@@ -95,7 +95,8 @@ function createAuth() {
             .select({ avatarKey: schema.profiles.avatarKey })
             .from(schema.profiles)
             .where(eq(schema.profiles.id, user.id));
-          if (profile?.avatarKey) {
+          // Only uploaded photos are files of the user's own (ready-made avatars are shared).
+          if (profile?.avatarKey?.startsWith(`avatars/${user.id}/`)) {
             await getStorage()
               .delete(profile.avatarKey)
               .catch((e) => console.warn("[auth] couldn't delete avatar", e));

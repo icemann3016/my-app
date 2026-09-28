@@ -8,6 +8,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { getAirport } from "@/lib/airports";
+import { presetFromKey } from "@/lib/avatar-presets";
 import { avatarUrl } from "@/lib/avatar-url";
 import { isGoogleEnabled } from "@/lib/auth/google";
 import { requireProfile } from "@/lib/auth/session";
@@ -80,7 +81,11 @@ export default async function AccountPage({
           <CardDescription>{t("profile.description")}</CardDescription>
         </CardHeader>
         <CardContent className="grid gap-6">
-          <AvatarUpload name={profile.displayName} url={avatarUrl(profile.avatarKey)} />
+          <AvatarUpload
+            name={profile.displayName}
+            url={avatarUrl(profile.avatarKey)}
+            preset={presetFromKey(profile.avatarKey)}
+          />
           <ProfileForm
             displayName={profile.displayName}
             homeAirport={homeAirport}

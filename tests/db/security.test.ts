@@ -133,6 +133,18 @@ describeDb("database security (RLS, grants, triggers)", () => {
     ).toBe("23503");
   });
 
+  it("allows only ready-made avatars or photos in the user's own folder", async () => {
+    const setAvatar = (key: string) =>
+      rls.asUser(ALICE, (tx) =>
+        tx.update(s.profiles).set({ avatarKey: key }).where(eq(s.profiles.id, ALICE)),
+      );
+    expect(await pgCode(setAvatar("preset:jet"))).toBeUndefined();
+    expect(await pgCode(setAvatar(`avatars/${ALICE}/1.jpg`))).toBeUndefined();
+    expect(await pgCode(setAvatar(`avatars/${BOB}/1.jpg`))).toBe("23514");
+    expect(await pgCode(setAvatar("documents/secret.pdf"))).toBe("23514");
+    expect(await pgCode(setAvatar("preset:../x"))).toBe("23514");
+  });
+
   it("lets everyone read airports but nobody change them", async () => {
     const found = await rls.asAnon((tx) =>
       tx.select().from(s.airports).where(eq(s.airports.ident, "LBSF")),

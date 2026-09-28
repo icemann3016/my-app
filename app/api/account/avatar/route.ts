@@ -3,6 +3,7 @@ import { revalidatePath } from "next/cache";
 import { getTranslations } from "next-intl/server";
 
 import { getUser } from "@/lib/auth/session";
+import { isAvatarPreset, presetKey } from "@/lib/avatar-presets";
 import { asUser } from "@/lib/db/rls";
 import { profiles } from "@/lib/db/schema";
 import { getStorage } from "@/lib/storage";
@@ -60,6 +61,17 @@ export async function POST(request: Request) {
     console.error("[avatar] upload failed", e);
     return error(t("failed"), 500);
   }
+  return Response.json({ ok: true });
+}
+
+/** Choose a ready-made avatar instead of a photo (JSON body { preset }). */
+export async function PUT(request: Request) {
+  const t = await getTranslations("account.avatar");
+  const user = await getUser();
+  if (!user) return error(t("failed"), 401);
+  const body = (await request.json().catch(() => null)) as { preset?: unknown } | null;
+  if (!isAvatarPreset(body?.preset)) return error(t("failed"));
+  await saveAvatarKey(user.id, presetKey(body.preset));
   return Response.json({ ok: true });
 }
 
