@@ -2,25 +2,27 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { ArrowLeftIcon, InfoIcon, TriangleAlertIcon } from "lucide-react";
-import { getLocale, getTranslations } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { formatPrice } from "@/lib/aircraft/format";
+import { FUEL_TYPES } from "@/lib/aircraft/catalog";
 import { getUnits, isUuid } from "@/lib/aircraft/queries";
 import { requireUser } from "@/lib/auth/session";
 import { bookingAmount } from "@/lib/bookings/amount";
 import { getFlightLog } from "@/lib/bookings/flight-log";
 import { getBooking } from "@/lib/bookings/queries";
-import { getLogPhoto, logAirports } from "@/lib/bookings/log-view";
+import { logAirports, logDocuments } from "@/lib/bookings/log-view";
+import { fuelSettlement } from "@/lib/domain/flight-log";
 import { zonedDay } from "@/lib/domain/time";
 import { litresToOil, litresToVolume } from "@/lib/domain/units";
-import type { Locale } from "@/lib/i18n/config";
-import { CheckoutForm } from "./checkout-form";
+import { CheckoutCard } from "./checkout-card";
 import { LegDialog } from "./leg-dialog";
 import { LegList } from "./leg-list";
-import { OwnerActions, SubmitLog } from "./log-actions";
+import { LogSummary } from "./log-summary";
+import { UpliftDialog } from "./uplift-dialog";
+import { UpliftList } from "./uplift-list";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("flightLog");
@@ -42,22 +44,35 @@ export default async function FlightLogPage({ params }: { params: Promise<{ id: 
   if (!role) notFound();
   const data = await getFlightLog(user.id, id);
   if (!data) redirect(`/bookings/${id}`);
-  const { log, legs } = data;
+  const { log, legs, uplifts } = data;
   const t = await getTranslations("flightLog");
-  const locale = (await getLocale()) as Locale;
   const units = await getUnits(user.id);
   const fuelUnit = t(units === "metric" ? "units.l" : "units.usgal");
   const oilUnit = t(plane.oilUnit === "qt" ? "units.qt" : "units.l");
   const editable =
     role === "pilot" && (log.status === "draft" || log.status === "correction_requested");
   const timeZone = route[0]?.timezone ?? "UTC";
-  const result = bookingAmount(b, period, timeZone, legs, log.fuelAdjustment ?? 0);
-  const photo = role === "pilot" ? await getLogPhoto(user.id, log.checkoutPhotoId) : null;
+  // Confirmed logs keep the fuel settlement agreed then; open ones follow the entries.
+  const fuel = fuelSettlement(uplifts, b.priceBasis);
+  const adjustment = log.status === "confirmed" ? (log.fuelAdjustment ?? 0) : fuel.adjustment;
+  const result = bookingAmount(b, period, timeZone, legs, adjustment);
+  const docs = await logDocuments(user.id, [
+    log.checkoutPhotoId,
+    ...uplifts.map((u) => u.receiptId),
+  ]);
+  const photo = log.checkoutPhotoId ? (docs[log.checkoutPhotoId] ?? null) : null;
   const airports = await logAirports([
     b.departureIdent,
     ...legs.flatMap((l) => [l.fromIdent, l.toIdent]),
+    ...uplifts.map((u) => u.airportIdent),
   ]);
   const common = { bookingId: b.id, logId: log.id, fuelUnit, oilUnit };
+  const ta = await getTranslations("aircraft");
+  const upliftProps = {
+    ...common,
+    currency: b.currency,
+    fuelTypes: FUEL_TYPES.map((f) => ({ value: f, label: ta(`fuelTypes.${f}`) })),
+  };
 
   return (
     <div className="mx-auto grid w-full max-w-3xl gap-6 px-4 py-10">
@@ -83,47 +98,17 @@ export default async function FlightLogPage({ params }: { params: Promise<{ id: 
         </Alert>
       )}
 
-      <Card>
-        <CardHeader>
-          <CardTitle as="h2">{t("checkout")}</CardTitle>
-        </CardHeader>
-        <CardContent>
-          {editable ? (
-            <CheckoutForm
-              {...common}
-              photo={photo}
-              values={{
-                hobbsStart: num(log.hobbsStart),
-                tachStart: num(log.tachStart),
-                fuelStart: num(log.fuelStartL, (l) => litresToVolume(l, units)),
-                oilStart: num(log.oilStartL, (l) => litresToOil(l, plane.oilUnit)),
-              }}
-            />
-          ) : (
-            <dl className="grid grid-cols-2 gap-3 text-sm sm:grid-cols-4">
-              {(
-                [
-                  [t("hobbs"), num(log.hobbsStart)],
-                  [t("tach"), num(log.tachStart)],
-                  [
-                    t("fuelOnBoard", { unit: fuelUnit }),
-                    num(log.fuelStartL, (l) => litresToVolume(l, units)),
-                  ],
-                  [
-                    t("oilLevel", { unit: oilUnit }),
-                    num(log.oilStartL, (l) => litresToOil(l, plane.oilUnit)),
-                  ],
-                ] as const
-              ).map(([label, value]) => (
-                <div key={label}>
-                  <dt className="text-muted-foreground">{label}</dt>
-                  <dd className="font-medium">{value || "–"}</dd>
-                </div>
-              ))}
-            </dl>
-          )}
-        </CardContent>
-      </Card>
+      <CheckoutCard
+        {...common}
+        editable={editable}
+        photo={photo}
+        values={{
+          hobbsStart: num(log.hobbsStart),
+          tachStart: num(log.tachStart),
+          fuelStart: num(log.fuelStartL, (l) => litresToVolume(l, units)),
+          oilStart: num(log.oilStartL, (l) => litresToOil(l, plane.oilUnit)),
+        }}
+      />
 
       <Card>
         <CardHeader className="flex flex-row flex-wrap items-center justify-between gap-2">
@@ -150,49 +135,44 @@ export default async function FlightLogPage({ params }: { params: Promise<{ id: 
       </Card>
 
       <Card>
-        <CardHeader>
-          <CardTitle as="h2">{t("summary")}</CardTitle>
+        <CardHeader className="flex flex-row flex-wrap items-center justify-between gap-2">
+          <CardTitle as="h2">{t("uplifts")}</CardTitle>
+          {editable && (
+            <UpliftDialog
+              {...upliftProps}
+              airport={airports[legs.at(-1)?.toIdent ?? b.departureIdent] ?? null}
+              receipt={null}
+              values={{ kind: "fuel", fuelType: plane.fuelType, paidBy: "pilot" }}
+            />
+          )}
         </CardHeader>
-        <CardContent className="grid gap-4 text-sm">
-          {result ? (
-            <dl className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-              <div>
-                <dt className="text-muted-foreground">{t(`flown.${b.timeBasis}`)}</dt>
-                <dd className="font-medium">
-                  {t("duration", { h: Math.floor(result.minutes / 60), m: result.minutes % 60 })}
-                </dd>
-              </div>
-              <div>
-                <dt className="text-muted-foreground">{t("billed")}</dt>
-                <dd className="font-medium">
-                  {t("billedHours", { hours: result.hours })} ×{" "}
-                  {formatPrice(result.rate, b.currency, locale)}
-                </dd>
-              </div>
-              <div>
-                <dt className="text-muted-foreground">{t("amountDue")}</dt>
-                <dd className="font-medium">
-                  {formatPrice(log.amountDue ?? result.amount, b.currency, locale)}
-                </dd>
-              </div>
-            </dl>
-          ) : (
-            <p className="text-destructive">
-              {t("missingMeters", { basis: t(`basis.${b.timeBasis}`) })}
-            </p>
-          )}
-          <p className="text-xs text-muted-foreground">{t("payDirectly")}</p>
-          {editable && <SubmitLog bookingId={b.id} logId={log.id} disabled={!legs.length} />}
-          {role === "owner" && log.status === "submitted" && (
-            <OwnerActions bookingId={b.id} logId={log.id} canConfirm={Boolean(result)} />
-          )}
-          {role === "pilot" && log.status === "submitted" && <p>{t("waitingForOwner")}</p>}
-          {role === "owner" &&
-            (log.status === "draft" || log.status === "correction_requested") && (
-              <p>{t("waitingForPilot")}</p>
-            )}
+        <CardContent>
+          <UpliftList
+            uplifts={uplifts}
+            airports={airports}
+            receipts={docs}
+            units={units}
+            dipstick={plane.oilUnit}
+            editable={editable}
+            {...upliftProps}
+          />
         </CardContent>
       </Card>
+
+      <LogSummary
+        bookingId={b.id}
+        logId={log.id}
+        role={role}
+        status={log.status}
+        editable={editable}
+        hasLegs={legs.length > 0}
+        timeBasis={b.timeBasis}
+        priceBasis={b.priceBasis}
+        currency={b.currency}
+        result={result}
+        confirmedAmount={log.amountDue}
+        unpriced={fuel.unpriced}
+      />
     </div>
   );
 }

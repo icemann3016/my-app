@@ -1270,7 +1270,7 @@
     "fuelOnBoard": "Fuel on board ({unit})",
     "oilLevel": "Oil level ({unit})",
     "checkoutPhoto": "Photo of the meters (optional)",
-    "checkoutPhotoHint": "Only you can open it for now. JPEG, PNG or PDF, up to 4 MB.",
+    "checkoutPhotoHint": "JPEG, PNG or PDF, up to 4 MB. The owner can open it too.",
     "saveCheckout": "Save check-out",
     "saving": "Saving…",
     "saved": "Saved.",
@@ -1348,6 +1348,41 @@
       "missing_meters": "Some meter readings are missing.",
       "leg_checks": "Check the leg: times must be in order (block off, engine start, take-off, landing, engine stop, block on), within 24 hours, and meters can't go backwards.",
       "failed": "Something went wrong. Please try again."
-    }
+    },
+    "uplifts": "Fuel and oil added",
+    "noUplifts": "Nothing added yet. Record each refuelling or oil top-up with its receipt.",
+    "addUplift": "Add fuel or oil",
+    "editUplift": "Edit fuel or oil",
+    "editUpliftOf": "Edit {uplift}",
+    "deleteUpliftOf": "Delete {uplift}",
+    "upliftHint": "Enter what was added and what it cost. Who paid decides how it counts in the amount due.",
+    "upliftKind": "What",
+    "kinds": {
+      "fuel": "Fuel",
+      "oil": "Oil"
+    },
+    "paidBy": "Paid by",
+    "payers": {
+      "pilot": "Me (pilot)",
+      "owner": "Owner's account"
+    },
+    "upliftAirport": "Airfield",
+    "quantity": "Quantity ({unit})",
+    "fuelType": "Fuel type",
+    "oilGrade": "Oil grade (optional)",
+    "price": "Price paid ({currency}, optional)",
+    "priceHint": "Total on the receipt, in the booking's currency.",
+    "receipt": "Receipt (optional)",
+    "receiptLink": "Receipt",
+    "saveUplift": "Save",
+    "upliftSaved": "Saved.",
+    "noPrice": "No price",
+    "fuelRule": {
+      "wet": "Wet rate: fuel the pilot paid for, and oil, are taken off.",
+      "dry": "Dry rate: fuel from the owner's account is added; oil the pilot paid for is taken off."
+    },
+    "unpriced": "{count, plural, one {One fuel or oil entry has} other {# fuel or oil entries have}} no price, so {count, plural, one {it isn't} other {they aren't}} counted in the amount.",
+    "fuelAdjustment": "Fuel and oil",
+    "checkoutPhotoLink": "Photo of the meters"
   }
 }

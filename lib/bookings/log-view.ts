@@ -1,21 +1,28 @@
 import "server-only";
 
-import { eq } from "drizzle-orm";
+import { inArray } from "drizzle-orm";
 
 import { type AirportSummary, getAirport } from "@/lib/airports";
 import { asUser } from "@/lib/db/rls";
 import { documents } from "@/lib/db/schema";
 
-/** The check-out photo's file name for its uploader (RLS: only the owner of the document). */
-export async function getLogPhoto(userId: string, documentId: string | null) {
-  if (!documentId) return null;
-  const [doc] = await asUser(userId, (tx) =>
+/**
+ * File names of the log's photo and receipts, by id. RLS: the uploader, and the other party of
+ * the booking (flight_log_document_visible()).
+ */
+export async function logDocuments(
+  userId: string,
+  ids: (string | null)[],
+): Promise<Record<string, { id: string; filename: string }>> {
+  const wanted = ids.filter((id): id is string => id !== null);
+  if (!wanted.length) return {};
+  const rows = await asUser(userId, (tx) =>
     tx
       .select({ id: documents.id, filename: documents.filename })
       .from(documents)
-      .where(eq(documents.id, documentId)),
+      .where(inArray(documents.id, wanted)),
   );
-  return doc ?? null;
+  return Object.fromEntries(rows.map((r) => [r.id, r]));
 }
 
 /** Airports of a log's legs (and the booking's departure), by ident. */

@@ -1,5 +1,6 @@
 import { z } from "zod";
 
+import { FUEL_TYPES } from "@/lib/aircraft/catalog";
 import { oilToLitres, type UnitSystem, volumeToLitres } from "@/lib/domain/units";
 
 // Messages are translation keys in messages/*.json → "validation".
@@ -104,3 +105,39 @@ export function legSchema(units: UnitSystem, oilUnit: "qt" | "l") {
 }
 
 export type LegInput = z.infer<ReturnType<typeof legSchema>>;
+
+/** Fuel or oil added (BKG-13, BKG-14): fuel in the user's units, oil in the dipstick unit. */
+export function upliftSchema(units: UnitSystem, oilUnit: "qt" | "l") {
+  return z
+    .object({
+      logId: z.uuid(),
+      upliftId: z
+        .string()
+        .trim()
+        .optional()
+        .transform((v) => v || undefined)
+        .pipe(z.uuid().optional()),
+      kind: z.enum(["fuel", "oil"]),
+      airport: z.string().trim().min(1, "airportUnknown").max(10),
+      quantity: reading(5000).refine((v) => v !== null && v > 0, "numberInvalid"),
+      fuelType: z.enum(FUEL_TYPES).optional().catch(undefined),
+      oilGrade: z.string().trim().max(40).optional().default(""),
+      price: reading(100000),
+      paidBy: z.enum(["pilot", "owner"]),
+      receiptId: z
+        .string()
+        .trim()
+        .optional()
+        .default("")
+        .transform((v) => v || null)
+        .pipe(z.uuid("documentInvalid").nullable()),
+    })
+    .transform(({ quantity, kind, fuelType, oilGrade, ...d }) => ({
+      ...d,
+      kind,
+      quantityL:
+        kind === "fuel" ? volumeToLitres(quantity!, units) : oilToLitres(quantity!, oilUnit),
+      fuelType: kind === "fuel" ? (fuelType ?? null) : null,
+      oilGrade: kind === "oil" && oilGrade ? oilGrade : null,
+    }));
+}

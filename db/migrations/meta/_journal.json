@@ -169,6 +169,20 @@
       "when": 1790524720050,
       "tag": "0023_booking_price_snapshot",
       "breakpoints": true
+    },
+    {
+      "idx": 24,
+      "version": "7",
+      "when": 1790569493061,
+      "tag": "0024_flight_uplifts",
+      "breakpoints": true
+    },
+    {
+      "idx": 25,
+      "version": "7",
+      "when": 1790569493904,
+      "tag": "0025_flight_uplift_security",
+      "breakpoints": true
     }
   ]
 }

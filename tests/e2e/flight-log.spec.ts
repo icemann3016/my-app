@@ -60,15 +60,28 @@ test("a pilot fills in the flight log and the owner confirms it", async ({ page,
   await expect(page.getByText("1 h 12 min")).toBeVisible();
   await expect(page.getByText("€216", { exact: true })).toBeVisible();
 
-  // 3. Check-in: the pilot can't change it any more
+  // 3. Fuel the pilot paid for is taken off the wet rate (BKG-13)
+  await page.getByRole("button", { name: "Add fuel or oil" }).click();
+  const fuel = page.getByRole("dialog");
+  await fuel.getByRole("combobox", { name: "Airfield" }).fill("LBSF");
+  await fuel.getByRole("listbox").getByRole("option").first().click();
+  await fuel.getByLabel("Quantity (L)").fill("40");
+  await fuel.getByLabel("Price paid (EUR, optional)").fill("100");
+  await fuel.getByRole("button", { name: "Save" }).click();
+  await expect(fuel).toBeHidden();
+  await expect(page.getByText("Fuel 40 L · LBSF")).toBeVisible();
+  await expect(page.getByText("-€100", { exact: true })).toBeVisible();
+  await expect(page.getByText("€116", { exact: true })).toBeVisible();
+
+  // 4. Check-in: the pilot can't change it any more
   await page.getByRole("button", { name: "Check in and send to the owner" }).click();
   await expect(page.getByText("Sent. Waiting for the owner to confirm.")).toBeVisible();
   await expect(page.getByRole("button", { name: "Add leg" })).toHaveCount(0);
 
-  // 4. The owner confirms; the booking is completed
+  // 5. The owner confirms; the booking is completed
   await owner.goto(`/bookings/${bookingId}`);
   await owner.getByRole("link", { name: "Flight log" }).click();
-  await expect(owner.getByText("€216", { exact: true })).toBeVisible();
+  await expect(owner.getByText("€116", { exact: true })).toBeVisible();
   await owner.getByRole("button", { name: "Confirm log and amount" }).click();
   await expect(owner.getByText(/· Confirmed$/)).toBeVisible();
   await owner.goto(`/bookings/${bookingId}`);

@@ -14,6 +14,7 @@ import { getFlightLog } from "@/lib/bookings/flight-log";
 import { getBooking } from "@/lib/bookings/queries";
 import { asUser } from "@/lib/db/rls";
 import { flightLegs, flightLogs } from "@/lib/db/schema";
+import { fuelSettlement } from "@/lib/domain/flight-log";
 import { legTimesToUtc } from "@/lib/domain/leg-times";
 import { type FormState, formValues } from "@/lib/forms";
 import { localizedFieldErrors } from "@/lib/i18n/server";
@@ -215,13 +216,8 @@ export async function confirmLog(_prev: FormState, formData: FormData): Promise<
   const data = detail ? await getFlightLog(user.id, detail.booking.id) : null;
   if (!detail || !data) return { message: t("errors.not_found") };
   const zone = detail.route[0]?.timezone ?? "UTC";
-  const result = bookingAmount(
-    detail.booking,
-    detail.period,
-    zone,
-    data.legs,
-    data.log.fuelAdjustment ?? 0,
-  );
+  const fuel = fuelSettlement(data.uplifts, detail.booking.priceBasis);
+  const result = bookingAmount(detail.booking, detail.period, zone, data.legs, fuel.adjustment);
   if (!result) return { message: t("errors.missing_meters") };
   return statusChange(
     formData,

@@ -8,7 +8,7 @@ function notFound() {
 }
 
 /**
- * View a private document. Only its owner and admins may; everyone else gets 404 (so ids can't
+ * View a private document. Only its owner, admins and (for flight log photos and receipts) the other party of the booking may; everyone else gets 404 (so ids can't
  * be probed). Admin views are logged in admin_actions.
  */
 export async function GET(request: Request, ctx: RouteContext<"/api/documents/[id]">) {

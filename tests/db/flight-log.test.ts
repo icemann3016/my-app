@@ -161,6 +161,76 @@ describeDb("flight log", () => {
     );
   });
 
+  it("lets the pilot record fuel and oil with their own receipts, visible to the owner", async () => {
+    const owner = db.getDb();
+    const doc = (userId: string, name: string) =>
+      owner
+        .insert(s.documents)
+        .values({
+          ownerId: userId,
+          storageKey: `documents/${userId}/${name}`,
+          filename: name,
+          contentType: "image/jpeg",
+          sizeBytes: 10,
+        })
+        .returning()
+        .then((r) => r[0]!.id);
+    const receipt = await doc(PIL, "receipt.jpg");
+    const photo = await doc(PIL, "meters.jpg");
+    const privateDoc = await doc(PIL, "licence.jpg");
+    const ownersDoc = await doc(OWN, "owner.jpg");
+    const uplift = (overrides: Partial<typeof s.flightUplifts.$inferInsert> = {}) => ({
+      flightLogId: logId,
+      kind: "fuel" as const,
+      airportIdent: "LBSF",
+      quantityL: 60,
+      fuelType: "avgas_100ll" as const,
+      price: 150,
+      paidBy: "pilot" as const,
+      ...overrides,
+    });
+    const code = (p: Promise<unknown>) =>
+      p.then(
+        () => undefined,
+        (e: { cause?: { code?: string } }) => e.cause?.code,
+      );
+
+    await rls.asUser(PIL, (tx) =>
+      tx.update(s.flightLogs).set({ checkoutPhotoId: photo }).where(eq(s.flightLogs.id, logId)),
+    );
+    await rls.asUser(PIL, (tx) =>
+      tx.insert(s.flightUplifts).values(uplift({ receiptId: receipt })),
+    );
+    // Someone else's document can't be attached; the owner can't add entries.
+    expect(
+      await code(
+        rls.asUser(PIL, (tx) =>
+          tx.insert(s.flightUplifts).values(uplift({ receiptId: ownersDoc })),
+        ),
+      ),
+    ).toBe("42501");
+    expect(await code(rls.asUser(OWN, (tx) => tx.insert(s.flightUplifts).values(uplift())))).toBe(
+      "42501",
+    );
+    // Oil can't have a fuel type.
+    expect(
+      await code(
+        rls.asUser(PIL, (tx) => tx.insert(s.flightUplifts).values(uplift({ kind: "oil" }))),
+      ),
+    ).toBe("23514");
+
+    expect(await rls.asUser(OWN, (tx) => tx.select().from(s.flightUplifts))).toHaveLength(1);
+    expect(await rls.asUser(OTH, (tx) => tx.select().from(s.flightUplifts))).toEqual([]);
+    const visible = (user: string) =>
+      rls
+        .asUser(user, (tx) => tx.select({ id: s.documents.id }).from(s.documents))
+        .then((rows) => rows.map((r) => r.id).sort());
+    // The owner sees the pilot's receipt and meter photo, never their other documents.
+    expect(await visible(OWN)).toEqual([receipt, photo, ownersDoc].sort());
+    expect(await visible(OTH)).toEqual([]);
+    expect(await visible(PIL)).toContain(privateDoc);
+  });
+
   it("goes from draft to submitted to correction and back, then confirmed", async () => {
     expect(await call(PIL, sql`select public.submit_flight_log(${logId}::uuid)`)).toEqual({
       error: "no_legs",
@@ -176,6 +246,22 @@ describeDb("flight log", () => {
         .returning(),
     );
     expect(changed).toEqual([]);
+    expect(
+      await rls
+        .asUser(PIL, (tx) =>
+          tx.insert(s.flightUplifts).values({
+            flightLogId: logId,
+            kind: "oil",
+            airportIdent: "LBSF",
+            quantityL: 1,
+            paidBy: "pilot",
+          }),
+        )
+        .then(
+          () => "inserted",
+          (e: { cause?: { code?: string } }) => e.cause?.code,
+        ),
+    ).toBe("42501");
 
     expect(
       await call(PIL, sql`select public.request_log_correction(${logId}::uuid, 'Hobbs end?')`),

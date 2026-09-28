@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { amountDue, flownMinutes } from "./flight-log";
+import { amountDue, flownMinutes, fuelSettlement } from "./flight-log";
 
 const leg = (
   from: string,
@@ -66,6 +66,39 @@ describe("amount due", () => {
       hours: 2,
       rate: 200,
       amount: 354.5,
+    });
+  });
+});
+
+describe("fuel settlement", () => {
+  const fuel = (paidBy: "pilot" | "owner", price: number | null) =>
+    ({ kind: "fuel", paidBy, price }) as const;
+  const oil = (paidBy: "pilot" | "owner", price: number | null) =>
+    ({ kind: "oil", paidBy, price }) as const;
+
+  it("takes fuel the pilot paid for off a wet rate", () => {
+    expect(fuelSettlement([fuel("pilot", 95.5), fuel("owner", 80)], "wet")).toEqual({
+      adjustment: -95.5,
+      unpriced: 0,
+    });
+  });
+
+  it("adds fuel the owner supplied to a dry rate", () => {
+    expect(fuelSettlement([fuel("pilot", 95.5), fuel("owner", 80)], "dry")).toEqual({
+      adjustment: 80,
+      unpriced: 0,
+    });
+  });
+
+  it("always takes oil the pilot paid for off", () => {
+    expect(fuelSettlement([oil("pilot", 12), oil("owner", 12)], "dry").adjustment).toBe(-12);
+    expect(fuelSettlement([oil("pilot", 12)], "wet").adjustment).toBe(-12);
+  });
+
+  it("counts entries that matter but have no price", () => {
+    expect(fuelSettlement([fuel("pilot", null), fuel("owner", null)], "wet")).toEqual({
+      adjustment: 0,
+      unpriced: 1,
     });
   });
 });

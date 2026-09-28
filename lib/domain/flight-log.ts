@@ -59,3 +59,36 @@ export function amountDue(p: AmountInput): { hours: number; rate: number; amount
   const amount = Math.max(0, Math.round((price.amount + p.fuelAdjustment) * 100) / 100);
   return { hours: price.billedHours, rate: price.rate, amount };
 }
+
+export type UpliftForSettlement = {
+  kind: "fuel" | "oil";
+  paidBy: "pilot" | "owner";
+  price: number | null;
+};
+
+/**
+ * Fuel and oil in the amount due (BKG-13): on a wet rate the fuel the pilot paid for is taken
+ * off; on a dry rate the fuel the owner supplied is added. Oil is part of both rates, so oil the
+ * pilot paid for is always taken off. `unpriced` counts entries that matter but have no price.
+ */
+export function fuelSettlement(
+  uplifts: UpliftForSettlement[],
+  priceBasis: "wet" | "dry",
+): { adjustment: number; unpriced: number } {
+  let adjustment = 0;
+  let unpriced = 0;
+  for (const u of uplifts) {
+    const sign =
+      u.paidBy === "pilot"
+        ? u.kind === "oil" || priceBasis === "wet"
+          ? -1
+          : 0
+        : u.kind === "fuel" && priceBasis === "dry"
+          ? 1
+          : 0;
+    if (sign === 0) continue;
+    if (u.price === null) unpriced += 1;
+    else adjustment += sign * u.price;
+  }
+  return { adjustment: Math.round(adjustment * 100) / 100, unpriced };
+}

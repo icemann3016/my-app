@@ -16,6 +16,7 @@ import {
   uuid,
 } from "drizzle-orm/pg-core";
 
+import { fuelType } from "./aircraft";
 import { airports } from "./airports";
 import { bookings } from "./bookings";
 import { documents } from "./documents";
@@ -127,6 +128,43 @@ export const flightLegs = pgTable(
   ],
 ).enableRLS();
 
+export const upliftKind = pgEnum("uplift_kind", ["fuel", "oil"]);
+export const upliftPayer = pgEnum("uplift_payer", ["pilot", "owner"]);
+
+// Fuel and oil added during the rental (BKG-13, BKG-14). The price is in the booking's currency;
+// who paid decides how it counts in the amount due (lib/domain/flight-log.ts).
+export const flightUplifts = pgTable(
+  "flight_uplifts",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    flightLogId: uuid("flight_log_id")
+      .notNull()
+      .references(() => flightLogs.id, { onDelete: "cascade" }),
+    kind: upliftKind("kind").notNull(),
+    airportIdent: text("airport_ident")
+      .notNull()
+      .references(() => airports.ident),
+    quantityL: litres("quantity_l").notNull(),
+    fuelType: fuelType("fuel_type"),
+    oilGrade: text("oil_grade"),
+    price: numeric("price", { precision: 10, scale: 2, mode: "number" }),
+    paidBy: upliftPayer("paid_by").notNull(),
+    receiptId: uuid("receipt_id").references(() => documents.id, { onDelete: "set null" }),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [
+    index("flight_uplifts_log_idx").on(t.flightLogId),
+    check(
+      "flight_uplifts_values",
+      sql`${t.quantityL} > 0 and ${t.quantityL} <= 5000 and (${t.price} is null or ${t.price} >= 0)
+        and char_length(${t.oilGrade}) <= 40
+        and (${t.kind} = 'fuel' or ${t.fuelType} is null)
+        and (${t.kind} = 'oil' or ${t.oilGrade} is null)`,
+    ),
+  ],
+).enableRLS();
+
 export type FlightLog = typeof flightLogs.$inferSelect;
 export type FlightLeg = typeof flightLegs.$inferSelect;
+export type FlightUplift = typeof flightUplifts.$inferSelect;
 export type FlightLogStatus = (typeof flightLogStatus.enumValues)[number];

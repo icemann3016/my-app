@@ -11,6 +11,7 @@ import {
   aircraftDocuments,
   documents,
   flightLogs,
+  flightUplifts,
   medicals,
   pilotLicences,
   pilotRatings,
@@ -67,17 +68,24 @@ export async function saveDocument(userId: string, file: File): Promise<UploadRe
 }
 
 /**
- * Read a document if the viewer may see it (owner or admin; enforced by RLS).
+ * Read a document if the viewer may see it (enforced by RLS): its owner, admins, and the other
+ * party of a booking for the flight log's photos and receipts.
  * Admin views of other people's documents are written to the audit log.
  */
 export async function readDocument(viewerId: string, documentId: string) {
-  const [doc] = await asUser(viewerId, (tx) =>
-    tx.select().from(documents).where(eq(documents.id, documentId)),
-  );
-  if (!doc) return null;
+  const found = await asUser(viewerId, async (tx) => {
+    const [doc] = await tx.select().from(documents).where(eq(documents.id, documentId));
+    if (!doc) return null;
+    const [role] = (await tx.execute(
+      sql`select public.user_has_role('admin') as admin`,
+    )) as unknown as { admin: boolean }[];
+    return { doc, admin: Boolean(role?.admin) };
+  });
+  if (!found) return null;
+  const { doc } = found;
   const file = await getStorage("private").get(doc.storageKey);
   if (!file) return null;
-  if (doc.ownerId !== viewerId) {
+  if (doc.ownerId !== viewerId && found.admin) {
     await getDb().insert(adminActions).values({
       adminId: viewerId,
       action: "document.view",
@@ -94,6 +102,7 @@ const referenced = (id: typeof documents.id) => sql`(
   or exists (select 1 from ${medicals} where ${medicals.documentId} = ${id})
   or exists (select 1 from ${aircraftDocuments} where ${aircraftDocuments.documentId} = ${id})
   or exists (select 1 from ${flightLogs} where ${flightLogs.checkoutPhotoId} = ${id})
+  or exists (select 1 from ${flightUplifts} where ${flightUplifts.receiptId} = ${id})
 )`;
 
 /** Delete the user's document if no credential or aircraft uses it any more (row and file). */
