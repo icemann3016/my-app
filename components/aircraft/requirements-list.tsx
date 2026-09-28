@@ -54,6 +54,7 @@ export async function RequirementsList({
   if (r && !r.allowUnrated) lines.push(t("noUnrated"));
   else if (r?.unratedNeedsCheckout) lines.push(t("unratedCheckout"));
   if (r?.checkoutFirstRental) lines.push(t("checkoutFirstRental"));
+  if (r?.instantBooking) lines.push(t("instantBooking"));
   else lines.push(t("unratedWelcome"));
 
   return (

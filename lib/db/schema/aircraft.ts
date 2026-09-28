@@ -238,6 +238,11 @@ export const rentalRequirements = pgTable(
     unratedNeedsCheckout: boolean("unrated_needs_checkout").notNull().default(false),
     /** Every pilot new to this aircraft needs a checkout flight with an instructor (BKG-10). */
     checkoutFirstRental: boolean("checkout_first_rental").notNull().default(false),
+    /**
+     * Requests are accepted at once from pilots who meet every requirement (no conditions left)
+     * and have completed a rental of this aircraft before (BKG-4).
+     */
+    instantBooking: boolean("instant_booking").notNull().default(false),
     /** Accepted licences; empty = any. */
     licenceTypes: licenceType("licence_types")
       .array()

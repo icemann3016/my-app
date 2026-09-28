@@ -15,6 +15,7 @@ const KNOWN = new Set([
   "log_correction",
   "log_confirmed",
   "defect_reported",
+  "instant_booked",
 ]);
 
 /** What happened to a booking, oldest first. */

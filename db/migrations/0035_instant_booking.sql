@@ -1,0 +1,1 @@
+ALTER TABLE "rental_requirements" ADD COLUMN "instant_booking" boolean DEFAULT false NOT NULL;

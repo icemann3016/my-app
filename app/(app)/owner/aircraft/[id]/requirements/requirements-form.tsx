@@ -74,6 +74,12 @@ export function RequirementsForm({
           hint={t("checkoutFirstRentalHint")}
           defaultChecked={v.checkoutFirstRental === "on"}
         />
+        <CheckboxField
+          name="instantBooking"
+          label={t("instantBooking")}
+          hint={t("instantBookingHint")}
+          defaultChecked={v.instantBooking === "on"}
+        />
       </fieldset>
 
       <fieldset className="grid gap-2">

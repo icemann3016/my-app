@@ -314,6 +314,7 @@ export function bookingNotificationEmail({
     | "log_correction"
     | "log_confirmed"
     | "defect_reported"
+    | "instant_booked"
     | "reminder"
     | "other";
   registration: string;

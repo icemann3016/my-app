@@ -487,6 +487,10 @@
       "other": {
         "subject": "Booking update: {registration}",
         "body": "Update on the booking of {registration}."
+      },
+      "instant_booked": {
+        "subject": "Instant booking: {registration}",
+        "body": "{other} booked {registration} from {when} (instant booking)."
       }
     }
   },
@@ -1058,7 +1062,9 @@
       "minAge": "Minimum age",
       "nightIfrNote": "Night and IFR flights always need the matching privilege (Night, IR), checked when a pilot asks for such a flight.",
       "checkoutFirstRental": "Every pilot new to this aircraft needs a checkout flight with an instructor first",
-      "checkoutFirstRentalHint": "Once you record a pilot's checkout flight (on their booking), they don't need another one."
+      "checkoutFirstRentalHint": "Once you record a pilot's checkout flight (on their booking), they don't need another one.",
+      "instantBooking": "Instant booking for pilots who have flown this aircraft before",
+      "instantBookingHint": "Their requests are accepted at once when they meet every requirement and nothing is left to check (such as a checkout flight). Everyone else sends a request as usual."
     },
     "requirementsList": {
       "verified": "Licence, class rating and medical verified by ownAplane and valid",
@@ -1073,7 +1079,8 @@
       "unratedCheckout": "Pilots without reviews: after a checkout flight with an instructor",
       "unratedWelcome": "Pilots without reviews are welcome",
       "verifiedNoClass": "Licence and medical verified by ownAplane and valid",
-      "checkoutFirstRental": "Pilots new to this aircraft: after a checkout flight with an instructor"
+      "checkoutFirstRental": "Pilots new to this aircraft: after a checkout flight with an instructor",
+      "instantBooking": "Instant booking for pilots who have flown it before"
     },
     "public": {
       "preview": "Preview. Pilots can't see this aircraft now ({status}).",
@@ -1309,7 +1316,8 @@
         "log_submitted": "Flight log sent",
         "log_correction": "Correction requested",
         "log_confirmed": "Flight log confirmed",
-        "defect_reported": "Defect reported"
+        "defect_reported": "Defect reported",
+        "instant_booked": "Booked instantly"
       }
     },
     "respond": {
@@ -1640,7 +1648,8 @@
       "log_confirmed": "{other} confirmed the flight log of {registration}. The booking is complete.",
       "defect_reported": "{other} reported a defect on {registration}.",
       "reminder": "Reminder: {registration} is booked from {when}.",
-      "other": "Update on the booking of {registration}."
+      "other": "Update on the booking of {registration}.",
+      "instant_booked": "{other} booked {registration} from {when} (instant booking)."
     }
   },
   "checkoutFlight": {

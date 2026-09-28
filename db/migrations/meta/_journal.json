@@ -246,6 +246,20 @@
       "when": 1790622215280,
       "tag": "0034_checkout_security",
       "breakpoints": true
+    },
+    {
+      "idx": 35,
+      "version": "7",
+      "when": 1790622582857,
+      "tag": "0035_instant_booking",
+      "breakpoints": true
+    },
+    {
+      "idx": 36,
+      "version": "7",
+      "when": 1790622583802,
+      "tag": "0036_instant_booking_functions",
+      "breakpoints": true
     }
   ]
 }
