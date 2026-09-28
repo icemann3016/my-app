@@ -1,4 +1,3 @@
-import type { ReactNode } from "react";
 import { getTranslations } from "next-intl/server";
 
 import type { ReviewDirection } from "@/lib/db/schema";
@@ -20,7 +19,7 @@ export async function ReviewList({
   categories,
   reviews,
   showAircraft = false,
-  actions,
+  viewerId = null,
 }: {
   /** Heading id. */
   id: string;
@@ -31,7 +30,7 @@ export async function ReviewList({
   categories: Record<string, number>;
   reviews: ReviewView[];
   showAircraft?: boolean;
-  actions?: (review: ReviewView) => ReactNode;
+  viewerId?: string | null;
 }) {
   const t = await getTranslations("reviews");
   return (
@@ -65,7 +64,7 @@ export async function ReviewList({
           <ul className="grid divide-y">
             {reviews.map((r) => (
               <li key={r.id} className="py-4 first:pt-0 last:pb-0">
-                <ReviewCard review={r} showAircraft={showAircraft} actions={actions?.(r)} />
+                <ReviewCard review={r} showAircraft={showAircraft} viewerId={viewerId} />
               </li>
             ))}
           </ul>

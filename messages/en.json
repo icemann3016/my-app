@@ -178,7 +178,7 @@
     "hoursInvalid": "Enter a number of hours, e.g. 125.5.",
     "hoursMoreThanTotal": "Can't be more than your total hours.",
     "aircraftTypeInvalid": "Enter an ICAO type designator, e.g. C172 or PA28.",
-    "reasonRequired": "Tell the pilot why (up to 500 characters).",
+    "reasonRequired": "Choose a reason.",
     "registrationInvalid": "Enter the registration as on the aircraft, e.g. LZ-ABC or D-EFGH.",
     "registrationTaken": "Another listing already uses this registration. Contact us if it's your aircraft.",
     "manufacturerRequired": "Enter the manufacturer (up to 60 characters).",
@@ -505,6 +505,10 @@
       "reviews_published": {
         "subject": "Reviews published: {registration}",
         "body": "The reviews for the booking of {registration} from {when} are now public. You can read them on the booking."
+      },
+      "review_replied": {
+        "subject": "{other} replied to your review of {registration}",
+        "body": "{other} replied publicly to your review of {registration}. You can read the reply on the booking."
       }
     }
   },
@@ -1344,7 +1348,8 @@
         "defect_reported": "Defect reported",
         "instant_booked": "Booked instantly",
         "review_submitted": "Review written",
-        "reviews_published": "Reviews published"
+        "reviews_published": "Reviews published",
+        "review_replied": "Owner replied to the review"
       }
     },
     "respond": {
@@ -1678,7 +1683,8 @@
       "other": "Update on the booking of {registration}.",
       "instant_booked": "{other} booked {registration} from {when} (instant booking).",
       "review_submitted": "{other} reviewed the booking of {registration}. Write yours to see it.",
-      "reviews_published": "The reviews for {registration} are now published."
+      "reviews_published": "The reviews for {registration} are now published.",
+      "review_replied": "{other} replied to your review of {registration}."
     }
   },
   "checkoutFlight": {
@@ -1780,6 +1786,44 @@
       "already_reviewed": "You've already reviewed this booking.",
       "bad_scores": "Please give every category 1 to 5 stars.",
       "failed": "Couldn't save your review. Please try again."
+    },
+    "reply": "Reply",
+    "replyTitle": "Reply publicly",
+    "replyHint": "Everyone who reads the review sees your reply. You can reply once and can't change it later. Stay polite and factual.",
+    "replyLabel": "Your reply",
+    "sendReply": "Publish reply",
+    "replied": "Your reply is published.",
+    "replyErrors": {
+      "not_found": "You can't reply to this review.",
+      "already_replied": "You've already replied to this review.",
+      "reply_required": "Write a few words.",
+      "failed": "Couldn't save your reply. Please try again."
     }
+  },
+  "reports": {
+    "report": "Report",
+    "title": {
+      "review": "Report this review",
+      "user": "Report this member",
+      "aircraft": "Report this listing",
+      "message": "Report this message"
+    },
+    "hint": "Our team checks every report. Reviews are only removed when they break the rules (abuse, personal data, spam), never just for being negative.",
+    "reason": "Reason",
+    "choose": "Choose a reason",
+    "reasons": {
+      "abuse": "Abusive or offensive",
+      "personal_data": "Contains personal data",
+      "spam": "Spam or advertising",
+      "misleading": "False or misleading",
+      "unsafe": "Safety concern",
+      "other": "Something else"
+    },
+    "details": "Details (optional)",
+    "send": "Send report",
+    "sending": "Sending…",
+    "sent": "Thanks, we'll take a look.",
+    "alreadyReported": "You've already reported this. We'll take a look.",
+    "notFound": "This can't be reported any more."
   }
 }

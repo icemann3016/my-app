@@ -236,4 +236,64 @@ describeDb("reviews", () => {
     const [plane] = await db.getDb().select().from(s.aircraft);
     expect(plane).toMatchObject({ ratingAvg: null, ratingCount: 0 });
   });
+
+  it("lets the owner reply once to a published review of their aircraft", async () => {
+    const owner = db.getDb();
+    await owner.execute(sql`update public.reviews set hidden_at = null`);
+    const [r] = await owner
+      .select({ id: s.reviews.id })
+      .from(s.reviews)
+      .where(sql`direction = 'pilot_to_owner'`);
+    const reply = (user: string, text: string) =>
+      call(user, sql`select public.reply_to_review(${r!.id}::uuid, ${text})`);
+    expect(await reply(PIL, "Thanks")).toEqual({ error: "not_found" });
+    expect(await reply(OTH, "Thanks")).toEqual({ error: "not_found" });
+    expect(await reply(OWN, "  ")).toEqual({ error: "reply_required" });
+    expect(await reply(OWN, "Thanks for flying with us!")).toHaveLength(1);
+    expect(await reply(OWN, "Again")).toEqual({ error: "already_replied" });
+    const rows = await rls.asAnon((tx) => tx.select().from(s.reviews));
+    expect(rows.find((x) => x.id === r!.id)?.reply).toBe("Thanks for flying with us!");
+    // Owners can't touch reviews any other way.
+    await rls.asUser(OWN, (tx) => tx.update(s.reviews).set({ reply: "Edited" })).catch(() => null);
+    const [again] = await owner
+      .select()
+      .from(s.reviews)
+      .where(sql`id = ${r!.id}::uuid`);
+    expect(again!.reply).toBe("Thanks for flying with us!");
+  });
+
+  it("lets anyone logged in report what they can see; only they and admins see it", async () => {
+    const [r] = await db.getDb().select({ id: s.reviews.id }).from(s.reviews).limit(1);
+    const report = (user: string, targetType: "review" | "aircraft", targetId: string) =>
+      rls
+        .asUser(user, (tx) =>
+          tx.insert(s.reports).values({ reporterId: user, targetType, targetId, reason: "abuse" }),
+        )
+        .then(
+          () => "ok",
+          (e: { cause?: { code?: string } }) => e.cause?.code,
+        );
+    expect(await report(OTH, "review", r!.id)).toBe("ok");
+    expect(await report(OTH, "review", r!.id)).toBe("23505"); // one open report per target
+    expect(await report(OTH, "aircraft", OTH)).toBe("42501"); // nothing to see there
+    expect(
+      await rls
+        .asUser(OTH, (tx) =>
+          tx.insert(s.reports).values({
+            reporterId: PIL,
+            targetType: "review",
+            targetId: r!.id,
+            reason: "spam",
+          }),
+        )
+        .then(
+          () => "ok",
+          (e: { cause?: { code?: string } }) => e.cause?.code,
+        ),
+    ).toBe("42501");
+    expect(await rls.asUser(OTH, (tx) => tx.select().from(s.reports))).toHaveLength(1);
+    expect(await rls.asUser(OWN, (tx) => tx.select().from(s.reports))).toEqual([]);
+    await db.getDb().insert(s.userRoles).values({ userId: OWN, role: "admin" });
+    expect(await rls.asUser(OWN, (tx) => tx.select().from(s.reports))).toHaveLength(1);
+  });
 });

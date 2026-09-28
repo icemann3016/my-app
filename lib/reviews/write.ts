@@ -31,3 +31,8 @@ export function submitReview(
       ${comment})`,
   );
 }
+
+/** The owner's one public reply to a review (RAT-5). Errors: not_found, already_replied, reply_required. */
+export function replyToReview(userId: string, reviewId: string, reply: string) {
+  return run(userId, sql`select public.reply_to_review(${reviewId}::uuid, ${reply})`);
+}

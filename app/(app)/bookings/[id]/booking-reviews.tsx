@@ -62,7 +62,7 @@ export async function BookingReviews({
             <h3 className="text-sm font-medium text-muted-foreground">
               {t(isPilot ? "fromOwner" : "fromPilot")}
             </h3>
-            <ReviewCard review={theirs} />
+            <ReviewCard review={theirs} viewerId={userId} />
           </div>
         )}
       </CardContent>

@@ -157,6 +157,7 @@ export default async function AircraftPage({
             count={a.ratingCount}
             categories={categories}
             reviews={reviews}
+            viewerId={user?.id ?? null}
           />
         </div>
 

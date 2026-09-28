@@ -1,25 +1,26 @@
-import type { ReactNode } from "react";
 import Link from "next/link";
 import { getLocale, getTranslations } from "next-intl/server";
 
+import { ReportDialog } from "@/components/reports/report-dialog";
 import { UserAvatar } from "@/components/user-avatar";
 import { avatarUrl } from "@/lib/avatar-url";
 import { intlLocale, type Locale } from "@/lib/i18n/config";
 import { REVIEW_CATEGORIES } from "@/lib/reviews/categories";
 import type { ReviewView } from "@/lib/reviews/queries";
+import { ReplyDialog } from "./reply-dialog";
 import { Stars } from "./stars";
 
 /** One review: author, date, overall and category scores, comment and the owner's reply. */
 export async function ReviewCard({
   review: r,
   showAircraft = false,
-  actions,
+  viewerId = null,
 }: {
   review: ReviewView;
   /** Name the aircraft (on a person's profile). */
   showAircraft?: boolean;
-  /** Reply / report buttons. */
-  actions?: ReactNode;
+  /** Logged-in viewer: may report it, or reply when it's about them as an owner. */
+  viewerId?: string | null;
 }) {
   const t = await getTranslations("reviews");
   const locale = (await getLocale()) as Locale;
@@ -75,7 +76,18 @@ export async function ReviewCard({
           <p className="leading-relaxed whitespace-pre-line">{r.reply}</p>
         </div>
       )}
-      {actions}
+      {viewerId && (
+        <div className="flex flex-wrap items-center gap-2">
+          {viewerId === r.subjectUserId &&
+            r.direction === "pilot_to_owner" &&
+            r.publishedAt &&
+            !r.hiddenAt &&
+            !r.reply && <ReplyDialog reviewId={r.id} />}
+          {viewerId !== r.authorId && r.publishedAt && (
+            <ReportDialog targetType="review" targetId={r.id} />
+          )}
+        </div>
+      )}
     </article>
   );
 }

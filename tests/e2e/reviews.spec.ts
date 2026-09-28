@@ -64,6 +64,13 @@ test("pilot and owner review each other, double-blind", async ({ page, browser }
   await expect(owner.getByText("Lovely aircraft, clean and on time.")).toBeVisible();
   await expect(owner.getByText("4.0 (1 review)")).toBeVisible();
 
+  // The owner replies once, publicly (RAT-5).
+  await owner.getByRole("button", { name: "Reply" }).click();
+  await owner.getByLabel("Your reply").fill("Thanks, come back soon!");
+  await owner.getByRole("button", { name: "Publish reply" }).click();
+  await expect(owner.getByText("Thanks, come back soon!")).toBeVisible();
+  await expect(owner.getByRole("button", { name: "Reply" })).toHaveCount(0);
+
   // The pilot's public profile shows the owner's review and the new pilot rating.
   await owner.goto(`/bookings/${bookingId}`);
   await owner
@@ -76,4 +83,10 @@ test("pilot and owner review each other, double-blind", async ({ page, browser }
 
   await page.reload();
   await expect(page.getByRole("heading", { name: "The owner's review of you" })).toBeVisible();
+
+  // Either side can report a review to the admins.
+  await page.getByRole("button", { name: "Report", exact: true }).click();
+  await page.getByLabel("Reason").selectOption("personal_data");
+  await page.getByRole("button", { name: "Send report" }).click();
+  await expect(page.getByText("Thanks, we'll take a look.")).toBeVisible();
 });

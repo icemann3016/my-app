@@ -193,6 +193,7 @@ export default async function PublicProfilePage({ params }: { params: Promise<{ 
       </Card>
       <ProfileReviews
         userId={profile.id}
+        viewerId={viewer?.id ?? null}
         asPilot={
           isPilot || profile.ratingCount
             ? { average: profile.ratingAvg, count: profile.ratingCount }

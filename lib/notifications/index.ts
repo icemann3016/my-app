@@ -26,6 +26,7 @@ export const NOTIFICATION_TYPES = [
   "instant_booked",
   "review_submitted",
   "reviews_published",
+  "review_replied",
   "reminder",
 ] as const;
 export type NotificationType = (typeof NOTIFICATION_TYPES)[number];

@@ -7,8 +7,8 @@ import { requireUser } from "@/lib/auth/session";
 import { type FormState, formValues } from "@/lib/forms";
 import { localizedFieldErrors } from "@/lib/i18n/server";
 import { sendNotificationsSoon } from "@/lib/notifications/soon";
-import { submitReview } from "@/lib/reviews/write";
-import { reviewSchema, reviewScores } from "@/lib/validation/review";
+import { replyToReview, submitReview } from "@/lib/reviews/write";
+import { reviewReplySchema, reviewSchema, reviewScores } from "@/lib/validation/review";
 
 /** Review a completed booking (RAT-1, RAT-2). */
 export async function submitReviewAction(_prev: FormState, formData: FormData): Promise<FormState> {
@@ -33,4 +33,26 @@ export async function submitReviewAction(_prev: FormState, formData: FormData): 
   sendNotificationsSoon();
   revalidatePath(`/bookings/${bookingId}`);
   return { ok: true, message: t("submitted") };
+}
+
+/** The owner replies publicly, once, to a review of their aircraft (RAT-5). */
+export async function replyToReviewAction(
+  _prev: FormState,
+  formData: FormData,
+): Promise<FormState> {
+  const user = await requireUser("/bookings");
+  const t = await getTranslations("reviews");
+  const raw = formValues(formData);
+  const parsed = reviewReplySchema.safeParse(raw);
+  if (!parsed.success) return { errors: await localizedFieldErrors(parsed.error), values: raw };
+  const result = await replyToReview(user.id, parsed.data.reviewId, parsed.data.text);
+  if (!result.ok) {
+    const known = ["not_found", "already_replied", "reply_required"];
+    const key = known.includes(result.error) ? result.error : "failed";
+    return { message: t(`replyErrors.${key}` as "replyErrors.failed"), values: raw };
+  }
+  sendNotificationsSoon();
+  // The reply shows on the booking, the aircraft page and the owner's profile.
+  revalidatePath("/", "layout");
+  return { ok: true, message: t("replied") };
 }

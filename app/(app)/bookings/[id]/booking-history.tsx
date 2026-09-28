@@ -19,6 +19,7 @@ const KNOWN = new Set([
   "instant_booked",
   "review_submitted",
   "reviews_published",
+  "review_replied",
 ]);
 
 /** What happened to a booking, oldest first. */

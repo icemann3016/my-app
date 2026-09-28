@@ -11,8 +11,10 @@ export async function ProfileReviews({
   userId,
   asPilot,
   asOwner,
+  viewerId,
 }: {
   userId: string;
+  viewerId: string | null;
   /** Null when the person isn't a pilot and has no reviews as one. */
   asPilot: Rating | null;
   asOwner: Rating | null;
@@ -46,6 +48,7 @@ export async function ProfileReviews({
             categories={s.categories}
             reviews={s.reviews}
             showAircraft={s.direction === "pilot_to_owner"}
+            viewerId={viewerId}
           />
         ))}
       </CardContent>
