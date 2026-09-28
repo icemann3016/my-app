@@ -47,6 +47,7 @@ npm run db:migrate         # apply migrations to DATABASE_URL
 npm run db:studio          # browse the database in the browser
 npm run airports:import    # (re)load European airfields from OurAirports; -- --file x.csv for a local file
 npm run admin:grant -- me@example.com   # make a user an admin (add --revoke to remove)
+npm run demo:seed -- --yes              # demo owners, pilots, aircraft, bookings (--remove to delete)
 
 docker build -t ownaplane .   # production container
 docker compose up -d db    # local Postgres (no cloud account needed)
@@ -100,7 +101,8 @@ lib/
 db/migrations/        # SQL migrations (generated + custom), applied with npm run db:migrate
 messages/             # translations: en.json (source) and bg.json (same keys)
 i18n/request.ts       # picks the language for each request
-scripts/              # import-airports.mjs (+ airports/transform.mjs), grant-admin.mjs, create-github-issues.mjs
+scripts/              # import-airports.mjs (+ airports/transform.mjs), grant-admin.mjs, seed-demo.mjs,
+                      #   create-github-issues.mjs
 tests/                # e2e/ (Playwright), db/ (database security tests), fixtures/ (test airports)
 docs/                 # requirements, implementation plan, deployment guide
 content/help/         # help articles (Markdown, en/ + bg/), shown at /help
