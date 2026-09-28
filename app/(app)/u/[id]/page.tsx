@@ -6,6 +6,7 @@ import { notFound } from "next/navigation";
 import { MapPinIcon, ShieldCheckIcon, StarIcon } from "lucide-react";
 import { getLocale, getTranslations } from "next-intl/server";
 
+import { ReportDialog } from "@/components/reports/report-dialog";
 import { UserAvatar } from "@/components/user-avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -188,6 +189,9 @@ export default async function PublicProfilePage({ params }: { params: Promise<{ 
 
           {profile.bio && (
             <p className="text-sm leading-relaxed whitespace-pre-line">{profile.bio}</p>
+          )}
+          {viewer && viewer.id !== profile.id && (
+            <ReportDialog targetType="user" targetId={profile.id} />
           )}
         </CardContent>
       </Card>

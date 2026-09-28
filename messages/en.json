@@ -99,7 +99,8 @@
     "linkExpired": "That link has expired or was already used. Log in, or request a new link.",
     "oauthFailed": "Signing in with Google didn't work. Please try again or use your email.",
     "accountNotLinked": "You already have an account with this email. Log in with your password, then connect Google under Account → Security.",
-    "errorCode": "Error code: {code}"
+    "errorCode": "Error code: {code}",
+    "suspended": "This account is suspended. If you think this is a mistake, contact us."
   },
   "signup": {
     "title": "Create your account",
@@ -155,7 +156,8 @@
     "tooManyRequests": "Too many attempts. Please wait a minute and try again.",
     "generic": "Something went wrong. Please try again.",
     "resetSent": "If an account exists for that email, we've sent a link to reset your password.",
-    "verificationSent": "If that address is waiting for confirmation, we've sent a new link."
+    "verificationSent": "If that address is waiting for confirmation, we've sent a new link.",
+    "suspended": "This account is suspended. If you think this is a mistake, contact us."
   },
   "validation": {
     "emailInvalid": "Enter a valid email address.",
@@ -770,6 +772,140 @@
         "reject": "rejected {item}",
         "viewDocument": "opened a document"
       }
+    },
+    "tabs": {
+      "label": "Admin",
+      "dashboard": "Dashboard",
+      "verifications": "Verifications",
+      "reports": "Reports",
+      "users": "Members",
+      "aircraft": "Aircraft",
+      "audit": "Audit log"
+    },
+    "dashboard": {
+      "title": "Admin dashboard",
+      "description": "How ownAplane is doing, and what needs your attention.",
+      "openReports": "Open reports",
+      "pendingVerifications": "Documents waiting for verification",
+      "last30": "Last 30 days",
+      "tiles": {
+        "users": "Members",
+        "roles": "Pilots / owners",
+        "listed": "Listed aircraft",
+        "bookings": "Booking requests",
+        "completed": "Completed bookings",
+        "cancelled": "Cancellations"
+      },
+      "newUsers": "{count, plural, one {# new} other {# new}} in the last 30 days",
+      "rolesSub": "With the role switched on (all time)",
+      "listedSub": "Right now",
+      "bookingsSub": "{accepted} accepted ({rate})",
+      "reviewsSub": "{count, plural, one {# review} other {# reviews}} published",
+      "cancelledSub": "{late} late · {declined} declined or expired",
+      "signups": "Sign-ups per week",
+      "weekOf": "Week of",
+      "suspended": "{count, plural, one {# member is} other {# members are}} suspended."
+    },
+    "reports": {
+      "title": "Reports",
+      "description": "Reported reviews, members, listings and messages. Hide or suspend only when the rules are broken, never just because something is negative.",
+      "filter": "Show reports",
+      "statuses": {
+        "open": "Open",
+        "resolved": "Resolved",
+        "dismissed": "Dismissed"
+      },
+      "targets": {
+        "review": "Review",
+        "user": "Member",
+        "aircraft": "Listing",
+        "message": "Message"
+      },
+      "empty": "Nothing here.",
+      "by": "reported by {name}",
+      "deletedUser": "a former member",
+      "gone": "It no longer exists.",
+      "reviewBy": "Review by",
+      "messageBy": "Message from",
+      "member": "Member",
+      "listing": "Listing",
+      "owner": "owner",
+      "hidden": "Hidden",
+      "suspended": "Suspended"
+    },
+    "users": {
+      "title": "Members",
+      "description": "Find members by name or email. Suspended members can't log in, book, message or review, and their aircraft are unlisted.",
+      "search": "Search members",
+      "placeholder": "Name or email",
+      "searchButton": "Search",
+      "none": "No members found.",
+      "admin": "Admin",
+      "joined": "joined {date}",
+      "suspended": "Suspended"
+    },
+    "aircraft": {
+      "title": "Aircraft",
+      "description": "Find listings by registration, make or model. An aircraft you unlist can't be listed again by its owner until you allow it.",
+      "search": "Search aircraft",
+      "placeholder": "Registration, make or model",
+      "searchButton": "Search",
+      "none": "No aircraft found.",
+      "reasons": {
+        "admin": "Unlisted by admin",
+        "suspended": "Owner suspended"
+      }
+    },
+    "audit": {
+      "title": "Audit log",
+      "description": "Every admin decision and every time an admin opened a private document.",
+      "search": "Search the audit log",
+      "placeholder": "Action, admin, target id or reason",
+      "searchButton": "Search",
+      "none": "No entries.",
+      "when": "When (UTC)",
+      "admin": "Admin",
+      "action": "Action",
+      "target": "Target",
+      "reason": "Reason"
+    },
+    "moderation": {
+      "reason": "Reason (for the audit log)",
+      "reasonHint": "Optional, but it helps the rest of the team later.",
+      "working": "Working…",
+      "failed": "That didn't work. Please reload the page and try again.",
+      "self": "You can't do that to your own account.",
+      "notFound": "Already done, or it no longer exists.",
+      "ops": {
+        "suspend": "Suspend member",
+        "unsuspend": "Lift suspension",
+        "unlist": "Unlist aircraft",
+        "allow_listing": "Allow listing again",
+        "hide_review": "Hide review",
+        "show_review": "Show review again",
+        "resolve_report": "Mark resolved",
+        "dismiss_report": "Dismiss"
+      },
+      "confirm": {
+        "suspend": "They are logged out and can't log in, book, message or review. Their listed aircraft are unlisted.",
+        "unsuspend": "They can log in again. Their aircraft can be listed again by them.",
+        "unlist": "The aircraft disappears from search and can't be listed again by the owner until you allow it. Existing bookings stay.",
+        "allow_listing": "The owner can list the aircraft again (it stays unlisted until they do).",
+        "hide_review": "Only hide reviews that break the rules (abuse, personal data, spam). The rating averages are updated.",
+        "show_review": "The review becomes public again and counts in the averages.",
+        "resolve_report": "Close the report: action was taken.",
+        "dismiss_report": "Close the report: nothing breaks the rules."
+      },
+      "done": {
+        "suspend": "Member suspended.",
+        "unsuspend": "Suspension lifted.",
+        "unlist": "Aircraft unlisted.",
+        "allow_listing": "The owner can list it again.",
+        "hide_review": "Review hidden.",
+        "show_review": "Review shown again.",
+        "resolve_report": "Report resolved.",
+        "dismiss_report": "Report dismissed."
+      }
     }
   },
   "aircraft": {
@@ -954,7 +1090,8 @@
         "listed": "Your aircraft is listed.",
         "paused": "Paused. Pilots can't see it for now.",
         "unlisted": "Unlisted."
-      }
+      },
+      "blocked": "This aircraft can't be listed at the moment: our team unlisted it. Please contact us."
     },
     "gaps": {
       "home_base": "home base",
@@ -981,7 +1118,9 @@
     },
     "unlistedReasons": {
       "arc": "We unlisted this aircraft because its ARC expired. Upload the new ARC to list it again.",
-      "insurance": "We unlisted this aircraft because its insurance expired. Upload the new certificate to list it again."
+      "insurance": "We unlisted this aircraft because its insurance expired. Upload the new certificate to list it again.",
+      "admin": "Our team unlisted this aircraft because it breaks the rules. Contact us to list it again.",
+      "suspended": "This aircraft was unlisted because your account is suspended."
     },
     "delete": {
       "button": "Delete aircraft",

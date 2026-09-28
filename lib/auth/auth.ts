@@ -1,6 +1,7 @@
 import "server-only";
 
 import { betterAuth } from "better-auth";
+import { APIError } from "better-auth/api";
 import { eq } from "drizzle-orm";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { nextCookies } from "better-auth/next-js";
@@ -105,6 +106,25 @@ function createAuth() {
           // with the user).
           await deleteAllDocumentFiles(user.id);
           await deleteAllAircraftPhotoFiles(user.id);
+        },
+      },
+    },
+    databaseHooks: {
+      session: {
+        create: {
+          // Suspended users can't log in (ADM-2); their sessions are deleted when suspended.
+          before: async (session) => {
+            const [profile] = await getDb()
+              .select({ suspendedAt: schema.profiles.suspendedAt })
+              .from(schema.profiles)
+              .where(eq(schema.profiles.id, session.userId));
+            if (profile?.suspendedAt) {
+              throw APIError.from("FORBIDDEN", {
+                message: "This account is suspended.",
+                code: "ACCOUNT_SUSPENDED",
+              });
+            }
+          },
         },
       },
     },

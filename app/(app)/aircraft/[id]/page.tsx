@@ -5,6 +5,7 @@ import { EyeIcon, MapPinIcon, MessagesSquareIcon, PencilIcon, StarIcon } from "l
 import { getLocale, getTranslations } from "next-intl/server";
 
 import { RequirementsList } from "@/components/aircraft/requirements-list";
+import { ReportDialog } from "@/components/reports/report-dialog";
 import { ReviewList } from "@/components/reviews/review-list";
 import { UserAvatar } from "@/components/user-avatar";
 import { Alert, AlertDescription } from "@/components/ui/alert";
@@ -219,6 +220,7 @@ export default async function AircraftPage({
                 </Button>
               )}
               <p className="text-xs text-muted-foreground">{t("fields.paymentNote")}</p>
+              {user && !isOwner && <ReportDialog targetType="aircraft" targetId={id} />}
             </CardContent>
           </Card>
           <Card>

@@ -28,6 +28,7 @@ type MessageKey =
   | "passwordLength"
   | "linkExpired"
   | "tooManyRequests"
+  | "suspended"
   | "generic";
 
 function messageKey(code: string | undefined): MessageKey {
@@ -47,6 +48,8 @@ function messageKey(code: string | undefined): MessageKey {
       return "linkExpired";
     case "TOO_MANY_REQUESTS":
       return "tooManyRequests";
+    case "ACCOUNT_SUSPENDED":
+      return "suspended";
     default:
       return "generic";
   }

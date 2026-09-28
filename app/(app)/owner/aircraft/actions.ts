@@ -160,6 +160,7 @@ export async function setAircraftStatus(_prev: FormState, formData: FormData): P
       const missing = detail.split(",").map((g) => gaps(g as ListingGap));
       return { message: t("notReady", { missing: missing.join(", ") }) };
     }
+    if (code === "23514" && !detail) return { message: t("blocked") };
     if (code === "23505") return { message: t("registrationTaken") };
     throw e;
   }

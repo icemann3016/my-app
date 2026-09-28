@@ -4,10 +4,11 @@
  */
 export function loginErrorKey(
   code: string | undefined,
-): "linkExpired" | "accountNotLinked" | "oauthFailed" | null {
+): "linkExpired" | "accountNotLinked" | "oauthFailed" | "suspended" | null {
   if (!code) return null;
   const c = code.toLowerCase();
   if (c === "account_not_linked") return "accountNotLinked";
+  if (c === "account_suspended") return "suspended";
   if (["invalid_token", "token_expired", "expired_token"].includes(c)) return "linkExpired";
   return "oauthFailed";
 }
