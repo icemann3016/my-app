@@ -32,6 +32,9 @@ export const profiles = pgTable(
     }),
     ratingAvg: numeric("rating_avg", { precision: 3, scale: 2, mode: "number" }),
     ratingCount: integer("rating_count").notNull().default(0),
+    // As an owner: published reviews of their aircraft (M7). rating_* above is as a pilot.
+    ownerRatingAvg: numeric("owner_rating_avg", { precision: 3, scale: 2, mode: "number" }),
+    ownerRatingCount: integer("owner_rating_count").notNull().default(0),
     suspendedAt: timestamp("suspended_at", { withTimezone: true }),
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
     updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),

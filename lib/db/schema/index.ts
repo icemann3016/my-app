@@ -9,3 +9,4 @@ export * from "./bookings";
 export * from "./flight-logs";
 export * from "./defects";
 export * from "./notifications";
+export * from "./reviews";

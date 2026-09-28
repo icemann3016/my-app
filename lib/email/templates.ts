@@ -315,6 +315,8 @@ export function bookingNotificationEmail({
     | "log_confirmed"
     | "defect_reported"
     | "instant_booked"
+    | "review_submitted"
+    | "reviews_published"
     | "reminder"
     | "other";
   registration: string;

@@ -15,6 +15,7 @@ import {
   pilotRatings,
   profiles,
   rentalRequirements,
+  reviews,
   sessions,
   userRoles,
   userSettings,
@@ -120,6 +121,19 @@ export async function GET() {
     sessions: activeSessions,
     pilot,
     owner,
+    reviewsWritten: await db
+      .select({
+        bookingId: reviews.bookingId,
+        direction: reviews.direction,
+        scores: reviews.scores,
+        overall: reviews.overall,
+        comment: reviews.comment,
+        submittedAt: reviews.submittedAt,
+        publishedAt: reviews.publishedAt,
+        reply: reviews.reply,
+      })
+      .from(reviews)
+      .where(eq(reviews.authorId, user.id)),
   };
   const date = new Date().toISOString().slice(0, 10);
   return new Response(JSON.stringify(data, null, 2), {

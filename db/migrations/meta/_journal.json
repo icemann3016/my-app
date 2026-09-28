@@ -267,6 +267,20 @@
       "when": 1790624013071,
       "tag": "0037_calendar_view",
       "breakpoints": true
+    },
+    {
+      "idx": 38,
+      "version": "7",
+      "when": 1790624894726,
+      "tag": "0038_reviews",
+      "breakpoints": true
+    },
+    {
+      "idx": 39,
+      "version": "7",
+      "when": 1790624910388,
+      "tag": "0039_review_security",
+      "breakpoints": true
     }
   ]
 }

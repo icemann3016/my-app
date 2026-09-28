@@ -493,6 +493,14 @@
       "instant_booked": {
         "subject": "Незабавна резервация: {registration}",
         "body": "{other} резервира {registration} от {when} (незабавна резервация)."
+      },
+      "review_submitted": {
+        "subject": "{other} написа отзив за полета ви с {registration}",
+        "body": "{other} написа отзив за резервацията на {registration} от {when}. Напишете и вие: двата отзива се показват, когато и двамата сте написали, или след 14 дни."
+      },
+      "reviews_published": {
+        "subject": "Публикувани отзиви: {registration}",
+        "body": "Отзивите за резервацията на {registration} от {when} вече са публични. Можете да ги прочетете в резервацията."
       }
     }
   },
@@ -1330,7 +1338,9 @@
         "log_correction": "Поискана е корекция",
         "log_confirmed": "Дневникът е потвърден",
         "defect_reported": "Докладван дефект",
-        "instant_booked": "Резервиран незабавно"
+        "instant_booked": "Резервиран незабавно",
+        "review_submitted": "Написан отзив",
+        "reviews_published": "Публикувани отзиви"
       }
     },
     "respond": {
@@ -1662,7 +1672,9 @@
       "defect_reported": "{other} докладва дефект на {registration}.",
       "reminder": "Напомняне: {registration} е резервиран от {when}.",
       "other": "Промяна по резервацията за {registration}.",
-      "instant_booked": "{other} резервира {registration} от {when} (незабавна резервация)."
+      "instant_booked": "{other} резервира {registration} от {when} (незабавна резервация).",
+      "review_submitted": "{other} написа отзив за резервацията на {registration}. Напишете вашия, за да го видите.",
+      "reviews_published": "Отзивите за {registration} вече са публикувани."
     }
   },
   "checkoutFlight": {

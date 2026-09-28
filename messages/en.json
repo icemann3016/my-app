@@ -493,6 +493,14 @@
       "instant_booked": {
         "subject": "Instant booking: {registration}",
         "body": "{other} booked {registration} from {when} (instant booking)."
+      },
+      "review_submitted": {
+        "subject": "{other} reviewed your flight with {registration}",
+        "body": "{other} has reviewed the booking of {registration} from {when}. Write your review too: both reviews are shown once you have both written one, or after 14 days."
+      },
+      "reviews_published": {
+        "subject": "Reviews published: {registration}",
+        "body": "The reviews for the booking of {registration} from {when} are now public. You can read them on the booking."
       }
     }
   },
@@ -1330,7 +1338,9 @@
         "log_correction": "Correction requested",
         "log_confirmed": "Flight log confirmed",
         "defect_reported": "Defect reported",
-        "instant_booked": "Booked instantly"
+        "instant_booked": "Booked instantly",
+        "review_submitted": "Review written",
+        "reviews_published": "Reviews published"
       }
     },
     "respond": {
@@ -1662,7 +1672,9 @@
       "defect_reported": "{other} reported a defect on {registration}.",
       "reminder": "Reminder: {registration} is booked from {when}.",
       "other": "Update on the booking of {registration}.",
-      "instant_booked": "{other} booked {registration} from {when} (instant booking)."
+      "instant_booked": "{other} booked {registration} from {when} (instant booking).",
+      "review_submitted": "{other} reviewed the booking of {registration}. Write yours to see it.",
+      "reviews_published": "The reviews for {registration} are now published."
     }
   },
   "checkoutFlight": {

@@ -5,6 +5,7 @@ import { expireBookingRequests } from "@/lib/bookings/queries";
 import { deleteOrphanDocuments } from "@/lib/documents";
 import { createBookingReminders, deliverNotificationEmails } from "@/lib/notifications";
 import { sendExpiryReminders } from "@/lib/pilot/reminders";
+import { publishDueReviews } from "@/lib/reviews/jobs";
 
 /**
  * Daily maintenance, called by a scheduler with `Authorization: Bearer $CRON_SECRET`:
@@ -16,6 +17,7 @@ import { sendExpiryReminders } from "@/lib/pilot/reminders";
  * - removes uploads older than a day that were never attached to a credential or aircraft
  * - reminds pilot and owner of bookings starting within 36 hours, and emails notifications
  *   that weren't sent right away
+ * - publishes reviews whose 14-day window has closed (RAT-3)
  */
 export const maxDuration = 60;
 
@@ -36,6 +38,7 @@ export async function GET(request: Request) {
   const unlistedAircraft = await unlistExpiredAircraft();
   const aircraftReminders = await sendAircraftExpiryReminders();
   const orphanDocuments = await deleteOrphanDocuments(new Date(Date.now() - 24 * 60 * 60 * 1000));
+  const publishedReviews = await publishDueReviews();
   const bookingReminders = await createBookingReminders();
   const notificationEmails = await deliverNotificationEmails(500);
   const result = {
@@ -44,6 +47,7 @@ export async function GET(request: Request) {
     unlistedAircraft,
     aircraftReminders,
     orphanDocuments,
+    publishedReviews,
     bookingReminders,
     notificationEmails,
   };
