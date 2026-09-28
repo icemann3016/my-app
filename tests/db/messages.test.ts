@@ -224,4 +224,31 @@ describeDb("messages", () => {
       console.info = log;
     }
   });
+
+  it("shares email and phone only with the other side of an accepted booking", async () => {
+    const owner = db.getDb();
+    await rls.asUser(PIL, (tx) =>
+      tx
+        .update(s.userSettings)
+        .set({ phone: "+359 88 123 4567" })
+        .where(sql`user_id = ${PIL}::uuid`),
+    );
+    const contacts = (user: string) =>
+      rls
+        .asUser(user, (tx) =>
+          tx.execute(sql`select * from public.booking_contacts(${bookingId}::uuid)`),
+        )
+        .then((rows) => rows as unknown as { email: string; phone: string | null }[]);
+    expect(await contacts(OWN)).toEqual([]); // still only requested
+    await owner.execute(
+      sql`update public.bookings set status = 'accepted' where id = ${bookingId}`,
+    );
+    expect(await contacts(OWN)).toMatchObject([
+      { email: "pil-m@example.com", phone: "+359 88 123 4567" },
+    ]);
+    expect(await contacts(PIL)).toMatchObject([{ email: "own-m@example.com", phone: null }]);
+    expect(await contacts(OTH)).toEqual([]);
+    // Other people's settings stay private.
+    expect(await rls.asUser(OWN, (tx) => tx.select().from(s.userSettings))).toHaveLength(1);
+  });
 });

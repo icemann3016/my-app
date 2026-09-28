@@ -56,12 +56,15 @@ export const userSettings = pgTable(
       .references(() => users.id, { onDelete: "cascade" }),
     locale: text("locale").notNull().default("en"),
     units: text("units").notNull().default("metric"),
+    // Shared only with the other side of an accepted booking (MSG-2), see booking_contacts().
+    phone: text("phone"),
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
     updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
   },
   (t) => [
     check("user_settings_locale", sql`${t.locale} in ('en', 'bg')`),
     check("user_settings_units", sql`${t.units} in ('metric', 'imperial')`),
+    check("user_settings_phone", sql`${t.phone} ~ '^\\+[0-9 ]{6,20}$'`),
   ],
 ).enableRLS();
 

@@ -26,6 +26,7 @@ import { getKnownItems } from "@/lib/bookings/remarks";
 import { FREE_CANCELLATION_HOURS } from "@/lib/bookings/respond";
 import { toRange, utcToZoned } from "@/lib/domain/time";
 import type { Locale } from "@/lib/i18n/config";
+import { BookingContact } from "./booking-contact";
 import { BookingHistory } from "./booking-history";
 import { BookingReviews } from "./booking-reviews";
 import { CancelBooking } from "./cancel-booking";
@@ -206,6 +207,13 @@ export default async function BookingPage({
         </Alert>
       )}
 
+      {["accepted", "in_progress", "completed"].includes(b.status) ? (
+        <BookingContact userId={user.id} bookingId={b.id} isOwner={isOwner} />
+      ) : (
+        b.status === "requested" && (
+          <p className="text-sm text-muted-foreground">{t("contact.afterAccept")}</p>
+        )
+      )}
       <Card>
         <CardHeader>
           <CardTitle as="h2">{t("detail.flight")}</CardTitle>

@@ -18,6 +18,7 @@ import { asUser } from "@/lib/db/rls";
 import { accounts, userSettings } from "@/lib/db/schema";
 import { AvatarUpload } from "./avatar-upload";
 import { DeleteAccount } from "./delete-account";
+import { ContactForm } from "./contact-form";
 import { PreferencesForm } from "./preferences-form";
 import { ProfileForm } from "./profile-form";
 import { RolesForm } from "./roles-form";
@@ -106,6 +107,15 @@ export default async function AccountPage({
         </CardContent>
       </Card>
 
+      <Card id="contact">
+        <CardHeader>
+          <CardTitle as="h2">{t("contact.title")}</CardTitle>
+          <CardDescription>{t("contact.description")}</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <ContactForm phone={settings?.phone ?? null} />
+        </CardContent>
+      </Card>
       <Card>
         <CardHeader>
           <CardTitle as="h2">{t("preferences.title")}</CardTitle>

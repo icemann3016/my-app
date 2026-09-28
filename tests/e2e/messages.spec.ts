@@ -51,9 +51,18 @@ test("a pilot asks the owner, who answers; booking conversations too", async ({
   await page.reload();
   await expect(page.getByText("Yes, from 08:00 UTC.")).toBeVisible();
 
+  // The pilot adds a phone number; it's only shared on accepted bookings (MSG-2).
+  await page.goto("/account");
+  await page.getByLabel("Mobile phone (optional)").fill("+359 (88) 123-4567");
+  await page.getByRole("button", { name: "Save phone" }).click();
+  await expect(page.getByLabel("Mobile phone (optional)")).toHaveValue("+359 88 123 4567");
+
   // Once there is a booking, it has its own conversation.
   await seedVerifiedPilot(pilotEmail);
   const bookingId = await seedAcceptedBooking(aircraftId, pilotEmail, 60 * 24);
+  await owner.goto(`/bookings/${bookingId}`);
+  await expect(owner.getByRole("heading", { name: "Contact the pilot" })).toBeVisible();
+  await expect(owner.getByRole("link", { name: /\+359 88 123 4567/ })).toBeVisible();
   await page.goto(`/bookings/${bookingId}`);
   await page.getByRole("link", { name: "Message the owner" }).click();
   await expect(page.getByText("No messages yet. Say hello!")).toBeVisible();

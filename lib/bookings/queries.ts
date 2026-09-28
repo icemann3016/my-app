@@ -161,3 +161,11 @@ export async function pilotMeetsRequirements(
   )) as unknown as { ok: boolean | null }[];
   return rows[0]?.ok ?? null;
 }
+
+/** The other side's name, email and phone, once the booking is accepted (MSG-2); else null. */
+export async function getBookingContact(userId: string, bookingId: string) {
+  const [row] = (await asUser(userId, (tx) =>
+    tx.execute(sql`select * from public.booking_contacts(${bookingId}::uuid)`),
+  )) as unknown as { user_id: string; name: string; email: string; phone: string | null }[];
+  return row ? { userId: row.user_id, name: row.name, email: row.email, phone: row.phone } : null;
+}

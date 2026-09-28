@@ -201,7 +201,8 @@
     "defectRequired": "Describe the defect (up to 2000 characters).",
     "scoreRequired": "Choose 1 to 5 stars.",
     "replyRequired": "Write a few words.",
-    "messageRequired": "Write a message."
+    "messageRequired": "Write a message.",
+    "phoneInvalid": "Enter the number in international format, e.g. +359 88 123 4567."
   },
   "dashboard": {
     "title": "Welcome, {name}",
@@ -335,6 +336,15 @@
       "label": "Account sections",
       "general": "General",
       "credentials": "Pilot credentials"
+    },
+    "contact": {
+      "title": "Contact phone",
+      "description": "Shown only to the other side of your accepted bookings, together with your email. Never on your public profile.",
+      "phone": "Mobile phone (optional)",
+      "phoneHint": "International format with the country code, e.g. +359 88 123 4567. Leave empty to remove it.",
+      "save": "Save phone",
+      "saving": "Saving…",
+      "saved": "Saved."
     }
   },
   "password": {
@@ -1405,6 +1415,15 @@
         "reason_required": "Please give a reason.",
         "failed": "That didn't work. Please try again."
       }
+    },
+    "contact": {
+      "titlePilot": "Contact the pilot",
+      "titleOwner": "Contact the owner",
+      "email": "Email",
+      "phone": "Phone",
+      "noPhone": "No phone number added.",
+      "note": "Shared because the booking is accepted. Use it only for this booking.",
+      "afterAccept": "Email and phone are shown here once the owner accepts. Until then, use messages."
     }
   },
   "usage": {
