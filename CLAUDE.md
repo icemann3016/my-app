@@ -13,7 +13,7 @@ This file tells Claude how to work in this repo. Claude reads it at the start of
 - **Plan:** [`docs/implementation-plan.md`](docs/implementation-plan.md) has the architecture, data model and milestones M0–M10. Tasks are GitHub issues. **Work on the current milestone's issues in order** and follow the plan's key technical decisions (§4).
 - **Current phase:** Phase 1 (MVP) — accounts, pilot verification, aircraft listings, search, booking requests, ratings. Don't build Phase 2–4 features unless asked.
 - **Team:** Zlati + friend, each working with our own Claude.
-- **Status:** M0 done. Live at https://ownaplane.eu (every push to main deploys). **M1 done:** accounts, profiles, roles, public profiles, Google sign-in (needs Google keys), data export + account deletion, English/Bulgarian + units preference. **M2 done:** 7,392 European airfields (OurAirports) with time zones, airport search box, home airfield linked to airports. **M3 done:** pilot credentials (licences, ratings, medical, experience) with private document upload, admin verification queue with audit log, verified badges on public profiles, daily expiry reminders. **M4 done:** aircraft listings (step-by-step form saved as a draft, photos, CofA/ARC/insurance verified by admins, reference documents, rental requirements), My aircraft dashboard, public aircraft page, auto-unlist when the ARC or insurance expires. **M5 done:** aircraft calendar with a no-overlap constraint and owner calendar page, eligibility check (`my_eligibility()`, incl. the night rule), search by airfield/radius/dates/filters with list and map (MapLibre + OpenFreeMap), aircraft page with availability and "can I rent this". Open: IFR/weather check (METAR/TAF), see decisions. Next: **M6 Booking**.
+- **Status:** M0 done. Live at https://ownaplane.eu (every push to main deploys). **M1 done:** accounts, profiles, roles, public profiles, Google sign-in (needs Google keys), data export + account deletion, English/Bulgarian + units preference. **M2 done:** 7,392 European airfields (OurAirports) with time zones, airport search box, home airfield linked to airports. **M3 done:** pilot credentials (licences, ratings, medical, experience) with private document upload, admin verification queue with audit log, verified badges on public profiles, daily expiry reminders. **M4 done:** aircraft listings (step-by-step form saved as a draft, photos, CofA/ARC/insurance verified by admins, reference documents, rental requirements), My aircraft dashboard, public aircraft page, auto-unlist when the ARC or insurance expires. **M5 done:** aircraft calendar with a no-overlap constraint and owner calendar page, eligibility check (`my_eligibility()`, incl. the night rule), search by airfield/radius/dates/filters with list and map (MapLibre + OpenFreeMap), aircraft page with availability and "can I rent this". **M6 done (except weather):** booking requests with owner answers, expiry and cancellation policies, flight log (check-out, legs, fuel/oil with receipts, remarks and known items, check-in, owner confirmation, amount due), defects and grounding, usage history with CSV exports, notifications (in-app + email, reminders), checkout flights, instant booking. Open: IFR/weather warnings (METAR/TAF), see decisions. Next: **M7 Ratings**. User guide: [`docs/user-guide.md`](docs/user-guide.md) (update it with every feature).
 - **Domain:** https://ownaplane.eu (Vercel; `BETTER_AUTH_URL=https://ownaplane.eu`). The *.vercel.app addresses keep working (trusted automatically). Next infra step: real email via SMTP (Resend) on ownaplane.eu, then switch on email verification.
 - **Portability:** the app must stay movable to Google Cloud or Azure: no provider-specific SDKs outside `lib/storage` and `lib/email` drivers. See [`docs/deployment.md`](docs/deployment.md).
 
@@ -62,7 +62,8 @@ app/
   (auth)/             # login, signup, forgot/reset password + actions.ts (auth Server Actions)
   (app)/              # logged-in pages: dashboard, account (+ credentials tab), admin/verifications,
                       #   u/[id] (public profile), aircraft/[id] (public listing + availability),
-                      #   search, owner/aircraft (my aircraft, new, [id]/calendar, details…requirements)
+                      #   search, owner/aircraft (my aircraft, new, [id]/calendar, details…requirements,
+                      #   defects, remarks, usage), bookings/[id] (+ log), notifications
   api/auth/           # Better Auth endpoints (email links, OAuth callbacks)
   api/account/avatar/ # photo upload
   api/documents/      # private document upload (POST) and viewing ([id], owner/admin only)
@@ -101,7 +102,7 @@ messages/             # translations: en.json (source) and bg.json (same keys)
 i18n/request.ts       # picks the language for each request
 scripts/              # import-airports.mjs (+ airports/transform.mjs), grant-admin.mjs, create-github-issues.mjs
 tests/                # e2e/ (Playwright), db/ (database security tests), fixtures/ (test airports)
-docs/                 # requirements, implementation plan, deployment guide
+docs/                 # requirements, implementation plan, deployment guide, user guide
 Dockerfile, docker-compose.yml
 ```
 
