@@ -26,6 +26,7 @@ import { FREE_CANCELLATION_HOURS } from "@/lib/bookings/respond";
 import { toRange, utcToZoned } from "@/lib/domain/time";
 import type { Locale } from "@/lib/i18n/config";
 import { BookingHistory } from "./booking-history";
+import { BookingReviews } from "./booking-reviews";
 import { CancelBooking } from "./cancel-booking";
 import { CheckoutRecord } from "./checkout-record";
 import { FlightLogLink } from "./flight-log-link";
@@ -123,6 +124,18 @@ export default async function BookingPage({
         opensAt={new Date(period.from.getTime() - 2 * 3_600_000)}
         error={checkout}
       />
+      {b.status === "completed" && b.pilotId && (
+        <BookingReviews
+          userId={user.id}
+          bookingId={b.id}
+          isPilot={b.pilotId === user.id}
+          otherName={
+            isOwner
+              ? (pilot?.displayName ?? t("detail.deletedUser"))
+              : `${plane.registration} · ${owner.displayName}`
+          }
+        />
+      )}
       {plane.status === "grounded" && ["requested", "accepted"].includes(b.status) && (
         <Alert variant="destructive">
           <TriangleAlertIcon />

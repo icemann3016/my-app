@@ -94,3 +94,14 @@ export async function seedAcceptedBooking(aircraftId: string, pilotEmail: string
     });
   });
 }
+
+/** An accepted booking whose flight log the owner has just confirmed (reviews can be written). */
+export async function seedCompletedBooking(aircraftId: string, pilotEmail: string) {
+  const id = await seedAcceptedBooking(aircraftId, pilotEmail);
+  await withDb(async (sql) => {
+    await sql`update bookings set status = 'completed' where id = ${id}`;
+    await sql`insert into flight_logs (booking_id, status, confirmed_at)
+      values (${id}, 'confirmed', now())`;
+  });
+  return id;
+}

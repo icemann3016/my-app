@@ -19,6 +19,7 @@ import { profiles, userRoles } from "@/lib/db/schema";
 import { intlLocale } from "@/lib/i18n/config";
 import { getPilotBadges } from "@/lib/pilot/credentials";
 import { credentialLabel, type PilotTranslate } from "@/lib/pilot/labels";
+import { ProfileReviews } from "./profile-reviews";
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const PUBLIC_ROLES = ["pilot", "owner"] as const;
@@ -38,6 +39,8 @@ const getPublicProfile = cache(async (id: string) => {
         homeAirportIdent: profiles.homeAirportIdent,
         ratingAvg: profiles.ratingAvg,
         ratingCount: profiles.ratingCount,
+        ownerRatingAvg: profiles.ownerRatingAvg,
+        ownerRatingCount: profiles.ownerRatingCount,
         createdAt: profiles.createdAt,
       })
       .from(profiles)
@@ -87,7 +90,7 @@ export default async function PublicProfilePage({ params }: { params: Promise<{ 
   }).format(profile.createdAt);
 
   return (
-    <div className="mx-auto w-full max-w-2xl px-4 py-10">
+    <div className="mx-auto grid w-full max-w-2xl gap-6 px-4 py-10">
       <Card>
         <CardContent className="grid gap-6">
           <div className="flex flex-wrap items-center gap-4">
@@ -112,19 +115,23 @@ export default async function PublicProfilePage({ params }: { params: Promise<{ 
           <dl className="grid gap-4 text-sm sm:grid-cols-3">
             <div>
               <dt className="text-muted-foreground">{t("rating")}</dt>
-              <dd className="flex items-center gap-1 font-medium">
-                {profile.ratingCount > 0 && profile.ratingAvg !== null ? (
-                  <>
+              {!profile.ratingCount && !profile.ownerRatingCount && (
+                <dd className="font-medium">{t("noRatings")}</dd>
+              )}
+              {[
+                { key: "asPilot", avg: profile.ratingAvg, count: profile.ratingCount },
+                { key: "asOwner", avg: profile.ownerRatingAvg, count: profile.ownerRatingCount },
+              ].map((r) =>
+                r.count > 0 && r.avg !== null ? (
+                  <dd key={r.key} className="flex items-center gap-1 font-medium">
                     <StarIcon className="size-4 fill-current text-amber-500" aria-hidden />
-                    {profile.ratingAvg.toFixed(1)}
+                    {r.avg.toFixed(1)}
                     <span className="font-normal text-muted-foreground">
-                      ({profile.ratingCount})
+                      ({r.count}) · {t(r.key as "asPilot")}
                     </span>
-                  </>
-                ) : (
-                  t("noRatings")
-                )}
-              </dd>
+                  </dd>
+                ) : null,
+              )}
               {lateCancellations > 0 && (
                 <dd className="text-xs text-muted-foreground">
                   {t("lateCancellations", { count: lateCancellations })}
@@ -184,6 +191,19 @@ export default async function PublicProfilePage({ params }: { params: Promise<{ 
           )}
         </CardContent>
       </Card>
+      <ProfileReviews
+        userId={profile.id}
+        asPilot={
+          isPilot || profile.ratingCount
+            ? { average: profile.ratingAvg, count: profile.ratingCount }
+            : null
+        }
+        asOwner={
+          roles.includes("owner") || profile.ownerRatingCount
+            ? { average: profile.ownerRatingAvg, count: profile.ownerRatingCount }
+            : null
+        }
+      />
     </div>
   );
 }

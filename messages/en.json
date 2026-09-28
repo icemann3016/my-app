@@ -197,7 +197,9 @@
     "timeInvalid": "Enter a time as HH:MM.",
     "meterBackwards": "The end reading can't be lower than the start.",
     "remarkRequired": "Write the remark (up to 1000 characters).",
-    "defectRequired": "Describe the defect (up to 2000 characters)."
+    "defectRequired": "Describe the defect (up to 2000 characters).",
+    "scoreRequired": "Choose 1 to 5 stars.",
+    "replyRequired": "Write a few words."
   },
   "dashboard": {
     "title": "Welcome, {name}",
@@ -360,7 +362,9 @@
     },
     "verifiedCredentials": "Verified by ownAplane",
     "noVerifiedCredentials": "Nothing verified yet",
-    "lateCancellations": "{count, plural, one {# late cancellation} other {# late cancellations}}"
+    "lateCancellations": "{count, plural, one {# late cancellation} other {# late cancellations}}",
+    "asPilot": "as pilot",
+    "asOwner": "as owner"
   },
   "email": {
     "linkFallback": "If the button doesn't work, copy this link into your browser:",
@@ -476,7 +480,7 @@
       },
       "log_confirmed": {
         "subject": "Flight log confirmed: {registration}",
-        "body": "{other} confirmed the flight log of {registration}. The booking is complete."
+        "body": "{other} confirmed the flight log of {registration}. The booking is complete: you can now review each other for 14 days."
       },
       "defect_reported": {
         "subject": "Defect reported on {registration}",
@@ -1668,7 +1672,7 @@
       "checked_out": "{other} checked out {registration}.",
       "log_submitted": "{other} sent the flight log of {registration} for you to confirm.",
       "log_correction": "{other} asked for a correction to the flight log of {registration}.",
-      "log_confirmed": "{other} confirmed the flight log of {registration}. The booking is complete.",
+      "log_confirmed": "{other} confirmed the flight log of {registration}. The booking is complete: review each other within 14 days.",
       "defect_reported": "{other} reported a defect on {registration}.",
       "reminder": "Reminder: {registration} is booked from {when}.",
       "other": "Update on the booking of {registration}.",
@@ -1708,6 +1712,74 @@
       "owners": "For aircraft owners",
       "everyone": "For everyone",
       "admins": "For admins"
+    }
+  },
+  "reviews": {
+    "title": "Reviews",
+    "writeTitle": "Write your review",
+    "writeTextPilot": "How was {name}? Your review is hidden until the owner has reviewed you too, or until {date}. You can't change it afterwards.",
+    "writeTextOwner": "How was {name} as a pilot? Your review is hidden until the pilot has reviewed you too, or until {date}. You can't change it afterwards.",
+    "windowClosed": "The 14 days for reviews have passed.",
+    "yours": "Your review",
+    "fromOwner": "The owner's review of you",
+    "fromPilot": "The pilot's review of you",
+    "hiddenUntil": "Only you can see this until the other side has reviewed too, or until {date}.",
+    "comment": "Comment (optional)",
+    "commentHintPilot": "What should other pilots know? Be fair and factual; no personal data.",
+    "commentHintOwner": "What should other owners know? Be fair and factual; no personal data.",
+    "send": "Publish review",
+    "sending": "Sending…",
+    "submitted": "Thanks! Your review is saved.",
+    "starsLabel": "{count, plural, one {# star} other {# stars}}",
+    "scoreWords": {
+      "1": "Poor",
+      "2": "Below average",
+      "3": "OK",
+      "4": "Good",
+      "5": "Excellent"
+    },
+    "outOfFive": "{score} out of 5",
+    "count": "({count, plural, one {# review} other {# reviews}})",
+    "none": "No reviews yet.",
+    "reviewBy": "Review by {name}",
+    "deletedUser": "Former member",
+    "ownerReply": "Owner's reply",
+    "asPilot": "Reviews as a pilot",
+    "asOwner": "Reviews as an owner",
+    "aircraftTitle": "Reviews",
+    "ownerRating": "{rating} as owner ({count})",
+    "categories": {
+      "aircraft_condition": {
+        "label": "Aircraft condition",
+        "hint": "Clean, working and as described in the listing?"
+      },
+      "communication": {
+        "label": "Communication",
+        "hint": "Clear, friendly and quick to answer?"
+      },
+      "value": {
+        "label": "Value",
+        "hint": "Worth the price?"
+      },
+      "airmanship": {
+        "label": "Airmanship",
+        "hint": "Careful and professional handling of the aircraft?"
+      },
+      "punctuality": {
+        "label": "Punctuality",
+        "hint": "On time for check-out and return?"
+      },
+      "condition_returned": {
+        "label": "Condition returned",
+        "hint": "Clean, fuelled as agreed, no surprises?"
+      }
+    },
+    "errors": {
+      "not_found": "You can't review this booking.",
+      "window_closed": "The 14 days for reviews have passed.",
+      "already_reviewed": "You've already reviewed this booking.",
+      "bad_scores": "Please give every category 1 to 5 stars.",
+      "failed": "Couldn't save your review. Please try again."
     }
   }
 }

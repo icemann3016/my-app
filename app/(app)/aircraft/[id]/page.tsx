@@ -5,6 +5,7 @@ import { EyeIcon, MapPinIcon, PencilIcon, StarIcon } from "lucide-react";
 import { getLocale, getTranslations } from "next-intl/server";
 
 import { RequirementsList } from "@/components/aircraft/requirements-list";
+import { ReviewList } from "@/components/reviews/review-list";
 import { UserAvatar } from "@/components/user-avatar";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
@@ -17,6 +18,7 @@ import { airportPlace, getAirport } from "@/lib/airports";
 import { avatarUrl } from "@/lib/avatar-url";
 import { getUser } from "@/lib/auth/session";
 import type { Locale } from "@/lib/i18n/config";
+import { categoryAverages, listPublishedReviews } from "@/lib/reviews/queries";
 import { Availability } from "./availability";
 import { EligibilityCard } from "./eligibility-card";
 import { Gallery } from "./gallery";
@@ -64,12 +66,15 @@ export default async function AircraftPage({
   if (!row) notFound();
   const { aircraft: a, owner } = row;
   const t = await getTranslations("aircraft");
+  const tr = await getTranslations("reviews");
   const locale = (await getLocale()) as Locale;
-  const [photos, requirements, airport, units] = await Promise.all([
+  const [photos, requirements, airport, units, reviews, categories] = await Promise.all([
     getPhotos(user?.id ?? null, id),
     getRequirements(user?.id ?? null, id),
     getAirport(a.homeAirportIdent),
     user ? getUnits(user.id) : Promise.resolve("metric" as const),
+    a.ratingCount ? listPublishedReviews({ aircraftId: id }) : [],
+    a.ratingCount ? categoryAverages({ aircraftId: id }) : {},
   ]);
   const isOwner = user?.id === a.ownerId;
   const { month, period } = await wantedPeriod(query);
@@ -99,10 +104,10 @@ export default async function AircraftPage({
               </span>
             )}
             {a.ratingCount > 0 && a.ratingAvg !== null && (
-              <span className="inline-flex items-center gap-1">
-                <StarIcon className="size-4" aria-hidden />
+              <a href="#reviews" className="inline-flex items-center gap-1 hover:underline">
+                <StarIcon className="size-4 fill-amber-500 text-amber-500" aria-hidden />
                 {t("public.rating", { rating: a.ratingAvg.toFixed(1), count: a.ratingCount })}
-              </span>
+              </a>
             )}
           </p>
         </div>
@@ -144,6 +149,15 @@ export default async function AircraftPage({
               category={a.category}
             />
           </section>
+          <ReviewList
+            id="reviews"
+            title={tr("aircraftTitle")}
+            direction="pilot_to_owner"
+            average={a.ratingAvg}
+            count={a.ratingCount}
+            categories={categories}
+            reviews={reviews}
+          />
         </div>
 
         <aside className="grid content-start gap-4">
@@ -203,6 +217,15 @@ export default async function AircraftPage({
                 >
                   {owner.displayName}
                 </Link>
+                {owner.ratingCount > 0 && owner.ratingAvg !== null && (
+                  <span className="flex items-center gap-1 text-xs text-muted-foreground">
+                    <StarIcon className="size-3 fill-amber-500 text-amber-500" aria-hidden />
+                    {tr("ownerRating", {
+                      rating: owner.ratingAvg.toFixed(1),
+                      count: owner.ratingCount,
+                    })}
+                  </span>
+                )}
               </div>
             </CardContent>
           </Card>

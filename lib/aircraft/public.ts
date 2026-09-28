@@ -22,8 +22,9 @@ export const getVisibleAircraft = cache(async (viewerId: string | null, id: stri
           id: profiles.id,
           displayName: profiles.displayName,
           avatarKey: profiles.avatarKey,
-          ratingAvg: profiles.ratingAvg,
-          ratingCount: profiles.ratingCount,
+          // As an owner (reviews of their aircraft), not as a pilot.
+          ratingAvg: profiles.ownerRatingAvg,
+          ratingCount: profiles.ownerRatingCount,
           createdAt: profiles.createdAt,
         },
       })
