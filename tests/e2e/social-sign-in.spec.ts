@@ -75,7 +75,8 @@ test("a logged-in user can connect Google, Apple or Facebook from the account pa
     await page.goto("/account");
     await expect(page.getByText("Email and password")).toBeVisible();
     await page.getByRole("button", { name: `Connect ${provider.name}` }).click();
-    await expect.poll(() => sent.url?.hostname).toBe(provider.host);
+    // Let the redirect finish before the next page.goto, or it interrupts it.
+    await page.waitForURL((url) => url.hostname === provider.host);
     expect(sent.url?.searchParams.get("redirect_uri")).toMatch(
       new RegExp(`/api/auth/callback/${provider.id}$`),
     );
