@@ -3,14 +3,14 @@ import path from "node:path";
 
 import { describe, expect, it } from "vitest";
 
-import { locales } from "@/lib/i18n/config";
+import { contentLocales, locales } from "@/lib/i18n/config";
 import { getHelpArticle, getHelpArticles, HELP_SLUGS, searchHelp } from "./articles";
 
 const dir = path.join(process.cwd(), "content", "help");
 
 describe("help articles", () => {
-  it("has every article in every language, and nothing else", () => {
-    for (const locale of locales) {
+  it("has every article in every translated language, and nothing else", () => {
+    for (const locale of contentLocales) {
       const files = readdirSync(path.join(dir, locale)).map((f) => f.replace(/\.md$/, ""));
       expect(files.sort()).toEqual([...HELP_SLUGS].sort());
     }

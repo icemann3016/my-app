@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { getHelpArticles, HELP_CATEGORIES, searchHelp } from "@/lib/help/articles";
-import type { Locale } from "@/lib/i18n/config";
+import { hasTranslatedContent, type Locale } from "@/lib/i18n/config";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("help");
@@ -32,6 +32,9 @@ export default async function HelpPage({
       <div className="grid gap-2">
         <h1 className="text-3xl font-semibold tracking-tight">{t("title")}</h1>
         <p className="text-muted-foreground">{t("description")}</p>
+        {!hasTranslatedContent(locale) && (
+          <p className="text-sm text-muted-foreground">{t("englishOnly")}</p>
+        )}
       </div>
       <form action="/help" role="search" className="flex gap-2">
         <Input

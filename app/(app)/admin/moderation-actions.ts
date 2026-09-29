@@ -1,12 +1,14 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { z } from "zod";
 
 import {
   allowListing,
   closeReport,
+  deleteMember,
   type ModerationResult,
   setReviewHidden,
   suspendUser,
@@ -45,12 +47,15 @@ export async function moderate(_prev: FormState, formData: FormData): Promise<Fo
     show_review: () => setReviewHidden(adminId, targetId, false, reason),
     resolve_report: () => closeReport(adminId, targetId, "resolved", reason),
     dismiss_report: () => closeReport(adminId, targetId, "dismissed", reason),
+    delete_user: () => deleteMember(adminId, targetId, reason),
   };
   const result = await run[op]();
-  if (!result.ok) return { message: t(result.error === "self" ? "self" : "notFound") };
+  if (!result.ok) return { message: t(result.error) };
   if (reportId && !op.endsWith("_report")) {
     await closeReport(adminId, reportId, "resolved", reason);
   }
   revalidatePath("/", "layout");
+  // The member's row (and the button showing the message) is gone: confirm on the list instead.
+  if (op === "delete_user") redirect("/admin/users?deleted=1");
   return { ok: true, message: t(`done.${op}`) };
 }

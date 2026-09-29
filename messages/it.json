@@ -1,0 +1,2230 @@
+{
+  "common": {
+    "description": "Noleggia aerei da proprietari verificati in tutta Europa. Piloti, proprietari, tecnici e aeroporti in un unico posto.",
+    "nav": {
+      "findAircraft": "Trova un aereo",
+      "listAircraft": "Offri il tuo aereo",
+      "dashboard": "Panoramica",
+      "account": "Account",
+      "publicProfile": "Profilo pubblico",
+      "logIn": "Accedi",
+      "signUp": "Registrati",
+      "logOut": "Esci",
+      "openMenu": "Apri menu",
+      "accountMenu": "Menu account",
+      "main": "Principale",
+      "mobile": "Mobile",
+      "footer": "Piè di pagina",
+      "mainNavigation": "Navigazione principale",
+      "pilotCredentials": "Titoli del pilota",
+      "admin": "Admin",
+      "bookings": "Prenotazioni",
+      "help": "Aiuto",
+      "messages": "Messaggi"
+    },
+    "footer": {
+      "tagline": "Pensato per l'aviazione generale in Europa.",
+      "terms": "Termini",
+      "privacy": "Privacy",
+      "language": "Lingua",
+      "help": "Aiuto",
+      "cookies": "Cookie"
+    },
+    "notFound": {
+      "title": "Fuori rotta",
+      "text": "Non abbiamo trovato questa pagina.",
+      "backHome": "Torna alla home"
+    },
+    "languages": {
+      "en": "English",
+      "bg": "Български",
+      "de": "Deutsch",
+      "fr": "Français",
+      "it": "Italiano",
+      "es": "Español"
+    },
+    "error": {
+      "title": "Qualcosa è andato storto",
+      "text": "Spiacenti, questa pagina ha avuto un problema. Siamo stati avvisati. Riprova.",
+      "reference": "Riferimento: {digest}",
+      "retry": "Riprova"
+    },
+    "skipToContent": "Vai al contenuto"
+  },
+  "home": {
+    "badge": "Anteprima · Europa",
+    "title": "Noleggia un aereo. Vola di più.",
+    "subtitle": "Trova aerei verificati da noleggiare vicino a te e prenota da proprietari che vedono le tue valutazioni. In seguito potrai anche ingaggiare tecnici e richiedere servizi aeroportuali, tutto in un unico posto.",
+    "findAircraft": "Trova un aereo",
+    "listAircraft": "Offri il tuo aereo",
+    "audiencesHeading": "Per chi è",
+    "comingLater": "In arrivo",
+    "pilots": {
+      "title": "Piloti",
+      "text": "Cerca aerei vicino a te per date, consulta caratteristiche, prezzo orario e disponibilità, e invia una richiesta di prenotazione."
+    },
+    "owners": {
+      "title": "Proprietari",
+      "text": "Offri il tuo aereo, gestisci il calendario e decidi chi lo pilota con una valutazione minima e regole di esperienza."
+    },
+    "technicians": {
+      "title": "Tecnici",
+      "text": "Offri ispezioni da 50 h e 100 h e altra manutenzione ai proprietari vicini."
+    },
+    "airports": {
+      "title": "Aeroporti",
+      "text": "Ricevi online richieste di PPR, parcheggio, hangar, carburante e dogana."
+    },
+    "trustLicences": "Licenze, abilitazioni e certificati medici verificati",
+    "trustRatings": "Valutazioni reciproche dopo ogni volo",
+    "trustEasa": "Pensato per le regole EASA e gli aeroporti europei",
+    "accountDeleted": "Il tuo account e tutti i suoi dati sono stati eliminati.",
+    "how": {
+      "heading": "Come funziona",
+      "search": {
+        "title": "Trova un aereo",
+        "text": "Cerca per aeroporto, raggio e date. Guarda foto, caratteristiche, prezzo orario e quando è libero."
+      },
+      "request": {
+        "title": "Invia una richiesta",
+        "text": "Prima che tu chieda, confrontiamo licenza, abilitazioni e certificato medico con le regole del proprietario. Il proprietario risponde, spesso in giornata."
+      },
+      "fly": {
+        "title": "Vola e valuta",
+        "text": "Registra le tratte, il carburante e le note, salda l'importo dovuto e valutatevi a vicenda: il prossimo noleggio sarà più semplice."
+      }
+    },
+    "cta": {
+      "title": "Pronto per il tuo prossimo volo?",
+      "text": "Unisciti a piloti e proprietari in tutta Europa. È gratuito durante l'anteprima."
+    }
+  },
+  "fields": {
+    "email": "E-mail",
+    "password": "Password"
+  },
+  "login": {
+    "title": "Accedi",
+    "description": "Bentornato. Accedi per noleggiare od offrire aerei.",
+    "forgotPassword": "Password dimenticata?",
+    "submit": "Accedi",
+    "pending": "Accesso…",
+    "newHere": "Nuovo qui?",
+    "createAccount": "Crea un account",
+    "resendConfirmation": "Invia di nuovo l'e-mail di conferma",
+    "passwordChanged": "La password è stata cambiata. Accedi con quella nuova.",
+    "linkExpired": "Questo link è scaduto o è già stato usato. Accedi o richiedi un nuovo link.",
+    "oauthFailed": "L'accesso con Google, Apple o Facebook non ha funzionato. Riprova o usa la tua e-mail.",
+    "accountNotLinked": "Esiste già un account con questa e-mail. Accedi con la password, poi collega Google, Apple o Facebook in Account → Sicurezza.",
+    "errorCode": "Codice errore: {code}",
+    "suspended": "Questo account è sospeso. Se pensi che si tratti di un errore, contattaci.",
+    "emailMissing": "Non abbiamo ricevuto un indirizzo e-mail da quell'account. Consenti la condivisione dell'e-mail quando richiesto, oppure registrati con la tua e-mail."
+  },
+  "social": {
+    "continue": "Continua con {provider}",
+    "or": "oppure",
+    "termsNote": "Continuando con Google, Apple o Facebook accetti i <terms>termini</terms> e l'<privacy>informativa sulla privacy</privacy>."
+  },
+  "signup": {
+    "title": "Crea il tuo account",
+    "description": "Un solo account per tutto: noleggia aerei come pilota od offri il tuo come proprietario.",
+    "name": "Il tuo nome",
+    "nameHint": "Mostrato sul tuo profilo pubblico.",
+    "passwordHint": "Almeno 8 caratteri.",
+    "acceptTerms": "Accetto i <terms>termini</terms> e l'<privacy>informativa sulla privacy</privacy>.",
+    "submit": "Crea account",
+    "pending": "Creazione account…",
+    "alreadyHaveAccount": "Hai già un account?",
+    "logIn": "Accedi"
+  },
+  "checkEmail": {
+    "title": "Controlla la tua e-mail",
+    "description": "Ti abbiamo inviato un link per confermare l'indirizzo. Aprilo per completare la creazione dell'account.",
+    "noEmail": "Nessuna e-mail dopo qualche minuto? Controlla lo spam o inviala di nuovo:",
+    "resend": "Invia di nuovo l'e-mail di conferma",
+    "pending": "Invio…",
+    "alreadyConfirmed": "Già confermato?",
+    "logIn": "Accedi"
+  },
+  "forgotPassword": {
+    "title": "Reimposta la password",
+    "description": "Inserisci la tua e-mail e ti invieremo un link per scegliere una nuova password.",
+    "submit": "Invia link",
+    "pending": "Invio…",
+    "backToLogin": "Torna all'accesso"
+  },
+  "resetPassword": {
+    "title": "Scegli una nuova password",
+    "description": "Almeno 8 caratteri. Una breve frase funziona bene.",
+    "invalidTitle": "Questo link non ha funzionato",
+    "invalidDescription": "I link di reimpostazione scadono dopo un'ora e si possono usare una sola volta.",
+    "sendNewLink": "Invia un nuovo link",
+    "newPassword": "Nuova password",
+    "repeatPassword": "Ripeti la nuova password",
+    "submit": "Salva la nuova password",
+    "pending": "Salvataggio…"
+  },
+  "authMessages": {
+    "notConfigured": "Gli account non sono ancora disponibili: il database non è configurato per questo sito.",
+    "wrongCredentials": "E-mail o password errata.",
+    "emailNotVerified": "Conferma prima il tuo indirizzo e-mail. Trovi il link nella tua casella di posta.",
+    "userExists": "Esiste già un account con questa e-mail. Prova ad accedere.",
+    "passwordLength": "Usa una password tra 8 e 72 caratteri.",
+    "linkExpired": "Questo link è scaduto o è già stato usato. Richiedine uno nuovo.",
+    "tooManyRequests": "Troppi tentativi. Attendi un minuto e riprova.",
+    "generic": "Qualcosa è andato storto. Riprova.",
+    "resetSent": "Se esiste un account con questa e-mail, abbiamo inviato un link per reimpostare la password.",
+    "verificationSent": "Se questo indirizzo è in attesa di conferma, abbiamo inviato un nuovo link.",
+    "suspended": "Questo account è sospeso. Se pensi che si tratti di un errore, contattaci."
+  },
+  "validation": {
+    "emailInvalid": "Inserisci un indirizzo e-mail valido.",
+    "passwordMin": "Almeno 8 caratteri.",
+    "passwordMax": "Al massimo 72 caratteri.",
+    "passwordRequired": "Inserisci la password.",
+    "currentPasswordRequired": "Inserisci la password attuale.",
+    "passwordsMismatch": "Le password non corrispondono.",
+    "nameRequired": "Inserisci il tuo nome.",
+    "nameMax": "Al massimo 80 caratteri.",
+    "termsRequired": "Accetta i termini per continuare.",
+    "bioMax": "Al massimo 1000 caratteri.",
+    "invalid": "Controlla questo campo.",
+    "airportUnknown": "Scegli un aeroporto dall'elenco.",
+    "dateInvalid": "Inserisci una data valida.",
+    "documentRequired": "Carica una scansione o una foto.",
+    "documentInvalid": "Questo file non può essere usato. Caricalo di nuovo.",
+    "licenceNumberRequired": "Inserisci il numero di licenza (fino a 50 caratteri).",
+    "expiryBeforeIssue": "La data di scadenza non può precedere la data di rilascio.",
+    "ratingCodeInvalid": "Scegli un'abilitazione dall'elenco o inserisci un designatore di tipo ICAO come C510.",
+    "hoursInvalid": "Inserisci un numero di ore, ad es. 125,5.",
+    "hoursMoreThanTotal": "Non può superare le tue ore totali.",
+    "aircraftTypeInvalid": "Inserisci un designatore di tipo ICAO, ad es. C172 o PA28.",
+    "reasonRequired": "Scegli un motivo.",
+    "registrationInvalid": "Inserisci la marca come riportata sull'aereo, ad es. LZ-ABC o I-ABCD.",
+    "registrationTaken": "Un altro annuncio usa già questa marca. Contattaci se è il tuo aereo.",
+    "manufacturerRequired": "Inserisci il costruttore (fino a 60 caratteri).",
+    "modelRequired": "Inserisci il modello (fino a 60 caratteri).",
+    "yearInvalid": "Inserisci l'anno di costruzione, ad es. 2004.",
+    "seatsInvalid": "Inserisci il numero di posti, pilota compreso (1–20).",
+    "textTooLong": "È troppo lungo.",
+    "numberInvalid": "Inserisci un numero, ad es. 32,5.",
+    "priceInvalid": "Inserisci un prezzo orario, ad es. 185.",
+    "minHoursInvalid": "Inserisci ore al giorno tra 0,1 e 12.",
+    "expiryRequired": "Inserisci la data di scadenza.",
+    "ageInvalid": "Inserisci un'età tra 16 e 99 anni.",
+    "dateTimeInvalid": "Inserisci data e ora.",
+    "endBeforeStart": "La fine deve essere dopo l'inizio.",
+    "plannedHoursInvalid": "Inserisci le ore di volo previste, ad es. 1,5.",
+    "timeInvalid": "Inserisci un orario nel formato HH:MM.",
+    "meterBackwards": "La lettura finale non può essere inferiore a quella iniziale.",
+    "remarkRequired": "Scrivi la nota (fino a 1000 caratteri).",
+    "defectRequired": "Descrivi il difetto (fino a 2000 caratteri).",
+    "scoreRequired": "Scegli da 1 a 5 stelle.",
+    "replyRequired": "Scrivi qualche parola.",
+    "messageRequired": "Scrivi un messaggio.",
+    "phoneInvalid": "Inserisci il numero in formato internazionale, ad es. +39 312 345 6789."
+  },
+  "dashboard": {
+    "title": "Benvenuto, {name}",
+    "subtitle": "Cosa richiede la tua attenzione, i tuoi voli e i tuoi aerei a colpo d'occhio.",
+    "todo": {
+      "title": "Da fare",
+      "none": "Sei in pari con tutto.",
+      "answerRequest": "Rispondi alla richiesta di prenotazione per {registration} (entro il {date})",
+      "finishLog": "Completa e invia il registro di volo di {registration}",
+      "confirmLog": "Controlla e conferma il registro di volo di {registration}",
+      "openDefects": "{count, plural, one {# difetto aperto} other {# difetti aperti}} sui tuoi aerei",
+      "docExpiring": {
+        "arc": "L'ARC di {registration} scade il {date}: carica quello nuovo",
+        "insurance": "L'assicurazione di {registration} scade il {date}: carica il nuovo certificato"
+      },
+      "writeReview": "Scrivi la tua valutazione del volo con {registration}",
+      "unreadMessages": "{count, plural, one {# conversazione} other {# conversazioni}} con messaggi non letti",
+      "unreadNotifications": "{count, plural, one {# notifica non letta} other {# notifiche non lette}}",
+      "docsPending": "{count, plural, one {# documento dell'aereo attende} other {# documenti dell'aereo attendono}} la nostra verifica",
+      "credentialsRejected": "{count, plural, one {# titolo va corretto} other {# titoli vanno corretti}}: vedi il motivo"
+    },
+    "publicProfile": "Il tuo profilo pubblico:",
+    "seeWhatOthersSee": "guarda cosa vedono gli altri",
+    "credentialExpiring": "{item} scade il {date}.",
+    "credentialExpired": "{item} è scaduto il {date}.",
+    "accountLink": "impostazioni dell'account",
+    "pilot": {
+      "title": "Come pilota",
+      "upcoming": "Voli in arrivo",
+      "completed": "Voli completati",
+      "rating": "Valutazione ({count, plural, one {# recensione} other {# recensioni}})",
+      "credentials": {
+        "verified": "Pilota verificato: licenza e certificato medico validi",
+        "pending": "Titoli in verifica",
+        "rejected": "Alcuni titoli vanno corretti",
+        "missing": "Aggiungi licenza e certificato medico",
+        "counts": "{pending} in attesa · {expiring} in scadenza"
+      },
+      "nextFlights": "Prossimi voli",
+      "noUpcoming": "Nessun volo in arrivo.",
+      "recentFlights": "Voli recenti",
+      "noPast": "Ancora nessun volo."
+    },
+    "owner": {
+      "title": "Come proprietario",
+      "listed": "Offerti (su {total})",
+      "upcoming": "Prenotazioni in arrivo",
+      "rating": "Valutazione ({count, plural, one {# recensione} other {# recensioni}})",
+      "aircraft": "I tuoi aerei",
+      "noAircraft": "Ancora nessun aereo.",
+      "nextBookings": "Prossime prenotazioni dei tuoi aerei",
+      "noUpcoming": "Nessuna prenotazione in arrivo.",
+      "recentBookings": "Prenotazioni recenti dei tuoi aerei",
+      "noPast": "Ancora nessuna prenotazione passata."
+    }
+  },
+  "account": {
+    "title": "Account",
+    "viewPublicProfile": "Vedi profilo pubblico",
+    "profile": {
+      "title": "Profilo",
+      "description": "Ecco cosa vedono proprietari e piloti sul tuo profilo pubblico.",
+      "name": "Nome",
+      "homeAirfield": "Aeroporto di base",
+      "homeAirfieldHint": "L'aeroporto da cui voli di solito. Cerca per codice ICAO (ad es. LIML), nome o città.",
+      "bio": "Su di te",
+      "bioPlaceholder": "ad es. PPL(A) dal 2019, circa 250 ore, soprattutto su C172 e PA-28.",
+      "save": "Salva profilo",
+      "saving": "Salvataggio…",
+      "saved": "Profilo salvato.",
+      "saveFailed": "Impossibile salvare il profilo. Riprova."
+    },
+    "avatar": {
+      "upload": "Carica foto",
+      "change": "Cambia foto",
+      "remove": "Rimuovi",
+      "hint": "JPG, PNG o WebP, fino a 2 MB.",
+      "choose": "Scegli la foto del profilo",
+      "invalidType": "Scegli un'immagine JPG, PNG o WebP.",
+      "tooLarge": "L'immagine supera i 2 MB. Scegline una più piccola.",
+      "failed": "Qualcosa è andato storto. Riprova.",
+      "presetsTitle": "Oppure scegli una delle nostre",
+      "presets": {
+        "light-aircraft": "Aereo leggero",
+        "biplane": "Biplano",
+        "jet": "Jet",
+        "helicopter": "Elicottero",
+        "glider": "Aliante",
+        "balloon": "Mongolfiera",
+        "propeller": "Elica",
+        "windsock": "Manica a vento",
+        "compass": "Rosa dei venti",
+        "headset": "Cuffia"
+      }
+    },
+    "roles": {
+      "title": "Come userai l'app",
+      "description": "Attiva ciò che ti riguarda. Puoi cambiarlo in qualsiasi momento.",
+      "pilotTitle": "Sono un pilota",
+      "pilotText": "Noleggia aerei dai proprietari. Poi aggiungerai licenza e certificato medico.",
+      "ownerTitle": "Possiedo un aereo",
+      "ownerText": "Offri il tuo aereo a noleggio e scegli chi può pilotarlo.",
+      "on": "Attivo",
+      "switchOn": "Attiva",
+      "switchOff": "Disattiva",
+      "switchOnLabel": "Attiva: {role}",
+      "switchOffLabel": "Disattiva: {role}"
+    },
+    "preferences": {
+      "title": "Preferenze",
+      "description": "Lingua dell'app e delle e-mail, e unità di misura per pesi e carburante.",
+      "language": "Lingua",
+      "units": "Unità",
+      "metric": "Metriche (kg, litri)",
+      "imperial": "Imperiali (lb, galloni USA)",
+      "save": "Salva preferenze",
+      "saving": "Salvataggio…",
+      "saved": "Preferenze salvate."
+    },
+    "security": {
+      "title": "Sicurezza",
+      "description": "Cambia la password che usi per accedere.",
+      "changePassword": "Cambia password"
+    },
+    "data": {
+      "title": "I tuoi dati",
+      "description": "Scarica una copia di tutto ciò che conserviamo su di te, oppure elimina il tuo account.",
+      "download": "Scarica i miei dati",
+      "delete": "Elimina account",
+      "dialogTitle": "Eliminare il tuo account?",
+      "dialogDescription": "Profilo, foto, ruoli, impostazioni, titoli di pilota e documenti caricati verranno eliminati definitivamente. L'operazione non si può annullare.",
+      "passwordLabel": "La tua password",
+      "confirmLabel": "Scrivi {word} per confermare",
+      "confirmWord": "ELIMINA",
+      "confirmMismatch": "Scrivi esattamente {word} per confermare.",
+      "cancel": "Annulla",
+      "confirm": "Elimina il mio account",
+      "deleting": "Eliminazione…",
+      "wrongPassword": "La password non è corretta.",
+      "notFresh": "Per sicurezza, esci e accedi di nuovo, poi elimina l'account.",
+      "failed": "Impossibile eliminare l'account. Riprova."
+    },
+    "signIn": {
+      "description": "I modi in cui puoi accedere e la tua password.",
+      "password": "E-mail e password",
+      "active": "Attivo",
+      "notSet": "Non impostato",
+      "connected": "Collegato",
+      "disconnect": "Scollega",
+      "linked": "{provider} è ora collegato. La prossima volta potrai accedere con {provider}.",
+      "linkFailed": "Impossibile collegare l'account (errore: {code}). Riprova.",
+      "connect": "Collega {provider}"
+    },
+    "tabs": {
+      "label": "Sezioni dell'account",
+      "general": "Generale",
+      "credentials": "Titoli del pilota"
+    },
+    "contact": {
+      "title": "Telefono di contatto",
+      "description": "Mostrato solo all'altra parte delle tue prenotazioni accettate, insieme alla tua e-mail. Mai sul profilo pubblico.",
+      "phone": "Cellulare (facoltativo)",
+      "phoneHint": "Formato internazionale con prefisso del paese, ad es. +39 312 345 6789. Lascia vuoto per rimuoverlo.",
+      "save": "Salva telefono",
+      "saving": "Salvataggio…",
+      "saved": "Salvato."
+    },
+    "notifications": {
+      "title": "Notifiche",
+      "description": "Scegli come ti informiamo su ciò che succede su ownAplane.",
+      "caption": "Canali di notifica",
+      "kind": "Argomento",
+      "email": "E-mail",
+      "inApp": "Nell'app",
+      "always": "Sempre",
+      "aria": "{kind}: {channel}",
+      "kinds": {
+        "bookings": {
+          "label": "Prenotazioni",
+          "hint": "Richieste, risposte, cancellazioni, registri di volo e promemoria"
+        },
+        "reviews": {
+          "label": "Recensioni",
+          "hint": "Recensioni su di te, recensioni pubblicate e risposte"
+        },
+        "messages": {
+          "label": "Messaggi",
+          "hint": "Un'e-mail quando ricevi nuovi messaggi; restano sempre in Messaggi"
+        }
+      },
+      "alwaysSent": "Sempre inviati via e-mail: difetti segnalati sui tuoi aerei, e-mail di password e accesso, e decisioni sui tuoi documenti e sulla loro scadenza.",
+      "save": "Salva notifiche",
+      "saving": "Salvataggio…",
+      "saved": "Salvato."
+    }
+  },
+  "password": {
+    "title": "Cambia password",
+    "description": "Almeno 8 caratteri. Resterai connesso qui e verrai disconnesso altrove.",
+    "current": "Password attuale",
+    "new": "Nuova password",
+    "repeat": "Ripeti la nuova password",
+    "submit": "Cambia password",
+    "saving": "Salvataggio…",
+    "changed": "Password cambiata. Sei stato disconnesso dagli altri dispositivi.",
+    "wrongCurrent": "La password attuale non è corretta.",
+    "failed": "Impossibile cambiare la password. Riprova.",
+    "back": "Torna all'account"
+  },
+  "profile": {
+    "notFound": "Profilo non trovato",
+    "rating": "Valutazione",
+    "noRatings": "Ancora nessuna valutazione",
+    "homeAirfield": "Aeroporto di base",
+    "notSet": "Non indicato",
+    "memberSince": "Membro dal",
+    "edit": "Modifica profilo",
+    "roles": {
+      "pilot": "Pilota",
+      "owner": "Proprietario di aereo"
+    },
+    "verifiedCredentials": "Verificato da ownAplane",
+    "noVerifiedCredentials": "Ancora nulla di verificato",
+    "lateCancellations": "{count, plural, one {# cancellazione tardiva} other {# cancellazioni tardive}}",
+    "asPilot": "come pilota",
+    "asOwner": "come proprietario"
+  },
+  "email": {
+    "linkFallback": "Se il pulsante non funziona, copia questo link nel browser:",
+    "verify": {
+      "subject": "Conferma la tua e-mail per {app}",
+      "greeting": "Ciao {name},",
+      "body": "Conferma il tuo indirizzo e-mail per completare la configurazione del tuo account {app}.",
+      "cta": "Conferma e-mail"
+    },
+    "reset": {
+      "subject": "Reimposta la password di {app}",
+      "greeting": "Ciao {name},",
+      "body": "Abbiamo ricevuto una richiesta di reimpostare la tua password di {app}. Il link è valido un'ora. Se non l'hai richiesto tu, puoi ignorare questa e-mail.",
+      "cta": "Scegli una nuova password"
+    },
+    "credentialReviewed": {
+      "greeting": "Ciao {name},",
+      "verifiedSubject": "Il tuo titolo «{item}» è verificato",
+      "verifiedBody": "Buone notizie: abbiamo controllato «{item}» ed è ora verificato. I proprietari lo vedranno sul tuo profilo.",
+      "rejectedSubject": "Non siamo riusciti a verificare «{item}»",
+      "rejectedBody": "Abbiamo controllato «{item}» ma non siamo riusciti a verificarlo.",
+      "reason": "Motivo: {reason}",
+      "rejectedNext": "Correggi i dati o carica un documento più leggibile e lo controlleremo di nuovo.",
+      "cta": "Apri i titoli del pilota"
+    },
+    "expiryReminder": {
+      "subject": "{count, plural, one {Un titolo di pilota scade a breve} other {Alcuni titoli di pilota scadono a breve}}",
+      "greeting": "Ciao {name},",
+      "body": "Promemoria: questi scadono entro 30 giorni. Dopo il rinnovo, aggiornali e carica il nuovo documento per continuare a noleggiare aerei.",
+      "item": "{item}: valido fino al {date}",
+      "cta": "Aggiorna i titoli"
+    },
+    "aircraftDocumentReviewed": {
+      "greeting": "Ciao {name},",
+      "verifiedSubject": "{registration}: «{item}» è verificato",
+      "verifiedBody": "Buone notizie: abbiamo controllato «{item}» di {registration} ed è ora verificato.",
+      "rejectedSubject": "{registration}: non siamo riusciti a verificare «{item}»",
+      "rejectedBody": "Abbiamo controllato «{item}» di {registration} ma non siamo riusciti a verificarlo.",
+      "reason": "Motivo: {reason}",
+      "rejectedNext": "Correggi i dati o carica un documento più leggibile e lo controlleremo di nuovo.",
+      "cta": "Apri i documenti dell'aereo"
+    },
+    "aircraftExpiryReminder": {
+      "subject": "{count, plural, one {Un documento dell'aereo scade a breve} other {Alcuni documenti dell'aereo scadono a breve}}",
+      "greeting": "Ciao {name},",
+      "body": "Promemoria: questi scadono entro 30 giorni. Carica in tempo i documenti rinnovati: un aereo senza ARC o assicurazione validi viene ritirato automaticamente.",
+      "item": "{registration}, {item}: valido fino al {date}",
+      "cta": "Apri i miei aerei"
+    },
+    "aircraftUnlisted": {
+      "subject": "{registration} non è più offerto",
+      "greeting": "Ciao {name},",
+      "arc": "L'ARC di {registration} è scaduto, quindi abbiamo ritirato l'aereo. Per ora i piloti non possono trovarlo.",
+      "insurance": "L'assicurazione di {registration} è scaduta, quindi abbiamo ritirato l'aereo. Per ora i piloti non possono trovarlo.",
+      "next": "Carica il documento rinnovato. Una volta verificato, potrai offrire di nuovo l'aereo.",
+      "cta": "Carica documenti"
+    },
+    "defectReported": {
+      "subject": {
+        "minor": "Difetto segnalato su {registration}",
+        "major": "Difetto segnalato su {registration}",
+        "unsafe": "Urgente: {registration} segnalato come non sicuro al volo"
+      },
+      "greeting": "Ciao {name},",
+      "body": "{reporter} ha segnalato un difetto su {registration}:",
+      "severity": {
+        "minor": "Minore: può aspettare la prossima manutenzione.",
+        "major": "Importante: va sistemato a breve.",
+        "unsafe": "Non sicuro: il pilota ritiene che l'aereo non debba volare."
+      },
+      "next": "Se non deve volare, fermalo a terra nell'app: i piloti non potranno prenotarlo né prenderlo in consegna finché non lo offri di nuovo.",
+      "cta": "Vedi il difetto"
+    },
+    "booking": {
+      "greeting": "Ciao {name},",
+      "cta": "Apri la prenotazione",
+      "someone": "Qualcuno",
+      "requested": {
+        "subject": "Nuova richiesta di prenotazione per {registration}",
+        "body": "{other} ha chiesto di noleggiare {registration} dal {when}."
+      },
+      "accepted": {
+        "subject": "Prenotazione accettata: {registration}",
+        "body": "{other} ha accettato la tua prenotazione di {registration} dal {when}."
+      },
+      "declined": {
+        "subject": "Prenotazione rifiutata: {registration}",
+        "body": "{other} ha rifiutato la tua prenotazione di {registration} dal {when}."
+      },
+      "proposed": {
+        "subject": "Proposto un altro orario per {registration}",
+        "body": "{other} ha rifiutato la tua prenotazione di {registration} e ha proposto un altro orario."
+      },
+      "expired": {
+        "subject": "Richiesta di prenotazione scaduta: {registration}",
+        "body": "La richiesta per {registration} dal {when} è scaduta senza risposta."
+      },
+      "cancelled": {
+        "subject": "Prenotazione cancellata: {registration}",
+        "body": "{other} ha cancellato la prenotazione di {registration} dal {when}."
+      },
+      "checked_out": {
+        "subject": "{registration} preso in consegna",
+        "body": "{other} ha preso in consegna {registration}."
+      },
+      "log_submitted": {
+        "subject": "Registro di volo da confermare: {registration}",
+        "body": "{other} ha inviato il registro di volo di {registration} per la tua conferma."
+      },
+      "log_correction": {
+        "subject": "Richiesta correzione del registro di volo: {registration}",
+        "body": "{other} ha chiesto una correzione del registro di volo di {registration}."
+      },
+      "log_confirmed": {
+        "subject": "Registro di volo confermato: {registration}",
+        "body": "{other} ha confermato il registro di volo di {registration}. La prenotazione è completata: ora potete valutarvi a vicenda per 14 giorni."
+      },
+      "defect_reported": {
+        "subject": "Difetto segnalato su {registration}",
+        "body": "{other} ha segnalato un difetto su {registration}."
+      },
+      "reminder": {
+        "subject": "In arrivo: {registration} dal {when}",
+        "body": "Promemoria: {registration} è prenotato dal {when}."
+      },
+      "other": {
+        "subject": "Aggiornamento prenotazione: {registration}",
+        "body": "Novità sulla prenotazione di {registration}."
+      },
+      "instant_booked": {
+        "subject": "Prenotazione immediata: {registration}",
+        "body": "{other} ha prenotato {registration} dal {when} (prenotazione immediata)."
+      },
+      "review_submitted": {
+        "subject": "{other} ha valutato il tuo volo con {registration}",
+        "body": "{other} ha valutato la prenotazione di {registration} dal {when}. Scrivi anche tu la tua valutazione: entrambe vengono mostrate quando le avete scritte entrambi, oppure dopo 14 giorni."
+      },
+      "reviews_published": {
+        "subject": "Recensioni pubblicate: {registration}",
+        "body": "Le recensioni della prenotazione di {registration} dal {when} sono ora pubbliche. Puoi leggerle nella prenotazione."
+      },
+      "review_replied": {
+        "subject": "{other} ha risposto alla tua recensione di {registration}",
+        "body": "{other} ha risposto pubblicamente alla tua recensione di {registration}. Puoi leggere la risposta nella prenotazione."
+      }
+    },
+    "newMessage": {
+      "subject": "Nuovo messaggio da {sender} su {registration}",
+      "greeting": "Ciao {name},",
+      "body": "{sender} ti ha inviato un messaggio su {registration}. Apri ownAplane per leggerlo e rispondere.",
+      "cta": "Leggi il messaggio"
+    }
+  },
+  "airportPicker": {
+    "placeholder": "Cerca per codice, nome o città",
+    "searching": "Ricerca…",
+    "noResults": "Nessun aeroporto trovato",
+    "clear": "Cancella"
+  },
+  "documents": {
+    "choose": "Scegli file",
+    "replace": "Sostituisci file",
+    "preparing": "Preparazione…",
+    "uploading": "Caricamento…",
+    "none": "Ancora nessun file",
+    "view": "si apre in una nuova scheda",
+    "hint": "PDF, JPG, PNG o WebP, fino a 4 MB.",
+    "invalidType": "Scegli un file PDF, JPG, PNG o WebP.",
+    "tooLarge": "Il file supera i 4 MB. Scegline uno più piccolo.",
+    "tooMany": "Hai caricato troppi file. Elimina prima alcuni elementi.",
+    "failed": "Caricamento non riuscito. Riprova."
+  },
+  "pilot": {
+    "title": "Titoli del pilota",
+    "description": "Aggiungi licenza, certificato medico e abilitazioni. Li verifichiamo sui tuoi documenti, di solito entro due giorni lavorativi.",
+    "privacy": "I proprietari vedono solo quali licenze e abilitazioni sono verificate. Numeri, documenti e dati medici sono visibili solo a te e al nostro team di verifica.",
+    "notPilotTitle": "Attiva il ruolo di pilota",
+    "notPilotText": "Attiva il ruolo di pilota per aggiungere la licenza e noleggiare aerei.",
+    "switchOn": "Attiva il ruolo di pilota",
+    "summary": {
+      "verifiedTitle": "Sei un pilota verificato",
+      "verified": "I proprietari vedono la tua licenza e le abilitazioni verificate.",
+      "notVerifiedTitle": "Non ancora verificato",
+      "missing": "Per noleggiare aerei servono una licenza verificata e un certificato medico valido e verificato.",
+      "pending": "{count, plural, one {# elemento è} other {# elementi sono}} in attesa di verifica.",
+      "rejected": "{count, plural, one {# elemento è stato rifiutato} other {# elementi sono stati rifiutati}}: vedi il motivo qui sotto.",
+      "expiring": "{count, plural, one {# elemento scade} other {# elementi scadono}} entro 30 giorni.",
+      "expired": "{count, plural, one {# elemento è scaduto} other {# elementi sono scaduti}}."
+    },
+    "status": {
+      "pending": "In attesa di verifica",
+      "verified": "Verificato",
+      "rejected": "Rifiutato"
+    },
+    "expiry": {
+      "none": "Nessuna scadenza",
+      "valid": "Valido fino al {date}",
+      "expiring": "Scade il {date}",
+      "expired": "Scaduto il {date}"
+    },
+    "rejectedBecause": "Non verificato: {reason}",
+    "editResetsReview": "Salvare modifiche a un elemento verificato lo rimanda in verifica.",
+    "viewDocument": "Documento",
+    "edit": "Modifica",
+    "editLabel": "Modifica {name}",
+    "delete": "Elimina",
+    "deleteLabel": "Elimina {name}",
+    "deleteTitle": "Eliminare {name}?",
+    "deleteText": "Verrà rimosso insieme al suo documento. L'operazione non si può annullare.",
+    "deleting": "Eliminazione…",
+    "cancel": "Annulla",
+    "save": "Salva",
+    "saving": "Salvataggio…",
+    "fields": {
+      "issuingState": "Paese di rilascio",
+      "chooseCountry": "Scegli un paese",
+      "document": "Scansione o foto",
+      "documentOptional": "Scansione o foto (facoltativa)"
+    },
+    "licences": {
+      "title": "Licenze",
+      "description": "La tua licenza di pilota, ad es. PPL(A) o LAPL(A).",
+      "empty": "Nessuna licenza aggiunta.",
+      "add": "Aggiungi licenza",
+      "addTitle": "Aggiungi una licenza",
+      "editTitle": "Modifica licenza",
+      "dialogDescription": "Inserisci i dati esattamente come appaiono sulla licenza.",
+      "type": "Licenza",
+      "other": "Altra licenza",
+      "number": "Numero di licenza",
+      "numberHint": "Come stampato sulla licenza, ad es. IT.FCL.PPL.12345.",
+      "issuedOn": "Data di rilascio",
+      "expiresOn": "Data di scadenza",
+      "expiresOnHint": "Lascia vuoto se non scade (la maggior parte delle licenze EASA non scade).",
+      "documentHint": "Le pagine con i tuoi dati e le abilitazioni.",
+      "saved": "Licenza salvata. La verificheremo presto."
+    },
+    "ratings": {
+      "title": "Abilitazioni",
+      "description": "Abilitazioni per classe e per tipo, e privilegi come volo notturno o IR.",
+      "empty": "Nessuna abilitazione aggiunta.",
+      "add": "Aggiungi abilitazione",
+      "addTitle": "Aggiungi un'abilitazione",
+      "editTitle": "Modifica abilitazione",
+      "dialogDescription": "Aggiungi ogni abilitazione separatamente, con la data di scadenza se prevista.",
+      "kind": "Tipo",
+      "kinds": {
+        "class": "Abilitazione per classe",
+        "privilege": "Privilegio",
+        "type": "Abilitazione per tipo"
+      },
+      "code": "Abilitazione",
+      "typeCode": "Tipo di aereo (ICAO)",
+      "typeCodeHint": "Designatore di tipo ICAO, ad es. PC12 o C510.",
+      "typeLabel": "Abilitazione per tipo {code}",
+      "expiresOn": "Valida fino al",
+      "expiresOnHint": "Le abilitazioni per classe come SEP valgono 24 mesi, l'IR 12.",
+      "documentHint": "Non serve se l'abilitazione è sulla licenza che hai caricato.",
+      "saved": "Abilitazione salvata. La verificheremo presto."
+    },
+    "privileges": {
+      "NIGHT": "Notturno",
+      "IR": "Abilitazione al volo strumentale (IR)",
+      "BIR": "Abilitazione strumentale di base (BIR)",
+      "AEROBATIC": "Acrobazia",
+      "TOWING": "Traino (striscione o aliante)",
+      "MOUNTAIN": "Montagna"
+    },
+    "medical": {
+      "title": "Certificato medico",
+      "description": "Solo tu e il nostro team di verifica vedete i dati medici.",
+      "empty": "Nessun certificato medico aggiunto.",
+      "add": "Aggiungi certificato medico",
+      "addTitle": "Aggiungi un certificato medico",
+      "editTitle": "Modifica certificato medico",
+      "dialogDescription": "Inserisci la classe e la data di validità che si applica alla tua attività di volo.",
+      "class": "Classe",
+      "classes": {
+        "class1": "Classe 1",
+        "class2": "Classe 2",
+        "lapl": "LAPL"
+      },
+      "label": "Certificato medico {class}",
+      "validUntil": "Valido fino al",
+      "validUntilHint": "La data di validità per il volo privato (classe 2 o LAPL).",
+      "documentHint": "Foto o scansione del certificato.",
+      "saved": "Certificato medico salvato. Lo verificheremo presto."
+    },
+    "experience": {
+      "title": "Esperienza di volo",
+      "description": "Dichiarata da te, dal tuo libretto di volo. I proprietari possono chiedere di vederla.",
+      "totalHours": "Ore totali",
+      "picHours": "Ore come PIC",
+      "last90DaysHours": "Ore negli ultimi 90 giorni",
+      "save": "Salva esperienza",
+      "saving": "Salvataggio…",
+      "saved": "Esperienza salvata.",
+      "byType": "Ore per tipo di aereo",
+      "type": "Tipo di aereo",
+      "hours": "Ore",
+      "hoursValue": "{hours} h",
+      "addType": "Aggiungi",
+      "removeType": "Rimuovi {type}",
+      "noTypes": "Nessun tipo di aereo aggiunto.",
+      "birthDate": "Data di nascita",
+      "birthDateHint": "Facoltativa. Usata solo per verificare l'età minima richiesta da un proprietario; mai mostrata a nessuno."
+    },
+    "errors": {
+      "notFound": "Questo elemento non esiste più. Ricarica la pagina."
+    },
+    "classRatings": {
+      "SEP_LAND": "SEP (terra)",
+      "SEP_SEA": "SEP (mare)",
+      "MEP_LAND": "MEP (terra)",
+      "MEP_SEA": "MEP (mare)",
+      "TMG": "TMG"
+    }
+  },
+  "admin": {
+    "verifications": {
+      "eyebrow": "Admin",
+      "title": "Coda di verifica",
+      "description": "Titoli dei piloti e documenti degli aerei in attesa di verifica.",
+      "waiting": "{count, plural, =0 {Nessuno in attesa} one {# pilota in attesa} other {# piloti in attesa}}",
+      "oldestFirst": "Prima i più vecchi. Cerca di rispondere entro due giorni lavorativi.",
+      "empty": "Niente da verificare al momento.",
+      "items": "{count, plural, one {# elemento} other {# elementi}}",
+      "since": "in attesa dal {date} UTC",
+      "aircraftWaiting": "{count, plural, =0 {Nessun aereo in attesa} one {# aereo in attesa} other {# aerei in attesa}}",
+      "aircraftText": "Certificati di navigabilità, ARC e certificati di assicurazione. Prima i più vecchi."
+    },
+    "review": {
+      "metaTitle": "Verifica pilota",
+      "back": "Torna alla coda",
+      "title": "Verifica {name}",
+      "memberSince": "Membro dal {date}",
+      "publicProfile": "Profilo pubblico",
+      "checklist": "Apri ogni documento e verifica che il nome corrisponda all'account e che numero, paese, date e abilitazioni corrispondano a quanto inserito dal pilota. L'apertura di un documento viene registrata.",
+      "nothing": "Questo pilota non ha aggiunto titoli.",
+      "reviewedBy": "Verificato da {name} il {date} UTC",
+      "openDocument": "Apri {name}",
+      "noDocument": "Nessun documento allegato",
+      "verify": "Verifica",
+      "verifying": "Verifica in corso…",
+      "verifyLabel": "Verifica {name}",
+      "reject": "Rifiuta",
+      "revoke": "Revoca",
+      "rejectLabel": "Rifiuta {name}",
+      "confirmReject": "Rifiuta e avvisa il pilota",
+      "rejecting": "Rifiuto in corso…",
+      "cancel": "Annulla",
+      "reason": "Motivo (inviato al pilota)",
+      "reasonPlaceholder": "ad es. Il numero di licenza non corrisponde al documento.",
+      "verified": "Verificato. Il pilota è stato avvisato.",
+      "rejected": "Rifiutato. Il pilota è stato informato del motivo.",
+      "errors": {
+        "notFound": "Questo elemento non esiste più.",
+        "ownItem": "Non puoi verificare i tuoi titoli o i tuoi aerei. Chiedi a un altro admin.",
+        "changed": "Questo elemento è stato modificato da quando hai aperto la pagina. Controllalo di nuovo."
+      },
+      "experience": "Esperienza dichiarata",
+      "experienceHint": "Dichiarata dal pilota; non verificata.",
+      "noExperience": "Non dichiarata.",
+      "history": "Cronologia",
+      "noHistory": "Ancora nessuna azione di admin.",
+      "actions": {
+        "verify": "ha verificato {item}",
+        "reject": "ha rifiutato {item}",
+        "viewDocument": "ha aperto un documento"
+      },
+      "reasonOwner": "Motivo (inviato al proprietario)",
+      "confirmRejectOwner": "Rifiuta e avvisa il proprietario",
+      "verifiedOwner": "Verificato. Il proprietario è stato avvisato.",
+      "rejectedOwner": "Rifiutato. Il proprietario è stato informato del motivo."
+    },
+    "aircraftReview": {
+      "metaTitle": "Verifica aereo",
+      "back": "Torna alla coda",
+      "title": "Verifica {registration}",
+      "owner": "Proprietario: {name} ({email})",
+      "ownerProfile": "Profilo del proprietario",
+      "checklist": "Apri ogni documento e verifica che riguardi {registration}, che sia valido e che le date corrispondano a quanto inserito dal proprietario. L'assicurazione deve coprire la responsabilità civile per chi noleggia. L'apertura di un documento viene registrata.",
+      "nothing": "Questo aereo non ha documenti da verificare.",
+      "reviewedOn": "Ultima verifica il {date} UTC",
+      "noExpiry": "Nessuna data di scadenza",
+      "openDocument": "Apri {name}",
+      "history": "Cronologia",
+      "noHistory": "Ancora nessuna azione di admin.",
+      "actions": {
+        "verify": "ha verificato {item}",
+        "reject": "ha rifiutato {item}",
+        "viewDocument": "ha aperto un documento"
+      }
+    },
+    "tabs": {
+      "label": "Admin",
+      "dashboard": "Panoramica",
+      "verifications": "Verifiche",
+      "reports": "Segnalazioni",
+      "users": "Membri",
+      "aircraft": "Aerei",
+      "audit": "Registro di controllo"
+    },
+    "dashboard": {
+      "title": "Panoramica admin",
+      "description": "Come va ownAplane e cosa richiede la tua attenzione.",
+      "openReports": "Segnalazioni aperte",
+      "pendingVerifications": "Documenti in attesa di verifica",
+      "last30": "Ultimi 30 giorni",
+      "tiles": {
+        "users": "Membri",
+        "roles": "Piloti / proprietari",
+        "listed": "Aerei offerti",
+        "bookings": "Richieste di prenotazione",
+        "completed": "Prenotazioni completate",
+        "cancelled": "Cancellazioni"
+      },
+      "newUsers": "{count, plural, one {# nuovo} other {# nuovi}} negli ultimi 30 giorni",
+      "rolesSub": "Con il ruolo attivo (in totale)",
+      "listedSub": "In questo momento",
+      "bookingsSub": "{accepted} accettate ({rate})",
+      "reviewsSub": "{count, plural, one {# recensione pubblicata} other {# recensioni pubblicate}}",
+      "cancelledSub": "{late} tardive · {declined} rifiutate o scadute",
+      "signups": "Iscrizioni a settimana",
+      "weekOf": "Settimana del",
+      "suspended": "{count, plural, one {# membro è sospeso} other {# membri sono sospesi}}."
+    },
+    "reports": {
+      "title": "Segnalazioni",
+      "description": "Recensioni, membri, annunci e messaggi segnalati. Nascondi o sospendi solo quando le regole vengono violate, mai solo perché qualcosa è negativo.",
+      "filter": "Mostra segnalazioni",
+      "statuses": {
+        "open": "Aperte",
+        "resolved": "Risolte",
+        "dismissed": "Archiviate"
+      },
+      "targets": {
+        "review": "Recensione",
+        "user": "Membro",
+        "aircraft": "Annuncio",
+        "message": "Messaggio"
+      },
+      "empty": "Niente qui.",
+      "by": "segnalato da {name}",
+      "deletedUser": "un ex membro",
+      "gone": "Non esiste più.",
+      "reviewBy": "Recensione di",
+      "messageBy": "Messaggio da",
+      "member": "Membro",
+      "listing": "Annuncio",
+      "owner": "proprietario",
+      "hidden": "Nascosta",
+      "suspended": "Sospeso"
+    },
+    "users": {
+      "title": "Membri",
+      "description": "Trova membri per nome o e-mail. I membri sospesi non possono accedere, prenotare, scrivere messaggi o recensire, e i loro aerei vengono ritirati.",
+      "search": "Cerca membri",
+      "placeholder": "Nome o e-mail",
+      "searchButton": "Cerca",
+      "none": "Nessun membro trovato.",
+      "admin": "Admin",
+      "joined": "iscritto il {date}",
+      "suspended": "Sospeso"
+    },
+    "aircraft": {
+      "title": "Aerei",
+      "description": "Trova annunci per marca, costruttore o modello. Un aereo che ritiri non può essere offerto di nuovo dal proprietario finché non lo consenti.",
+      "search": "Cerca aerei",
+      "placeholder": "Marca, costruttore o modello",
+      "searchButton": "Cerca",
+      "none": "Nessun aereo trovato.",
+      "reasons": {
+        "admin": "Ritirato da un admin",
+        "suspended": "Proprietario sospeso"
+      }
+    },
+    "audit": {
+      "title": "Registro di controllo",
+      "description": "Ogni decisione di un admin e ogni apertura di un documento privato da parte di un admin.",
+      "search": "Cerca nel registro",
+      "placeholder": "Azione, admin, ID destinazione o motivo",
+      "searchButton": "Cerca",
+      "none": "Nessuna voce.",
+      "when": "Quando (UTC)",
+      "admin": "Admin",
+      "action": "Azione",
+      "target": "Destinazione",
+      "reason": "Motivo"
+    },
+    "moderation": {
+      "reason": "Motivo (per il registro di controllo)",
+      "reasonHint": "Facoltativo, ma aiuta il resto del team in seguito.",
+      "working": "In corso…",
+      "failed": "Non ha funzionato. Ricarica la pagina e riprova.",
+      "self": "Non puoi farlo sul tuo account.",
+      "notFound": "Già fatto, oppure non esiste più.",
+      "ops": {
+        "suspend": "Sospendi membro",
+        "unsuspend": "Revoca sospensione",
+        "unlist": "Ritira aereo",
+        "allow_listing": "Consenti di offrirlo di nuovo",
+        "hide_review": "Nascondi recensione",
+        "show_review": "Mostra di nuovo la recensione",
+        "resolve_report": "Segna come risolta",
+        "dismiss_report": "Archivia",
+        "delete_user": "Elimina membro"
+      },
+      "confirm": {
+        "suspend": "Viene disconnesso e non può accedere, prenotare, scrivere messaggi o recensire. I suoi aerei offerti vengono ritirati.",
+        "unsuspend": "Può accedere di nuovo e offrire di nuovo i propri aerei.",
+        "unlist": "L'aereo scompare dalla ricerca e il proprietario non può offrirlo di nuovo finché non lo consenti. Le prenotazioni esistenti restano.",
+        "allow_listing": "Il proprietario può offrire di nuovo l'aereo (resta ritirato finché non lo fa).",
+        "hide_review": "Nascondi solo le recensioni che violano le regole (offese, dati personali, spam). Le medie vengono aggiornate.",
+        "show_review": "La recensione torna pubblica e conta nelle medie.",
+        "resolve_report": "Chiudi la segnalazione: è stata presa una misura.",
+        "dismiss_report": "Chiudi la segnalazione: nessuna regola violata.",
+        "delete_user": "Elimina l'account per sempre: profilo, titoli, documenti, foto e i suoi aerei con le relative prenotazioni. Le prenotazioni fatte come pilota, le recensioni e i messaggi restano per l'altra parte, indicati come ex membro. L'operazione non si può annullare; nel dubbio, sospendi."
+      },
+      "done": {
+        "suspend": "Membro sospeso.",
+        "unsuspend": "Sospensione revocata.",
+        "unlist": "Aereo ritirato.",
+        "allow_listing": "Il proprietario può offrirlo di nuovo.",
+        "hide_review": "Recensione nascosta.",
+        "show_review": "Recensione di nuovo visibile.",
+        "resolve_report": "Segnalazione risolta.",
+        "dismiss_report": "Segnalazione archiviata.",
+        "delete_user": "Membro eliminato."
+      },
+      "adminAccount": "Gli account admin non si possono eliminare da qui. Rimuovi prima il ruolo di admin.",
+      "activeBookings": "Questo membro ha prenotazioni aperte (richieste, accettate o in corso). Sospendilo ora ed eliminalo quando saranno cancellate o concluse."
+    },
+    "monitoring": {
+      "title": "Monitoraggio errori",
+      "send": "Invia un errore di prova",
+      "sending": "Invio…",
+      "sent": "Errore di prova inviato. Dovrebbe comparire in Sentry sotto Issues entro un minuto.",
+      "failed": "Il servizio di monitoraggio non ha accettato l'errore di prova. Verifica che SENTRY_DSN sia copiato per intero.",
+      "status": {
+        "ok": "Gli errori vengono inviati al servizio di monitoraggio (SENTRY_DSN è impostato).",
+        "missing": "Non configurato: SENTRY_DSN non è impostato in questo deployment, quindi gli errori finiscono solo nel log del server. Aggiungilo alle variabili d'ambiente del progetto (una variabile condivisa va collegata al progetto) e ripeti il deploy.",
+        "invalid": "SENTRY_DSN è impostato ma non è un DSN valido. Copia il valore completo da Sentry → Project Settings → Client Keys (DSN), a partire da https://, e ripeti il deploy."
+      }
+    }
+  },
+  "aircraft": {
+    "owner": {
+      "title": "I miei aerei",
+      "description": "Offri i tuoi aerei, fissa i prezzi e scegli chi può noleggiarli.",
+      "add": "Aggiungi aereo",
+      "emptyTitle": "Ancora nessun aereo",
+      "emptyText": "Aggiungi il tuo primo aereo. Puoi salvarlo come bozza e completarlo più tardi.",
+      "notOwnerTitle": "Attiva il ruolo di proprietario",
+      "notOwnerText": "Per offrire aerei, attiva il ruolo di proprietario. Puoi disattivarlo di nuovo nel tuo account.",
+      "switchOn": "Attiva il ruolo di proprietario",
+      "perHour": "{price}/h",
+      "stepsLeft": "{count, plural, one {Manca # cosa prima di poterlo offrire} other {Mancano # cose prima di poterlo offrire}}",
+      "continue": "Continua la configurazione",
+      "manage": "Gestisci"
+    },
+    "new": {
+      "title": "Aggiungi un aereo",
+      "description": "Inizia dalle basi. La bozza viene salvata dopo ogni passo, così puoi completarla più tardi."
+    },
+    "edit": {
+      "back": "I miei aerei",
+      "ownerRoleNeeded": "Attiva prima il ruolo di proprietario.",
+      "notFound": "Non abbiamo trovato questo aereo. Ricarica la pagina.",
+      "saved": "Salvato.",
+      "saving": "Salvataggio…",
+      "save": "Salva modifiche",
+      "saveAndContinue": "Salva e continua",
+      "draftSaved": "La bozza viene salvata a ogni passo.",
+      "continue": "Continua"
+    },
+    "sections": {
+      "label": "Sezioni dell'annuncio",
+      "complete": "completo",
+      "overview": "Panoramica",
+      "details": "Dati",
+      "equipment": "Equipaggiamento",
+      "base": "Base",
+      "pricing": "Prezzi",
+      "photos": "Foto",
+      "documents": "Documenti",
+      "requirements": "Requisiti",
+      "calendar": "Calendario",
+      "remarks": "Note",
+      "usage": "Utilizzo",
+      "defects": "Difetti"
+    },
+    "sectionText": {
+      "details": "Marca, tipo e prestazioni.",
+      "equipment": "Avionica e per cosa è approvato l'aereo.",
+      "base": "Dove è basato l'aereo e una descrizione per i piloti.",
+      "pricing": "Quanto costa il noleggio e come si misura il tempo di volo.",
+      "photos": "Almeno una foto, fino a 20. La prima è la copertina.",
+      "documents": "I documenti vengono controllati dal nostro team. L'aereo può essere offerto quando ARC e assicurazione validi sono verificati.",
+      "requirements": "Scegli chi può noleggiare l'aereo. I piloti li vedono prima di chiedere.",
+      "calendar": "Blocca i periodi in cui usi l'aereo, la manutenzione e altre indisponibilità. Le prenotazioni appaiono qui automaticamente.",
+      "remarks": "Cosa hanno annotato i piloti dopo i loro voli. Segna le note sull'aereo come punti noti, così i noleggiatori successivi li vedono prima di volare.",
+      "usage": "Ore, atterraggi, carburante e olio dai registri di volo confermati, per mese e per pilota.",
+      "defects": "Difetti segnalati dai noleggiatori o da te. Ferma a terra l'aereo se non deve volare."
+    },
+    "fields": {
+      "registration": "Marca di immatricolazione",
+      "registrationHint": "Come dipinta sull'aereo, ad es. I-ABCD.",
+      "category": "Categoria",
+      "manufacturer": "Costruttore",
+      "model": "Modello",
+      "typeDesignator": "Designatore di tipo ICAO",
+      "typeDesignatorHint": "Ad es. C172, P28A, DA40. Serve per confrontare le ore sul tipo dei piloti.",
+      "year": "Anno di costruzione",
+      "seats": "Posti (pilota compreso)",
+      "engine": "Motore",
+      "performance": "Prestazioni",
+      "fuelType": "Carburante",
+      "fuelBurn": "Consumo ({unit})",
+      "cruiseKt": "Velocità di crociera (kt)",
+      "usefulLoad": "Carico utile ({unit})",
+      "enduranceH": "Autonomia (h)",
+      "unitsHint": "Le unità seguono le tue preferenze nell'Account.",
+      "avionics": "Avionica",
+      "avionicsHint": "Principali apparati di avionica e navigazione.",
+      "transponder": "Transponder",
+      "capabilities": "Approvato per",
+      "autopilot": "Autopilota",
+      "nightVfr": "VFR notturno",
+      "ifr": "IFR",
+      "ifrHint": "Equipaggiato e approvato per il volo secondo le regole del volo strumentale.",
+      "homeAirport": "Base",
+      "homeAirportHint": "L'aeroporto dove i piloti prendono l'aereo.",
+      "description": "Descrizione",
+      "descriptionPlaceholder": "Cosa rende l'aereo piacevole da pilotare, il suo stato, dove è parcheggiato, carburante sul campo…",
+      "pricePerHour": "Prezzo orario",
+      "currency": "Valuta",
+      "weekendPrice": "Prezzo orario nel weekend",
+      "weekendPriceHint": "Facoltativo. Si applica il sabato e la domenica.",
+      "priceBasis": "Carburante",
+      "timeBasis": "Tempo misurato con",
+      "timeBasisHint": "Serve a calcolare il tempo volato dopo ogni noleggio.",
+      "minHoursPerDay": "Ore minime al giorno",
+      "minHoursPerDayHint": "Facoltativo, ad es. 2 ore per una prenotazione di un giorno intero.",
+      "oilUnit": "Olio misurato in",
+      "oilUnitHint": "L'unità sull'astina.",
+      "cancellationPolicy": "Condizioni di cancellazione",
+      "paymentNote": "I piloti ti pagano direttamente. ownAplane non gestisce ancora i pagamenti."
+    },
+    "units": {
+      "litresPerHour": "L/h",
+      "usgalPerHour": "gal USA/h",
+      "kg": "kg",
+      "lb": "lb"
+    },
+    "categories": {
+      "aeroplane": "Velivolo",
+      "tmg": "Motoaliante da turismo (TMG)",
+      "ultralight": "Ultraleggero",
+      "helicopter": "Elicottero"
+    },
+    "fuelTypes": {
+      "avgas_100ll": "AVGAS 100LL",
+      "ul91": "UL91",
+      "mogas": "MOGAS",
+      "jet_a1": "Jet A-1"
+    },
+    "transponders": {
+      "none": "Nessuno",
+      "mode_c": "Modo C",
+      "mode_s": "Modo S",
+      "adsb_out": "Modo S con ADS-B Out"
+    },
+    "priceBases": {
+      "wet": "Carburante incluso",
+      "dry": "Carburante escluso"
+    },
+    "timeBases": {
+      "hobbs": "Contaore Hobbs",
+      "tach": "Contagiri (tach)",
+      "block": "Tempo di blocco"
+    },
+    "oilUnits": {
+      "qt": "Quarti USA",
+      "l": "Litri"
+    },
+    "cancellation": {
+      "flexible": {
+        "label": "Flessibile",
+        "text": "cancellazione gratuita fino a 24 ore prima della prenotazione."
+      },
+      "moderate": {
+        "label": "Moderata",
+        "text": "cancellazione gratuita fino a 3 giorni prima della prenotazione."
+      },
+      "strict": {
+        "label": "Rigida",
+        "text": "cancellazione gratuita fino a 7 giorni prima della prenotazione."
+      }
+    },
+    "statuses": {
+      "draft": "Bozza",
+      "listed": "Offerto",
+      "paused": "In pausa",
+      "unlisted": "Ritirato",
+      "grounded": "Fermo a terra"
+    },
+    "statusText": {
+      "draft": "Non ancora visibile. Completa l'elenco qui sotto, poi pubblicalo.",
+      "listed": "Visibile ai piloti, che possono trovarlo e chiedere di noleggiarlo.",
+      "paused": "Nascosto ai piloti per ora. Offrilo di nuovo quando vuoi.",
+      "unlisted": "Non visibile ai piloti.",
+      "grounded": "Fermo a terra: i piloti non possono noleggiarlo finché non lo offri di nuovo."
+    },
+    "status": {
+      "failed": "Non ha funzionato. Ricarica la pagina e riprova.",
+      "notReady": "Non può ancora essere offerto. Manca: {missing}.",
+      "registrationTaken": "Un altro annuncio usa già questa marca.",
+      "publish": "Pubblica annuncio",
+      "to": {
+        "listed": "Offri di nuovo",
+        "paused": "Metti in pausa",
+        "unlisted": "Ritira"
+      },
+      "done": {
+        "listed": "Il tuo aereo è offerto.",
+        "paused": "In pausa. Per ora i piloti non lo vedono.",
+        "unlisted": "Ritirato."
+      },
+      "blocked": "Questo aereo non può essere offerto al momento: il nostro team l'ha ritirato. Contattaci."
+    },
+    "gaps": {
+      "home_base": "base",
+      "price": "prezzo",
+      "photo": "una foto",
+      "arc": "un ARC verificato",
+      "insurance": "un'assicurazione verificata"
+    },
+    "checklist": {
+      "home_base": "Base",
+      "price": "Prezzo orario",
+      "photo": "Almeno una foto",
+      "arc": "ARC valido, verificato",
+      "insurance": "Assicurazione valida, verificata"
+    },
+    "overview": {
+      "statusTitle": "Stato",
+      "checklist": "Necessario prima di offrirlo",
+      "missing": "mancante",
+      "done": "fatto",
+      "fix": "Aggiungi",
+      "viewListing": "Vedi annuncio",
+      "summary": "Riepilogo"
+    },
+    "unlistedReasons": {
+      "arc": "Abbiamo ritirato questo aereo perché il suo ARC è scaduto. Carica il nuovo ARC per offrirlo di nuovo.",
+      "insurance": "Abbiamo ritirato questo aereo perché la sua assicurazione è scaduta. Carica il nuovo certificato per offrirlo di nuovo.",
+      "admin": "Il nostro team ha ritirato questo aereo perché viola le regole. Contattaci per offrirlo di nuovo.",
+      "suspended": "Questo aereo è stato ritirato perché il tuo account è sospeso."
+    },
+    "delete": {
+      "button": "Elimina aereo",
+      "title": "Eliminare {registration}?",
+      "text": "L'annuncio, le foto e i documenti vengono eliminati. L'operazione non si può annullare.",
+      "cancel": "Annulla",
+      "deleting": "Eliminazione…",
+      "confirm": "Elimina",
+      "hasBookings": "Questo aereo ha prenotazioni in arrivo. Cancellale o completale prima."
+    },
+    "photos": {
+      "add": "Aggiungi foto",
+      "choose": "Scegli foto",
+      "uploading": "Caricamento {done} di {total}…",
+      "count": "{count} di {max} foto",
+      "empty": "Ancora nessuna foto. Aggiungine almeno una per offrire l'aereo.",
+      "cover": "Copertina",
+      "photoAlt": "Foto {number}",
+      "moveEarlier": "Sposta la foto {number} prima",
+      "moveLater": "Sposta la foto {number} dopo",
+      "makeCover": "Usa la foto {number} come copertina",
+      "delete": "Elimina la foto {number}",
+      "hint": "JPEG, PNG o WebP. Le foto grandi vengono ridotte prima del caricamento. Le foto orizzontali rendono meglio.",
+      "invalidType": "Scegli una foto JPEG, PNG o WebP.",
+      "tooLarge": "Questa foto è troppo grande (max 4 MB).",
+      "tooMany": "Un aereo può avere fino a 20 foto.",
+      "notFound": "Non abbiamo trovato questo aereo.",
+      "failed": "Il caricamento non ha funzionato. Riprova.",
+      "lastPhoto": "Un aereo offerto deve avere almeno una foto. Aggiungi prima un'altra foto o metti in pausa l'annuncio."
+    },
+    "documents": {
+      "groups": {
+        "verified": {
+          "title": "Navigabilità e assicurazione",
+          "text": "Certificato di navigabilità, certificato di revisione della navigabilità (ARC) e assicurazione. Il nostro team li controlla.",
+          "empty": "Ancora nessun documento. Carica un ARC e un certificato di assicurazione validi per offrire l'aereo."
+        },
+        "reference": {
+          "title": "Per chi noleggia",
+          "text": "Estratti del manuale di volo (POH/AFM), checklist e dati di massa e centraggio, da leggere prima del volo. Condivisi solo con i piloti di cui hai accettato la prenotazione.",
+          "empty": "Ancora niente. Sono facoltativi ma aiutano i piloti a prepararsi."
+        }
+      },
+      "add": {
+        "verified": "Aggiungi documento",
+        "reference": "Aggiungi documento"
+      },
+      "dialogText": {
+        "verified": "Carica una scansione o una foto. ARC o assicurazione rinnovati? Aggiungili come nuovo documento: il vecchio vale finché il nuovo non è verificato.",
+        "reference": "Carica un PDF o una foto che i piloti possono leggere prima del volo."
+      },
+      "editTitle": "Modifica documento",
+      "edit": "Modifica",
+      "editLabel": "Modifica {name}",
+      "editResetsReview": "Modificare un documento verificato lo rimanda in verifica.",
+      "kind": "Documento",
+      "kinds": {
+        "cofa": "Certificato di navigabilità (CofA)",
+        "arc": "Certificato di revisione della navigabilità (ARC)",
+        "insurance": "Certificato di assicurazione",
+        "poh": "Estratto del POH/AFM",
+        "checklist": "Checklist",
+        "weight_balance": "Massa e centraggio"
+      },
+      "title": "Titolo",
+      "titleHint": "Facoltativo, ad es. «Procedure normali».",
+      "expiresOn": "Valido fino al",
+      "expiresOnOptional": "Valido fino al (se scade)",
+      "file": "Scansione o foto",
+      "cancel": "Annulla",
+      "save": "Salva",
+      "saving": "Salvataggio…",
+      "saved": "Salvato. Lo controlleremo presto.",
+      "delete": "Elimina",
+      "deleting": "Eliminazione…",
+      "deleteLabel": "Elimina {name}",
+      "deleteTitle": "Eliminare {name}?",
+      "deleteText": "Il documento e il suo file vengono eliminati.",
+      "notFound": "Non abbiamo trovato questo documento. Ricarica la pagina.",
+      "addRenewal": "L'aereo offerto resterebbe senza ARC o assicurazione validi e verificati. Aggiungi invece il certificato rinnovato come nuovo documento.",
+      "cantDeleteListed": "È l'unico ARC o l'unica assicurazione validi dell'aereo. Aggiungi prima il rinnovo, oppure metti in pausa l'annuncio.",
+      "status": {
+        "pending": "In attesa di verifica",
+        "verified": "Verificato",
+        "rejected": "Rifiutato"
+      },
+      "expiry": {
+        "valid": "Valido fino al {date}",
+        "expiring": "Scade il {date}",
+        "expired": "Scaduto il {date}"
+      },
+      "rejectedBecause": "Rifiutato: {reason}",
+      "privacy": "I documenti sono privati. Solo tu e il nostro team di verifica potete aprirli; chi noleggia vede solo i documenti a lui destinati."
+    },
+    "requirements": {
+      "ratingTitle": "Valutazione del pilota",
+      "minPilotRating": "Valutazione minima da altri proprietari",
+      "minPilotRatingHint": "La media delle recensioni ricevute dai piloti dopo noleggi precedenti.",
+      "anyRating": "Nessun minimo",
+      "atLeast": "{rating} stelle o più",
+      "allowUnrated": "I piloti senza recensioni possono chiedere",
+      "allowUnratedHint": "Tutti iniziano senza recensioni. Disattiva per noleggiare solo a piloti con uno storico.",
+      "unratedNeedsCheckout": "…ma solo dopo un volo di ambientamento con un istruttore",
+      "licenceTitle": "Licenza",
+      "licenceHint": "Spunta le licenze che accetti. Nessuna spuntata = qualsiasi licenza verificata.",
+      "ratingsTitle": "Abilitazioni e privilegi",
+      "ratingsHint": "Il pilota deve avere tutte le abilitazioni spuntate, verificate e valide.",
+      "typeRating": "Abilitazione per tipo (designatore ICAO)",
+      "typeRatingHint": "Solo se l'aereo ne richiede una, ad es. C510.",
+      "experienceTitle": "Esperienza ed età",
+      "minTotalHours": "Ore totali minime",
+      "minTypeHours": "Ore minime su questo tipo",
+      "min90DaysHours": "Ore minime negli ultimi 90 giorni",
+      "minAge": "Età minima",
+      "nightIfrNote": "I voli notturni e IFR richiedono sempre il privilegio corrispondente (Notturno, IR), verificato quando un pilota chiede un volo del genere.",
+      "checkoutFirstRental": "Ogni pilota nuovo su questo aereo deve prima fare un volo di ambientamento con un istruttore",
+      "checkoutFirstRentalHint": "Una volta registrato il volo di ambientamento di un pilota (sulla sua prenotazione), non gliene serve un altro.",
+      "instantBooking": "Prenotazione immediata per i piloti che hanno già volato su questo aereo",
+      "instantBookingHint": "Le loro richieste vengono accettate subito se soddisfano ogni requisito e non resta nulla da verificare (come un volo di ambientamento). Tutti gli altri inviano una richiesta come al solito."
+    },
+    "requirementsList": {
+      "verified": "Licenza, abilitazione per classe e certificato medico verificati da ownAplane e validi",
+      "licences": "Licenza: {list}",
+      "ratings": "Abilitazioni: {list}",
+      "totalHours": "Almeno {hours} h di tempo di volo totale",
+      "typeHours": "Almeno {hours} h su {type}",
+      "recentHours": "Almeno {hours} h negli ultimi 90 giorni",
+      "age": "Almeno {age} anni",
+      "rating": "Valutazione del pilota di {rating} o più",
+      "noUnrated": "I piloti devono avere recensioni da noleggi precedenti",
+      "unratedCheckout": "Piloti senza recensioni: dopo un volo di ambientamento con un istruttore",
+      "unratedWelcome": "I piloti senza recensioni sono benvenuti",
+      "verifiedNoClass": "Licenza e certificato medico verificati da ownAplane e validi",
+      "checkoutFirstRental": "Piloti nuovi su questo aereo: dopo un volo di ambientamento con un istruttore",
+      "instantBooking": "Prenotazione immediata per i piloti che l'hanno già pilotato"
+    },
+    "public": {
+      "preview": "Anteprima. Al momento i piloti non vedono questo aereo ({status}).",
+      "edit": "Modifica annuncio",
+      "rating": "{rating} ({count, plural, one {# recensione} other {# recensioni}})",
+      "about": "Informazioni sull'aereo",
+      "specs": "Caratteristiche",
+      "requirements": "Chi può noleggiarlo",
+      "weekend": "Weekend: {price}/h",
+      "minHours": "Minimo {hours} h al giorno",
+      "owner": "Proprietario",
+      "photos": "Foto di {name}",
+      "photoAlt": "{name}, foto {number} di {total}",
+      "showPhoto": "Mostra la foto {number}",
+      "vfr": "VFR",
+      "fuelBurn": "Consumo",
+      "cruise": "Velocità di crociera",
+      "usefulLoad": "Carico utile",
+      "endurance": "Autonomia",
+      "hours": "{hours} h",
+      "request": "Richiedi prenotazione"
+    },
+    "eligibility": {
+      "own_aircraft": "Questo è il tuo aereo.",
+      "suspended": "Il tuo account è sospeso.",
+      "aircraft_unavailable": "Questo aereo non è disponibile.",
+      "licence": "Aggiungi la tua licenza di pilota e attendi che venga verificata.",
+      "licence_type": "Richiede una di queste licenze: {list}.",
+      "medical": "Il tuo certificato medico deve essere verificato e valido fino alla fine del noleggio.",
+      "class_rating": "Richiede un'abilitazione {rating} valida e verificata.",
+      "rating": "Richiede un'abilitazione {rating} valida e verificata.",
+      "total_hours": "Richiede almeno {need} h in totale, tu ne hai {have}.",
+      "type_hours": "Richiede almeno {need} h su {type}, tu ne hai {have}.",
+      "recent_hours": "Richiede almeno {need} h negli ultimi 90 giorni, tu ne hai {have}.",
+      "age_unknown": "Richiede un'età minima di {need} anni. Aggiungi la data di nascita nei tuoi titoli di pilota.",
+      "age": "Richiede un'età minima di {need} anni, tu ne hai {have}.",
+      "unrated": "Il proprietario noleggia solo a piloti con recensioni da noleggi precedenti.",
+      "pilot_rating": "Richiede una valutazione del pilota di almeno {need}, la tua è {have}.",
+      "checkout": "Il proprietario chiede un volo di ambientamento con un istruttore prima del tuo primo noleggio da solo di questo aereo.",
+      "unknown": "Un requisito non è soddisfatto.",
+      "logInText": "Accedi per vedere se soddisfi i requisiti per questo aereo.",
+      "logIn": "Accedi",
+      "ok": "Soddisfi i requisiti.",
+      "okForPeriod": "Soddisfi i requisiti per queste date.",
+      "notYet": "Non puoi ancora noleggiare questo aereo:",
+      "updateCredentials": "Aggiorna i tuoi titoli di pilota",
+      "aircraft_no_night": "Parte di questo periodo è di notte (da 30 minuti dopo il tramonto a 30 minuti prima dell'alba) e questo aereo non è approvato per il VFR notturno.",
+      "night_rating": "Parte di questo periodo è di notte (da 30 minuti dopo il tramonto a 30 minuti prima dell'alba): ti serve un'abilitazione al volo notturno valida e verificata.",
+      "night_flight": "Parte di questo periodo è di notte (da 30 minuti dopo il tramonto a 30 minuti prima dell'alba). Si applicano le regole del VFR notturno."
+    },
+    "calendar": {
+      "previous": "Mese precedente",
+      "next": "Mese successivo",
+      "timeZone": "Tutti gli orari in UTC.",
+      "kinds": {
+        "booking": "Prenotazione",
+        "owner_use": "Uso personale",
+        "maintenance": "Manutenzione",
+        "unavailable": "Non disponibile"
+      },
+      "states": {
+        "free": "Libero",
+        "partly": "Parzialmente prenotato",
+        "busy": "Prenotato"
+      },
+      "addTitle": "Blocca un periodo",
+      "kind": "Tipo",
+      "from": "Dal",
+      "to": "Al",
+      "localHint": "Orari in UTC.",
+      "note": "Nota (visibile solo a te)",
+      "notePlaceholder": "ad es. ispezione delle 50 ore",
+      "add": "Blocca periodo",
+      "adding": "Salvataggio…",
+      "added": "Aggiunto al calendario.",
+      "overlaps": "Si sovrappone a qualcosa già presente nel calendario.",
+      "tooLong": "Un blocco può durare al massimo un anno.",
+      "notFound": "Non abbiamo trovato questo aereo. Ricarica la pagina.",
+      "upcoming": "In arrivo",
+      "nothingPlanned": "Niente in programma. L'aereo è libero per le prenotazioni.",
+      "remove": "Rimuovi {when}",
+      "selectHint": "Clicca un giorno di inizio, poi un giorno di fine, per scegliere le date. Passa sopra o tocca un giorno per vedere cosa è prenotato.",
+      "selectEnd": "Dal {from}: ora clicca l'ultimo giorno.",
+      "selected": "{from} – {to}",
+      "clearSelection": "Cancella le date",
+      "fromTime": "Dal ({day}, UTC)",
+      "toTime": "Al ({day}, UTC)",
+      "endBeforeStart": "La fine deve essere dopo l'inizio.",
+      "checkAvailability": "Verifica disponibilità",
+      "requestBooking": "Richiedi prenotazione",
+      "blockTime": "Blocca questo periodo",
+      "pending": "richiesto, non ancora confermato"
+    },
+    "availability": {
+      "title": "Disponibilità",
+      "free": "Libero {when}",
+      "busy": "Non disponibile {when}"
+    }
+  },
+  "search": {
+    "title": "Trova un aereo",
+    "description": "Cerca aerei per aeroporto, date e ciò che vuoi pilotare.",
+    "airport": "Vicino all'aeroporto",
+    "airportHint": "Lascia vuoto per cercare ovunque.",
+    "radius": "Entro",
+    "km": "{km} km",
+    "from": "Dal",
+    "to": "Al",
+    "timesHint": "Orari in UTC. Con le date vengono mostrati solo gli aerei liberi per tutto il periodo.",
+    "moreFilters": "Altri filtri",
+    "any": "Qualsiasi",
+    "seats": "Posti minimi",
+    "maxPrice": "Prezzo orario massimo",
+    "maxPriceHint": "Nella valuta dell'annuncio.",
+    "eligible": "Solo aerei che posso noleggiare",
+    "eligibleHint": "Confronta licenza, certificato medico, abilitazioni ed esperienza verificati con i requisiti di ogni proprietario.",
+    "eligibleLogIn": "Accedi per vedere solo gli aerei di cui soddisfi i requisiti.",
+    "sort": "Ordina per",
+    "sorts": {
+      "distance": "Distanza",
+      "price": "Prezzo",
+      "rating": "Valutazione",
+      "newest": "Più recenti"
+    },
+    "submit": "Cerca",
+    "found": "{count, plural, =0 {Nessun aereo trovato} one {# aereo trovato} other {# aerei trovati}}",
+    "near": "entro {km} km da {code}",
+    "everywhere": "ovunque",
+    "freeBetween": "libero {when}",
+    "empty": "Ancora nessun risultato. Prova un raggio più ampio, altre date o meno filtri.",
+    "seatsCount": "{count, plural, one {# posto} other {# posti}}",
+    "distance": "a {km} km",
+    "noReviews": "Ancora nessuna recensione",
+    "view": {
+      "label": "Mostra i risultati come",
+      "list": "Elenco",
+      "map": "Mappa"
+    },
+    "map": {
+      "label": "Mappa degli aerei trovati",
+      "marker": "{code}: {count, plural, one {# aereo} other {# aerei}}"
+    }
+  },
+  "booking": {
+    "statuses": {
+      "requested": "Richiesta",
+      "accepted": "Accettata",
+      "declined": "Rifiutata",
+      "expired": "Scaduta",
+      "cancelled": "Cancellata",
+      "in_progress": "In corso",
+      "completed": "Completata"
+    },
+    "form": {
+      "title": "Richiedi una prenotazione",
+      "back": "Torna all'aereo",
+      "from": "Dal",
+      "to": "Al",
+      "timesHint": "Orari in UTC. Il proprietario ha 24 ore per rispondere; nel frattempo il periodo resta riservato a te.",
+      "route": "Rotta",
+      "departure": "Partenza",
+      "arrival": "Arrivo",
+      "arrivalHint": "Di solito il ritorno all'aeroporto di partenza.",
+      "stop": "Scalo {number}",
+      "addStop": "Aggiungi uno scalo",
+      "removeStop": "Rimuovi l'ultimo scalo",
+      "airfieldsHint": "Notte e meteo vengono controllati per questi aeroporti.",
+      "purpose": "Scopo",
+      "purposes": {
+        "local": "Volo locale",
+        "cross_country": "Navigazione",
+        "training": "Addestramento",
+        "other": "Altro"
+      },
+      "passengers": "Passeggeri",
+      "plannedHours": "Tempo di volo previsto (h)",
+      "message": "Messaggio al proprietario",
+      "messagePlaceholder": "Ciò che il proprietario dovrebbe sapere: i tuoi piani, l'esperienza sul tipo…",
+      "estimate": "Prezzo stimato",
+      "estimateDetail": "{hours} h × {rate}",
+      "estimateEmpty": "Inserisci gli orari e il tempo di volo previsto per vedere una stima.",
+      "fuelNotIncluded": "Carburante non incluso: circa {litres} L.",
+      "payDirectly": "Paghi direttamente il proprietario; ownAplane non gestisce ancora i pagamenti. L'importo finale segue il registro di volo.",
+      "send": "Invia richiesta",
+      "sending": "Invio…",
+      "cancellation": "Condizioni di cancellazione:",
+      "updateCredentials": "Vai ai tuoi titoli di pilota"
+    },
+    "errors": {
+      "not_eligible": "Non puoi ancora prenotare questo volo:",
+      "too_many_passengers": "Questo aereo porta al massimo {max} passeggeri.",
+      "period_in_past": "Scegli un momento nel futuro.",
+      "period_length": "Una prenotazione dura tra 30 minuti e 14 giorni.",
+      "not_free": "Quel periodo non è più libero. Scegline un altro.",
+      "aircraft_unavailable": "Questo aereo non può essere prenotato al momento.",
+      "failed": "Non ha funzionato. Riprova."
+    },
+    "list": {
+      "title": "Prenotazioni",
+      "description": "Le tue richieste di prenotazione e i tuoi noleggi.",
+      "asOwner": "Per i miei aerei",
+      "asPilot": "I miei noleggi",
+      "emptyPilot": "Ancora nessuna prenotazione. Trova un aereo e invia una richiesta.",
+      "exportLegs": "Esporta i miei voli (CSV)",
+      "exportLegsHint": "Le tue tratte dai registri di volo inviati e confermati, nell'ordine del libretto di volo, orari in UTC. Un aiuto per compilare il tuo libretto, non un sostituto."
+    },
+    "detail": {
+      "metaTitle": "Prenotazione",
+      "back": "Tutte le prenotazioni",
+      "pilotIs": "Pilota: {name}",
+      "ownerIs": "Proprietario: {name}",
+      "deletedUser": "account eliminato",
+      "answerBy": "Rispondi entro il {date}; dopo, la richiesta scade e il periodo viene liberato.",
+      "waiting": "In attesa del proprietario, che ha tempo fino al {date} per rispondere.",
+      "meets": "Il pilota soddisfa i tuoi requisiti per questo volo.",
+      "doesNotMeet": "Il pilota non soddisfa più i tuoi requisiti per questo volo.",
+      "checkout": "Il proprietario chiede un volo di ambientamento con un istruttore prima del primo noleggio da solo.",
+      "flight": "Volo",
+      "when": "Quando",
+      "route": "Rotta",
+      "basis": {
+        "wet": "carburante incluso",
+        "dry": "carburante escluso"
+      },
+      "ownerNote": "Nota del proprietario:",
+      "proposed": "Il proprietario non può in quell'orario ma propone {when}.",
+      "requestProposed": "Richiedi questo orario",
+      "youProposed": "Hai rifiutato e proposto {when}.",
+      "cancelledByOwner": "Cancellata dal proprietario: {reason}",
+      "cancelledByPilot": "Cancellata dal pilota: {reason}",
+      "late": "Cancellazione tardiva (dopo il termine per la cancellazione gratuita).",
+      "grounded": "Il proprietario ha fermato a terra questo aereo. Non può volare finché il proprietario non lo offre di nuovo.",
+      "messagePilot": "Scrivi al pilota",
+      "messageOwner": "Scrivi al proprietario"
+    },
+    "history": {
+      "title": "Cronologia",
+      "types": {
+        "requested": "Richiesta",
+        "accepted": "Accettata",
+        "declined": "Rifiutata",
+        "proposed": "Proposto un altro orario",
+        "expired": "Scaduta (nessuna risposta)",
+        "cancelled": "Cancellata",
+        "checked_out": "Preso in consegna",
+        "log_submitted": "Registro di volo inviato",
+        "log_correction": "Correzione richiesta",
+        "log_confirmed": "Registro di volo confermato",
+        "defect_reported": "Difetto segnalato",
+        "instant_booked": "Prenotata immediatamente",
+        "review_submitted": "Recensione scritta",
+        "reviews_published": "Recensioni pubblicate",
+        "review_replied": "Il proprietario ha risposto alla recensione"
+      }
+    },
+    "respond": {
+      "title": "La tua risposta",
+      "note": "Nota per il pilota (facoltativa)",
+      "notePlaceholder": "ad es. Le chiavi sono nella club house.",
+      "accept": "Accetta",
+      "decline": "Rifiuta",
+      "propose": "Proponi un altro orario",
+      "proposeText": "Proponi un orario che ti va bene (UTC). La richiesta viene rifiutata e il pilota può richiedere il tuo orario con un tocco.",
+      "from": "Dal",
+      "to": "Al",
+      "sendProposal": "Rifiuta e proponi",
+      "cancel": "Annulla",
+      "sending": "Invio…",
+      "done": {
+        "accept": "Accettata. Il periodo è prenotato per il pilota.",
+        "decline": "Rifiutata. Il periodo è di nuovo libero.",
+        "propose": "Rifiutata con la tua proposta. Il periodo è di nuovo libero."
+      },
+      "errors": {
+        "not_found": "Non abbiamo trovato questa richiesta.",
+        "not_open": "Questa richiesta ha già ricevuto risposta o è scaduta.",
+        "pilot_not_eligible": "Il pilota non soddisfa più i tuoi requisiti per questo volo (ad esempio, un titolo è scaduto), quindi non può essere accettata.",
+        "bad_proposal": "Proponi un orario nel futuro.",
+        "failed": "Non ha funzionato. Riprova.",
+        "aircraft_grounded": "L'aereo è fermo a terra. Offrilo di nuovo prima di accettare."
+      }
+    },
+    "cancel": {
+      "button": "Cancella prenotazione",
+      "title": "Cancellare questa prenotazione?",
+      "lateWarning": "Il termine per la cancellazione gratuita è passato: apparirà come cancellazione tardiva sul tuo profilo.",
+      "reason": "Motivo (visibile all'altra parte)",
+      "keep": "Mantieni prenotazione",
+      "confirm": "Cancella prenotazione",
+      "cancelling": "Cancellazione…",
+      "done": "Cancellata. Il periodo è di nuovo libero.",
+      "doneLate": "Cancellata (tardivamente). Il periodo è di nuovo libero.",
+      "errors": {
+        "not_found": "Non abbiamo trovato questa prenotazione.",
+        "not_cancellable": "Questa prenotazione non può più essere cancellata.",
+        "reason_required": "Indica un motivo.",
+        "failed": "Non ha funzionato. Riprova."
+      }
+    },
+    "contact": {
+      "titlePilot": "Contatta il pilota",
+      "titleOwner": "Contatta il proprietario",
+      "email": "E-mail",
+      "phone": "Telefono",
+      "noPhone": "Nessun numero di telefono inserito.",
+      "note": "Condiviso perché la prenotazione è accettata. Usalo solo per questa prenotazione.",
+      "afterAccept": "E-mail e telefono appariranno qui quando il proprietario accetta. Fino ad allora, usa i messaggi."
+    }
+  },
+  "usage": {
+    "none": "Ancora nessun registro di volo confermato. L'utilizzo appare qui quando confermi il registro di un pilota.",
+    "total": "Totale",
+    "allFlights": "Tutti i voli",
+    "byMonth": "Per mese",
+    "byPilot": "Per pilota",
+    "export": "Esporta tratte (CSV)",
+    "deletedPilot": "Account eliminato",
+    "flights": "Voli",
+    "block": "Tempo di blocco",
+    "engine": "Tempo motore",
+    "landings": "Atterraggi",
+    "fuel": "Carburante consumato ({unit})",
+    "oil": "Olio consumato ({unit})",
+    "oilRate": "Olio per ora motore ({unit})",
+    "note": "Carburante e olio consumati sono calcolati dai livelli prima e dopo ogni tratta, solo dove sono stati inseriti entrambi. Un consumo d'olio per ora motore in aumento può essere un primo segnale di problemi al motore. Non è un registro tecnico ufficiale.",
+    "csv": {
+      "date": "Data (UTC)",
+      "booking": "Prenotazione",
+      "pilot": "Pilota",
+      "from": "Da",
+      "to": "A",
+      "blockOff": "Fuori blocchi (UTC)",
+      "blockOn": "In blocchi (UTC)",
+      "blockMinutes": "Tempo di blocco (min)",
+      "engineStart": "Avvio motore (UTC)",
+      "engineStop": "Spegnimento motore (UTC)",
+      "engineMinutes": "Tempo motore (min)",
+      "takeoff": "Decollo (UTC)",
+      "landing": "Atterraggio (UTC)",
+      "landings": "Atterraggi",
+      "hobbsStart": "Hobbs inizio",
+      "hobbsEnd": "Hobbs fine",
+      "tachStart": "Tach inizio",
+      "tachEnd": "Tach fine",
+      "fuelBefore": "Carburante prima (L)",
+      "fuelAfter": "Carburante dopo (L)",
+      "oilBefore": "Olio prima (L)",
+      "oilAfter": "Olio dopo (L)",
+      "deletedPilot": "Account eliminato"
+    },
+    "logbook": {
+      "date": "Data (UTC)",
+      "departure": "Partenza",
+      "offBlock": "Fuori blocchi (UTC)",
+      "arrival": "Arrivo",
+      "onBlock": "In blocchi (UTC)",
+      "type": "Tipo",
+      "registration": "Marca",
+      "takeoff": "Decollo (UTC)",
+      "landing": "Atterraggio (UTC)",
+      "blockTime": "Tempo di blocco (h:mm)",
+      "landings": "Atterraggi"
+    }
+  },
+  "flightLog": {
+    "title": "Registro di volo",
+    "back": "Torna alla prenotazione",
+    "open": "Registro di volo",
+    "startCheckout": "Prendi in consegna",
+    "checkoutHint": "La presa in consegna avvia il noleggio e apre il registro di volo. Registra contatori, carburante e olio prima del primo volo.",
+    "checkoutOpens": "La presa in consegna è possibile dal {when}.",
+    "disclaimer": "Questo registro è un documento tra te e l'altra parte. Non sostituisce il giornale di bordo o il registro tecnico ufficiali dell'aereo, né il tuo libretto di volo.",
+    "statuses": {
+      "draft": "In compilazione",
+      "submitted": "Inviato al proprietario",
+      "correction_requested": "Correzione richiesta",
+      "confirmed": "Confermato"
+    },
+    "correctionNote": "Il proprietario ha chiesto una correzione: {note}",
+    "checkout": "Presa in consegna",
+    "hobbs": "Hobbs",
+    "tach": "Tach",
+    "fuelOnBoard": "Carburante a bordo ({unit})",
+    "oilLevel": "Livello olio ({unit})",
+    "checkoutPhoto": "Foto dei contatori (facoltativa)",
+    "checkoutPhotoHint": "JPEG, PNG o PDF, fino a 4 MB. Anche il proprietario può aprirla.",
+    "saveCheckout": "Salva presa in consegna",
+    "saving": "Salvataggio…",
+    "saved": "Salvato.",
+    "legs": "Tratte",
+    "noLegs": "Ancora nessuna tratta. Aggiungine una dopo ogni volo.",
+    "addLeg": "Aggiungi tratta",
+    "editLeg": "Modifica tratta",
+    "edit": "Modifica",
+    "delete": "Elimina",
+    "editLegOf": "Modifica tratta {leg}",
+    "deleteLegOf": "Elimina tratta {leg}",
+    "legHint": "Tutti gli orari in UTC.",
+    "from": "Da",
+    "to": "A",
+    "date": "Data (fuori blocchi, UTC)",
+    "blockOff": "Fuori blocchi",
+    "engineStart": "Avvio motore",
+    "takeoff": "Decollo",
+    "landing": "Atterraggio",
+    "engineStop": "Spegnimento motore",
+    "blockOn": "In blocchi",
+    "optional": "{field} (facoltativo)",
+    "landings": "Atterraggi",
+    "hobbsStart": "Hobbs inizio",
+    "hobbsEnd": "Hobbs fine",
+    "tachStart": "Tach inizio",
+    "tachEnd": "Tach fine",
+    "fuelBefore": "Carburante prima ({unit})",
+    "fuelAfter": "Carburante dopo ({unit})",
+    "oilBefore": "Olio prima ({unit})",
+    "oilAfter": "Olio dopo ({unit})",
+    "saveLeg": "Salva tratta",
+    "legSaved": "Tratta salvata.",
+    "blockTimes": "Blocchi {off}–{on} UTC",
+    "landingsCount": "{count, plural, one {# atterraggio} other {# atterraggi}}",
+    "summary": "Tempo e importo",
+    "flown": {
+      "hobbs": "Volato (Hobbs)",
+      "tach": "Volato (tach)",
+      "block": "Volato (tempo di blocco)"
+    },
+    "basis": {
+      "hobbs": "Hobbs",
+      "tach": "tach",
+      "block": "blocco"
+    },
+    "duration": "{h} h {m} min",
+    "billed": "Fatturato",
+    "billedHours": "{hours} h",
+    "amountDue": "Importo dovuto",
+    "missingMeters": "Aggiungi le letture iniziali e finali {basis} a ogni tratta per calcolare l'importo.",
+    "payDirectly": "Paga direttamente il proprietario. Nessun denaro passa per ownAplane.",
+    "submit": "Riconsegna e invia al proprietario",
+    "submitHint": "Al rientro, riconsegna: il proprietario controlla il registro e conferma l'importo. Dopo non potrai modificarlo, a meno che il proprietario chieda una correzione.",
+    "waitingForOwner": "Inviato. In attesa della conferma del proprietario.",
+    "waitingForPilot": "Il pilota sta ancora compilando il registro.",
+    "confirm": "Conferma registro e importo",
+    "confirmHint": "La conferma chiude la prenotazione con il tempo e l'importo indicati sopra.",
+    "correctionLabel": "Cosa deve correggere il pilota?",
+    "requestCorrection": "Chiedi una correzione",
+    "units": {
+      "l": "L",
+      "usgal": "gal USA",
+      "qt": "qt"
+    },
+    "errors": {
+      "not_found": "Non abbiamo trovato questo registro di volo.",
+      "not_accepted": "Solo una prenotazione accettata può essere presa in consegna.",
+      "too_early": "La presa in consegna è possibile 2 ore prima dell'orario prenotato.",
+      "not_editable": "Il registro non può essere modificato ora.",
+      "no_legs": "Aggiungi prima almeno una tratta.",
+      "not_submitted": "Il registro non è ancora stato inviato, oppure è già stato gestito.",
+      "note_required": "Indica cosa va corretto.",
+      "bad_amount": "L'importo non è valido.",
+      "missing_meters": "Mancano alcune letture dei contatori.",
+      "leg_checks": "Controlla la tratta: gli orari devono essere in ordine (fuori blocchi, avvio motore, decollo, atterraggio, spegnimento motore, in blocchi), entro 24 ore, e i contatori non possono tornare indietro.",
+      "failed": "Qualcosa è andato storto. Riprova.",
+      "aircraft_grounded": "L'aereo è fermo a terra per decisione del proprietario, quindi non può essere preso in consegna."
+    },
+    "uplifts": "Carburante e olio aggiunti",
+    "noUplifts": "Ancora niente aggiunto. Registra ogni rifornimento o rabbocco d'olio con la ricevuta.",
+    "addUplift": "Aggiungi carburante o olio",
+    "editUplift": "Modifica carburante o olio",
+    "editUpliftOf": "Modifica {uplift}",
+    "deleteUpliftOf": "Elimina {uplift}",
+    "upliftHint": "Inserisci cosa è stato aggiunto e quanto è costato. Chi ha pagato determina come conta nell'importo dovuto.",
+    "upliftKind": "Cosa",
+    "kinds": {
+      "fuel": "Carburante",
+      "oil": "Olio"
+    },
+    "paidBy": "Pagato da",
+    "payers": {
+      "pilot": "Me (pilota)",
+      "owner": "Conto del proprietario"
+    },
+    "upliftAirport": "Aeroporto",
+    "quantity": "Quantità ({unit})",
+    "fuelType": "Tipo di carburante",
+    "oilGrade": "Tipo di olio (facoltativo)",
+    "price": "Prezzo pagato ({currency}, facoltativo)",
+    "priceHint": "Totale sulla ricevuta, nella valuta della prenotazione.",
+    "receipt": "Ricevuta (facoltativa)",
+    "receiptLink": "Ricevuta",
+    "saveUplift": "Salva",
+    "upliftSaved": "Salvato.",
+    "noPrice": "Nessun prezzo",
+    "fuelRule": {
+      "wet": "Tariffa con carburante: il carburante pagato dal pilota e l'olio vengono detratti.",
+      "dry": "Tariffa senza carburante: il carburante pagato sul conto del proprietario viene aggiunto; l'olio pagato dal pilota viene detratto."
+    },
+    "unpriced": "{count, plural, one {Una voce di carburante o olio non ha} other {# voci di carburante o olio non hanno}} un prezzo, quindi {count, plural, one {non è conteggiata} other {non sono conteggiate}} nell'importo.",
+    "fuelAdjustment": "Carburante e olio",
+    "checkoutPhotoLink": "Foto dei contatori",
+    "remarks": {
+      "title": "Note e PIREP",
+      "pilotHint": "Tutto ciò che il proprietario o il prossimo pilota dovrebbe sapere: cose sull'aereo che non sono difetti (ad es. «calo magnete sinistro 150 giri», «COM2 disturbato»), e note sul meteo o su un aeroporto.",
+      "ownerHint": "Cosa ha annotato il pilota. Segna una nota sull'aereo come punto noto, così i noleggiatori successivi la vedono prima di volare.",
+      "none": "Nessuna nota.",
+      "noneYet": "Ancora nessuna nota. Appaiono qui quando i piloti le aggiungono ai loro registri di volo.",
+      "kind": "Argomento",
+      "kinds": {
+        "aircraft": "Aereo",
+        "weather": "Meteo",
+        "airfield": "Aeroporto"
+      },
+      "airport": "Aeroporto (facoltativo)",
+      "body": "Nota",
+      "bodyHint": "I difetti che riguardano la navigabilità si segnalano a parte.",
+      "add": "Aggiungi nota",
+      "saving": "Salvataggio…",
+      "delete": "Elimina",
+      "deleteLabel": "Elimina nota",
+      "known": "Punto noto",
+      "fixed": "Risolto",
+      "markKnown": "Segna come punto noto",
+      "markFixed": "Segna come risolto"
+    },
+    "knownItems": {
+      "title": "Punti noti su questo aereo",
+      "text": "Il proprietario ne è al corrente. Controllali prima di volare.",
+      "since": "dal {date}"
+    },
+    "remarkSaved": "Nota aggiunta."
+  },
+  "defects": {
+    "report": "Segnala un difetto",
+    "reportTitle": "Segnala un difetto",
+    "reportHint": "Qualcosa non va nell'aereo e può influire sulla navigabilità. Il proprietario viene avvisato subito. Le note che non sono difetti vanno nel registro di volo.",
+    "severity": "Quanto è grave?",
+    "severities": {
+      "minor": "Minore: può aspettare la prossima manutenzione",
+      "major": "Importante: va sistemato a breve",
+      "unsafe": "Non sicuro: l'aereo non dovrebbe volare"
+    },
+    "description": "Qual è il problema?",
+    "descriptionHint": "Dove, cosa hai notato e quando (ad es. «olio sulla cappottatura sinistra dopo l'atterraggio a LIML»).",
+    "photo": "Foto (facoltativa)",
+    "send": "Invia al proprietario",
+    "sending": "Invio…",
+    "reported": "Difetto segnalato. Il proprietario è stato avvisato.",
+    "errors": {
+      "not_found": "Non puoi segnalare un difetto su questo aereo.",
+      "description_required": "Descrivi il difetto.",
+      "bad_photo": "Questa foto non può essere usata. Caricala di nuovo.",
+      "failed": "Non ha funzionato. Riprova."
+    },
+    "groundedTitle": "Questo aereo è fermo a terra",
+    "groundedText": "I piloti non possono prenotarlo e le prenotazioni non possono essere accettate né prese in consegna finché non lo offri di nuovo.",
+    "clear": "Togli il fermo e offri di nuovo",
+    "groundHint": "Ferma a terra l'aereo se non deve volare: i piloti non possono prenotarlo e le prenotazioni accettate non possono essere prese in consegna finché non lo offri di nuovo.",
+    "ground": "Ferma a terra l'aereo",
+    "open": "Difetti aperti",
+    "noneOpen": "Nessun difetto aperto.",
+    "fixed": "Risolto",
+    "reportedBy": "Segnalato da {name}, {date}",
+    "deletedUser": "un account eliminato",
+    "booking": "Prenotazione",
+    "photoLink": "Foto",
+    "resolution": "Cosa è stato fatto",
+    "resolutionPlaceholder": "Cosa è stato fatto (facoltativo)",
+    "markFixed": "Segna come risolto",
+    "fixedOn": "risolto il {date}",
+    "disclaimer": "Un documento tra te e chi noleggia, non il registro tecnico dell'aereo. La navigabilità e i certificati di riammissione in servizio (CRS) restano a carico tuo e della tua organizzazione di manutenzione."
+  },
+  "notifications": {
+    "title": "Notifiche",
+    "description": "Richieste di prenotazione, risposte, registri di volo e promemoria. Le ricevi anche via e-mail.",
+    "none": "Ancora nessuna notifica.",
+    "bell": "Notifiche",
+    "bellUnread": "Notifiche, {count} non lette",
+    "someone": "Qualcuno",
+    "new": "Nuovo:",
+    "types": {
+      "requested": "{other} ha chiesto di noleggiare {registration} dal {when}.",
+      "accepted": "{other} ha accettato la tua prenotazione di {registration} dal {when}.",
+      "declined": "{other} ha rifiutato la tua prenotazione di {registration} dal {when}.",
+      "proposed": "{other} ha rifiutato la tua prenotazione di {registration} e ha proposto un altro orario.",
+      "expired": "La richiesta per {registration} dal {when} è scaduta senza risposta.",
+      "cancelled": "{other} ha cancellato la prenotazione di {registration} dal {when}.",
+      "checked_out": "{other} ha preso in consegna {registration}.",
+      "log_submitted": "{other} ha inviato il registro di volo di {registration} per la tua conferma.",
+      "log_correction": "{other} ha chiesto una correzione del registro di volo di {registration}.",
+      "log_confirmed": "{other} ha confermato il registro di volo di {registration}. La prenotazione è completata: valutatevi a vicenda entro 14 giorni.",
+      "defect_reported": "{other} ha segnalato un difetto su {registration}.",
+      "reminder": "Promemoria: {registration} è prenotato dal {when}.",
+      "other": "Novità sulla prenotazione di {registration}.",
+      "instant_booked": "{other} ha prenotato {registration} dal {when} (prenotazione immediata).",
+      "review_submitted": "{other} ha recensito la prenotazione di {registration}. Scrivi la tua per vederla.",
+      "reviews_published": "Le recensioni di {registration} sono ora pubblicate.",
+      "review_replied": "{other} ha risposto alla tua recensione di {registration}."
+    }
+  },
+  "checkoutFlight": {
+    "neededPilot": "Il proprietario chiede un volo di ambientamento con un istruttore prima del tuo primo noleggio da solo di questo aereo. Organizzalo con il proprietario.",
+    "neededOwner": "Hai chiesto un volo di ambientamento con un istruttore prima del primo noleggio da solo di questo pilota. Registralo qui una volta effettuato.",
+    "done": "Volo di ambientamento su questo aereo registrato il {date}",
+    "instructorIs": "istruttore {name}",
+    "recordTitle": "Volo di ambientamento fatto?",
+    "recordHint": "Registralo e il pilota non avrà bisogno di un altro ambientamento su questo aereo.",
+    "doneOn": "Data del volo di ambientamento",
+    "instructor": "Istruttore (facoltativo)",
+    "note": "Nota (facoltativa)",
+    "record": "Registra volo di ambientamento",
+    "saving": "Salvataggio…",
+    "saved": "Volo di ambientamento registrato.",
+    "failed": "Non ha funzionato. Riprova."
+  },
+  "help": {
+    "title": "Aiuto",
+    "description": "Come funziona ownAplane per piloti, proprietari di aerei e admin.",
+    "search": "Cerca",
+    "searchPlaceholder": "Cerca nell'aiuto, ad es. cancellazione o registro di volo",
+    "results": "{count, plural, =0 {Nessun articolo} one {# articolo} other {# articoli}} per «{query}»",
+    "noResults": "Nessun risultato. Prova altre parole, oppure cancella la ricerca per vedere tutti gli articoli.",
+    "allArticles": "Tutti gli articoli di aiuto",
+    "onThisPage": "In questa pagina",
+    "moreArticles": "Altri articoli",
+    "categories": {
+      "start": "Per iniziare",
+      "pilots": "Per i piloti",
+      "owners": "Per i proprietari di aerei",
+      "everyone": "Per tutti",
+      "admins": "Per gli admin"
+    },
+    "englishOnly": "Per ora gli articoli di aiuto sono in inglese; le traduzioni sono in arrivo."
+  },
+  "reviews": {
+    "title": "Recensioni",
+    "writeTitle": "Scrivi la tua recensione",
+    "writeTextPilot": "Com'è andata con {name}? La tua recensione resta nascosta finché anche il proprietario non ti ha recensito, oppure fino al {date}. Dopo non potrai modificarla.",
+    "writeTextOwner": "Com'è stato {name} come pilota? La tua recensione resta nascosta finché anche il pilota non ti ha recensito, oppure fino al {date}. Dopo non potrai modificarla.",
+    "windowClosed": "I 14 giorni per le recensioni sono trascorsi.",
+    "yours": "La tua recensione",
+    "fromOwner": "La recensione del proprietario su di te",
+    "fromPilot": "La recensione del pilota su di te",
+    "hiddenUntil": "Visibile solo a te finché anche l'altra parte non ha recensito, oppure fino al {date}.",
+    "comment": "Commento (facoltativo)",
+    "commentHintPilot": "Cosa dovrebbero sapere gli altri piloti? Sii corretto e oggettivo; niente dati personali.",
+    "commentHintOwner": "Cosa dovrebbero sapere gli altri proprietari? Sii corretto e oggettivo; niente dati personali.",
+    "send": "Pubblica recensione",
+    "sending": "Invio…",
+    "submitted": "Grazie! La tua recensione è salvata.",
+    "starsLabel": "{count, plural, one {# stella} other {# stelle}}",
+    "scoreWords": {
+      "1": "Scarso",
+      "2": "Sotto la media",
+      "3": "Discreto",
+      "4": "Buono",
+      "5": "Eccellente"
+    },
+    "outOfFive": "{score} su 5",
+    "count": "({count, plural, one {# recensione} other {# recensioni}})",
+    "none": "Ancora nessuna recensione.",
+    "reviewBy": "Recensione di {name}",
+    "deletedUser": "Ex membro",
+    "ownerReply": "Risposta del proprietario",
+    "asPilot": "Recensioni come pilota",
+    "asOwner": "Recensioni come proprietario",
+    "aircraftTitle": "Recensioni",
+    "ownerRating": "{rating} come proprietario ({count})",
+    "categories": {
+      "aircraft_condition": {
+        "label": "Condizioni dell'aereo",
+        "hint": "Pulito, funzionante e come descritto nell'annuncio?"
+      },
+      "communication": {
+        "label": "Comunicazione",
+        "hint": "Chiara, cordiale e rapida nel rispondere?"
+      },
+      "value": {
+        "label": "Rapporto qualità-prezzo",
+        "hint": "Vale il prezzo?"
+      },
+      "airmanship": {
+        "label": "Condotta di volo",
+        "hint": "Uso attento e professionale dell'aereo?"
+      },
+      "punctuality": {
+        "label": "Puntualità",
+        "hint": "Puntuale alla presa in consegna e alla riconsegna?"
+      },
+      "condition_returned": {
+        "label": "Condizioni alla riconsegna",
+        "hint": "Pulito, rifornito come concordato, senza sorprese?"
+      }
+    },
+    "errors": {
+      "not_found": "Non puoi recensire questa prenotazione.",
+      "window_closed": "I 14 giorni per le recensioni sono trascorsi.",
+      "already_reviewed": "Hai già recensito questa prenotazione.",
+      "bad_scores": "Dai da 1 a 5 stelle a ogni categoria.",
+      "failed": "Impossibile salvare la recensione. Riprova."
+    },
+    "reply": "Rispondi",
+    "replyTitle": "Rispondi pubblicamente",
+    "replyHint": "Chiunque legga la recensione vede la tua risposta. Puoi rispondere una sola volta e non potrai modificarla. Resta cortese e oggettivo.",
+    "replyLabel": "La tua risposta",
+    "sendReply": "Pubblica risposta",
+    "replied": "La tua risposta è pubblicata.",
+    "replyErrors": {
+      "not_found": "Non puoi rispondere a questa recensione.",
+      "already_replied": "Hai già risposto a questa recensione.",
+      "reply_required": "Scrivi qualche parola.",
+      "failed": "Impossibile salvare la risposta. Riprova."
+    }
+  },
+  "reports": {
+    "report": "Segnala",
+    "title": {
+      "review": "Segnala questa recensione",
+      "user": "Segnala questo membro",
+      "aircraft": "Segnala questo annuncio",
+      "message": "Segnala questo messaggio"
+    },
+    "hint": "Il nostro team esamina ogni segnalazione. Le recensioni vengono rimosse solo se violano le regole (offese, dati personali, spam), mai solo perché negative.",
+    "reason": "Motivo",
+    "choose": "Scegli un motivo",
+    "reasons": {
+      "abuse": "Offensivo o volgare",
+      "personal_data": "Contiene dati personali",
+      "spam": "Spam o pubblicità",
+      "misleading": "Falso o fuorviante",
+      "unsafe": "Problema di sicurezza",
+      "other": "Altro"
+    },
+    "details": "Dettagli (facoltativi)",
+    "send": "Invia segnalazione",
+    "sending": "Invio…",
+    "sent": "Grazie, daremo un'occhiata.",
+    "alreadyReported": "L'hai già segnalato. Daremo un'occhiata.",
+    "notFound": "Non si può più segnalare.",
+    "tooMany": "Oggi hai inviato molte segnalazioni. Riprova domani o contattaci."
+  },
+  "messages": {
+    "title": "Messaggi",
+    "description": "Le tue conversazioni con piloti e proprietari su prenotazioni e annunci.",
+    "none": "Ancora nessun messaggio. Puoi scrivere a un proprietario dalla pagina di un aereo, o all'altra parte da una prenotazione.",
+    "iconUnread": "Messaggi ({count} non letti)",
+    "unread": "Non letto:",
+    "deletedUser": "Ex membro",
+    "aboutBooking": "Prenotazione",
+    "aboutListing": "Domanda sull'annuncio",
+    "bookingFrom": "Prenotazione dal {when}",
+    "back": "Tutti i messaggi",
+    "thread": "Messaggi",
+    "you": "Tu",
+    "empty": "Ancora nessun messaggio. Saluta!",
+    "closed": "L'altro membro ha lasciato ownAplane, quindi non puoi rispondere.",
+    "label": "Il tuo messaggio",
+    "placeholder": "Scrivi un messaggio…",
+    "hint": "Condividi numeri di telefono ed e-mail solo dopo che la prenotazione è accettata; a quel punto appaiono nella prenotazione.",
+    "send": "Invia",
+    "sending": "Invio…",
+    "newTitle": "Nuovo messaggio",
+    "askTitle": "Chiedi a {name}",
+    "askText": "Domande sull'aereo, sulla disponibilità o sui requisiti? Il proprietario riceve un'e-mail.",
+    "askOwner": "Chiedi al proprietario",
+    "errors": {
+      "not_found": "Non puoi inviare messaggi in questa conversazione.",
+      "failed": "Impossibile inviare il messaggio. Riprova.",
+      "too_many_messages": "Hai inviato molti messaggi in poco tempo. Attendi qualche minuto."
+    }
+  },
+  "legal": {
+    "draft": "Bozza: questo testo è ancora in revisione da parte del nostro avvocato e può cambiare prima del lancio.",
+    "englishOnly": "Questa pagina è mostrata in inglese finché la traduzione non sarà stata verificata."
+  },
+  "weather": {
+    "title": "Meteo",
+    "disclaimer": "Avvisi da METAR e TAF (aviationweather.gov) per gli aeroporti di questo volo. Non è un briefing ufficiale: decide il pilota in comando, dopo un briefing meteo completo.",
+    "later": "Le previsioni (TAF) appaiono qui dal {date}, 30 ore prima della partenza.",
+    "belowVfr": "Per questo volo sono osservate o previste condizioni sotto i minimi VFR (visibilità inferiore a 5 km o base delle nubi sotto 1 500 ft).",
+    "aircraftNotIfr": "Questo aereo non è approvato per l'IFR.",
+    "noIr": "Non hai un'abilitazione al volo strumentale (IR) valida e verificata.",
+    "unavailable": "Alcuni bollettini meteo non sono stati caricati. Controllali nel tuo servizio di briefing abituale.",
+    "noReport": "Nessun bollettino meteo entro 50 km.",
+    "nearest": "Da {station}, a {km} km (nessun bollettino per questo aeroporto).",
+    "vfr": "VFR",
+    "belowShort": "Sotto i minimi VFR",
+    "tafOk": "Nessuna condizione sotto i minimi VFR prevista per il periodo prenotato.",
+    "rawTaf": "Mostra il TAF",
+    "visibility": "visibilità {m, number} m",
+    "ceiling": "base delle nubi {ft, number} ft",
+    "kinds": {
+      "base": "Previsione",
+      "from": "Dalle",
+      "becoming": "In evoluzione",
+      "temporary": "Temporaneamente",
+      "probable": "Probabilità {p}%"
+    }
+  },
+  "completion": {
+    "title": "Profilo completo al {percent}%",
+    "left": "{count, plural, one {Manca # passo} other {Mancano # passi}}",
+    "complete": "Tutto fatto",
+    "progress": "Completamento del profilo",
+    "allDone": "Il tuo profilo è completo.",
+    "openGuide": "Apri la guida di configurazione",
+    "done": "Fatto",
+    "todo": "Da fare",
+    "waitingTitle": "In attesa della nostra verifica (nulla da fare per te)",
+    "items": {
+      "roles": "Dicci se voli, possiedi un aereo o entrambi",
+      "photo": "Aggiungi una foto del profilo o scegli un avatar",
+      "home": "Imposta il tuo aeroporto di base",
+      "bio": "Scrivi qualche parola sulla tua attività di volo",
+      "phone": "Aggiungi un telefono di contatto (mostrato solo nelle prenotazioni accettate)",
+      "licence": "Aggiungi la tua licenza di pilota",
+      "medical": "Aggiungi il tuo certificato medico",
+      "classRating": "Aggiungi la tua abilitazione per classe (ad es. SEP terra)",
+      "experience": "Inserisci la tua esperienza di volo (ore totali)",
+      "rejected": "Correggi {count, plural, one {# titolo rifiutato} other {# titoli rifiutati}}",
+      "expired": "Rinnova {count, plural, one {# titolo scaduto} other {# titoli scaduti}}",
+      "pendingCreds": "{count, plural, one {# titolo è} other {# titoli sono}} in verifica",
+      "aircraft": "Aggiungi il tuo primo aereo",
+      "publish": "Pubblica {registration}: è tutto pronto",
+      "gap": {
+        "home_base": "{registration}: imposta la base",
+        "price": "{registration}: imposta il prezzo",
+        "photo": "{registration}: aggiungi almeno una foto",
+        "arc": "{registration}: carica l'ARC",
+        "insurance": "{registration}: carica il certificato di assicurazione"
+      },
+      "pendingDoc": {
+        "arc": "{registration}: ARC in verifica",
+        "insurance": "{registration}: assicurazione in verifica"
+      }
+    }
+  },
+  "welcome": {
+    "metaTitle": "Configura il tuo account",
+    "rolesTitle": "Benvenuto, {name}! Come userai ownAplane?",
+    "rolesText": "Scegline una; ti guideremo nei passi che contano per te.",
+    "rolesLater": "Puoi cambiarlo in qualsiasi momento nell'Account.",
+    "choices": {
+      "pilot": {
+        "title": "Sono un pilota",
+        "text": "Voglio noleggiare aerei dai proprietari."
+      },
+      "owner": {
+        "title": "Possiedo un aereo",
+        "text": "Voglio noleggiare il mio aereo a piloti verificati."
+      },
+      "both": {
+        "title": "Entrambi",
+        "text": "Volo e noleggio il mio aereo."
+      }
+    },
+    "stepsTitle": "Configura il tuo account",
+    "progress": "Completato al {percent}%. Ogni passo apre la pagina in cui farlo; torna qui quando vuoi dalla panoramica.",
+    "nextStep": "Prossimo passo",
+    "next": {
+      "start": "Scegli come userai ownAplane",
+      "profile": "Completa il tuo profilo",
+      "pilot": "Aggiungi i tuoi titoli di pilota",
+      "owner": "Offri il tuo aereo"
+    },
+    "continue": "Continua",
+    "allDone": "È tutto configurato.",
+    "toDashboard": "Vai alla panoramica",
+    "groups": {
+      "profile": {
+        "title": "Il tuo profilo",
+        "text": "Cosa vedono di te gli altri piloti e proprietari."
+      },
+      "pilot": {
+        "title": "Titoli del pilota",
+        "text": "Li verifichiamo perché i proprietari possano fidarsi di te; ci vogliono fino a due giorni lavorativi."
+      },
+      "owner": {
+        "title": "Il tuo aereo",
+        "text": "Un annuncio va online con base, prezzo, una foto, e ARC e assicurazione verificati."
+      }
+    },
+    "changeRoles": "Cambia pilota / proprietario",
+    "later": "Salta per ora, vai alla panoramica"
+  }
+}

@@ -69,7 +69,7 @@ export const userSettings = pgTable(
     updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
   },
   (t) => [
-    check("user_settings_locale", sql`${t.locale} in ('en', 'bg')`),
+    check("user_settings_locale", sql`${t.locale} in ('en', 'bg', 'de', 'fr', 'it', 'es')`),
     check("user_settings_units", sql`${t.units} in ('metric', 'imperial')`),
     check("user_settings_phone", sql`${t.phone} ~ '^\\+[0-9 ]{6,20}$'`),
   ],

@@ -1,0 +1,2 @@
+ALTER TABLE "user_settings" DROP CONSTRAINT "user_settings_locale";--> statement-breakpoint
+ALTER TABLE "user_settings" ADD CONSTRAINT "user_settings_locale" CHECK ("user_settings"."locale" in ('en', 'bg', 'de', 'fr', 'it', 'es'));

@@ -1,15 +1,27 @@
 import "server-only";
 
-import { and, eq, inArray, isNotNull, isNull } from "drizzle-orm";
+import { and, eq, inArray, isNotNull, isNull, or } from "drizzle-orm";
 
 import { getDb } from "@/lib/db";
-import { adminActions, aircraft, profiles, reports, reviews, sessions } from "@/lib/db/schema";
+import { deleteUserFiles } from "@/lib/account/delete-files";
+import {
+  adminActions,
+  aircraft,
+  bookings,
+  profiles,
+  reports,
+  reviews,
+  sessions,
+  userRoles,
+  users,
+} from "@/lib/db/schema";
 
 // Moderation actions (ADM-2). Trusted admin code: callers must have checked the admin role with
 // requireAdmin(). Every action is written to admin_actions (the audit log) in the same
 // transaction.
 
-export type ModerationResult = { ok: true } | { ok: false; error: "notFound" | "self" };
+export type ModerationResult =
+  { ok: true } | { ok: false; error: "notFound" | "self" | "adminAccount" | "activeBookings" };
 
 type Tx = Parameters<Parameters<ReturnType<typeof getDb>["transaction"]>[0]>[0];
 
@@ -159,6 +171,48 @@ export async function closeReport(
       .returning({ id: reports.id });
     if (!done.length) return { ok: false, error: "notFound" } as const;
     await log(tx, adminId, `report_${status}`, "report", reportId, note);
+    return { ok: true } as const;
+  });
+}
+
+/**
+ * Delete a member for good (e.g. on request, or a spam account). Same as when members delete
+ * themselves: files first, then the account. Their aircraft go with its bookings; bookings they
+ * made as a pilot, reviews and messages stay for the other side as "former member". Refused
+ * while they have open bookings (requested, accepted or in progress) on either side, so nobody
+ * loses a flight without notice: suspend them meanwhile. Admin accounts must lose the admin
+ * role first (npm run admin:grant -- --revoke), so one admin can't remove another.
+ */
+export async function deleteMember(
+  adminId: string,
+  userId: string,
+  reason: string | null,
+): Promise<ModerationResult> {
+  if (adminId === userId) return { ok: false, error: "self" };
+  const db = getDb();
+  const [target] = await db.select({ id: users.id }).from(users).where(eq(users.id, userId));
+  if (!target) return { ok: false, error: "notFound" };
+  const [isAdmin] = await db
+    .select({ role: userRoles.role })
+    .from(userRoles)
+    .where(and(eq(userRoles.userId, userId), eq(userRoles.role, "admin")));
+  if (isAdmin) return { ok: false, error: "adminAccount" };
+  const [open] = await db
+    .select({ id: bookings.id })
+    .from(bookings)
+    .where(
+      and(
+        or(eq(bookings.ownerId, userId), eq(bookings.pilotId, userId)),
+        inArray(bookings.status, ["requested", "accepted", "in_progress"]),
+      ),
+    )
+    .limit(1);
+  if (open) return { ok: false, error: "activeBookings" };
+  await deleteUserFiles(userId);
+  return db.transaction(async (tx) => {
+    await log(tx, adminId, "delete_user", "user", userId, reason);
+    const done = await tx.delete(users).where(eq(users.id, userId)).returning({ id: users.id });
+    if (!done.length) throw new Error("member already deleted");
     return { ok: true } as const;
   });
 }

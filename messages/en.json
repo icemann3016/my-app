@@ -37,7 +37,11 @@
     },
     "languages": {
       "en": "English",
-      "bg": "Български"
+      "bg": "Български",
+      "de": "Deutsch",
+      "fr": "Français",
+      "it": "Italiano",
+      "es": "Español"
     },
     "error": {
       "title": "Something went wrong",
@@ -950,7 +954,8 @@
         "hide_review": "Hide review",
         "show_review": "Show review again",
         "resolve_report": "Mark resolved",
-        "dismiss_report": "Dismiss"
+        "dismiss_report": "Dismiss",
+        "delete_user": "Delete member"
       },
       "confirm": {
         "suspend": "They are logged out and can't log in, book, message or review. Their listed aircraft are unlisted.",
@@ -960,7 +965,8 @@
         "hide_review": "Only hide reviews that break the rules (abuse, personal data, spam). The rating averages are updated.",
         "show_review": "The review becomes public again and counts in the averages.",
         "resolve_report": "Close the report: action was taken.",
-        "dismiss_report": "Close the report: nothing breaks the rules."
+        "dismiss_report": "Close the report: nothing breaks the rules.",
+        "delete_user": "Deletes the account for good: profile, credentials, documents, photos, and their aircraft with its bookings. Bookings they made as a pilot, reviews and messages stay for the other side, shown as a former member. This can't be undone; suspend instead if you're not sure."
       },
       "done": {
         "suspend": "Member suspended.",
@@ -970,8 +976,11 @@
         "hide_review": "Review hidden.",
         "show_review": "Review shown again.",
         "resolve_report": "Report resolved.",
-        "dismiss_report": "Report dismissed."
-      }
+        "dismiss_report": "Report dismissed.",
+        "delete_user": "Member deleted."
+      },
+      "adminAccount": "Admin accounts can't be deleted here. Remove the admin role first.",
+      "activeBookings": "This member has open bookings (requested, accepted or in progress). Suspend them now, and delete once those are cancelled or finished."
     },
     "monitoring": {
       "title": "Error monitoring",
@@ -1964,7 +1973,8 @@
       "owners": "For aircraft owners",
       "everyone": "For everyone",
       "admins": "For admins"
-    }
+    },
+    "englishOnly": "The help articles are in English for now; translations are coming."
   },
   "reviews": {
     "title": "Reviews",
@@ -2104,7 +2114,8 @@
     }
   },
   "legal": {
-    "draft": "Draft: this text is still being reviewed by our lawyer and may change before launch."
+    "draft": "Draft: this text is still being reviewed by our lawyer and may change before launch.",
+    "englishOnly": "This page is shown in English until its translation has been reviewed."
   },
   "weather": {
     "title": "Weather",

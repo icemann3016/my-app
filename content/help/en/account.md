@@ -21,7 +21,7 @@ only the other side of an **accepted** booking sees it, together with your email
 
 ## Preferences
 
-- **Language:** English or Bulgarian, for the app and for emails.
+- **Language:** English, Bulgarian, German, French, Italian or Spanish, for the app and for emails. The help articles and legal pages are in English and Bulgarian for now.
 - **Units:** metric (kg, litres) or imperial (lb, US gallons), for weights and fuel. Oil is always
   shown in the aircraft's own dipstick unit (US quarts or litres).
 

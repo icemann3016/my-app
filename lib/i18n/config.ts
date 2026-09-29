@@ -1,5 +1,5 @@
 /** Supported languages. Add a locale here and a messages/<locale>.json file to add a language. */
-export const locales = ["en", "bg"] as const;
+export const locales = ["en", "bg", "de", "fr", "it", "es"] as const;
 export type Locale = (typeof locales)[number];
 export const defaultLocale: Locale = "en";
 
@@ -29,5 +29,24 @@ export function resolveLocale(
 
 /** Locale tag for number and date formatting. */
 export function intlLocale(locale: Locale): string {
-  return locale === "bg" ? "bg-BG" : "en-GB";
+  return INTL_LOCALES[locale];
+}
+
+const INTL_LOCALES: Record<Locale, string> = {
+  en: "en-GB",
+  bg: "bg-BG",
+  de: "de-DE",
+  fr: "fr-FR",
+  it: "it-IT",
+  es: "es-ES",
+};
+
+/**
+ * Languages the help articles and legal pages are written in. Other languages show the English
+ * text with a note (content/help, content/legal).
+ */
+export const contentLocales: readonly Locale[] = ["en", "bg"];
+
+export function hasTranslatedContent(locale: Locale): boolean {
+  return contentLocales.includes(locale);
 }

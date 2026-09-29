@@ -153,4 +153,45 @@ describeDb("moderation", () => {
     expect(m.signupsByWeek).toHaveLength(8);
     expect(m.signupsByWeek.at(-1)!.n).toBe(3);
   });
+
+  it("deletes a member only when nothing is open; the owner keeps the pilot's past booking", async () => {
+    const owner = db.getDb();
+    const booking = async (status: string) => {
+      const rows = await owner.execute(sql`
+        insert into public.bookings (aircraft_id, pilot_id, owner_id, status, period,
+          departure_ident, arrival_ident, purpose, planned_hours, price_per_hour, currency,
+          price_basis, time_basis, estimate, expires_at)
+        values (${planeId}::uuid, ${PIL}::uuid, ${OWN}::uuid, ${status}::public.booking_status,
+          tstzrange(now() + interval '3 days', now() + interval '3 days 2 hours'),
+          'LBSF', 'LBSF', 'local', 2, 180, 'EUR', 'wet', 'hobbs', 360, now() + interval '1 day')
+        returning id`);
+      return (rows as unknown as { id: string }[])[0]!.id;
+    };
+    const bookingId = await booking("accepted");
+
+    expect(await mod.deleteMember(ADM, ADM, null)).toEqual({ ok: false, error: "self" });
+    expect(await mod.deleteMember(OWN, ADM, null)).toEqual({ ok: false, error: "adminAccount" });
+    expect(await mod.deleteMember(ADM, PIL, null)).toEqual({
+      ok: false,
+      error: "activeBookings",
+    });
+
+    await owner.execute(
+      sql`update public.bookings set status = 'completed' where id = ${bookingId}::uuid`,
+    );
+    expect(await mod.deleteMember(ADM, PIL, "Asked by email")).toEqual({ ok: true });
+    expect(await owner.select().from(s.users).where(eq(s.users.id, PIL))).toEqual([]);
+    const [kept] = await owner.select().from(s.bookings).where(eq(s.bookings.id, bookingId));
+    expect(kept).toMatchObject({ pilotId: null, ownerId: OWN });
+    const [logged] = await owner
+      .select()
+      .from(s.adminActions)
+      .where(eq(s.adminActions.action, "delete_user"));
+    expect(logged).toMatchObject({ adminId: ADM, targetId: PIL, reason: "Asked by email" });
+
+    // Deleting the owner removes their aircraft and its bookings.
+    expect(await mod.deleteMember(ADM, OWN, null)).toEqual({ ok: true });
+    expect(await owner.select().from(s.aircraft).where(eq(s.aircraft.id, planeId))).toEqual([]);
+    expect(await mod.deleteMember(ADM, OWN, null)).toEqual({ ok: false, error: "notFound" });
+  });
 });

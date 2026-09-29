@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { CircleCheckIcon } from "lucide-react";
 import { getLocale, getTranslations } from "next-intl/server";
 
 import { ModerationButton } from "@/components/admin/moderation-button";
 import { AdminSearch } from "@/components/admin/search-form";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { formatUtc } from "@/lib/aircraft/format";
@@ -21,12 +23,14 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function AdminUsersPage({
   searchParams,
 }: {
-  searchParams: Promise<{ q?: string }>;
+  searchParams: Promise<{ q?: string; deleted?: string }>;
 }) {
   const { userId: adminId } = await requireAdmin("/admin/users");
-  const q = ((await searchParams).q ?? "").trim().slice(0, 100);
+  const params = await searchParams;
+  const q = (params.q ?? "").trim().slice(0, 100);
   const t = await getTranslations("admin.users");
   const tm = await getTranslations("admin.moderation.ops");
+  const tdone = await getTranslations("admin.moderation.done");
   const tp = await getTranslations("profile.roles");
   const locale = (await getLocale()) as Locale;
   const rows = await searchUsers(q);
@@ -34,6 +38,12 @@ export default async function AdminUsersPage({
   return (
     <div className="mx-auto grid w-full max-w-5xl gap-6 px-4 py-8">
       <AdminHeader title={t("title")} text={t("description")} />
+      {params.deleted && (
+        <Alert variant="success">
+          <CircleCheckIcon />
+          <AlertDescription>{tdone("delete_user")}</AlertDescription>
+        </Alert>
+      )}
       <AdminSearch
         action="/admin/users"
         q={q}
@@ -79,6 +89,14 @@ export default async function AdminUsersPage({
                         destructive
                       />
                     ))}
+                  {u.id !== adminId && !u.roles.includes("admin") && (
+                    <ModerationButton
+                      op="delete_user"
+                      targetId={u.id}
+                      label={tm("delete_user")}
+                      destructive
+                    />
+                  )}
                 </li>
               ))}
             </ul>

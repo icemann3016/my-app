@@ -7,13 +7,11 @@ import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { nextCookies } from "better-auth/next-js";
 
 import { getDb, schema } from "@/lib/db";
-import { deleteAllAircraftPhotoFiles } from "@/lib/aircraft/photos";
-import { deleteAllDocumentFiles } from "@/lib/documents";
+import { deleteUserFiles } from "@/lib/account/delete-files";
 import { sendEmail } from "@/lib/email";
 import { resetPasswordEmail, verifyEmailEmail } from "@/lib/email/templates";
 import { siteConfig } from "@/lib/site";
 import { appUrl } from "@/lib/site-url";
-import { getStorage } from "@/lib/storage";
 import { isProviderEnabled, PROVIDER_HOSTS, socialProviderOptions } from "./providers";
 
 /** The user's chosen language, for emails. */
@@ -93,22 +91,7 @@ function createAuth() {
         enabled: true,
         // Profile, settings, roles and sessions are removed by the database (ON DELETE CASCADE);
         // files in storage have to be removed here.
-        beforeDelete: async (user) => {
-          const [profile] = await getDb()
-            .select({ avatarKey: schema.profiles.avatarKey })
-            .from(schema.profiles)
-            .where(eq(schema.profiles.id, user.id));
-          // Only uploaded photos are files of the user's own (ready-made avatars are shared).
-          if (profile?.avatarKey?.startsWith(`avatars/${user.id}/`)) {
-            await getStorage()
-              .delete(profile.avatarKey)
-              .catch((e) => console.warn("[auth] couldn't delete avatar", e));
-          }
-          // Licence, medical and aircraft documents, and aircraft photos (the database rows go
-          // with the user).
-          await deleteAllDocumentFiles(user.id);
-          await deleteAllAircraftPhotoFiles(user.id);
-        },
+        beforeDelete: (user) => deleteUserFiles(user.id),
       },
     },
     databaseHooks: {

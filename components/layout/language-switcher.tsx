@@ -20,7 +20,10 @@ export function LanguageSwitcher() {
       <label htmlFor="language-switcher" className="sr-only">
         {t("footer.language")}
       </label>
+      {/* key: after the action React resets the form to its defaults; a new key makes the
+          default the language now in use (else it jumps back to the previous one). */}
       <select
+        key={locale}
         id="language-switcher"
         name="locale"
         defaultValue={locale}

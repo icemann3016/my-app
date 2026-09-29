@@ -8,5 +8,6 @@ export const MODERATION_OPS = [
   "show_review",
   "resolve_report",
   "dismiss_report",
+  "delete_user",
 ] as const;
 export type ModerationOp = (typeof MODERATION_OPS)[number];

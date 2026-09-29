@@ -5,9 +5,13 @@ import type { AircraftDocumentKind } from "@/lib/db/schema";
 import { type CredentialRef, credentialLabel } from "@/lib/pilot/labels";
 import { siteConfig } from "@/lib/site";
 import bg from "@/messages/bg.json";
+import de from "@/messages/de.json";
 import en from "@/messages/en.json";
+import es from "@/messages/es.json";
+import fr from "@/messages/fr.json";
+import it from "@/messages/it.json";
 
-const catalogs = { en, bg } satisfies Record<Locale, typeof en>;
+const catalogs = { en, bg, de, fr, it, es } satisfies Record<Locale, typeof en>;
 
 function localeOf(locale: string | null | undefined): Locale {
   return isLocale(locale) ? locale : defaultLocale;

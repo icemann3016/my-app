@@ -26,3 +26,10 @@ first, with the reported content and the actions that fit:
 
 Every action asks for a reason (optional but recommended) and is written to the **audit log**,
 which you can search by action, admin, target or reason. You can't suspend yourself.
+
+**Delete member** (Admin → Members) removes an account for good, for example when someone asks
+by email or for a spam account: profile, credentials, documents, photos, and their aircraft with
+its bookings. Bookings they made as a pilot, reviews and messages stay for the other side, shown
+as a former member. It isn't possible while the member has open bookings (requested, accepted or
+in progress): suspend them meanwhile. Admin accounts can't be deleted here; remove the admin role
+first. Members can also delete their own account under **Account → Your data**.

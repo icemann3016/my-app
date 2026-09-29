@@ -1,0 +1,2230 @@
+{
+  "common": {
+    "description": "Flugzeuge von verifizierten Haltern in ganz Europa mieten. Piloten, Halter, Techniker und Flugplätze an einem Ort.",
+    "nav": {
+      "findAircraft": "Flugzeug finden",
+      "listAircraft": "Flugzeug anbieten",
+      "dashboard": "Übersicht",
+      "account": "Konto",
+      "publicProfile": "Öffentliches Profil",
+      "logIn": "Anmelden",
+      "signUp": "Registrieren",
+      "logOut": "Abmelden",
+      "openMenu": "Menü öffnen",
+      "accountMenu": "Kontomenü",
+      "main": "Haupt",
+      "mobile": "Mobil",
+      "footer": "Fußzeile",
+      "mainNavigation": "Hauptnavigation",
+      "pilotCredentials": "Pilotennachweise",
+      "admin": "Admin",
+      "bookings": "Buchungen",
+      "help": "Hilfe",
+      "messages": "Nachrichten"
+    },
+    "footer": {
+      "tagline": "Gemacht für die Allgemeine Luftfahrt in Europa.",
+      "terms": "AGB",
+      "privacy": "Datenschutz",
+      "language": "Sprache",
+      "help": "Hilfe",
+      "cookies": "Cookies"
+    },
+    "notFound": {
+      "title": "Nicht auf der Karte",
+      "text": "Diese Seite haben wir nicht gefunden.",
+      "backHome": "Zur Startseite"
+    },
+    "languages": {
+      "en": "English",
+      "bg": "Български",
+      "de": "Deutsch",
+      "fr": "Français",
+      "it": "Italiano",
+      "es": "Español"
+    },
+    "error": {
+      "title": "Etwas ist schiefgelaufen",
+      "text": "Entschuldigung, auf dieser Seite ist ein Problem aufgetreten. Wir wurden informiert. Bitte versuchen Sie es erneut.",
+      "reference": "Referenz: {digest}",
+      "retry": "Erneut versuchen"
+    },
+    "skipToContent": "Zum Inhalt springen"
+  },
+  "home": {
+    "badge": "Frühe Vorschau · Europa",
+    "title": "Flugzeug mieten. Mehr fliegen.",
+    "subtitle": "Finden Sie verifizierte Flugzeuge zur Miete in Ihrer Nähe und buchen Sie bei Haltern, die Ihre Bewertungen sehen. Techniker beauftragen und Flugplatzleistungen anfragen folgen – alles an einem Ort.",
+    "findAircraft": "Flugzeug finden",
+    "listAircraft": "Flugzeug anbieten",
+    "audiencesHeading": "Für wen",
+    "comingLater": "Folgt später",
+    "pilots": {
+      "title": "Piloten",
+      "text": "Suchen Sie Flugzeuge in Ihrer Nähe nach Datum, sehen Sie Daten, Stundenpreis und Verfügbarkeit und senden Sie eine Buchungsanfrage."
+    },
+    "owners": {
+      "title": "Halter",
+      "text": "Bieten Sie Ihr Flugzeug an, verwalten Sie den Kalender und bestimmen Sie mit Mindestbewertung und Erfahrungsregeln, wer es fliegt."
+    },
+    "technicians": {
+      "title": "Techniker",
+      "text": "Bieten Sie Haltern in der Nähe 50‑h- und 100‑h-Kontrollen und andere Wartung an."
+    },
+    "airports": {
+      "title": "Flugplätze",
+      "text": "Nehmen Sie PPR-, Abstell-, Hangar-, Tank- und Zollanfragen online entgegen."
+    },
+    "trustLicences": "Verifizierte Lizenzen, Berechtigungen und Tauglichkeitszeugnisse",
+    "trustRatings": "Gegenseitige Bewertungen nach jedem Flug",
+    "trustEasa": "Gebaut für EASA-Regeln und europäische Flugplätze",
+    "accountDeleted": "Ihr Konto und alle zugehörigen Daten wurden gelöscht.",
+    "how": {
+      "heading": "So funktioniert es",
+      "search": {
+        "title": "Flugzeug finden",
+        "text": "Suchen Sie nach Flugplatz, Umkreis und Datum. Sehen Sie Fotos, Daten, Stundenpreis und wann es frei ist."
+      },
+      "request": {
+        "title": "Anfrage senden",
+        "text": "Wir prüfen Ihre Lizenz, Berechtigungen und Ihr Tauglichkeitszeugnis gegen die Regeln des Halters, bevor Sie anfragen. Der Halter antwortet, oft noch am selben Tag."
+      },
+      "fly": {
+        "title": "Fliegen und bewerten",
+        "text": "Erfassen Sie Flugabschnitte, Kraftstoff und Bemerkungen, begleichen Sie den Betrag und bewerten Sie sich gegenseitig – so wird die nächste Miete einfacher."
+      }
+    },
+    "cta": {
+      "title": "Bereit für Ihren nächsten Flug?",
+      "text": "Werden Sie Teil der Piloten und Halter in ganz Europa. Kostenlos, solange wir in der Vorschau sind."
+    }
+  },
+  "fields": {
+    "email": "E-Mail",
+    "password": "Passwort"
+  },
+  "login": {
+    "title": "Anmelden",
+    "description": "Willkommen zurück. Melden Sie sich an, um Flugzeuge zu mieten oder anzubieten.",
+    "forgotPassword": "Passwort vergessen?",
+    "submit": "Anmelden",
+    "pending": "Anmeldung…",
+    "newHere": "Neu hier?",
+    "createAccount": "Konto erstellen",
+    "resendConfirmation": "Bestätigungs-E-Mail erneut senden",
+    "passwordChanged": "Ihr Passwort wurde geändert. Melden Sie sich mit dem neuen an.",
+    "linkExpired": "Dieser Link ist abgelaufen oder wurde bereits verwendet. Melden Sie sich an oder fordern Sie einen neuen Link an.",
+    "oauthFailed": "Die Anmeldung mit Google, Apple oder Facebook hat nicht funktioniert. Bitte versuchen Sie es erneut oder verwenden Sie Ihre E-Mail.",
+    "accountNotLinked": "Mit dieser E-Mail besteht bereits ein Konto. Melden Sie sich mit Ihrem Passwort an und verbinden Sie dann Google, Apple oder Facebook unter Konto → Sicherheit.",
+    "errorCode": "Fehlercode: {code}",
+    "suspended": "Dieses Konto ist gesperrt. Wenn Sie das für einen Fehler halten, kontaktieren Sie uns.",
+    "emailMissing": "Von diesem Konto haben wir keine E-Mail-Adresse erhalten. Erlauben Sie die Freigabe Ihrer E-Mail, wenn Sie gefragt werden, oder registrieren Sie sich mit Ihrer E-Mail."
+  },
+  "social": {
+    "continue": "Weiter mit {provider}",
+    "or": "oder",
+    "termsNote": "Wenn Sie mit Google, Apple oder Facebook fortfahren, akzeptieren Sie die <terms>AGB</terms> und die <privacy>Datenschutzerklärung</privacy>."
+  },
+  "signup": {
+    "title": "Konto erstellen",
+    "description": "Ein Konto für alles: als Pilot Flugzeuge mieten oder als Halter Ihr eigenes anbieten.",
+    "name": "Ihr Name",
+    "nameHint": "Wird in Ihrem öffentlichen Profil angezeigt.",
+    "passwordHint": "Mindestens 8 Zeichen.",
+    "acceptTerms": "Ich akzeptiere die <terms>AGB</terms> und die <privacy>Datenschutzerklärung</privacy>.",
+    "submit": "Konto erstellen",
+    "pending": "Konto wird erstellt…",
+    "alreadyHaveAccount": "Sie haben bereits ein Konto?",
+    "logIn": "Anmelden"
+  },
+  "checkEmail": {
+    "title": "Prüfen Sie Ihre E-Mails",
+    "description": "Wir haben Ihnen einen Link zur Bestätigung Ihrer Adresse geschickt. Öffnen Sie ihn, um die Kontoerstellung abzuschließen.",
+    "noEmail": "Nach ein paar Minuten keine E-Mail? Prüfen Sie Ihren Spam-Ordner oder senden Sie sie erneut:",
+    "resend": "Bestätigungs-E-Mail erneut senden",
+    "pending": "Wird gesendet…",
+    "alreadyConfirmed": "Bereits bestätigt?",
+    "logIn": "Anmelden"
+  },
+  "forgotPassword": {
+    "title": "Passwort zurücksetzen",
+    "description": "Geben Sie Ihre E-Mail ein und wir senden Ihnen einen Link, um ein neues Passwort zu wählen.",
+    "submit": "Link senden",
+    "pending": "Wird gesendet…",
+    "backToLogin": "Zurück zur Anmeldung"
+  },
+  "resetPassword": {
+    "title": "Neues Passwort wählen",
+    "description": "Mindestens 8 Zeichen. Ein kurzer Satz eignet sich gut.",
+    "invalidTitle": "Dieser Link hat nicht funktioniert",
+    "invalidDescription": "Links zum Zurücksetzen laufen nach einer Stunde ab und können nur einmal verwendet werden.",
+    "sendNewLink": "Neuen Link senden",
+    "newPassword": "Neues Passwort",
+    "repeatPassword": "Neues Passwort wiederholen",
+    "submit": "Neues Passwort speichern",
+    "pending": "Wird gespeichert…"
+  },
+  "authMessages": {
+    "notConfigured": "Konten sind noch nicht verfügbar: Die Datenbank ist für diese Website nicht eingerichtet.",
+    "wrongCredentials": "Falsche E-Mail oder falsches Passwort.",
+    "emailNotVerified": "Bitte bestätigen Sie zuerst Ihre E-Mail-Adresse. Den Link finden Sie in Ihrem Posteingang.",
+    "userExists": "Mit dieser E-Mail besteht bereits ein Konto. Versuchen Sie, sich anzumelden.",
+    "passwordLength": "Verwenden Sie ein Passwort mit 8 bis 72 Zeichen.",
+    "linkExpired": "Dieser Link ist abgelaufen oder wurde bereits verwendet. Bitte fordern Sie einen neuen an.",
+    "tooManyRequests": "Zu viele Versuche. Bitte warten Sie eine Minute und versuchen Sie es erneut.",
+    "generic": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut.",
+    "resetSent": "Falls ein Konto mit dieser E-Mail existiert, haben wir einen Link zum Zurücksetzen gesendet.",
+    "verificationSent": "Falls diese Adresse auf Bestätigung wartet, haben wir einen neuen Link gesendet.",
+    "suspended": "Dieses Konto ist gesperrt. Wenn Sie das für einen Fehler halten, kontaktieren Sie uns."
+  },
+  "validation": {
+    "emailInvalid": "Geben Sie eine gültige E-Mail-Adresse ein.",
+    "passwordMin": "Mindestens 8 Zeichen.",
+    "passwordMax": "Höchstens 72 Zeichen.",
+    "passwordRequired": "Geben Sie Ihr Passwort ein.",
+    "currentPasswordRequired": "Geben Sie Ihr aktuelles Passwort ein.",
+    "passwordsMismatch": "Die Passwörter stimmen nicht überein.",
+    "nameRequired": "Geben Sie Ihren Namen ein.",
+    "nameMax": "Höchstens 80 Zeichen.",
+    "termsRequired": "Bitte akzeptieren Sie die AGB, um fortzufahren.",
+    "bioMax": "Höchstens 1000 Zeichen.",
+    "invalid": "Bitte prüfen Sie dieses Feld.",
+    "airportUnknown": "Wählen Sie einen Flugplatz aus der Liste.",
+    "dateInvalid": "Geben Sie ein gültiges Datum ein.",
+    "documentRequired": "Bitte laden Sie einen Scan oder ein Foto hoch.",
+    "documentInvalid": "Diese Datei kann nicht verwendet werden. Bitte laden Sie sie erneut hoch.",
+    "licenceNumberRequired": "Geben Sie die Lizenznummer ein (bis zu 50 Zeichen).",
+    "expiryBeforeIssue": "Das Ablaufdatum darf nicht vor dem Ausstellungsdatum liegen.",
+    "ratingCodeInvalid": "Wählen Sie eine Berechtigung aus der Liste oder geben Sie einen ICAO-Typcode wie C510 ein.",
+    "hoursInvalid": "Geben Sie eine Stundenzahl ein, z. B. 125,5.",
+    "hoursMoreThanTotal": "Darf nicht mehr als Ihre Gesamtstunden sein.",
+    "aircraftTypeInvalid": "Geben Sie einen ICAO-Typcode ein, z. B. C172 oder PA28.",
+    "reasonRequired": "Wählen Sie einen Grund.",
+    "registrationInvalid": "Geben Sie das Kennzeichen wie am Flugzeug ein, z. B. LZ-ABC oder D-EFGH.",
+    "registrationTaken": "Ein anderes Angebot verwendet dieses Kennzeichen bereits. Kontaktieren Sie uns, wenn es Ihr Flugzeug ist.",
+    "manufacturerRequired": "Geben Sie den Hersteller ein (bis zu 60 Zeichen).",
+    "modelRequired": "Geben Sie das Modell ein (bis zu 60 Zeichen).",
+    "yearInvalid": "Geben Sie das Baujahr ein, z. B. 2004.",
+    "seatsInvalid": "Geben Sie die Anzahl der Sitze einschließlich Pilot ein (1–20).",
+    "textTooLong": "Das ist zu lang.",
+    "numberInvalid": "Geben Sie eine Zahl ein, z. B. 32,5.",
+    "priceInvalid": "Geben Sie einen Stundenpreis ein, z. B. 185.",
+    "minHoursInvalid": "Geben Sie Stunden pro Tag zwischen 0,1 und 12 ein.",
+    "expiryRequired": "Geben Sie das Ablaufdatum ein.",
+    "ageInvalid": "Geben Sie ein Alter zwischen 16 und 99 ein.",
+    "dateTimeInvalid": "Geben Sie Datum und Uhrzeit ein.",
+    "endBeforeStart": "Das Ende muss nach dem Beginn liegen.",
+    "plannedHoursInvalid": "Geben Sie die geplante Flugzeit ein, z. B. 1,5.",
+    "timeInvalid": "Geben Sie eine Uhrzeit als HH:MM ein.",
+    "meterBackwards": "Der Endstand darf nicht niedriger als der Anfangsstand sein.",
+    "remarkRequired": "Schreiben Sie die Bemerkung (bis zu 1000 Zeichen).",
+    "defectRequired": "Beschreiben Sie den Mangel (bis zu 2000 Zeichen).",
+    "scoreRequired": "Wählen Sie 1 bis 5 Sterne.",
+    "replyRequired": "Schreiben Sie ein paar Worte.",
+    "messageRequired": "Schreiben Sie eine Nachricht.",
+    "phoneInvalid": "Geben Sie die Nummer im internationalen Format ein, z. B. +49 170 1234567."
+  },
+  "dashboard": {
+    "title": "Willkommen, {name}",
+    "subtitle": "Was Ihre Aufmerksamkeit braucht, Ihre Flüge und Ihre Flugzeuge auf einen Blick.",
+    "todo": {
+      "title": "Zu erledigen",
+      "none": "Alles erledigt.",
+      "answerRequest": "Buchungsanfrage für {registration} beantworten (bis {date})",
+      "finishLog": "Flugbericht für {registration} fertigstellen und senden",
+      "confirmLog": "Flugbericht für {registration} prüfen und bestätigen",
+      "openDefects": "{count, plural, one {# offener Mangel} other {# offene Mängel}} an Ihren Flugzeugen",
+      "docExpiring": {
+        "arc": "Die ARC von {registration} läuft am {date} ab: Laden Sie die neue hoch",
+        "insurance": "Die Versicherung von {registration} läuft am {date} ab: Laden Sie den neuen Nachweis hoch"
+      },
+      "writeReview": "Schreiben Sie Ihre Bewertung zum Flug mit {registration}",
+      "unreadMessages": "{count, plural, one {# Unterhaltung} other {# Unterhaltungen}} mit ungelesenen Nachrichten",
+      "unreadNotifications": "{count, plural, one {# ungelesene Benachrichtigung} other {# ungelesene Benachrichtigungen}}",
+      "docsPending": "{count, plural, one {# Flugzeugdokument wartet} other {# Flugzeugdokumente warten}} auf unsere Prüfung",
+      "credentialsRejected": "{count, plural, one {# Nachweis muss} other {# Nachweise müssen}} korrigiert werden: siehe Grund"
+    },
+    "publicProfile": "Ihr öffentliches Profil:",
+    "seeWhatOthersSee": "so sehen es andere",
+    "credentialExpiring": "{item} läuft am {date} ab.",
+    "credentialExpired": "{item} ist am {date} abgelaufen.",
+    "accountLink": "Kontoeinstellungen",
+    "pilot": {
+      "title": "Als Pilot",
+      "upcoming": "Anstehende Flüge",
+      "completed": "Absolvierte Flüge",
+      "rating": "Bewertung ({count, plural, one {# Bewertung} other {# Bewertungen}})",
+      "credentials": {
+        "verified": "Verifizierter Pilot: Lizenz und Tauglichkeitszeugnis gültig",
+        "pending": "Nachweise werden geprüft",
+        "rejected": "Einige Nachweise müssen korrigiert werden",
+        "missing": "Fügen Sie Lizenz und Tauglichkeitszeugnis hinzu",
+        "counts": "{pending} in Prüfung · {expiring} laufen bald ab"
+      },
+      "nextFlights": "Nächste Flüge",
+      "noUpcoming": "Keine anstehenden Flüge.",
+      "recentFlights": "Letzte Flüge",
+      "noPast": "Noch keine Flüge."
+    },
+    "owner": {
+      "title": "Als Halter",
+      "listed": "Angeboten (von {total})",
+      "upcoming": "Anstehende Buchungen",
+      "rating": "Bewertung ({count, plural, one {# Bewertung} other {# Bewertungen}})",
+      "aircraft": "Ihre Flugzeuge",
+      "noAircraft": "Noch keine Flugzeuge.",
+      "nextBookings": "Nächste Buchungen Ihrer Flugzeuge",
+      "noUpcoming": "Keine anstehenden Buchungen.",
+      "recentBookings": "Letzte Buchungen Ihrer Flugzeuge",
+      "noPast": "Noch keine vergangenen Buchungen."
+    }
+  },
+  "account": {
+    "title": "Konto",
+    "viewPublicProfile": "Öffentliches Profil ansehen",
+    "profile": {
+      "title": "Profil",
+      "description": "Das sehen Halter und Piloten in Ihrem öffentlichen Profil.",
+      "name": "Name",
+      "homeAirfield": "Heimatflugplatz",
+      "homeAirfieldHint": "Der Flugplatz, von dem Sie meist fliegen. Suche nach ICAO-Code (z. B. EDDM), Name oder Ort.",
+      "bio": "Über Sie",
+      "bioPlaceholder": "z. B. PPL(A) seit 2019, rund 250 Stunden, meist auf C172 und PA-28.",
+      "save": "Profil speichern",
+      "saving": "Wird gespeichert…",
+      "saved": "Profil gespeichert.",
+      "saveFailed": "Ihr Profil konnte nicht gespeichert werden. Bitte versuchen Sie es erneut."
+    },
+    "avatar": {
+      "upload": "Foto hochladen",
+      "change": "Foto ändern",
+      "remove": "Entfernen",
+      "hint": "JPG, PNG oder WebP, bis 2 MB.",
+      "choose": "Profilfoto wählen",
+      "invalidType": "Bitte wählen Sie ein JPG-, PNG- oder WebP-Bild.",
+      "tooLarge": "Das Bild ist größer als 2 MB. Bitte wählen Sie ein kleineres.",
+      "failed": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut.",
+      "presetsTitle": "Oder wählen Sie eines von unseren",
+      "presets": {
+        "light-aircraft": "Leichtflugzeug",
+        "biplane": "Doppeldecker",
+        "jet": "Jet",
+        "helicopter": "Hubschrauber",
+        "glider": "Segelflugzeug",
+        "balloon": "Heißluftballon",
+        "propeller": "Propeller",
+        "windsock": "Windsack",
+        "compass": "Kompassrose",
+        "headset": "Headset"
+      }
+    },
+    "roles": {
+      "title": "Wie Sie die App nutzen",
+      "description": "Schalten Sie ein, was auf Sie zutrifft. Sie können das jederzeit ändern.",
+      "pilotTitle": "Ich bin Pilot",
+      "pilotText": "Flugzeuge von Haltern mieten. Als Nächstes fügen Sie Lizenz und Tauglichkeitszeugnis hinzu.",
+      "ownerTitle": "Ich besitze ein Flugzeug",
+      "ownerText": "Bieten Sie Ihr Flugzeug zur Miete an und bestimmen Sie, wer es fliegen darf.",
+      "on": "An",
+      "switchOn": "Einschalten",
+      "switchOff": "Ausschalten",
+      "switchOnLabel": "Einschalten: {role}",
+      "switchOffLabel": "Ausschalten: {role}"
+    },
+    "preferences": {
+      "title": "Einstellungen",
+      "description": "Sprache der App und der E-Mails sowie die Einheiten für Gewichte und Kraftstoff.",
+      "language": "Sprache",
+      "units": "Einheiten",
+      "metric": "Metrisch (kg, Liter)",
+      "imperial": "Imperial (lb, US-Gallonen)",
+      "save": "Einstellungen speichern",
+      "saving": "Wird gespeichert…",
+      "saved": "Einstellungen gespeichert."
+    },
+    "security": {
+      "title": "Sicherheit",
+      "description": "Ändern Sie das Passwort, mit dem Sie sich anmelden.",
+      "changePassword": "Passwort ändern"
+    },
+    "data": {
+      "title": "Ihre Daten",
+      "description": "Laden Sie eine Kopie aller über Sie gespeicherten Daten herunter oder löschen Sie Ihr Konto.",
+      "download": "Meine Daten herunterladen",
+      "delete": "Konto löschen",
+      "dialogTitle": "Konto löschen?",
+      "dialogDescription": "Ihr Profil, Foto, Ihre Rollen, Einstellungen, Pilotennachweise und hochgeladenen Dokumente werden endgültig gelöscht. Das kann nicht rückgängig gemacht werden.",
+      "passwordLabel": "Ihr Passwort",
+      "confirmLabel": "Geben Sie {word} zur Bestätigung ein",
+      "confirmWord": "LÖSCHEN",
+      "confirmMismatch": "Geben Sie genau {word} ein, um zu bestätigen.",
+      "cancel": "Abbrechen",
+      "confirm": "Mein Konto löschen",
+      "deleting": "Wird gelöscht…",
+      "wrongPassword": "Ihr Passwort ist nicht korrekt.",
+      "notFresh": "Zu Ihrer Sicherheit melden Sie sich bitte ab und wieder an und löschen Sie dann Ihr Konto.",
+      "failed": "Ihr Konto konnte nicht gelöscht werden. Bitte versuchen Sie es erneut."
+    },
+    "signIn": {
+      "description": "Wie Sie sich anmelden können, und Ihr Passwort.",
+      "password": "E-Mail und Passwort",
+      "active": "Aktiv",
+      "notSet": "Nicht festgelegt",
+      "connected": "Verbunden",
+      "disconnect": "Trennen",
+      "linked": "{provider} ist jetzt verbunden. Beim nächsten Mal können Sie sich mit {provider} anmelden.",
+      "linkFailed": "Das Konto konnte nicht verbunden werden (Fehler: {code}). Bitte versuchen Sie es erneut.",
+      "connect": "{provider} verbinden"
+    },
+    "tabs": {
+      "label": "Kontobereiche",
+      "general": "Allgemein",
+      "credentials": "Pilotennachweise"
+    },
+    "contact": {
+      "title": "Telefon für Kontakt",
+      "description": "Wird nur der Gegenseite Ihrer angenommenen Buchungen angezeigt, zusammen mit Ihrer E-Mail. Nie in Ihrem öffentlichen Profil.",
+      "phone": "Mobiltelefon (optional)",
+      "phoneHint": "Internationales Format mit Ländervorwahl, z. B. +49 170 1234567. Leer lassen, um sie zu entfernen.",
+      "save": "Telefon speichern",
+      "saving": "Wird gespeichert…",
+      "saved": "Gespeichert."
+    },
+    "notifications": {
+      "title": "Benachrichtigungen",
+      "description": "Wählen Sie, wie wir Sie über Neuigkeiten auf ownAplane informieren.",
+      "caption": "Benachrichtigungskanäle",
+      "kind": "Thema",
+      "email": "E-Mail",
+      "inApp": "In der App",
+      "always": "Immer",
+      "aria": "{kind}: {channel}",
+      "kinds": {
+        "bookings": {
+          "label": "Buchungen",
+          "hint": "Anfragen, Antworten, Stornierungen, Flugberichte und Erinnerungen"
+        },
+        "reviews": {
+          "label": "Bewertungen",
+          "hint": "Bewertungen über Sie, veröffentlichte Bewertungen und Antworten"
+        },
+        "messages": {
+          "label": "Nachrichten",
+          "hint": "Eine E-Mail bei neuen Nachrichten; sie sind immer unter Nachrichten"
+        }
+      },
+      "alwaysSent": "Immer per E-Mail: gemeldete Mängel an Ihren Flugzeugen, E-Mails zu Passwort und Anmeldung sowie Entscheidungen zu Ihren Dokumenten und deren Ablauf.",
+      "save": "Benachrichtigungen speichern",
+      "saving": "Wird gespeichert…",
+      "saved": "Gespeichert."
+    }
+  },
+  "password": {
+    "title": "Passwort ändern",
+    "description": "Mindestens 8 Zeichen. Hier bleiben Sie angemeldet, auf anderen Geräten werden Sie abgemeldet.",
+    "current": "Aktuelles Passwort",
+    "new": "Neues Passwort",
+    "repeat": "Neues Passwort wiederholen",
+    "submit": "Passwort ändern",
+    "saving": "Wird gespeichert…",
+    "changed": "Passwort geändert. Auf anderen Geräten wurden Sie abgemeldet.",
+    "wrongCurrent": "Ihr aktuelles Passwort ist nicht korrekt.",
+    "failed": "Ihr Passwort konnte nicht geändert werden. Bitte versuchen Sie es erneut.",
+    "back": "Zurück zum Konto"
+  },
+  "profile": {
+    "notFound": "Profil nicht gefunden",
+    "rating": "Bewertung",
+    "noRatings": "Noch keine Bewertungen",
+    "homeAirfield": "Heimatflugplatz",
+    "notSet": "Nicht angegeben",
+    "memberSince": "Mitglied seit",
+    "edit": "Profil bearbeiten",
+    "roles": {
+      "pilot": "Pilot",
+      "owner": "Flugzeughalter"
+    },
+    "verifiedCredentials": "Von ownAplane verifiziert",
+    "noVerifiedCredentials": "Noch nichts verifiziert",
+    "lateCancellations": "{count, plural, one {# späte Stornierung} other {# späte Stornierungen}}",
+    "asPilot": "als Pilot",
+    "asOwner": "als Halter"
+  },
+  "email": {
+    "linkFallback": "Falls die Schaltfläche nicht funktioniert, kopieren Sie diesen Link in Ihren Browser:",
+    "verify": {
+      "subject": "Bestätigen Sie Ihre E-Mail für {app}",
+      "greeting": "Hallo {name},",
+      "body": "Bitte bestätigen Sie Ihre E-Mail-Adresse, um Ihr {app}-Konto fertig einzurichten.",
+      "cta": "E-Mail bestätigen"
+    },
+    "reset": {
+      "subject": "Setzen Sie Ihr {app}-Passwort zurück",
+      "greeting": "Hallo {name},",
+      "body": "Wir haben eine Anfrage erhalten, Ihr {app}-Passwort zurückzusetzen. Der Link ist eine Stunde gültig. Wenn Sie das nicht angefordert haben, können Sie diese E-Mail ignorieren.",
+      "cta": "Neues Passwort wählen"
+    },
+    "credentialReviewed": {
+      "greeting": "Hallo {name},",
+      "verifiedSubject": "Ihr Nachweis „{item}“ ist verifiziert",
+      "verifiedBody": "Gute Nachricht: Wir haben „{item}“ geprüft und verifiziert. Halter sehen es in Ihrem Profil.",
+      "rejectedSubject": "Wir konnten „{item}“ nicht verifizieren",
+      "rejectedBody": "Wir haben „{item}“ geprüft, konnten es aber nicht verifizieren.",
+      "reason": "Grund: {reason}",
+      "rejectedNext": "Bitte korrigieren Sie die Angaben oder laden Sie ein deutlicheres Dokument hoch; dann prüfen wir erneut.",
+      "cta": "Pilotennachweise öffnen"
+    },
+    "expiryReminder": {
+      "subject": "{count, plural, one {Ein Pilotennachweis läuft bald ab} other {Pilotennachweise laufen bald ab}}",
+      "greeting": "Hallo {name},",
+      "body": "Zur Info: Diese laufen innerhalb von 30 Tagen ab. Aktualisieren Sie sie nach der Verlängerung und laden Sie das neue Dokument hoch, damit Sie weiter Flugzeuge mieten können.",
+      "item": "{item}: gültig bis {date}",
+      "cta": "Nachweise aktualisieren"
+    },
+    "aircraftDocumentReviewed": {
+      "greeting": "Hallo {name},",
+      "verifiedSubject": "{registration}: „{item}“ ist verifiziert",
+      "verifiedBody": "Gute Nachricht: Wir haben „{item}“ von {registration} geprüft und verifiziert.",
+      "rejectedSubject": "{registration}: Wir konnten „{item}“ nicht verifizieren",
+      "rejectedBody": "Wir haben „{item}“ von {registration} geprüft, konnten es aber nicht verifizieren.",
+      "reason": "Grund: {reason}",
+      "rejectedNext": "Bitte korrigieren Sie die Angaben oder laden Sie ein deutlicheres Dokument hoch; dann prüfen wir erneut.",
+      "cta": "Flugzeugdokumente öffnen"
+    },
+    "aircraftExpiryReminder": {
+      "subject": "{count, plural, one {Ein Flugzeugdokument läuft bald ab} other {Flugzeugdokumente laufen bald ab}}",
+      "greeting": "Hallo {name},",
+      "body": "Zur Info: Diese laufen innerhalb von 30 Tagen ab. Laden Sie die erneuerten Dokumente rechtzeitig hoch: Ein Flugzeug ohne gültige ARC oder Versicherung wird automatisch aus dem Angebot genommen.",
+      "item": "{registration}, {item}: gültig bis {date}",
+      "cta": "Meine Flugzeuge öffnen"
+    },
+    "aircraftUnlisted": {
+      "subject": "{registration} wird nicht mehr angeboten",
+      "greeting": "Hallo {name},",
+      "arc": "Die ARC von {registration} ist abgelaufen, daher haben wir das Flugzeug aus dem Angebot genommen. Piloten finden es vorerst nicht.",
+      "insurance": "Die Versicherung von {registration} ist abgelaufen, daher haben wir das Flugzeug aus dem Angebot genommen. Piloten finden es vorerst nicht.",
+      "next": "Laden Sie das erneuerte Dokument hoch. Sobald wir es verifiziert haben, können Sie das Flugzeug wieder anbieten.",
+      "cta": "Dokumente hochladen"
+    },
+    "defectReported": {
+      "subject": {
+        "minor": "Mangel an {registration} gemeldet",
+        "major": "Mangel an {registration} gemeldet",
+        "unsafe": "Dringend: {registration} als flugunsicher gemeldet"
+      },
+      "greeting": "Hallo {name},",
+      "body": "{reporter} hat einen Mangel an {registration} gemeldet:",
+      "severity": {
+        "minor": "Gering: kann bis zur nächsten Wartung warten.",
+        "major": "Erheblich: sollte bald behoben werden.",
+        "unsafe": "Unsicher: Der Pilot meint, das Flugzeug sollte nicht fliegen."
+      },
+      "next": "Wenn es nicht fliegen sollte, setzen Sie es in der App am Boden fest: Piloten können es dann weder buchen noch übernehmen, bis Sie es wieder anbieten.",
+      "cta": "Mangel ansehen"
+    },
+    "booking": {
+      "greeting": "Hallo {name},",
+      "cta": "Buchung öffnen",
+      "someone": "Jemand",
+      "requested": {
+        "subject": "Neue Buchungsanfrage für {registration}",
+        "body": "{other} möchte {registration} ab {when} mieten."
+      },
+      "accepted": {
+        "subject": "Buchung angenommen: {registration}",
+        "body": "{other} hat Ihre Buchung von {registration} ab {when} angenommen."
+      },
+      "declined": {
+        "subject": "Buchung abgelehnt: {registration}",
+        "body": "{other} hat Ihre Buchung von {registration} ab {when} abgelehnt."
+      },
+      "proposed": {
+        "subject": "Anderer Zeitraum für {registration} vorgeschlagen",
+        "body": "{other} hat Ihre Buchung von {registration} abgelehnt und einen anderen Zeitraum vorgeschlagen."
+      },
+      "expired": {
+        "subject": "Buchungsanfrage abgelaufen: {registration}",
+        "body": "Die Anfrage für {registration} ab {when} ist ohne Antwort abgelaufen."
+      },
+      "cancelled": {
+        "subject": "Buchung storniert: {registration}",
+        "body": "{other} hat die Buchung von {registration} ab {when} storniert."
+      },
+      "checked_out": {
+        "subject": "{registration} übernommen",
+        "body": "{other} hat {registration} übernommen."
+      },
+      "log_submitted": {
+        "subject": "Flugbericht zu bestätigen: {registration}",
+        "body": "{other} hat den Flugbericht von {registration} zur Bestätigung gesendet."
+      },
+      "log_correction": {
+        "subject": "Korrektur des Flugberichts angefordert: {registration}",
+        "body": "{other} hat eine Korrektur des Flugberichts von {registration} angefordert."
+      },
+      "log_confirmed": {
+        "subject": "Flugbericht bestätigt: {registration}",
+        "body": "{other} hat den Flugbericht von {registration} bestätigt. Die Buchung ist abgeschlossen: Sie können sich jetzt 14 Tage lang gegenseitig bewerten."
+      },
+      "defect_reported": {
+        "subject": "Mangel an {registration} gemeldet",
+        "body": "{other} hat einen Mangel an {registration} gemeldet."
+      },
+      "reminder": {
+        "subject": "Demnächst: {registration} ab {when}",
+        "body": "Erinnerung: {registration} ist ab {when} gebucht."
+      },
+      "other": {
+        "subject": "Buchungsupdate: {registration}",
+        "body": "Neuigkeiten zur Buchung von {registration}."
+      },
+      "instant_booked": {
+        "subject": "Sofortbuchung: {registration}",
+        "body": "{other} hat {registration} ab {when} gebucht (Sofortbuchung)."
+      },
+      "review_submitted": {
+        "subject": "{other} hat Ihren Flug mit {registration} bewertet",
+        "body": "{other} hat die Buchung von {registration} ab {when} bewertet. Schreiben Sie auch Ihre Bewertung: Beide werden angezeigt, sobald beide geschrieben sind, oder nach 14 Tagen."
+      },
+      "reviews_published": {
+        "subject": "Bewertungen veröffentlicht: {registration}",
+        "body": "Die Bewertungen zur Buchung von {registration} ab {when} sind jetzt öffentlich. Sie können sie in der Buchung lesen."
+      },
+      "review_replied": {
+        "subject": "{other} hat auf Ihre Bewertung von {registration} geantwortet",
+        "body": "{other} hat öffentlich auf Ihre Bewertung von {registration} geantwortet. Sie können die Antwort in der Buchung lesen."
+      }
+    },
+    "newMessage": {
+      "subject": "Neue Nachricht von {sender} zu {registration}",
+      "greeting": "Hallo {name},",
+      "body": "{sender} hat Ihnen eine Nachricht zu {registration} gesendet. Öffnen Sie ownAplane, um sie zu lesen und zu antworten.",
+      "cta": "Nachricht lesen"
+    }
+  },
+  "airportPicker": {
+    "placeholder": "Nach Code, Name oder Ort suchen",
+    "searching": "Suche…",
+    "noResults": "Keine Flugplätze gefunden",
+    "clear": "Leeren"
+  },
+  "documents": {
+    "choose": "Datei wählen",
+    "replace": "Datei ersetzen",
+    "preparing": "Wird vorbereitet…",
+    "uploading": "Wird hochgeladen…",
+    "none": "Noch keine Datei",
+    "view": "öffnet in einem neuen Tab",
+    "hint": "PDF, JPG, PNG oder WebP, bis 4 MB.",
+    "invalidType": "Bitte wählen Sie eine PDF-, JPG-, PNG- oder WebP-Datei.",
+    "tooLarge": "Die Datei ist größer als 4 MB. Bitte wählen Sie eine kleinere.",
+    "tooMany": "Sie haben zu viele Dateien hochgeladen. Löschen Sie zuerst einige Einträge.",
+    "failed": "Hochladen fehlgeschlagen. Bitte versuchen Sie es erneut."
+  },
+  "pilot": {
+    "title": "Pilotennachweise",
+    "description": "Fügen Sie Lizenz, Tauglichkeitszeugnis und Berechtigungen hinzu. Wir prüfen sie anhand Ihrer Dokumente, meist innerhalb von zwei Werktagen.",
+    "privacy": "Halter sehen nur, welche Lizenz und Berechtigungen verifiziert sind. Nummern, Dokumente und medizinische Angaben sehen nur Sie und unser Prüfteam.",
+    "notPilotTitle": "Pilotenrolle einschalten",
+    "notPilotText": "Schalten Sie die Pilotenrolle ein, um Ihre Lizenz hinzuzufügen und Flugzeuge zu mieten.",
+    "switchOn": "Pilotenrolle einschalten",
+    "summary": {
+      "verifiedTitle": "Sie sind verifizierter Pilot",
+      "verified": "Halter sehen Ihre verifizierte Lizenz und Berechtigungen.",
+      "notVerifiedTitle": "Noch nicht verifiziert",
+      "missing": "Zum Mieten brauchen Sie eine verifizierte Lizenz und ein gültiges, verifiziertes Tauglichkeitszeugnis.",
+      "pending": "{count, plural, one {# Eintrag wartet} other {# Einträge warten}} auf Prüfung.",
+      "rejected": "{count, plural, one {# Eintrag wurde} other {# Einträge wurden}} abgelehnt: siehe Grund unten.",
+      "expiring": "{count, plural, one {# Eintrag läuft} other {# Einträge laufen}} innerhalb von 30 Tagen ab.",
+      "expired": "{count, plural, one {# Eintrag ist} other {# Einträge sind}} abgelaufen."
+    },
+    "status": {
+      "pending": "In Prüfung",
+      "verified": "Verifiziert",
+      "rejected": "Abgelehnt"
+    },
+    "expiry": {
+      "none": "Kein Ablauf",
+      "valid": "Gültig bis {date}",
+      "expiring": "Läuft ab am {date}",
+      "expired": "Abgelaufen am {date}"
+    },
+    "rejectedBecause": "Nicht verifiziert: {reason}",
+    "editResetsReview": "Änderungen an einem verifizierten Eintrag senden ihn erneut zur Prüfung.",
+    "viewDocument": "Dokument",
+    "edit": "Bearbeiten",
+    "editLabel": "{name} bearbeiten",
+    "delete": "Löschen",
+    "deleteLabel": "{name} löschen",
+    "deleteTitle": "{name} löschen?",
+    "deleteText": "Der Eintrag wird mit seinem Dokument entfernt. Das kann nicht rückgängig gemacht werden.",
+    "deleting": "Wird gelöscht…",
+    "cancel": "Abbrechen",
+    "save": "Speichern",
+    "saving": "Wird gespeichert…",
+    "fields": {
+      "issuingState": "Ausstellungsland",
+      "chooseCountry": "Land wählen",
+      "document": "Scan oder Foto",
+      "documentOptional": "Scan oder Foto (optional)"
+    },
+    "licences": {
+      "title": "Lizenzen",
+      "description": "Ihre Pilotenlizenz, z. B. PPL(A) oder LAPL(A).",
+      "empty": "Noch keine Lizenz hinzugefügt.",
+      "add": "Lizenz hinzufügen",
+      "addTitle": "Lizenz hinzufügen",
+      "editTitle": "Lizenz bearbeiten",
+      "dialogDescription": "Geben Sie die Angaben genau so ein, wie sie auf Ihrer Lizenz stehen.",
+      "type": "Lizenz",
+      "other": "Andere Lizenz",
+      "number": "Lizenznummer",
+      "numberHint": "Wie auf Ihrer Lizenz gedruckt, z. B. DE.FCL.PPL.12345.",
+      "issuedOn": "Ausstellungsdatum",
+      "expiresOn": "Ablaufdatum",
+      "expiresOnHint": "Leer lassen, wenn sie nicht abläuft (die meisten EASA-Lizenzen laufen nicht ab).",
+      "documentHint": "Die Seiten mit Ihren Daten und Berechtigungen.",
+      "saved": "Lizenz gespeichert. Wir prüfen sie bald."
+    },
+    "ratings": {
+      "title": "Berechtigungen",
+      "description": "Klassen- und Musterberechtigungen sowie Rechte wie Nacht oder IR.",
+      "empty": "Noch keine Berechtigungen hinzugefügt.",
+      "add": "Berechtigung hinzufügen",
+      "addTitle": "Berechtigung hinzufügen",
+      "editTitle": "Berechtigung bearbeiten",
+      "dialogDescription": "Fügen Sie jede Berechtigung einzeln hinzu, mit Ablaufdatum, falls vorhanden.",
+      "kind": "Art",
+      "kinds": {
+        "class": "Klassenberechtigung",
+        "privilege": "Recht",
+        "type": "Musterberechtigung"
+      },
+      "code": "Berechtigung",
+      "typeCode": "Flugzeugmuster (ICAO)",
+      "typeCodeHint": "ICAO-Typcode, z. B. PC12 oder C510.",
+      "typeLabel": "Musterberechtigung {code}",
+      "expiresOn": "Gültig bis",
+      "expiresOnHint": "Klassenberechtigungen wie SEP gelten 24 Monate, IR 12 Monate.",
+      "documentHint": "Nicht nötig, wenn die Berechtigung auf der hochgeladenen Lizenz steht.",
+      "saved": "Berechtigung gespeichert. Wir prüfen sie bald."
+    },
+    "privileges": {
+      "NIGHT": "Nacht",
+      "IR": "Instrumentenflugberechtigung (IR)",
+      "BIR": "Basis-Instrumentenflugberechtigung (BIR)",
+      "AEROBATIC": "Kunstflug",
+      "TOWING": "Schlepp (Banner oder Segelflugzeug)",
+      "MOUNTAIN": "Gebirgsflug"
+    },
+    "medical": {
+      "title": "Tauglichkeitszeugnis",
+      "description": "Medizinische Angaben sehen nur Sie und unser Prüfteam.",
+      "empty": "Noch kein Tauglichkeitszeugnis hinzugefügt.",
+      "add": "Tauglichkeitszeugnis hinzufügen",
+      "addTitle": "Tauglichkeitszeugnis hinzufügen",
+      "editTitle": "Tauglichkeitszeugnis bearbeiten",
+      "dialogDescription": "Geben Sie die Klasse und das Gültigkeitsdatum ein, das für Ihr Fliegen gilt.",
+      "class": "Klasse",
+      "classes": {
+        "class1": "Klasse 1",
+        "class2": "Klasse 2",
+        "lapl": "LAPL"
+      },
+      "label": "Tauglichkeitszeugnis {class}",
+      "validUntil": "Gültig bis",
+      "validUntilHint": "Das Gültigkeitsdatum für private Flüge (Klasse 2 oder LAPL).",
+      "documentHint": "Foto oder Scan des Zeugnisses.",
+      "saved": "Tauglichkeitszeugnis gespeichert. Wir prüfen es bald."
+    },
+    "experience": {
+      "title": "Flugerfahrung",
+      "description": "Selbst angegeben, aus Ihrem Flugbuch. Halter können danach fragen.",
+      "totalHours": "Gesamtstunden",
+      "picHours": "Stunden als PIC",
+      "last90DaysHours": "Stunden in den letzten 90 Tagen",
+      "save": "Erfahrung speichern",
+      "saving": "Wird gespeichert…",
+      "saved": "Erfahrung gespeichert.",
+      "byType": "Stunden nach Flugzeugmuster",
+      "type": "Flugzeugmuster",
+      "hours": "Stunden",
+      "hoursValue": "{hours} h",
+      "addType": "Hinzufügen",
+      "removeType": "{type} entfernen",
+      "noTypes": "Noch keine Flugzeugmuster hinzugefügt.",
+      "birthDate": "Geburtsdatum",
+      "birthDateHint": "Optional. Nur zur Prüfung eines Mindestalters des Halters; wird niemandem angezeigt."
+    },
+    "errors": {
+      "notFound": "Dieser Eintrag existiert nicht mehr. Bitte laden Sie die Seite neu."
+    },
+    "classRatings": {
+      "SEP_LAND": "SEP (Land)",
+      "SEP_SEA": "SEP (Wasser)",
+      "MEP_LAND": "MEP (Land)",
+      "MEP_SEA": "MEP (Wasser)",
+      "TMG": "TMG"
+    }
+  },
+  "admin": {
+    "verifications": {
+      "eyebrow": "Admin",
+      "title": "Prüfwarteschlange",
+      "description": "Pilotennachweise und Flugzeugdokumente, die auf Prüfung warten.",
+      "waiting": "{count, plural, =0 {Niemand wartet} one {# Pilot wartet} other {# Piloten warten}}",
+      "oldestFirst": "Älteste zuerst. Möglichst innerhalb von zwei Werktagen antworten.",
+      "empty": "Derzeit nichts zu prüfen.",
+      "items": "{count, plural, one {# Eintrag} other {# Einträge}}",
+      "since": "wartet seit {date} UTC",
+      "aircraftWaiting": "{count, plural, =0 {Kein Flugzeug wartet} one {# Flugzeug wartet} other {# Flugzeuge warten}}",
+      "aircraftText": "Lufttüchtigkeitszeugnisse, ARC und Versicherungsnachweise. Älteste zuerst."
+    },
+    "review": {
+      "metaTitle": "Pilot prüfen",
+      "back": "Zurück zur Warteschlange",
+      "title": "{name} prüfen",
+      "memberSince": "Mitglied seit {date}",
+      "publicProfile": "Öffentliches Profil",
+      "checklist": "Öffnen Sie jedes Dokument und prüfen Sie, dass der Name zum Konto passt und Nummer, Land, Daten und Berechtigungen mit den Angaben des Piloten übereinstimmen. Das Öffnen eines Dokuments wird protokolliert.",
+      "nothing": "Dieser Pilot hat keine Nachweise hinzugefügt.",
+      "reviewedBy": "Geprüft von {name} am {date} UTC",
+      "openDocument": "{name} öffnen",
+      "noDocument": "Kein Dokument angehängt",
+      "verify": "Verifizieren",
+      "verifying": "Wird verifiziert…",
+      "verifyLabel": "{name} verifizieren",
+      "reject": "Ablehnen",
+      "revoke": "Widerrufen",
+      "rejectLabel": "{name} ablehnen",
+      "confirmReject": "Ablehnen und Pilot informieren",
+      "rejecting": "Wird abgelehnt…",
+      "cancel": "Abbrechen",
+      "reason": "Grund (wird an den Piloten gesendet)",
+      "reasonPlaceholder": "z. B. Die Lizenznummer stimmt nicht mit dem Dokument überein.",
+      "verified": "Verifiziert. Der Pilot wurde informiert.",
+      "rejected": "Abgelehnt. Der Pilot wurde über den Grund informiert.",
+      "errors": {
+        "notFound": "Dieser Eintrag existiert nicht mehr.",
+        "ownItem": "Sie können Ihre eigenen Nachweise oder Flugzeuge nicht prüfen. Bitten Sie einen anderen Admin.",
+        "changed": "Dieser Eintrag wurde geändert, seit Sie die Seite geöffnet haben. Bitte prüfen Sie ihn erneut."
+      },
+      "experience": "Angegebene Erfahrung",
+      "experienceHint": "Vom Piloten selbst angegeben; nicht verifiziert.",
+      "noExperience": "Nicht angegeben.",
+      "history": "Verlauf",
+      "noHistory": "Noch keine Admin-Aktionen.",
+      "actions": {
+        "verify": "hat {item} verifiziert",
+        "reject": "hat {item} abgelehnt",
+        "viewDocument": "hat ein Dokument geöffnet"
+      },
+      "reasonOwner": "Grund (wird an den Halter gesendet)",
+      "confirmRejectOwner": "Ablehnen und Halter informieren",
+      "verifiedOwner": "Verifiziert. Der Halter wurde informiert.",
+      "rejectedOwner": "Abgelehnt. Der Halter wurde über den Grund informiert."
+    },
+    "aircraftReview": {
+      "metaTitle": "Flugzeug prüfen",
+      "back": "Zurück zur Warteschlange",
+      "title": "{registration} prüfen",
+      "owner": "Halter: {name} ({email})",
+      "ownerProfile": "Profil des Halters",
+      "checklist": "Öffnen Sie jedes Dokument und prüfen Sie, dass es für {registration} gilt, gültig ist und die Daten mit den Angaben des Halters übereinstimmen. Die Versicherung muss die Haftpflicht für Mieter abdecken. Das Öffnen eines Dokuments wird protokolliert.",
+      "nothing": "Für dieses Flugzeug gibt es keine Dokumente zu prüfen.",
+      "reviewedOn": "Zuletzt geprüft am {date} UTC",
+      "noExpiry": "Kein Ablaufdatum",
+      "openDocument": "{name} öffnen",
+      "history": "Verlauf",
+      "noHistory": "Noch keine Admin-Aktionen.",
+      "actions": {
+        "verify": "hat {item} verifiziert",
+        "reject": "hat {item} abgelehnt",
+        "viewDocument": "hat ein Dokument geöffnet"
+      }
+    },
+    "tabs": {
+      "label": "Admin",
+      "dashboard": "Übersicht",
+      "verifications": "Prüfungen",
+      "reports": "Meldungen",
+      "users": "Mitglieder",
+      "aircraft": "Flugzeuge",
+      "audit": "Prüfprotokoll"
+    },
+    "dashboard": {
+      "title": "Admin-Übersicht",
+      "description": "Wie es ownAplane geht und was Ihre Aufmerksamkeit braucht.",
+      "openReports": "Offene Meldungen",
+      "pendingVerifications": "Dokumente, die auf Prüfung warten",
+      "last30": "Letzte 30 Tage",
+      "tiles": {
+        "users": "Mitglieder",
+        "roles": "Piloten / Halter",
+        "listed": "Angebotene Flugzeuge",
+        "bookings": "Buchungsanfragen",
+        "completed": "Abgeschlossene Buchungen",
+        "cancelled": "Stornierungen"
+      },
+      "newUsers": "{count, plural, one {# neu} other {# neu}} in den letzten 30 Tagen",
+      "rolesSub": "Mit eingeschalteter Rolle (insgesamt)",
+      "listedSub": "Aktuell",
+      "bookingsSub": "{accepted} angenommen ({rate})",
+      "reviewsSub": "{count, plural, one {# Bewertung} other {# Bewertungen}} veröffentlicht",
+      "cancelledSub": "{late} spät · {declined} abgelehnt oder abgelaufen",
+      "signups": "Registrierungen pro Woche",
+      "weekOf": "Woche vom",
+      "suspended": "{count, plural, one {# Mitglied ist} other {# Mitglieder sind}} gesperrt."
+    },
+    "reports": {
+      "title": "Meldungen",
+      "description": "Gemeldete Bewertungen, Mitglieder, Angebote und Nachrichten. Nur ausblenden oder sperren, wenn Regeln verletzt werden – nie nur, weil etwas negativ ist.",
+      "filter": "Meldungen anzeigen",
+      "statuses": {
+        "open": "Offen",
+        "resolved": "Erledigt",
+        "dismissed": "Verworfen"
+      },
+      "targets": {
+        "review": "Bewertung",
+        "user": "Mitglied",
+        "aircraft": "Angebot",
+        "message": "Nachricht"
+      },
+      "empty": "Nichts vorhanden.",
+      "by": "gemeldet von {name}",
+      "deletedUser": "einem ehemaligen Mitglied",
+      "gone": "Existiert nicht mehr.",
+      "reviewBy": "Bewertung von",
+      "messageBy": "Nachricht von",
+      "member": "Mitglied",
+      "listing": "Angebot",
+      "owner": "Halter",
+      "hidden": "Ausgeblendet",
+      "suspended": "Gesperrt"
+    },
+    "users": {
+      "title": "Mitglieder",
+      "description": "Mitglieder nach Name oder E-Mail finden. Gesperrte Mitglieder können sich nicht anmelden, buchen, Nachrichten senden oder bewerten, und ihre Flugzeuge werden aus dem Angebot genommen.",
+      "search": "Mitglieder suchen",
+      "placeholder": "Name oder E-Mail",
+      "searchButton": "Suchen",
+      "none": "Keine Mitglieder gefunden.",
+      "admin": "Admin",
+      "joined": "dabei seit {date}",
+      "suspended": "Gesperrt"
+    },
+    "aircraft": {
+      "title": "Flugzeuge",
+      "description": "Angebote nach Kennzeichen, Hersteller oder Modell finden. Ein von Ihnen entferntes Flugzeug kann der Halter erst wieder anbieten, wenn Sie es erlauben.",
+      "search": "Flugzeuge suchen",
+      "placeholder": "Kennzeichen, Hersteller oder Modell",
+      "searchButton": "Suchen",
+      "none": "Keine Flugzeuge gefunden.",
+      "reasons": {
+        "admin": "Vom Admin entfernt",
+        "suspended": "Halter gesperrt"
+      }
+    },
+    "audit": {
+      "title": "Prüfprotokoll",
+      "description": "Jede Admin-Entscheidung und jedes Öffnen eines privaten Dokuments durch einen Admin.",
+      "search": "Prüfprotokoll durchsuchen",
+      "placeholder": "Aktion, Admin, Ziel-ID oder Grund",
+      "searchButton": "Suchen",
+      "none": "Keine Einträge.",
+      "when": "Wann (UTC)",
+      "admin": "Admin",
+      "action": "Aktion",
+      "target": "Ziel",
+      "reason": "Grund"
+    },
+    "moderation": {
+      "reason": "Grund (für das Prüfprotokoll)",
+      "reasonHint": "Optional, hilft aber später dem Rest des Teams.",
+      "working": "Wird ausgeführt…",
+      "failed": "Das hat nicht funktioniert. Bitte laden Sie die Seite neu und versuchen Sie es erneut.",
+      "self": "Das können Sie mit Ihrem eigenen Konto nicht tun.",
+      "notFound": "Bereits erledigt oder existiert nicht mehr.",
+      "ops": {
+        "suspend": "Mitglied sperren",
+        "unsuspend": "Sperre aufheben",
+        "unlist": "Flugzeug entfernen",
+        "allow_listing": "Wieder anbieten erlauben",
+        "hide_review": "Bewertung ausblenden",
+        "show_review": "Bewertung wieder anzeigen",
+        "resolve_report": "Als erledigt markieren",
+        "dismiss_report": "Verwerfen",
+        "delete_user": "Mitglied löschen"
+      },
+      "confirm": {
+        "suspend": "Das Mitglied wird abgemeldet und kann sich nicht anmelden, buchen, Nachrichten senden oder bewerten. Seine angebotenen Flugzeuge werden entfernt.",
+        "unsuspend": "Das Mitglied kann sich wieder anmelden und seine Flugzeuge selbst wieder anbieten.",
+        "unlist": "Das Flugzeug verschwindet aus der Suche und kann vom Halter erst wieder angeboten werden, wenn Sie es erlauben. Bestehende Buchungen bleiben.",
+        "allow_listing": "Der Halter kann das Flugzeug wieder anbieten (es bleibt entfernt, bis er das tut).",
+        "hide_review": "Blenden Sie nur Bewertungen aus, die gegen die Regeln verstoßen (Beleidigung, personenbezogene Daten, Spam). Die Durchschnittswerte werden aktualisiert.",
+        "show_review": "Die Bewertung wird wieder öffentlich und zählt in den Durchschnitt.",
+        "resolve_report": "Meldung schließen: Es wurde gehandelt.",
+        "dismiss_report": "Meldung schließen: Es liegt kein Regelverstoß vor.",
+        "delete_user": "Löscht das Konto endgültig: Profil, Nachweise, Dokumente, Fotos sowie seine Flugzeuge mit deren Buchungen. Buchungen als Pilot, Bewertungen und Nachrichten bleiben für die Gegenseite erhalten, als ehemaliges Mitglied angezeigt. Das kann nicht rückgängig gemacht werden; im Zweifel lieber sperren."
+      },
+      "done": {
+        "suspend": "Mitglied gesperrt.",
+        "unsuspend": "Sperre aufgehoben.",
+        "unlist": "Flugzeug entfernt.",
+        "allow_listing": "Der Halter kann es wieder anbieten.",
+        "hide_review": "Bewertung ausgeblendet.",
+        "show_review": "Bewertung wieder angezeigt.",
+        "resolve_report": "Meldung erledigt.",
+        "dismiss_report": "Meldung verworfen.",
+        "delete_user": "Mitglied gelöscht."
+      },
+      "adminAccount": "Admin-Konten können hier nicht gelöscht werden. Entfernen Sie zuerst die Admin-Rolle.",
+      "activeBookings": "Dieses Mitglied hat offene Buchungen (angefragt, angenommen oder laufend). Sperren Sie es jetzt und löschen Sie es, sobald diese storniert oder abgeschlossen sind."
+    },
+    "monitoring": {
+      "title": "Fehlerüberwachung",
+      "send": "Testfehler senden",
+      "sending": "Wird gesendet…",
+      "sent": "Testfehler gesendet. Er sollte innerhalb einer Minute in Sentry unter Issues erscheinen.",
+      "failed": "Der Überwachungsdienst hat den Testfehler nicht angenommen. Prüfen Sie, ob SENTRY_DSN vollständig kopiert ist.",
+      "status": {
+        "ok": "Fehler werden an den Überwachungsdienst gesendet (SENTRY_DSN ist gesetzt).",
+        "missing": "Nicht eingerichtet: SENTRY_DSN ist in dieser Bereitstellung nicht gesetzt, daher landen Fehler nur im Serverprotokoll. Fügen Sie die Variable den Umgebungsvariablen des Projekts hinzu (eine geteilte Variable muss mit dem Projekt verknüpft sein) und stellen Sie neu bereit.",
+        "invalid": "SENTRY_DSN ist gesetzt, aber kein gültiger DSN. Kopieren Sie den ganzen Wert aus Sentry → Project Settings → Client Keys (DSN), beginnend mit https://, und stellen Sie neu bereit."
+      }
+    }
+  },
+  "aircraft": {
+    "owner": {
+      "title": "Meine Flugzeuge",
+      "description": "Bieten Sie Ihre Flugzeuge an, legen Sie Preise fest und bestimmen Sie, wer sie mieten darf.",
+      "add": "Flugzeug hinzufügen",
+      "emptyTitle": "Noch keine Flugzeuge",
+      "emptyText": "Fügen Sie Ihr erstes Flugzeug hinzu. Sie können es als Entwurf speichern und später fertigstellen.",
+      "notOwnerTitle": "Halterrolle einschalten",
+      "notOwnerText": "Um Flugzeuge anzubieten, schalten Sie die Halterrolle ein. Sie können sie im Konto wieder ausschalten.",
+      "switchOn": "Halterrolle einschalten",
+      "perHour": "{price}/h",
+      "stepsLeft": "{count, plural, one {Noch # Punkt, bevor es angeboten werden kann} other {Noch # Punkte, bevor es angeboten werden kann}}",
+      "continue": "Einrichtung fortsetzen",
+      "manage": "Verwalten"
+    },
+    "new": {
+      "title": "Flugzeug hinzufügen",
+      "description": "Beginnen Sie mit den Grunddaten. Ihr Entwurf wird nach jedem Schritt gespeichert, sodass Sie später weitermachen können."
+    },
+    "edit": {
+      "back": "Meine Flugzeuge",
+      "ownerRoleNeeded": "Schalten Sie zuerst die Halterrolle ein.",
+      "notFound": "Wir konnten dieses Flugzeug nicht finden. Bitte laden Sie die Seite neu.",
+      "saved": "Gespeichert.",
+      "saving": "Wird gespeichert…",
+      "save": "Änderungen speichern",
+      "saveAndContinue": "Speichern und weiter",
+      "draftSaved": "Ihr Entwurf wird bei jedem Schritt gespeichert.",
+      "continue": "Weiter"
+    },
+    "sections": {
+      "label": "Bereiche des Angebots",
+      "complete": "vollständig",
+      "overview": "Überblick",
+      "details": "Daten",
+      "equipment": "Ausrüstung",
+      "base": "Heimatflugplatz",
+      "pricing": "Preise",
+      "photos": "Fotos",
+      "documents": "Dokumente",
+      "requirements": "Anforderungen",
+      "calendar": "Kalender",
+      "remarks": "Bemerkungen",
+      "usage": "Nutzung",
+      "defects": "Mängel"
+    },
+    "sectionText": {
+      "details": "Kennzeichen, Muster und Leistung.",
+      "equipment": "Avionik und wofür das Flugzeug zugelassen ist.",
+      "base": "Wo das Flugzeug stationiert ist, und eine Beschreibung für Piloten.",
+      "pricing": "Was die Miete kostet und wie die Flugzeit gemessen wird.",
+      "photos": "Mindestens ein Foto, bis zu 20. Das erste ist das Titelbild.",
+      "documents": "Dokumente werden von unserem Team geprüft. Das Flugzeug kann angeboten werden, sobald eine gültige ARC und Versicherung verifiziert sind.",
+      "requirements": "Bestimmen Sie, wer das Flugzeug mieten darf. Piloten sehen das, bevor sie anfragen.",
+      "calendar": "Sperren Sie Zeiten für eigene Nutzung, Wartung und andere Nichtverfügbarkeit. Buchungen erscheinen hier automatisch.",
+      "remarks": "Was Piloten nach ihren Flügen notiert haben. Markieren Sie Flugzeugbemerkungen als bekannte Punkte, damit spätere Mieter sie vor dem Flug sehen.",
+      "usage": "Stunden, Landungen, Kraftstoff und Öl aus bestätigten Flugberichten, pro Monat und pro Pilot.",
+      "defects": "Von Mietern oder Ihnen gemeldete Mängel. Setzen Sie das Flugzeug am Boden fest, wenn es nicht fliegen sollte."
+    },
+    "fields": {
+      "registration": "Kennzeichen",
+      "registrationHint": "Wie am Flugzeug lackiert, z. B. D-EABC.",
+      "category": "Kategorie",
+      "manufacturer": "Hersteller",
+      "model": "Modell",
+      "typeDesignator": "ICAO-Typcode",
+      "typeDesignatorHint": "Z. B. C172, P28A, DA40. Wird genutzt, um die Musterstunden der Piloten abzugleichen.",
+      "year": "Baujahr",
+      "seats": "Sitze (inkl. Pilot)",
+      "engine": "Triebwerk",
+      "performance": "Leistung",
+      "fuelType": "Kraftstoff",
+      "fuelBurn": "Verbrauch ({unit})",
+      "cruiseKt": "Reisegeschwindigkeit (kt)",
+      "usefulLoad": "Zuladung ({unit})",
+      "enduranceH": "Flugdauer (h)",
+      "unitsHint": "Die Einheiten richten sich nach Ihren Einstellungen im Konto.",
+      "avionics": "Avionik",
+      "avionicsHint": "Wichtigste Avionik und Navigationsausrüstung.",
+      "transponder": "Transponder",
+      "capabilities": "Zugelassen für",
+      "autopilot": "Autopilot",
+      "nightVfr": "Nacht-VFR",
+      "ifr": "IFR",
+      "ifrHint": "Ausgerüstet und zugelassen für Flüge nach Instrumentenflugregeln.",
+      "homeAirport": "Heimatflugplatz",
+      "homeAirportHint": "Der Flugplatz, an dem Piloten das Flugzeug übernehmen.",
+      "description": "Beschreibung",
+      "descriptionPlaceholder": "Was das Flugzeug angenehm zu fliegen macht, sein Zustand, wo es steht, Kraftstoff am Platz…",
+      "pricePerHour": "Preis pro Stunde",
+      "currency": "Währung",
+      "weekendPrice": "Wochenendpreis pro Stunde",
+      "weekendPriceHint": "Optional. Gilt samstags und sonntags.",
+      "priceBasis": "Kraftstoff",
+      "timeBasis": "Zeitmessung nach",
+      "timeBasisHint": "Wird verwendet, um nach jeder Miete die geflogene Zeit zu berechnen.",
+      "minHoursPerDay": "Mindeststunden pro Tag",
+      "minHoursPerDayHint": "Optional, z. B. 2 Stunden bei einer ganztägigen Buchung.",
+      "oilUnit": "Öl gemessen in",
+      "oilUnitHint": "Die Einheit auf dem Ölmessstab.",
+      "cancellationPolicy": "Stornierungsbedingungen",
+      "paymentNote": "Piloten bezahlen Sie direkt. ownAplane wickelt noch keine Zahlungen ab."
+    },
+    "units": {
+      "litresPerHour": "L/h",
+      "usgalPerHour": "US gal/h",
+      "kg": "kg",
+      "lb": "lb"
+    },
+    "categories": {
+      "aeroplane": "Flugzeug",
+      "tmg": "Reisemotorsegler (TMG)",
+      "ultralight": "Ultraleicht",
+      "helicopter": "Hubschrauber"
+    },
+    "fuelTypes": {
+      "avgas_100ll": "AVGAS 100LL",
+      "ul91": "UL91",
+      "mogas": "MOGAS",
+      "jet_a1": "Jet A-1"
+    },
+    "transponders": {
+      "none": "Keiner",
+      "mode_c": "Mode C",
+      "mode_s": "Mode S",
+      "adsb_out": "Mode S mit ADS-B Out"
+    },
+    "priceBases": {
+      "wet": "Nass (inkl. Kraftstoff)",
+      "dry": "Trocken (ohne Kraftstoff)"
+    },
+    "timeBases": {
+      "hobbs": "Hobbs-Zähler",
+      "tach": "Drehzahlmesser (Tach)",
+      "block": "Blockzeit"
+    },
+    "oilUnits": {
+      "qt": "US-Quarts",
+      "l": "Liter"
+    },
+    "cancellation": {
+      "flexible": {
+        "label": "Flexibel",
+        "text": "kostenlose Stornierung bis 24 Stunden vor der Buchung."
+      },
+      "moderate": {
+        "label": "Moderat",
+        "text": "kostenlose Stornierung bis 3 Tage vor der Buchung."
+      },
+      "strict": {
+        "label": "Streng",
+        "text": "kostenlose Stornierung bis 7 Tage vor der Buchung."
+      }
+    },
+    "statuses": {
+      "draft": "Entwurf",
+      "listed": "Angeboten",
+      "paused": "Pausiert",
+      "unlisted": "Nicht angeboten",
+      "grounded": "Am Boden"
+    },
+    "statusText": {
+      "draft": "Noch nicht sichtbar. Vervollständigen Sie die Liste unten und veröffentlichen Sie es dann.",
+      "listed": "Für Piloten sichtbar, die es finden und anfragen können.",
+      "paused": "Vorerst für Piloten ausgeblendet. Bieten Sie es jederzeit wieder an.",
+      "unlisted": "Für Piloten nicht sichtbar.",
+      "grounded": "Am Boden: Piloten können es nicht mieten, bis Sie es wieder anbieten."
+    },
+    "status": {
+      "failed": "Das hat nicht funktioniert. Bitte laden Sie die Seite neu und versuchen Sie es erneut.",
+      "notReady": "Kann noch nicht angeboten werden. Es fehlt: {missing}.",
+      "registrationTaken": "Ein anderes Angebot verwendet dieses Kennzeichen bereits.",
+      "publish": "Angebot veröffentlichen",
+      "to": {
+        "listed": "Wieder anbieten",
+        "paused": "Pausieren",
+        "unlisted": "Aus dem Angebot nehmen"
+      },
+      "done": {
+        "listed": "Ihr Flugzeug wird angeboten.",
+        "paused": "Pausiert. Piloten sehen es vorerst nicht.",
+        "unlisted": "Aus dem Angebot genommen."
+      },
+      "blocked": "Dieses Flugzeug kann derzeit nicht angeboten werden: Unser Team hat es entfernt. Bitte kontaktieren Sie uns."
+    },
+    "gaps": {
+      "home_base": "Heimatflugplatz",
+      "price": "Preis",
+      "photo": "ein Foto",
+      "arc": "eine verifizierte ARC",
+      "insurance": "eine verifizierte Versicherung"
+    },
+    "checklist": {
+      "home_base": "Heimatflugplatz",
+      "price": "Preis pro Stunde",
+      "photo": "Mindestens ein Foto",
+      "arc": "Gültige ARC, verifiziert",
+      "insurance": "Gültige Versicherung, verifiziert"
+    },
+    "overview": {
+      "statusTitle": "Status",
+      "checklist": "Vor dem Anbieten nötig",
+      "missing": "fehlt",
+      "done": "erledigt",
+      "fix": "Hinzufügen",
+      "viewListing": "Angebot ansehen",
+      "summary": "Zusammenfassung"
+    },
+    "unlistedReasons": {
+      "arc": "Wir haben dieses Flugzeug entfernt, weil seine ARC abgelaufen ist. Laden Sie die neue ARC hoch, um es wieder anzubieten.",
+      "insurance": "Wir haben dieses Flugzeug entfernt, weil seine Versicherung abgelaufen ist. Laden Sie den neuen Nachweis hoch, um es wieder anzubieten.",
+      "admin": "Unser Team hat dieses Flugzeug entfernt, weil es gegen die Regeln verstößt. Kontaktieren Sie uns, um es wieder anzubieten.",
+      "suspended": "Dieses Flugzeug wurde entfernt, weil Ihr Konto gesperrt ist."
+    },
+    "delete": {
+      "button": "Flugzeug löschen",
+      "title": "{registration} löschen?",
+      "text": "Das Angebot, seine Fotos und Dokumente werden gelöscht. Das kann nicht rückgängig gemacht werden.",
+      "cancel": "Abbrechen",
+      "deleting": "Wird gelöscht…",
+      "confirm": "Löschen",
+      "hasBookings": "Dieses Flugzeug hat anstehende Buchungen. Stornieren oder beenden Sie diese zuerst."
+    },
+    "photos": {
+      "add": "Fotos hinzufügen",
+      "choose": "Fotos wählen",
+      "uploading": "Lade {done} von {total} hoch…",
+      "count": "{count} von {max} Fotos",
+      "empty": "Noch keine Fotos. Fügen Sie mindestens eines hinzu, um das Flugzeug anzubieten.",
+      "cover": "Titelbild",
+      "photoAlt": "Foto {number}",
+      "moveEarlier": "Foto {number} nach vorne",
+      "moveLater": "Foto {number} nach hinten",
+      "makeCover": "Foto {number} als Titelbild",
+      "delete": "Foto {number} löschen",
+      "hint": "JPEG, PNG oder WebP. Große Fotos werden vor dem Hochladen verkleinert. Querformat sieht am besten aus.",
+      "invalidType": "Bitte wählen Sie ein JPEG-, PNG- oder WebP-Foto.",
+      "tooLarge": "Dieses Foto ist zu groß (max. 4 MB).",
+      "tooMany": "Ein Flugzeug kann bis zu 20 Fotos haben.",
+      "notFound": "Wir konnten dieses Flugzeug nicht finden.",
+      "failed": "Das Hochladen hat nicht funktioniert. Bitte versuchen Sie es erneut.",
+      "lastPhoto": "Ein angebotenes Flugzeug braucht mindestens ein Foto. Fügen Sie zuerst ein weiteres Foto hinzu oder pausieren Sie das Angebot."
+    },
+    "documents": {
+      "groups": {
+        "verified": {
+          "title": "Lufttüchtigkeit und Versicherung",
+          "text": "Lufttüchtigkeitszeugnis, Bescheinigung über die Prüfung der Lufttüchtigkeit (ARC) und Versicherung. Unser Team prüft sie.",
+          "empty": "Noch keine Dokumente. Laden Sie eine gültige ARC und einen Versicherungsnachweis hoch, um das Flugzeug anzubieten."
+        },
+        "reference": {
+          "title": "Für Mieter",
+          "text": "Auszüge aus POH/AFM, Checklisten sowie Masse- und Schwerpunktdaten, die Piloten vor dem Flug lesen. Nur für Piloten, deren Buchung Sie angenommen haben.",
+          "empty": "Noch nichts. Optional, hilft Piloten aber bei der Vorbereitung."
+        }
+      },
+      "add": {
+        "verified": "Dokument hinzufügen",
+        "reference": "Dokument hinzufügen"
+      },
+      "dialogText": {
+        "verified": "Laden Sie einen Scan oder ein Foto hoch. Erneuerte ARC oder Versicherung? Fügen Sie sie als neues Dokument hinzu: Das alte zählt, bis das neue verifiziert ist.",
+        "reference": "Laden Sie ein PDF oder Foto hoch, das Piloten vor dem Flug lesen können."
+      },
+      "editTitle": "Dokument bearbeiten",
+      "edit": "Bearbeiten",
+      "editLabel": "{name} bearbeiten",
+      "editResetsReview": "Änderungen an einem verifizierten Dokument senden es erneut zur Prüfung.",
+      "kind": "Dokument",
+      "kinds": {
+        "cofa": "Lufttüchtigkeitszeugnis (CofA)",
+        "arc": "Bescheinigung über die Prüfung der Lufttüchtigkeit (ARC)",
+        "insurance": "Versicherungsnachweis",
+        "poh": "Auszug aus POH/AFM",
+        "checklist": "Checkliste",
+        "weight_balance": "Masse und Schwerpunkt"
+      },
+      "title": "Titel",
+      "titleHint": "Optional, z. B. „Normalverfahren“.",
+      "expiresOn": "Gültig bis",
+      "expiresOnOptional": "Gültig bis (falls es abläuft)",
+      "file": "Scan oder Foto",
+      "cancel": "Abbrechen",
+      "save": "Speichern",
+      "saving": "Wird gespeichert…",
+      "saved": "Gespeichert. Wir prüfen es bald.",
+      "delete": "Löschen",
+      "deleting": "Wird gelöscht…",
+      "deleteLabel": "{name} löschen",
+      "deleteTitle": "{name} löschen?",
+      "deleteText": "Das Dokument und seine Datei werden gelöscht.",
+      "notFound": "Wir konnten dieses Dokument nicht finden. Bitte laden Sie die Seite neu.",
+      "addRenewal": "Damit wäre das angebotene Flugzeug ohne gültige, verifizierte ARC oder Versicherung. Fügen Sie den erneuerten Nachweis stattdessen als neues Dokument hinzu.",
+      "cantDeleteListed": "Dies ist die einzige gültige ARC oder Versicherung des Flugzeugs. Fügen Sie zuerst die erneuerte hinzu oder pausieren Sie das Angebot.",
+      "status": {
+        "pending": "In Prüfung",
+        "verified": "Verifiziert",
+        "rejected": "Abgelehnt"
+      },
+      "expiry": {
+        "valid": "Gültig bis {date}",
+        "expiring": "Läuft ab am {date}",
+        "expired": "Abgelaufen am {date}"
+      },
+      "rejectedBecause": "Abgelehnt: {reason}",
+      "privacy": "Dokumente sind privat. Nur Sie und unser Prüfteam können sie öffnen; Mieter sehen nur die Dokumente für Mieter."
+    },
+    "requirements": {
+      "ratingTitle": "Pilotenbewertung",
+      "minPilotRating": "Mindestbewertung durch andere Halter",
+      "minPilotRatingHint": "Der Durchschnitt der Bewertungen, die Piloten nach früheren Mieten erhalten haben.",
+      "anyRating": "Kein Minimum",
+      "atLeast": "{rating} Sterne oder mehr",
+      "allowUnrated": "Piloten ohne Bewertungen dürfen anfragen",
+      "allowUnratedHint": "Alle beginnen ohne Bewertungen. Schalten Sie das aus, um nur an Piloten mit Erfahrung zu vermieten.",
+      "unratedNeedsCheckout": "…aber erst nach einem Einweisungsflug mit Fluglehrer",
+      "licenceTitle": "Lizenz",
+      "licenceHint": "Kreuzen Sie die akzeptierten Lizenzen an. Keine angekreuzt = jede verifizierte Lizenz.",
+      "ratingsTitle": "Berechtigungen und Rechte",
+      "ratingsHint": "Der Pilot braucht alle angekreuzten Berechtigungen, verifiziert und gültig.",
+      "typeRating": "Musterberechtigung (ICAO-Code)",
+      "typeRatingHint": "Nur wenn das Flugzeug eine erfordert, z. B. C510.",
+      "experienceTitle": "Erfahrung und Alter",
+      "minTotalHours": "Mindestgesamtstunden",
+      "minTypeHours": "Mindeststunden auf diesem Muster",
+      "min90DaysHours": "Mindeststunden in den letzten 90 Tagen",
+      "minAge": "Mindestalter",
+      "nightIfrNote": "Nacht- und IFR-Flüge erfordern immer das passende Recht (Nacht, IR); das wird geprüft, wenn ein Pilot einen solchen Flug anfragt.",
+      "checkoutFirstRental": "Jeder Pilot, der neu auf diesem Flugzeug ist, braucht zuerst einen Einweisungsflug mit Fluglehrer",
+      "checkoutFirstRentalHint": "Sobald Sie den Einweisungsflug eines Piloten (in seiner Buchung) erfassen, braucht er keinen weiteren.",
+      "instantBooking": "Sofortbuchung für Piloten, die dieses Flugzeug schon geflogen sind",
+      "instantBookingHint": "Ihre Anfragen werden sofort angenommen, wenn sie alle Anforderungen erfüllen und nichts mehr zu klären ist (z. B. ein Einweisungsflug). Alle anderen senden wie gewohnt eine Anfrage."
+    },
+    "requirementsList": {
+      "verified": "Lizenz, Klassenberechtigung und Tauglichkeitszeugnis von ownAplane verifiziert und gültig",
+      "licences": "Lizenz: {list}",
+      "ratings": "Berechtigungen: {list}",
+      "totalHours": "Mindestens {hours} h Gesamtflugzeit",
+      "typeHours": "Mindestens {hours} h auf {type}",
+      "recentHours": "Mindestens {hours} h in den letzten 90 Tagen",
+      "age": "Mindestens {age} Jahre alt",
+      "rating": "Pilotenbewertung {rating} oder höher",
+      "noUnrated": "Piloten brauchen Bewertungen aus früheren Mieten",
+      "unratedCheckout": "Piloten ohne Bewertungen: nach einem Einweisungsflug mit Fluglehrer",
+      "unratedWelcome": "Piloten ohne Bewertungen sind willkommen",
+      "verifiedNoClass": "Lizenz und Tauglichkeitszeugnis von ownAplane verifiziert und gültig",
+      "checkoutFirstRental": "Piloten, die neu auf diesem Flugzeug sind: nach einem Einweisungsflug mit Fluglehrer",
+      "instantBooking": "Sofortbuchung für Piloten, die es schon geflogen sind"
+    },
+    "public": {
+      "preview": "Vorschau. Piloten sehen dieses Flugzeug derzeit nicht ({status}).",
+      "edit": "Angebot bearbeiten",
+      "rating": "{rating} ({count, plural, one {# Bewertung} other {# Bewertungen}})",
+      "about": "Über dieses Flugzeug",
+      "specs": "Technische Daten",
+      "requirements": "Wer es mieten darf",
+      "weekend": "Wochenende: {price}/h",
+      "minHours": "Mindestens {hours} h pro Tag",
+      "owner": "Halter",
+      "photos": "Fotos von {name}",
+      "photoAlt": "{name}, Foto {number} von {total}",
+      "showPhoto": "Foto {number} zeigen",
+      "vfr": "VFR",
+      "fuelBurn": "Verbrauch",
+      "cruise": "Reisegeschwindigkeit",
+      "usefulLoad": "Zuladung",
+      "endurance": "Flugdauer",
+      "hours": "{hours} h",
+      "request": "Buchung anfragen"
+    },
+    "eligibility": {
+      "own_aircraft": "Das ist Ihr eigenes Flugzeug.",
+      "suspended": "Ihr Konto ist gesperrt.",
+      "aircraft_unavailable": "Dieses Flugzeug ist nicht verfügbar.",
+      "licence": "Fügen Sie Ihre Pilotenlizenz hinzu und warten Sie, bis sie verifiziert ist.",
+      "licence_type": "Erfordert eine dieser Lizenzen: {list}.",
+      "medical": "Ihr Tauglichkeitszeugnis muss verifiziert und bis zum Ende der Miete gültig sein.",
+      "class_rating": "Erfordert eine gültige, verifizierte Berechtigung {rating}.",
+      "rating": "Erfordert eine gültige, verifizierte Berechtigung {rating}.",
+      "total_hours": "Erfordert mindestens {need} h insgesamt, Sie haben {have} h.",
+      "type_hours": "Erfordert mindestens {need} h auf {type}, Sie haben {have} h.",
+      "recent_hours": "Erfordert mindestens {need} h in den letzten 90 Tagen, Sie haben {have} h.",
+      "age_unknown": "Erfordert ein Mindestalter von {need}. Geben Sie Ihr Geburtsdatum in Ihren Pilotennachweisen an.",
+      "age": "Erfordert ein Mindestalter von {need}, Sie sind {have}.",
+      "unrated": "Der Halter vermietet nur an Piloten mit Bewertungen aus früheren Mieten.",
+      "pilot_rating": "Erfordert eine Pilotenbewertung von mindestens {need}, Ihre ist {have}.",
+      "checkout": "Der Halter verlangt einen Einweisungsflug mit Fluglehrer vor Ihrer ersten Alleinmiete dieses Flugzeugs.",
+      "unknown": "Eine Anforderung ist nicht erfüllt.",
+      "logInText": "Melden Sie sich an, um zu sehen, ob Sie die Anforderungen für dieses Flugzeug erfüllen.",
+      "logIn": "Anmelden",
+      "ok": "Sie erfüllen die Anforderungen.",
+      "okForPeriod": "Sie erfüllen die Anforderungen für diesen Zeitraum.",
+      "notYet": "Sie können dieses Flugzeug noch nicht mieten:",
+      "updateCredentials": "Pilotennachweise aktualisieren",
+      "aircraft_no_night": "Ein Teil dieser Zeit liegt in der Nacht (von 30 Minuten nach Sonnenuntergang bis 30 Minuten vor Sonnenaufgang), und dieses Flugzeug ist nicht für Nacht-VFR zugelassen.",
+      "night_rating": "Ein Teil dieser Zeit liegt in der Nacht (von 30 Minuten nach Sonnenuntergang bis 30 Minuten vor Sonnenaufgang): Sie brauchen eine gültige, verifizierte Nachtflugberechtigung.",
+      "night_flight": "Ein Teil dieser Zeit liegt in der Nacht (von 30 Minuten nach Sonnenuntergang bis 30 Minuten vor Sonnenaufgang). Es gelten die Nacht-VFR-Regeln."
+    },
+    "calendar": {
+      "previous": "Vorheriger Monat",
+      "next": "Nächster Monat",
+      "timeZone": "Alle Zeiten in UTC.",
+      "kinds": {
+        "booking": "Buchung",
+        "owner_use": "Eigene Nutzung",
+        "maintenance": "Wartung",
+        "unavailable": "Nicht verfügbar"
+      },
+      "states": {
+        "free": "Frei",
+        "partly": "Teilweise gebucht",
+        "busy": "Gebucht"
+      },
+      "addTitle": "Zeit sperren",
+      "kind": "Art",
+      "from": "Von",
+      "to": "Bis",
+      "localHint": "Zeiten in UTC.",
+      "note": "Notiz (nur für Sie sichtbar)",
+      "notePlaceholder": "z. B. 50-Stunden-Kontrolle",
+      "add": "Zeit sperren",
+      "adding": "Wird gespeichert…",
+      "added": "Zum Kalender hinzugefügt.",
+      "overlaps": "Das überschneidet sich mit einem Eintrag im Kalender.",
+      "tooLong": "Eine Sperre darf höchstens ein Jahr dauern.",
+      "notFound": "Wir konnten dieses Flugzeug nicht finden. Bitte laden Sie die Seite neu.",
+      "upcoming": "Demnächst",
+      "nothingPlanned": "Nichts geplant. Das Flugzeug ist für Piloten buchbar.",
+      "remove": "{when} entfernen",
+      "selectHint": "Klicken Sie auf einen Start- und dann einen Endtag, um Daten zu wählen. Fahren Sie über einen Tag oder tippen Sie darauf, um zu sehen, was gebucht ist.",
+      "selectEnd": "Ab {from}: Klicken Sie jetzt auf den letzten Tag.",
+      "selected": "{from} – {to}",
+      "clearSelection": "Daten löschen",
+      "fromTime": "Von ({day}, UTC)",
+      "toTime": "Bis ({day}, UTC)",
+      "endBeforeStart": "Das Ende muss nach dem Beginn liegen.",
+      "checkAvailability": "Verfügbarkeit prüfen",
+      "requestBooking": "Buchung anfragen",
+      "blockTime": "Diese Zeit sperren",
+      "pending": "angefragt, noch nicht bestätigt"
+    },
+    "availability": {
+      "title": "Verfügbarkeit",
+      "free": "Frei {when}",
+      "busy": "Nicht verfügbar {when}"
+    }
+  },
+  "search": {
+    "title": "Flugzeug finden",
+    "description": "Suchen Sie Flugzeuge nach Flugplatz, Datum und dem, was Sie fliegen möchten.",
+    "airport": "In der Nähe von",
+    "airportHint": "Leer lassen, um überall zu suchen.",
+    "radius": "Umkreis",
+    "km": "{km} km",
+    "from": "Von",
+    "to": "Bis",
+    "timesHint": "Zeiten in UTC. Mit Datum werden nur Flugzeuge angezeigt, die die ganze Zeit frei sind.",
+    "moreFilters": "Weitere Filter",
+    "any": "Beliebig",
+    "seats": "Mindestanzahl Sitze",
+    "maxPrice": "Höchstpreis pro Stunde",
+    "maxPriceHint": "In der Währung des Angebots.",
+    "eligible": "Nur Flugzeuge, die ich mieten darf",
+    "eligibleHint": "Prüft Ihre verifizierte Lizenz, Ihr Tauglichkeitszeugnis, Berechtigungen und Erfahrung gegen die Anforderungen jedes Halters.",
+    "eligibleLogIn": "Melden Sie sich an, um nur Flugzeuge zu sehen, deren Anforderungen Sie erfüllen.",
+    "sort": "Sortieren nach",
+    "sorts": {
+      "distance": "Entfernung",
+      "price": "Preis",
+      "rating": "Bewertung",
+      "newest": "Neueste"
+    },
+    "submit": "Suchen",
+    "found": "{count, plural, =0 {Keine Flugzeuge gefunden} one {# Flugzeug gefunden} other {# Flugzeuge gefunden}}",
+    "near": "im Umkreis von {km} km um {code}",
+    "everywhere": "überall",
+    "freeBetween": "frei {when}",
+    "empty": "Noch keine Treffer. Versuchen Sie einen größeren Umkreis, andere Daten oder weniger Filter.",
+    "seatsCount": "{count, plural, one {# Sitz} other {# Sitze}}",
+    "distance": "{km} km entfernt",
+    "noReviews": "Noch keine Bewertungen",
+    "view": {
+      "label": "Ergebnisse anzeigen als",
+      "list": "Liste",
+      "map": "Karte"
+    },
+    "map": {
+      "label": "Karte der gefundenen Flugzeuge",
+      "marker": "{code}: {count, plural, one {# Flugzeug} other {# Flugzeuge}}"
+    }
+  },
+  "booking": {
+    "statuses": {
+      "requested": "Angefragt",
+      "accepted": "Angenommen",
+      "declined": "Abgelehnt",
+      "expired": "Abgelaufen",
+      "cancelled": "Storniert",
+      "in_progress": "Läuft",
+      "completed": "Abgeschlossen"
+    },
+    "form": {
+      "title": "Buchung anfragen",
+      "back": "Zurück zum Flugzeug",
+      "from": "Von",
+      "to": "Bis",
+      "timesHint": "Zeiten in UTC. Der Halter hat 24 Stunden Zeit zu antworten; bis dahin ist die Zeit für Sie reserviert.",
+      "route": "Strecke",
+      "departure": "Abflug",
+      "arrival": "Ankunft",
+      "arrivalHint": "Meist zurück am Abflugplatz.",
+      "stop": "Zwischenstopp {number}",
+      "addStop": "Zwischenstopp hinzufügen",
+      "removeStop": "Letzten Zwischenstopp entfernen",
+      "airfieldsHint": "Nacht und Wetter werden für diese Flugplätze geprüft.",
+      "purpose": "Zweck",
+      "purposes": {
+        "local": "Platzrunde / lokaler Flug",
+        "cross_country": "Überlandflug",
+        "training": "Training",
+        "other": "Sonstiges"
+      },
+      "passengers": "Passagiere",
+      "plannedHours": "Geplante Flugzeit (h)",
+      "message": "Nachricht an den Halter",
+      "messagePlaceholder": "Was der Halter wissen sollte: Ihre Pläne, Erfahrung auf dem Muster…",
+      "estimate": "Geschätzter Preis",
+      "estimateDetail": "{hours} h × {rate}",
+      "estimateEmpty": "Geben Sie die Zeiten und die geplante Flugzeit ein, um eine Schätzung zu sehen.",
+      "fuelNotIncluded": "Kraftstoff ist nicht enthalten: etwa {litres} L.",
+      "payDirectly": "Sie bezahlen den Halter direkt; ownAplane wickelt noch keine Zahlungen ab. Der Endbetrag richtet sich nach dem Flugbericht.",
+      "send": "Anfrage senden",
+      "sending": "Wird gesendet…",
+      "cancellation": "Stornierungsbedingungen:",
+      "updateCredentials": "Zu Ihren Pilotennachweisen"
+    },
+    "errors": {
+      "not_eligible": "Sie können diesen Flug noch nicht buchen:",
+      "too_many_passengers": "Dieses Flugzeug nimmt höchstens {max} Passagiere mit.",
+      "period_in_past": "Wählen Sie einen Zeitpunkt in der Zukunft.",
+      "period_length": "Eine Buchung dauert zwischen 30 Minuten und 14 Tagen.",
+      "not_free": "Diese Zeit ist nicht mehr frei. Bitte wählen Sie eine andere.",
+      "aircraft_unavailable": "Dieses Flugzeug kann gerade nicht gebucht werden.",
+      "failed": "Das hat nicht funktioniert. Bitte versuchen Sie es erneut."
+    },
+    "list": {
+      "title": "Buchungen",
+      "description": "Ihre Buchungsanfragen und Mieten.",
+      "asOwner": "Für meine Flugzeuge",
+      "asPilot": "Meine Mieten",
+      "emptyPilot": "Noch keine Buchungen. Finden Sie ein Flugzeug und senden Sie eine Anfrage.",
+      "exportLegs": "Meine Flüge exportieren (CSV)",
+      "exportLegsHint": "Ihre Flugabschnitte aus gesendeten und bestätigten Flugberichten, in Flugbuch-Reihenfolge, Zeiten in UTC. Eine Hilfe beim Ausfüllen Ihres Flugbuchs, kein Ersatz dafür."
+    },
+    "detail": {
+      "metaTitle": "Buchung",
+      "back": "Alle Buchungen",
+      "pilotIs": "Pilot: {name}",
+      "ownerIs": "Halter: {name}",
+      "deletedUser": "gelöschtes Konto",
+      "answerBy": "Bitte antworten Sie bis {date}; danach läuft die Anfrage ab und die Zeit wird freigegeben.",
+      "waiting": "Warten auf den Halter, der bis {date} antworten kann.",
+      "meets": "Der Pilot erfüllt Ihre Anforderungen für diesen Flug.",
+      "doesNotMeet": "Der Pilot erfüllt Ihre Anforderungen für diesen Flug nicht mehr.",
+      "checkout": "Der Halter verlangt vor der ersten Alleinmiete einen Einweisungsflug mit Fluglehrer.",
+      "flight": "Flug",
+      "when": "Wann",
+      "route": "Strecke",
+      "basis": {
+        "wet": "inkl. Kraftstoff",
+        "dry": "ohne Kraftstoff"
+      },
+      "ownerNote": "Notiz des Halters:",
+      "proposed": "Der Halter kann zu dieser Zeit nicht, schlägt aber {when} vor.",
+      "requestProposed": "Diese Zeit anfragen",
+      "youProposed": "Sie haben abgelehnt und {when} vorgeschlagen.",
+      "cancelledByOwner": "Vom Halter storniert: {reason}",
+      "cancelledByPilot": "Vom Piloten storniert: {reason}",
+      "late": "Späte Stornierung (nach Ablauf der kostenlosen Stornierungsfrist).",
+      "grounded": "Der Halter hat dieses Flugzeug am Boden festgesetzt. Es kann nicht geflogen werden, bis der Halter es wieder anbietet.",
+      "messagePilot": "Dem Piloten schreiben",
+      "messageOwner": "Dem Halter schreiben"
+    },
+    "history": {
+      "title": "Verlauf",
+      "types": {
+        "requested": "Angefragt",
+        "accepted": "Angenommen",
+        "declined": "Abgelehnt",
+        "proposed": "Andere Zeit vorgeschlagen",
+        "expired": "Abgelaufen (keine Antwort)",
+        "cancelled": "Storniert",
+        "checked_out": "Übernommen",
+        "log_submitted": "Flugbericht gesendet",
+        "log_correction": "Korrektur angefordert",
+        "log_confirmed": "Flugbericht bestätigt",
+        "defect_reported": "Mangel gemeldet",
+        "instant_booked": "Sofort gebucht",
+        "review_submitted": "Bewertung geschrieben",
+        "reviews_published": "Bewertungen veröffentlicht",
+        "review_replied": "Halter hat auf die Bewertung geantwortet"
+      }
+    },
+    "respond": {
+      "title": "Ihre Antwort",
+      "note": "Notiz an den Piloten (optional)",
+      "notePlaceholder": "z. B. Die Schlüssel sind im Clubheim.",
+      "accept": "Annehmen",
+      "decline": "Ablehnen",
+      "propose": "Andere Zeit vorschlagen",
+      "proposeText": "Schlagen Sie eine passende Zeit vor (UTC). Die Anfrage wird abgelehnt und der Pilot kann Ihre Zeit mit einem Tipp anfragen.",
+      "from": "Von",
+      "to": "Bis",
+      "sendProposal": "Ablehnen und vorschlagen",
+      "cancel": "Abbrechen",
+      "sending": "Wird gesendet…",
+      "done": {
+        "accept": "Angenommen. Die Zeit ist für den Piloten gebucht.",
+        "decline": "Abgelehnt. Die Zeit ist wieder frei.",
+        "propose": "Mit Ihrem Vorschlag abgelehnt. Die Zeit ist wieder frei."
+      },
+      "errors": {
+        "not_found": "Wir konnten diese Anfrage nicht finden.",
+        "not_open": "Diese Anfrage wurde bereits beantwortet oder ist abgelaufen.",
+        "pilot_not_eligible": "Der Pilot erfüllt Ihre Anforderungen für diesen Flug nicht mehr (z. B. ist ein Nachweis abgelaufen), daher kann sie nicht angenommen werden.",
+        "bad_proposal": "Schlagen Sie eine Zeit in der Zukunft vor.",
+        "failed": "Das hat nicht funktioniert. Bitte versuchen Sie es erneut.",
+        "aircraft_grounded": "Das Flugzeug ist am Boden festgesetzt. Bieten Sie es wieder an, bevor Sie annehmen."
+      }
+    },
+    "cancel": {
+      "button": "Buchung stornieren",
+      "title": "Diese Buchung stornieren?",
+      "lateWarning": "Die kostenlose Stornierungsfrist ist abgelaufen: Dies wird in Ihrem Profil als späte Stornierung angezeigt.",
+      "reason": "Grund (die Gegenseite sieht ihn)",
+      "keep": "Buchung behalten",
+      "confirm": "Buchung stornieren",
+      "cancelling": "Wird storniert…",
+      "done": "Storniert. Die Zeit ist wieder frei.",
+      "doneLate": "Storniert (spät). Die Zeit ist wieder frei.",
+      "errors": {
+        "not_found": "Wir konnten diese Buchung nicht finden.",
+        "not_cancellable": "Diese Buchung kann nicht mehr storniert werden.",
+        "reason_required": "Bitte geben Sie einen Grund an.",
+        "failed": "Das hat nicht funktioniert. Bitte versuchen Sie es erneut."
+      }
+    },
+    "contact": {
+      "titlePilot": "Piloten kontaktieren",
+      "titleOwner": "Halter kontaktieren",
+      "email": "E-Mail",
+      "phone": "Telefon",
+      "noPhone": "Keine Telefonnummer hinterlegt.",
+      "note": "Geteilt, weil die Buchung angenommen ist. Nur für diese Buchung verwenden.",
+      "afterAccept": "E-Mail und Telefon werden hier angezeigt, sobald der Halter annimmt. Bis dahin nutzen Sie Nachrichten."
+    }
+  },
+  "usage": {
+    "none": "Noch keine bestätigten Flugberichte. Die Nutzung erscheint hier, sobald Sie den Bericht eines Piloten bestätigen.",
+    "total": "Gesamt",
+    "allFlights": "Alle Flüge",
+    "byMonth": "Nach Monat",
+    "byPilot": "Nach Pilot",
+    "export": "Flugabschnitte exportieren (CSV)",
+    "deletedPilot": "Gelöschtes Konto",
+    "flights": "Flüge",
+    "block": "Blockzeit",
+    "engine": "Motorlaufzeit",
+    "landings": "Landungen",
+    "fuel": "Kraftstoffverbrauch ({unit})",
+    "oil": "Ölverbrauch ({unit})",
+    "oilRate": "Öl pro Motorstunde ({unit})",
+    "note": "Kraftstoff- und Ölverbrauch werden aus den Ständen vor und nach jedem Abschnitt berechnet, nur wo beide erfasst sind. Steigender Ölverbrauch pro Motorstunde kann ein frühes Zeichen für Motorprobleme sein. Kein offizielles technisches Bordbuch.",
+    "csv": {
+      "date": "Datum (UTC)",
+      "booking": "Buchung",
+      "pilot": "Pilot",
+      "from": "Von",
+      "to": "Nach",
+      "blockOff": "Off-Block (UTC)",
+      "blockOn": "On-Block (UTC)",
+      "blockMinutes": "Blockzeit (min)",
+      "engineStart": "Anlassen (UTC)",
+      "engineStop": "Abstellen (UTC)",
+      "engineMinutes": "Motorlaufzeit (min)",
+      "takeoff": "Start (UTC)",
+      "landing": "Landung (UTC)",
+      "landings": "Landungen",
+      "hobbsStart": "Hobbs Beginn",
+      "hobbsEnd": "Hobbs Ende",
+      "tachStart": "Tach Beginn",
+      "tachEnd": "Tach Ende",
+      "fuelBefore": "Kraftstoff vorher (L)",
+      "fuelAfter": "Kraftstoff nachher (L)",
+      "oilBefore": "Öl vorher (L)",
+      "oilAfter": "Öl nachher (L)",
+      "deletedPilot": "Gelöschtes Konto"
+    },
+    "logbook": {
+      "date": "Datum (UTC)",
+      "departure": "Abflug",
+      "offBlock": "Off-Block (UTC)",
+      "arrival": "Ankunft",
+      "onBlock": "On-Block (UTC)",
+      "type": "Muster",
+      "registration": "Kennzeichen",
+      "takeoff": "Start (UTC)",
+      "landing": "Landung (UTC)",
+      "blockTime": "Blockzeit (h:mm)",
+      "landings": "Landungen"
+    }
+  },
+  "flightLog": {
+    "title": "Flugbericht",
+    "back": "Zurück zur Buchung",
+    "open": "Flugbericht",
+    "startCheckout": "Übernehmen",
+    "checkoutHint": "Mit der Übernahme beginnt die Miete und der Flugbericht wird geöffnet. Erfassen Sie Zählerstände, Kraftstoff und Öl vor dem ersten Flug.",
+    "checkoutOpens": "Die Übernahme ist ab {when} möglich.",
+    "disclaimer": "Dieser Bericht ist eine Aufzeichnung zwischen Ihnen und der Gegenseite. Er ersetzt weder das offizielle Bordbuch oder technische Bordbuch des Flugzeugs noch Ihr Flugbuch.",
+    "statuses": {
+      "draft": "Wird ausgefüllt",
+      "submitted": "An den Halter gesendet",
+      "correction_requested": "Korrektur angefordert",
+      "confirmed": "Bestätigt"
+    },
+    "correctionNote": "Der Halter hat eine Korrektur angefordert: {note}",
+    "checkout": "Übernahme",
+    "hobbs": "Hobbs",
+    "tach": "Tach",
+    "fuelOnBoard": "Kraftstoff an Bord ({unit})",
+    "oilLevel": "Ölstand ({unit})",
+    "checkoutPhoto": "Foto der Zähler (optional)",
+    "checkoutPhotoHint": "JPEG, PNG oder PDF, bis 4 MB. Der Halter kann es auch öffnen.",
+    "saveCheckout": "Übernahme speichern",
+    "saving": "Wird gespeichert…",
+    "saved": "Gespeichert.",
+    "legs": "Flugabschnitte",
+    "noLegs": "Noch keine Abschnitte. Fügen Sie nach jedem Flug einen hinzu.",
+    "addLeg": "Abschnitt hinzufügen",
+    "editLeg": "Abschnitt bearbeiten",
+    "edit": "Bearbeiten",
+    "delete": "Löschen",
+    "editLegOf": "Abschnitt {leg} bearbeiten",
+    "deleteLegOf": "Abschnitt {leg} löschen",
+    "legHint": "Alle Zeiten in UTC.",
+    "from": "Von",
+    "to": "Nach",
+    "date": "Datum (Off-Block, UTC)",
+    "blockOff": "Off-Block",
+    "engineStart": "Anlassen",
+    "takeoff": "Start",
+    "landing": "Landung",
+    "engineStop": "Abstellen",
+    "blockOn": "On-Block",
+    "optional": "{field} (optional)",
+    "landings": "Landungen",
+    "hobbsStart": "Hobbs Beginn",
+    "hobbsEnd": "Hobbs Ende",
+    "tachStart": "Tach Beginn",
+    "tachEnd": "Tach Ende",
+    "fuelBefore": "Kraftstoff vorher ({unit})",
+    "fuelAfter": "Kraftstoff nachher ({unit})",
+    "oilBefore": "Öl vorher ({unit})",
+    "oilAfter": "Öl nachher ({unit})",
+    "saveLeg": "Abschnitt speichern",
+    "legSaved": "Abschnitt gespeichert.",
+    "blockTimes": "Block {off}–{on} UTC",
+    "landingsCount": "{count, plural, one {# Landung} other {# Landungen}}",
+    "summary": "Zeit und Betrag",
+    "flown": {
+      "hobbs": "Geflogen (Hobbs)",
+      "tach": "Geflogen (Tach)",
+      "block": "Geflogen (Blockzeit)"
+    },
+    "basis": {
+      "hobbs": "Hobbs",
+      "tach": "Tach",
+      "block": "Block"
+    },
+    "duration": "{h} h {m} min",
+    "billed": "Abgerechnet",
+    "billedHours": "{hours} h",
+    "amountDue": "Fälliger Betrag",
+    "missingMeters": "Tragen Sie bei jedem Abschnitt die {basis}-Anfangs- und Endstände ein, um den Betrag zu berechnen.",
+    "payDirectly": "Bezahlen Sie den Halter direkt. Über ownAplane fließt kein Geld.",
+    "submit": "Zurückgeben und an den Halter senden",
+    "submitHint": "Wenn Sie zurück sind, geben Sie zurück: Der Halter prüft den Bericht und bestätigt den Betrag. Danach können Sie ihn nur ändern, wenn der Halter eine Korrektur anfordert.",
+    "waitingForOwner": "Gesendet. Warten auf die Bestätigung des Halters.",
+    "waitingForPilot": "Der Pilot füllt den Bericht noch aus.",
+    "confirm": "Bericht und Betrag bestätigen",
+    "confirmHint": "Die Bestätigung schließt die Buchung mit der oben genannten Zeit und dem Betrag ab.",
+    "correctionLabel": "Was soll der Pilot korrigieren?",
+    "requestCorrection": "Korrektur anfordern",
+    "units": {
+      "l": "L",
+      "usgal": "US gal",
+      "qt": "qt"
+    },
+    "errors": {
+      "not_found": "Wir konnten diesen Flugbericht nicht finden.",
+      "not_accepted": "Nur eine angenommene Buchung kann übernommen werden.",
+      "too_early": "Die Übernahme ist ab 2 Stunden vor der gebuchten Zeit möglich.",
+      "not_editable": "Der Bericht kann jetzt nicht geändert werden.",
+      "no_legs": "Fügen Sie zuerst mindestens einen Abschnitt hinzu.",
+      "not_submitted": "Der Bericht wurde noch nicht gesendet oder ist bereits bearbeitet.",
+      "note_required": "Geben Sie an, was korrigiert werden soll.",
+      "bad_amount": "Der Betrag ist ungültig.",
+      "missing_meters": "Einige Zählerstände fehlen.",
+      "leg_checks": "Prüfen Sie den Abschnitt: Die Zeiten müssen in Reihenfolge sein (Off-Block, Anlassen, Start, Landung, Abstellen, On-Block), innerhalb von 24 Stunden, und Zähler können nicht rückwärts laufen.",
+      "failed": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut.",
+      "aircraft_grounded": "Das Flugzeug ist vom Halter am Boden festgesetzt und kann nicht übernommen werden."
+    },
+    "uplifts": "Getankter Kraftstoff und Öl",
+    "noUplifts": "Noch nichts hinzugefügt. Erfassen Sie jedes Tanken oder Öl-Nachfüllen mit Beleg.",
+    "addUplift": "Kraftstoff oder Öl hinzufügen",
+    "editUplift": "Kraftstoff oder Öl bearbeiten",
+    "editUpliftOf": "{uplift} bearbeiten",
+    "deleteUpliftOf": "{uplift} löschen",
+    "upliftHint": "Geben Sie ein, was nachgefüllt wurde und was es gekostet hat. Wer bezahlt hat, entscheidet, wie es im fälligen Betrag zählt.",
+    "upliftKind": "Was",
+    "kinds": {
+      "fuel": "Kraftstoff",
+      "oil": "Öl"
+    },
+    "paidBy": "Bezahlt von",
+    "payers": {
+      "pilot": "Mir (Pilot)",
+      "owner": "Konto des Halters"
+    },
+    "upliftAirport": "Flugplatz",
+    "quantity": "Menge ({unit})",
+    "fuelType": "Kraftstoffart",
+    "oilGrade": "Ölsorte (optional)",
+    "price": "Bezahlter Preis ({currency}, optional)",
+    "priceHint": "Gesamtbetrag auf dem Beleg, in der Währung der Buchung.",
+    "receipt": "Beleg (optional)",
+    "receiptLink": "Beleg",
+    "saveUplift": "Speichern",
+    "upliftSaved": "Gespeichert.",
+    "noPrice": "Kein Preis",
+    "fuelRule": {
+      "wet": "Nasspreis: Vom Piloten bezahlter Kraftstoff und Öl werden abgezogen.",
+      "dry": "Trockenpreis: Kraftstoff über das Konto des Halters wird hinzugerechnet; vom Piloten bezahltes Öl wird abgezogen."
+    },
+    "unpriced": "{count, plural, one {Ein Kraftstoff- oder Öleintrag hat} other {# Kraftstoff- oder Öleinträge haben}} keinen Preis, daher {count, plural, one {zählt er} other {zählen sie}} nicht im Betrag.",
+    "fuelAdjustment": "Kraftstoff und Öl",
+    "checkoutPhotoLink": "Foto der Zähler",
+    "remarks": {
+      "title": "Bemerkungen und PIREPs",
+      "pilotHint": "Alles, was der Halter oder der nächste Pilot wissen sollte: Dinge am Flugzeug, die keine Mängel sind (z. B. „Magnetabfall links 150 U/min“, „COM2 kratzt“), sowie Hinweise zum Wetter oder zu einem Flugplatz.",
+      "ownerHint": "Was der Pilot notiert hat. Markieren Sie eine Flugzeugbemerkung als bekannten Punkt, damit spätere Mieter sie vor dem Flug sehen.",
+      "none": "Keine Bemerkungen.",
+      "noneYet": "Noch keine Bemerkungen. Sie erscheinen hier, wenn Piloten sie in ihren Flugberichten erfassen.",
+      "kind": "Thema",
+      "kinds": {
+        "aircraft": "Flugzeug",
+        "weather": "Wetter",
+        "airfield": "Flugplatz"
+      },
+      "airport": "Flugplatz (optional)",
+      "body": "Bemerkung",
+      "bodyHint": "Mängel, die die Lufttüchtigkeit betreffen, werden separat gemeldet.",
+      "add": "Bemerkung hinzufügen",
+      "saving": "Wird gespeichert…",
+      "delete": "Löschen",
+      "deleteLabel": "Bemerkung löschen",
+      "known": "Bekannter Punkt",
+      "fixed": "Behoben",
+      "markKnown": "Als bekannten Punkt markieren",
+      "markFixed": "Als behoben markieren"
+    },
+    "knownItems": {
+      "title": "Bekannte Punkte an diesem Flugzeug",
+      "text": "Der Halter weiß davon. Prüfen Sie sie vor dem Flug.",
+      "since": "seit {date}"
+    },
+    "remarkSaved": "Bemerkung hinzugefügt."
+  },
+  "defects": {
+    "report": "Mangel melden",
+    "reportTitle": "Mangel melden",
+    "reportHint": "Etwas stimmt am Flugzeug nicht und könnte die Lufttüchtigkeit beeinträchtigen. Der Halter wird sofort informiert. Bemerkungen, die keine Mängel sind, gehören in den Flugbericht.",
+    "severity": "Wie schwerwiegend ist es?",
+    "severities": {
+      "minor": "Gering: kann bis zur nächsten Wartung warten",
+      "major": "Erheblich: sollte bald behoben werden",
+      "unsafe": "Unsicher: Das Flugzeug sollte nicht fliegen"
+    },
+    "description": "Was ist los?",
+    "descriptionHint": "Wo, was Ihnen aufgefallen ist und wann (z. B. „Öl an der linken Cowling nach der Landung in EDNY“).",
+    "photo": "Foto (optional)",
+    "send": "An den Halter senden",
+    "sending": "Wird gesendet…",
+    "reported": "Mangel gemeldet. Der Halter wurde informiert.",
+    "errors": {
+      "not_found": "Sie können für dieses Flugzeug keinen Mangel melden.",
+      "description_required": "Beschreiben Sie den Mangel.",
+      "bad_photo": "Dieses Foto kann nicht verwendet werden. Bitte laden Sie es erneut hoch.",
+      "failed": "Das hat nicht funktioniert. Bitte versuchen Sie es erneut."
+    },
+    "groundedTitle": "Dieses Flugzeug ist am Boden festgesetzt",
+    "groundedText": "Piloten können es nicht buchen, und Buchungen können nicht angenommen oder übernommen werden, bis Sie es wieder anbieten.",
+    "clear": "Festsetzung aufheben und wieder anbieten",
+    "groundHint": "Setzen Sie das Flugzeug am Boden fest, wenn es nicht fliegen sollte: Piloten können es nicht buchen, und angenommene Buchungen können nicht übernommen werden, bis Sie es wieder anbieten.",
+    "ground": "Flugzeug am Boden festsetzen",
+    "open": "Offene Mängel",
+    "noneOpen": "Keine offenen Mängel.",
+    "fixed": "Behoben",
+    "reportedBy": "Gemeldet von {name}, {date}",
+    "deletedUser": "einem gelöschten Konto",
+    "booking": "Buchung",
+    "photoLink": "Foto",
+    "resolution": "Was gemacht wurde",
+    "resolutionPlaceholder": "Was gemacht wurde (optional)",
+    "markFixed": "Als behoben markieren",
+    "fixedOn": "behoben am {date}",
+    "disclaimer": "Eine Aufzeichnung zwischen Ihnen und Ihren Mietern, nicht das technische Bordbuch des Flugzeugs. Lufttüchtigkeit und Freigabebescheinigungen (CRS) bleiben bei Ihnen und Ihrem Instandhaltungsbetrieb."
+  },
+  "notifications": {
+    "title": "Benachrichtigungen",
+    "description": "Buchungsanfragen, Antworten, Flugberichte und Erinnerungen. Sie erhalten sie auch per E-Mail.",
+    "none": "Noch keine Benachrichtigungen.",
+    "bell": "Benachrichtigungen",
+    "bellUnread": "Benachrichtigungen, {count} ungelesen",
+    "someone": "Jemand",
+    "new": "Neu:",
+    "types": {
+      "requested": "{other} möchte {registration} ab {when} mieten.",
+      "accepted": "{other} hat Ihre Buchung von {registration} ab {when} angenommen.",
+      "declined": "{other} hat Ihre Buchung von {registration} ab {when} abgelehnt.",
+      "proposed": "{other} hat Ihre Buchung von {registration} abgelehnt und einen anderen Zeitraum vorgeschlagen.",
+      "expired": "Die Anfrage für {registration} ab {when} ist ohne Antwort abgelaufen.",
+      "cancelled": "{other} hat die Buchung von {registration} ab {when} storniert.",
+      "checked_out": "{other} hat {registration} übernommen.",
+      "log_submitted": "{other} hat den Flugbericht von {registration} zur Bestätigung gesendet.",
+      "log_correction": "{other} hat eine Korrektur des Flugberichts von {registration} angefordert.",
+      "log_confirmed": "{other} hat den Flugbericht von {registration} bestätigt. Die Buchung ist abgeschlossen: Bewerten Sie sich innerhalb von 14 Tagen gegenseitig.",
+      "defect_reported": "{other} hat einen Mangel an {registration} gemeldet.",
+      "reminder": "Erinnerung: {registration} ist ab {when} gebucht.",
+      "other": "Neuigkeiten zur Buchung von {registration}.",
+      "instant_booked": "{other} hat {registration} ab {when} gebucht (Sofortbuchung).",
+      "review_submitted": "{other} hat die Buchung von {registration} bewertet. Schreiben Sie Ihre Bewertung, um sie zu sehen.",
+      "reviews_published": "Die Bewertungen zu {registration} sind jetzt veröffentlicht.",
+      "review_replied": "{other} hat auf Ihre Bewertung von {registration} geantwortet."
+    }
+  },
+  "checkoutFlight": {
+    "neededPilot": "Der Halter verlangt vor Ihrer ersten Alleinmiete dieses Flugzeugs einen Einweisungsflug mit Fluglehrer. Vereinbaren Sie ihn mit dem Halter.",
+    "neededOwner": "Sie verlangen vor der ersten Alleinmiete dieses Piloten einen Einweisungsflug mit Fluglehrer. Erfassen Sie ihn hier, sobald er stattgefunden hat.",
+    "done": "Einweisungsflug auf diesem Flugzeug erfasst am {date}",
+    "instructorIs": "Fluglehrer {name}",
+    "recordTitle": "Einweisungsflug erledigt?",
+    "recordHint": "Erfassen Sie ihn, dann braucht der Pilot auf diesem Flugzeug keine weitere Einweisung.",
+    "doneOn": "Datum des Einweisungsflugs",
+    "instructor": "Fluglehrer (optional)",
+    "note": "Notiz (optional)",
+    "record": "Einweisungsflug erfassen",
+    "saving": "Wird gespeichert…",
+    "saved": "Einweisungsflug erfasst.",
+    "failed": "Das hat nicht funktioniert. Bitte versuchen Sie es erneut."
+  },
+  "help": {
+    "title": "Hilfe",
+    "description": "Wie ownAplane für Piloten, Flugzeughalter und Admins funktioniert.",
+    "search": "Suchen",
+    "searchPlaceholder": "Hilfe durchsuchen, z. B. Stornierung oder Flugbericht",
+    "results": "{count, plural, =0 {Keine Artikel} one {# Artikel} other {# Artikel}} zu „{query}“",
+    "noResults": "Nichts gefunden. Versuchen Sie andere Wörter oder leeren Sie die Suche, um alle Artikel zu sehen.",
+    "allArticles": "Alle Hilfeartikel",
+    "onThisPage": "Auf dieser Seite",
+    "moreArticles": "Weitere Artikel",
+    "categories": {
+      "start": "Erste Schritte",
+      "pilots": "Für Piloten",
+      "owners": "Für Flugzeughalter",
+      "everyone": "Für alle",
+      "admins": "Für Admins"
+    },
+    "englishOnly": "Die Hilfeartikel sind vorerst auf Englisch; Übersetzungen folgen."
+  },
+  "reviews": {
+    "title": "Bewertungen",
+    "writeTitle": "Ihre Bewertung schreiben",
+    "writeTextPilot": "Wie war es mit {name}? Ihre Bewertung bleibt verborgen, bis der Halter Sie auch bewertet hat oder bis {date}. Danach können Sie sie nicht mehr ändern.",
+    "writeTextOwner": "Wie war {name} als Pilot? Ihre Bewertung bleibt verborgen, bis der Pilot Sie auch bewertet hat oder bis {date}. Danach können Sie sie nicht mehr ändern.",
+    "windowClosed": "Die 14 Tage für Bewertungen sind vorbei.",
+    "yours": "Ihre Bewertung",
+    "fromOwner": "Die Bewertung des Halters über Sie",
+    "fromPilot": "Die Bewertung des Piloten über Sie",
+    "hiddenUntil": "Nur Sie sehen das, bis die Gegenseite ebenfalls bewertet hat oder bis {date}.",
+    "comment": "Kommentar (optional)",
+    "commentHintPilot": "Was sollten andere Piloten wissen? Fair und sachlich bleiben; keine personenbezogenen Daten.",
+    "commentHintOwner": "Was sollten andere Halter wissen? Fair und sachlich bleiben; keine personenbezogenen Daten.",
+    "send": "Bewertung veröffentlichen",
+    "sending": "Wird gesendet…",
+    "submitted": "Danke! Ihre Bewertung ist gespeichert.",
+    "starsLabel": "{count, plural, one {# Stern} other {# Sterne}}",
+    "scoreWords": {
+      "1": "Schlecht",
+      "2": "Unterdurchschnittlich",
+      "3": "OK",
+      "4": "Gut",
+      "5": "Ausgezeichnet"
+    },
+    "outOfFive": "{score} von 5",
+    "count": "({count, plural, one {# Bewertung} other {# Bewertungen}})",
+    "none": "Noch keine Bewertungen.",
+    "reviewBy": "Bewertung von {name}",
+    "deletedUser": "Ehemaliges Mitglied",
+    "ownerReply": "Antwort des Halters",
+    "asPilot": "Bewertungen als Pilot",
+    "asOwner": "Bewertungen als Halter",
+    "aircraftTitle": "Bewertungen",
+    "ownerRating": "{rating} als Halter ({count})",
+    "categories": {
+      "aircraft_condition": {
+        "label": "Zustand des Flugzeugs",
+        "hint": "Sauber, funktionsfähig und wie im Angebot beschrieben?"
+      },
+      "communication": {
+        "label": "Kommunikation",
+        "hint": "Klar, freundlich und schnell in der Antwort?"
+      },
+      "value": {
+        "label": "Preis-Leistung",
+        "hint": "Den Preis wert?"
+      },
+      "airmanship": {
+        "label": "Airmanship",
+        "hint": "Sorgfältiger und professioneller Umgang mit dem Flugzeug?"
+      },
+      "punctuality": {
+        "label": "Pünktlichkeit",
+        "hint": "Pünktlich zur Übernahme und Rückgabe?"
+      },
+      "condition_returned": {
+        "label": "Zustand bei Rückgabe",
+        "hint": "Sauber, wie vereinbart betankt, keine Überraschungen?"
+      }
+    },
+    "errors": {
+      "not_found": "Sie können diese Buchung nicht bewerten.",
+      "window_closed": "Die 14 Tage für Bewertungen sind vorbei.",
+      "already_reviewed": "Sie haben diese Buchung bereits bewertet.",
+      "bad_scores": "Bitte vergeben Sie in jeder Kategorie 1 bis 5 Sterne.",
+      "failed": "Ihre Bewertung konnte nicht gespeichert werden. Bitte versuchen Sie es erneut."
+    },
+    "reply": "Antworten",
+    "replyTitle": "Öffentlich antworten",
+    "replyHint": "Alle, die die Bewertung lesen, sehen Ihre Antwort. Sie können einmal antworten und die Antwort später nicht ändern. Bleiben Sie höflich und sachlich.",
+    "replyLabel": "Ihre Antwort",
+    "sendReply": "Antwort veröffentlichen",
+    "replied": "Ihre Antwort ist veröffentlicht.",
+    "replyErrors": {
+      "not_found": "Sie können auf diese Bewertung nicht antworten.",
+      "already_replied": "Sie haben auf diese Bewertung bereits geantwortet.",
+      "reply_required": "Schreiben Sie ein paar Worte.",
+      "failed": "Ihre Antwort konnte nicht gespeichert werden. Bitte versuchen Sie es erneut."
+    }
+  },
+  "reports": {
+    "report": "Melden",
+    "title": {
+      "review": "Diese Bewertung melden",
+      "user": "Dieses Mitglied melden",
+      "aircraft": "Dieses Angebot melden",
+      "message": "Diese Nachricht melden"
+    },
+    "hint": "Unser Team prüft jede Meldung. Bewertungen werden nur entfernt, wenn sie gegen die Regeln verstoßen (Beleidigung, personenbezogene Daten, Spam), nie nur, weil sie negativ sind.",
+    "reason": "Grund",
+    "choose": "Grund wählen",
+    "reasons": {
+      "abuse": "Beleidigend oder anstößig",
+      "personal_data": "Enthält personenbezogene Daten",
+      "spam": "Spam oder Werbung",
+      "misleading": "Falsch oder irreführend",
+      "unsafe": "Sicherheitsbedenken",
+      "other": "Etwas anderes"
+    },
+    "details": "Details (optional)",
+    "send": "Meldung senden",
+    "sending": "Wird gesendet…",
+    "sent": "Danke, wir sehen es uns an.",
+    "alreadyReported": "Sie haben das bereits gemeldet. Wir sehen es uns an.",
+    "notFound": "Das kann nicht mehr gemeldet werden.",
+    "tooMany": "Sie haben heute viele Meldungen gesendet. Bitte versuchen Sie es morgen erneut oder kontaktieren Sie uns."
+  },
+  "messages": {
+    "title": "Nachrichten",
+    "description": "Ihre Unterhaltungen mit Piloten und Haltern zu Buchungen und Angeboten.",
+    "none": "Noch keine Nachrichten. Sie können einem Halter von einer Flugzeugseite aus schreiben oder der Gegenseite aus einer Buchung.",
+    "iconUnread": "Nachrichten ({count} ungelesen)",
+    "unread": "Ungelesen:",
+    "deletedUser": "Ehemaliges Mitglied",
+    "aboutBooking": "Buchung",
+    "aboutListing": "Frage zum Angebot",
+    "bookingFrom": "Buchung ab {when}",
+    "back": "Alle Nachrichten",
+    "thread": "Nachrichten",
+    "you": "Sie",
+    "empty": "Noch keine Nachrichten. Sagen Sie Hallo!",
+    "closed": "Das andere Mitglied hat ownAplane verlassen, daher können Sie nicht antworten.",
+    "label": "Ihre Nachricht",
+    "placeholder": "Nachricht schreiben…",
+    "hint": "Teilen Sie Telefonnummern und E-Mails erst, wenn die Buchung angenommen ist; dann werden sie in der Buchung angezeigt.",
+    "send": "Senden",
+    "sending": "Wird gesendet…",
+    "newTitle": "Neue Nachricht",
+    "askTitle": "{name} fragen",
+    "askText": "Fragen zum Flugzeug, zur Verfügbarkeit oder zu den Anforderungen? Der Halter erhält eine E-Mail.",
+    "askOwner": "Halter fragen",
+    "errors": {
+      "not_found": "Sie können in dieser Unterhaltung keine Nachrichten senden.",
+      "failed": "Ihre Nachricht konnte nicht gesendet werden. Bitte versuchen Sie es erneut.",
+      "too_many_messages": "Sie haben in kurzer Zeit viele Nachrichten gesendet. Bitte warten Sie ein paar Minuten."
+    }
+  },
+  "legal": {
+    "draft": "Entwurf: Dieser Text wird noch von unserem Anwalt geprüft und kann sich vor dem Start ändern.",
+    "englishOnly": "Diese Seite wird auf Englisch angezeigt, bis ihre Übersetzung geprüft ist."
+  },
+  "weather": {
+    "title": "Wetter",
+    "disclaimer": "Warnungen aus METAR und TAF (aviationweather.gov) für die Flugplätze dieses Flugs. Kein offizielles Briefing: Der verantwortliche Pilot entscheidet nach einem vollständigen Wetterbriefing.",
+    "later": "Vorhersagen (TAF) erscheinen hier ab {date}, 30 Stunden vor dem Abflug.",
+    "belowVfr": "Für diesen Flug wird Wetter unter VFR-Minima (Sicht unter 5 km oder Wolkenuntergrenze unter 1 500 ft) gemeldet oder vorhergesagt.",
+    "aircraftNotIfr": "Dieses Flugzeug ist nicht für IFR zugelassen.",
+    "noIr": "Sie haben keine gültige, verifizierte Instrumentenflugberechtigung (IR).",
+    "unavailable": "Einige Wettermeldungen konnten gerade nicht geladen werden. Prüfen Sie sie in Ihrem üblichen Briefingdienst.",
+    "noReport": "Keine Wettermeldung im Umkreis von 50 km.",
+    "nearest": "Von {station}, {km} km entfernt (keine Meldung für diesen Flugplatz).",
+    "vfr": "VFR",
+    "belowShort": "Unter VFR-Minima",
+    "tafOk": "Für die gebuchte Zeit sind keine Bedingungen unter VFR-Minima vorhergesagt.",
+    "rawTaf": "TAF anzeigen",
+    "visibility": "Sicht {m, number} m",
+    "ceiling": "Wolkenuntergrenze {ft, number} ft",
+    "kinds": {
+      "base": "Vorhersage",
+      "from": "Ab",
+      "becoming": "Übergehend",
+      "temporary": "Zeitweise",
+      "probable": "{p} % Wahrscheinlichkeit"
+    }
+  },
+  "completion": {
+    "title": "Profil zu {percent} % vollständig",
+    "left": "{count, plural, one {Noch # Schritt} other {Noch # Schritte}}",
+    "complete": "Alles erledigt",
+    "progress": "Profilvollständigkeit",
+    "allDone": "Ihr Profil ist vollständig.",
+    "openGuide": "Einrichtungshilfe öffnen",
+    "done": "Erledigt",
+    "todo": "Offen",
+    "waitingTitle": "Wartet auf unsere Prüfung (für Sie nichts zu tun)",
+    "items": {
+      "roles": "Sagen Sie uns, ob Sie fliegen, ein Flugzeug besitzen oder beides",
+      "photo": "Fügen Sie ein Profilfoto hinzu oder wählen Sie einen Avatar",
+      "home": "Legen Sie Ihren Heimatflugplatz fest",
+      "bio": "Schreiben Sie ein paar Worte über Ihr Fliegen",
+      "phone": "Fügen Sie ein Kontakttelefon hinzu (nur bei angenommenen Buchungen sichtbar)",
+      "licence": "Fügen Sie Ihre Pilotenlizenz hinzu",
+      "medical": "Fügen Sie Ihr Tauglichkeitszeugnis hinzu",
+      "classRating": "Fügen Sie Ihre Klassenberechtigung hinzu (z. B. SEP Land)",
+      "experience": "Geben Sie Ihre Flugerfahrung ein (Gesamtstunden)",
+      "rejected": "{count, plural, one {# abgelehnten Nachweis} other {# abgelehnte Nachweise}} korrigieren",
+      "expired": "{count, plural, one {# abgelaufenen Nachweis} other {# abgelaufene Nachweise}} erneuern",
+      "pendingCreds": "{count, plural, one {# Nachweis wird} other {# Nachweise werden}} geprüft",
+      "aircraft": "Fügen Sie Ihr erstes Flugzeug hinzu",
+      "publish": "{registration} veröffentlichen: Alles ist bereit",
+      "gap": {
+        "home_base": "{registration}: Heimatflugplatz festlegen",
+        "price": "{registration}: Preis festlegen",
+        "photo": "{registration}: mindestens ein Foto hinzufügen",
+        "arc": "{registration}: ARC hochladen",
+        "insurance": "{registration}: Versicherungsnachweis hochladen"
+      },
+      "pendingDoc": {
+        "arc": "{registration}: ARC wird geprüft",
+        "insurance": "{registration}: Versicherung wird geprüft"
+      }
+    }
+  },
+  "welcome": {
+    "metaTitle": "Konto einrichten",
+    "rolesTitle": "Willkommen, {name}! Wie werden Sie ownAplane nutzen?",
+    "rolesText": "Wählen Sie eine Option; wir führen Sie durch die Schritte, die für Sie wichtig sind.",
+    "rolesLater": "Sie können das jederzeit im Konto ändern.",
+    "choices": {
+      "pilot": {
+        "title": "Ich bin Pilot",
+        "text": "Ich möchte Flugzeuge von Haltern mieten."
+      },
+      "owner": {
+        "title": "Ich besitze ein Flugzeug",
+        "text": "Ich möchte mein Flugzeug an verifizierte Piloten vermieten."
+      },
+      "both": {
+        "title": "Beides",
+        "text": "Ich fliege und vermiete mein eigenes Flugzeug."
+      }
+    },
+    "stepsTitle": "Konto einrichten",
+    "progress": "Zu {percent} % erledigt. Jeder Schritt öffnet die passende Seite; über die Übersicht kommen Sie jederzeit hierher zurück.",
+    "nextStep": "Nächster Schritt",
+    "next": {
+      "start": "Wählen Sie, wie Sie ownAplane nutzen",
+      "profile": "Vervollständigen Sie Ihr Profil",
+      "pilot": "Fügen Sie Ihre Pilotennachweise hinzu",
+      "owner": "Bieten Sie Ihr Flugzeug an"
+    },
+    "continue": "Weiter",
+    "allDone": "Alles ist eingerichtet.",
+    "toDashboard": "Zur Übersicht",
+    "groups": {
+      "profile": {
+        "title": "Ihr Profil",
+        "text": "Was andere Piloten und Halter über Sie sehen."
+      },
+      "pilot": {
+        "title": "Pilotennachweise",
+        "text": "Wir verifizieren sie, damit Halter Ihnen vertrauen können; das dauert bis zu zwei Werktage."
+      },
+      "owner": {
+        "title": "Ihr Flugzeug",
+        "text": "Ein Angebot geht online mit Heimatflugplatz, Preis, Foto sowie verifizierter ARC und Versicherung."
+      }
+    },
+    "changeRoles": "Pilot / Halter ändern",
+    "later": "Jetzt überspringen, zur Übersicht"
+  }
+}

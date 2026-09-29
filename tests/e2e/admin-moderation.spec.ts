@@ -72,3 +72,49 @@ test("an admin handles a report: unlist, suspend, audit log", async ({ page, bro
 
   expect((await page.goto(`/aircraft/${aircraftId}`))?.status()).toBe(404);
 });
+
+test("an admin deletes a member for good; admins can't be deleted", async ({ page, browser }) => {
+  test.setTimeout(90_000);
+  const id = unique();
+  const memberEmail = `gone-${id}@example.com`;
+  const adminEmail = `admin-d-${id}@example.com`;
+  const otherAdminEmail = `admin-e-${id}@example.com`;
+  const memberContext = await browser.newContext();
+  await signUp(await memberContext.newPage(), `Gone ${id}`, memberEmail);
+  await memberContext.close();
+  const otherContext = await browser.newContext();
+  await signUp(await otherContext.newPage(), `Other admin ${id}`, otherAdminEmail);
+  await otherContext.close();
+  execFileSync("node", ["scripts/grant-admin.mjs", otherAdminEmail], { stdio: "pipe" });
+
+  await signUp(page, `Admin ${id}`, adminEmail);
+  execFileSync("node", ["scripts/grant-admin.mjs", adminEmail], { stdio: "pipe" });
+
+  // Another admin has no delete button.
+  await page.goto(`/admin/users?q=${encodeURIComponent(otherAdminEmail)}`);
+  await expect(page.getByText(otherAdminEmail)).toBeVisible();
+  await expect(page.getByRole("button", { name: "Delete member" })).toHaveCount(0);
+
+  await page.goto(`/admin/users?q=${encodeURIComponent(memberEmail)}`);
+  await page.getByRole("button", { name: "Delete member" }).click();
+  const dialog = page.getByRole("dialog");
+  await expect(dialog.getByText("This can't be undone", { exact: false })).toBeVisible();
+  await dialog.getByLabel("Reason (for the audit log)").fill(`Asked by email ${id}`);
+  await dialog.getByRole("button", { name: "Delete member" }).click();
+  await expect(page.getByText("Member deleted.")).toBeVisible();
+  await page.goto(`/admin/users?q=${encodeURIComponent(memberEmail)}`);
+  await expect(page.getByText("No members found.")).toBeVisible();
+
+  await page.goto(`/admin/audit?q=${encodeURIComponent(`Asked by email ${id}`)}`);
+  await expect(page.getByText(`Asked by email ${id}`)).toBeVisible();
+
+  // The account is gone: logging in fails.
+  const loginContext = await browser.newContext();
+  const login = await loginContext.newPage();
+  await login.goto("/login");
+  await login.getByLabel("Email").fill(memberEmail);
+  await login.getByLabel("Password").fill(PASSWORD);
+  await login.getByRole("button", { name: "Log in" }).click();
+  await expect(login.getByText("Wrong email or password.")).toBeVisible();
+  await loginContext.close();
+});

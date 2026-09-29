@@ -4,13 +4,13 @@ import path from "node:path";
 import { describe, expect, it } from "vitest";
 
 import { parseMarkdown } from "@/lib/help/markdown";
-import { locales } from "@/lib/i18n/config";
+import { contentLocales } from "@/lib/i18n/config";
 
 const PAGES = ["terms", "privacy", "cookies"];
 
 describe("legal pages", () => {
   it.each(PAGES)("%s exists in every language with the same sections", (page) => {
-    const sections = locales.map((locale) => {
+    const sections = contentLocales.map((locale) => {
       const source = readFileSync(
         path.join(process.cwd(), "content", "legal", locale, `${page}.md`),
         "utf8",
