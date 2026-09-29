@@ -82,7 +82,7 @@ components/
   pilot/              # StatusBadge, ExpiryText
   aircraft/           # AircraftStatusBadge, MonthCalendar, RequirementsList, SectionHeading…
   document-field.tsx  # upload a private document in a form (submits its id)
-  layout/             # SiteHeader, UserMenu, MobileNav, SiteFooter, LanguageSwitcher, Logo
+  layout/             # SiteHeader, UserMenu, MobileNav, SiteFooter, LanguageSwitcher, Logo (+ LogoMark)
   auth/               # SocialSignIn (Google/Apple/Facebook buttons), ProviderIcon
   marketing/          # home page: HomeHero, AudienceCards, PhotoStrip, HowItWorks, ClosingCta
   airport-picker.tsx  # airport search box (combobox), submits the airport ident
@@ -185,6 +185,8 @@ _TODO: split areas so we don't edit the same files at the same time._
 ## Decisions log
 
 Add one line per decision, newest first.
+
+- 2026-09-29: **Logo** (Zlati): wordmark "own" + an A drawn as a delta-wing aircraft seen from above + "plane" (`components/layout/logo.tsx`, the A in `logo-mark.tsx`, in the primary colour; screen readers hear "ownAplane"). The same A, white on blue, is the browser icon (`app/icon.svg`), phone icon (`app/apple-icon.png`) and app icon for Facebook/Apple (`docs/brand/app-icon-1024.png`).
 
 - 2026-09-29: **Admins delete members** (Zlati): Admin → Members → Delete member (`deleteMember()` in `lib/admin/moderation.ts`), the same clean-up as self-deletion (`lib/account/delete-files.ts`, then the `users` row; FKs cascade or set null), logged in `admin_actions` as `delete_user`. Refused for yourself, for admins (remove the role first) and while the member has open bookings (requested/accepted/in progress) on either side; suspend meanwhile.
 

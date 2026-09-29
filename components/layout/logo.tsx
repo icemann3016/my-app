@@ -1,15 +1,21 @@
 import Link from "next/link";
-import { PlaneIcon } from "lucide-react";
 
 import { siteConfig } from "@/lib/site";
+import { LogoMark } from "./logo-mark";
 
+/** The wordmark: "own", the aircraft-shaped A, "plane". Screen readers hear the site name. */
 export function Logo() {
   return (
-    <Link href="/" className="flex items-center gap-2 font-semibold tracking-tight">
-      <span className="flex size-8 items-center justify-center rounded-md bg-primary text-primary-foreground">
-        <PlaneIcon className="size-4 -rotate-45" aria-hidden />
+    <Link
+      href="/"
+      aria-label={siteConfig.name}
+      className="flex items-baseline text-xl leading-none font-bold tracking-tight"
+    >
+      <span aria-hidden>own</span>
+      <LogoMark className="mx-px h-[0.8em] w-auto translate-y-[0.03em] self-baseline text-primary" />
+      <span aria-hidden className="text-primary">
+        plane
       </span>
-      <span>{siteConfig.name}</span>
     </Link>
   );
 }
