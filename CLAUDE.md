@@ -84,7 +84,7 @@ components/
   document-field.tsx  # upload a private document in a form (submits its id)
   layout/             # SiteHeader, UserMenu, MobileNav, SiteFooter, LanguageSwitcher, Logo
   auth/               # SocialSignIn (Google/Apple/Facebook buttons), ProviderIcon
-  marketing/          # home page: SkyScene (animated SVG), HowItWorks, ClosingCta
+  marketing/          # home page: HomeHero, AudienceCards, PhotoStrip, HowItWorks, ClosingCta
   airport-picker.tsx  # airport search box (combobox), submits the airport ident
 lib/
   auth/               # auth.ts (Better Auth config), session.ts (getUser, requireUser, requireAdmin…), errors.ts
@@ -186,7 +186,7 @@ _TODO: split areas so we don't edit the same files at the same time._
 
 Add one line per decision, newest first.
 
-- 2026-09-29: **Home page artwork** is original animated SVG + CSS (`components/marketing/sky-scene.tsx`, `.sky-*` in globals.css): day sky in light mode, night in dark mode, still for "reduce motion". No stock photos or videos yet (none can be downloaded from here; licences matter). Real photos/videos can replace or join it later as files in `public/` (self-hosted, so the CSP needs no change).
+- 2026-09-29: **Home page photos** (Zlati didn't like drawn artwork): real photos from Unsplash (free licence, no credit needed) in `public/images/home/` (sources in `CREDITS.md`), shown with `next/image` (static imports, blur placeholders, served from our own site so the CSP needs no change). Movement: slow zoom on the header photo and a sideways-scrolling photo strip, both still for "reduce motion". No stock video yet: Pexels/Pixabay block automated downloads; a clip can be added as a file in `public/` later.
 
 - 2026-09-29: **Apple and Facebook sign-in** next to Google (ACC-1), all through Better Auth's built-in providers, each shown only when its keys are set (`lib/auth/providers.ts`; `APPLE_*`, `FACEBOOK_*`). Apple's client secret (a JWT valid ≤ 6 months) is made from the `.p8` key at start-up with Node's crypto (no new dependency), and the auth instance is rebuilt every 30 days. Same linking rule as Google: never automatic, connect from Account → Security; disconnect only while another way to log in remains. Facebook accounts without an email can't sign up (clear message). Setup steps in `docs/deployment.md`.
 
