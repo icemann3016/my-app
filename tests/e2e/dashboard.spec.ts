@@ -70,6 +70,6 @@ test("owner and pilot see their to-dos, flights and aircraft", async ({ page, br
     .locator("xpath=ancestor::*[@data-slot='card'][1]");
   await expect(pilotCard.getByText("Verified pilot: licence and medical valid")).toBeVisible();
   await expect(pilotCard.getByRole("link", { name: /Upcoming flights/ })).toContainText("2");
-  await pilotCard.getByRole("link", { name: "Pilot credentials" }).first().click();
+  await pilotCard.getByRole("link", { name: /Verified pilot/ }).click();
   await expect(page).toHaveURL(/\/account\/credentials$/);
 });

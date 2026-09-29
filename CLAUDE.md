@@ -65,7 +65,7 @@ app/
                       #   u/[id] (public profile), aircraft/[id] (public listing + availability),
                       #   search, owner/aircraft (my aircraft, new, [id]/calendar, details…requirements,
                       #   defects, remarks, usage), bookings/[id] (+ log, reviews, contact), notifications,
-                      #   messages (+ [id], new), reports (actions), admin (dashboard, verifications,
+                      #   messages (+ [id], new), reports (actions), welcome (setup guide), admin (dashboard, verifications,
                       #   reports, users, aircraft, audit)
   api/auth/           # Better Auth endpoints (email links, OAuth callbacks)
   api/account/avatar/ # photo upload
@@ -185,6 +185,7 @@ _TODO: split areas so we don't edit the same files at the same time._
 
 Add one line per decision, newest first.
 
+- 2026-09-29: **Setup guide + profile completion** (Zlati): sign-up (email and Google) lands on `/welcome`: choose pilot / owner / both (roles), then the steps for those roles with "Continue" to the next one. The dashboard shows "Profile N% complete" (`lib/profile-completion.ts`, pure + tested) that opens to what is left **for the user**; credentials and aircraft documents waiting for an admin count as done and are listed as "waiting". Dashboard cards: full width with one role, no bottom buttons (every item links to its page).
 - 2026-09-29: **Dashboard as overview** (Zlati): a "To do" list of everything waiting for the user (requests to answer, flight logs to finish/confirm, open defects, ARC/insurance expiring within 30 days, credential problems, reviews due, unread messages/notifications), each linking to the page where it is done; then "As a pilot" and "As an owner" cards (counts, rating, credentials status, aircraft, next and recent bookings, shortcuts); getting-started steps only until done. Data from `lib/dashboard` with the user's own rights (RLS).
 - 2026-09-29: **Strict CSP + axe.** `proxy.ts` sets a per-request nonce Content-Security-Policy (`lib/csp.ts`): scripts only with the nonce (`strict-dynamic`), styles from us (+ inline style attributes), images from our storage hosts and the map, connections to us, the map tiles and the analytics host. New external hosts must be added in `lib/csp.ts` (the CSP e2e test catches violations). Every page must stay dynamically rendered (the layout reads the locale cookie) so Next can apply the nonce. Dev dependency `@axe-core/playwright` (approved) checks WCAG 2.1 AA incl. contrast in light and dark mode; colour tokens darkened to ≥ 4.5:1.
 - 2026-09-29: **Notification settings (MSG-3):** `user_settings` has email/in-app switches for bookings and reviews and an email switch for messages (default on). The `booking_events` trigger and the reminder job apply them (`notifications.in_app`; unwanted emails are marked sent; nothing is created when both are off); message emails skip people who turned them off. Always sent: defect emails, account/auth emails, document decisions and expiry reminders. Push stays for later.

@@ -203,7 +203,6 @@
   "dashboard": {
     "title": "Welcome, {name}",
     "subtitle": "What needs your attention, your flights and your aircraft at a glance.",
-    "done": "Done",
     "todo": {
       "title": "To do",
       "none": "You're all caught up.",
@@ -221,31 +220,10 @@
       "docsPending": "{count, plural, one {# aircraft document} other {# aircraft documents}} waiting for our check",
       "credentialsRejected": "{count, plural, one {# credential needs} other {# credentials need}} fixing: see the reason"
     },
-    "profileTitle": "Complete your profile",
-    "profileText": "Add a photo, your home airfield and a few words about your flying.",
-    "profileComplete": "Complete profile",
-    "profileEdit": "Edit profile",
-    "pilotTitle": "Fly as a pilot",
-    "pilotTextOff": "Switch on the pilot role to rent aircraft.",
-    "ownerTitle": "List your aircraft",
-    "ownerTextOn": "Next: create your first listing.",
-    "ownerTextOff": "Own an aircraft? Switch on the owner role to rent it out.",
-    "switchOn": "Switch on",
     "publicProfile": "Your public profile:",
     "seeWhatOthersSee": "see what others see",
-    "pilotTextMissing": "Next: add your licence and medical so we can verify them.",
-    "pilotTextPending": "Thanks! We're checking your documents, usually within two working days.",
-    "pilotTextVerified": "You're a verified pilot: find an aircraft and send a booking request.",
-    "pilotTextRejected": "Something needs fixing: see the reason in your pilot credentials.",
-    "addCredentials": "Add credentials",
-    "manageCredentials": "Pilot credentials",
     "credentialExpiring": "{item} expires on {date}.",
     "credentialExpired": "{item} expired on {date}.",
-    "ownerTextDraft": "Finish your listing and publish it so pilots can find it.",
-    "ownerTextListed": "{count, plural, one {# aircraft listed} other {# aircraft listed}}.",
-    "myAircraft": "My aircraft",
-    "addAircraft": "Add aircraft",
-    "setupTitle": "Getting started",
     "accountLink": "account settings",
     "pilot": {
       "title": "As a pilot",
@@ -262,10 +240,7 @@
       "nextFlights": "Next flights",
       "noUpcoming": "No upcoming flights.",
       "recentFlights": "Recent flights",
-      "noPast": "No flights yet.",
-      "findAircraft": "Find aircraft",
-      "allBookings": "All bookings",
-      "credentialsLink": "Pilot credentials"
+      "noPast": "No flights yet."
     },
     "owner": {
       "title": "As an owner",
@@ -276,13 +251,9 @@
       "noAircraft": "No aircraft yet.",
       "nextBookings": "Next bookings of your aircraft",
       "noUpcoming": "No upcoming bookings.",
-      "myAircraft": "My aircraft",
-      "addAircraft": "Add aircraft",
-      "allBookings": "All bookings",
       "recentBookings": "Recent bookings of your aircraft",
       "noPast": "No past bookings yet."
-    },
-    "notDone": "Not done yet"
+    }
   },
   "account": {
     "title": "Account",
@@ -2138,5 +2109,91 @@
       "temporary": "Temporarily",
       "probable": "{p}% chance"
     }
+  },
+  "completion": {
+    "title": "Profile {percent}% complete",
+    "left": "{count, plural, one {# step left} other {# steps left}}",
+    "complete": "All done",
+    "progress": "Profile completion",
+    "allDone": "Your profile is complete.",
+    "openGuide": "Open the setup guide",
+    "done": "Done",
+    "todo": "To do",
+    "waitingTitle": "Waiting for our check (nothing to do for you)",
+    "items": {
+      "roles": "Tell us whether you fly, own an aircraft or both",
+      "photo": "Add a profile photo or choose an avatar",
+      "home": "Set your home airfield",
+      "bio": "Write a few words about your flying",
+      "phone": "Add a contact phone (shown only on accepted bookings)",
+      "licence": "Add your pilot licence",
+      "medical": "Add your medical certificate",
+      "classRating": "Add your class rating (e.g. SEP land)",
+      "experience": "Enter your flying experience (total hours)",
+      "rejected": "Fix {count, plural, one {# rejected credential} other {# rejected credentials}}",
+      "expired": "Renew {count, plural, one {# expired credential} other {# expired credentials}}",
+      "pendingCreds": "{count, plural, one {# credential is} other {# credentials are}} being checked",
+      "aircraft": "Add your first aircraft",
+      "publish": "Publish {registration}: everything is ready",
+      "gap": {
+        "home_base": "{registration}: set its home base",
+        "price": "{registration}: set the price",
+        "photo": "{registration}: add at least one photo",
+        "arc": "{registration}: upload the ARC",
+        "insurance": "{registration}: upload the insurance certificate"
+      },
+      "pendingDoc": {
+        "arc": "{registration}: ARC being checked",
+        "insurance": "{registration}: insurance being checked"
+      }
+    }
+  },
+  "welcome": {
+    "metaTitle": "Set up your account",
+    "rolesTitle": "Welcome, {name}! How will you use ownAplane?",
+    "rolesText": "Pick one; we'll guide you through the steps that matter for you.",
+    "rolesLater": "You can change this any time in Account.",
+    "choices": {
+      "pilot": {
+        "title": "I'm a pilot",
+        "text": "I want to rent aircraft from owners."
+      },
+      "owner": {
+        "title": "I own an aircraft",
+        "text": "I want to rent my aircraft to verified pilots."
+      },
+      "both": {
+        "title": "Both",
+        "text": "I fly and I rent out my own aircraft."
+      }
+    },
+    "stepsTitle": "Set up your account",
+    "progress": "{percent}% done. Each step opens the page where you do it; come back here any time from the dashboard.",
+    "nextStep": "Next step",
+    "next": {
+      "start": "Choose how you'll use ownAplane",
+      "profile": "Complete your profile",
+      "pilot": "Add your pilot credentials",
+      "owner": "List your aircraft"
+    },
+    "continue": "Continue",
+    "allDone": "Everything is set up.",
+    "toDashboard": "Go to the dashboard",
+    "groups": {
+      "profile": {
+        "title": "Your profile",
+        "text": "What other pilots and owners see about you."
+      },
+      "pilot": {
+        "title": "Pilot credentials",
+        "text": "We verify them so owners can trust you; this takes up to two working days."
+      },
+      "owner": {
+        "title": "Your aircraft",
+        "text": "A listing goes live with a home base, a price, a photo and a verified ARC and insurance."
+      }
+    },
+    "changeRoles": "Change pilot / owner",
+    "later": "Skip for now, go to the dashboard"
   }
 }

@@ -29,15 +29,21 @@ export async function BookingMiniList({
             <li key={b.id}>
               <Link
                 href={`/bookings/${b.id}`}
-                className="flex flex-wrap items-center gap-x-3 gap-y-1 px-3 py-2 text-sm hover:bg-accent"
+                className="flex items-center gap-3 px-3 py-2 text-sm hover:bg-accent"
               >
-                <span className="font-mono font-medium">{b.aircraft.registration}</span>
-                <span className="text-muted-foreground">
-                  {b.departureIdent === b.arrivalIdent
-                    ? b.departureIdent
-                    : `${b.departureIdent} → ${b.arrivalIdent}`}
+                <span className="grid min-w-0 flex-1 gap-0.5">
+                  <span className="flex items-baseline gap-2">
+                    <span className="font-mono font-medium">{b.aircraft.registration}</span>
+                    <span className="truncate text-xs text-muted-foreground">
+                      {b.departureIdent === b.arrivalIdent
+                        ? b.departureIdent
+                        : `${b.departureIdent} → ${b.arrivalIdent}`}
+                    </span>
+                  </span>
+                  <span className="text-xs text-muted-foreground">
+                    {formatSpan(b.from, b.to, locale)}
+                  </span>
                 </span>
-                <span className="min-w-0 flex-1 basis-40">{formatSpan(b.from, b.to, locale)}</span>
                 <BookingStatusBadge status={b.status} label={t(`statuses.${b.status}`)} />
               </Link>
             </li>

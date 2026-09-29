@@ -80,7 +80,7 @@ export async function signUp(_prev: FormState, formData: FormData): Promise<Form
   let signedIn = false;
   try {
     const result = await getAuth().api.signUpEmail({
-      body: { name: displayName, email, password, callbackURL: "/dashboard" },
+      body: { name: displayName, email, password, callbackURL: "/welcome" },
       headers: await headers(),
     });
     signedIn = Boolean(result.token);
@@ -97,7 +97,8 @@ export async function signUp(_prev: FormState, formData: FormData): Promise<Form
 
   revalidatePath("/", "layout");
   // With email verification switched on, no session exists until the link is clicked.
-  redirect(signedIn ? "/dashboard" : "/signup/check-email");
+  // New accounts start with the welcome guide (pilot, owner or both, then the steps).
+  redirect(signedIn ? "/welcome" : "/signup/check-email");
 }
 
 export async function signIn(_prev: FormState, formData: FormData): Promise<FormState> {
@@ -136,7 +137,7 @@ export async function signInWithGoogle(formData: FormData) {
     body: {
       provider: "google",
       callbackURL: next,
-      newUserCallbackURL: "/dashboard",
+      newUserCallbackURL: "/welcome",
       errorCallbackURL: "/login",
     },
     headers: await headers(),

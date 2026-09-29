@@ -3,7 +3,6 @@ import { PlaneIcon } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 
 import { AircraftStatusBadge } from "@/components/aircraft/aircraft-status-badge";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import type { Dashboard } from "@/lib/dashboard";
 import { BookingMiniList } from "./booking-mini-list";
@@ -69,17 +68,6 @@ export async function OwnerCard({ owner }: { owner: NonNullable<Dashboard["owner
           items={owner.past.slice(0, 3)}
           empty={t("noPast")}
         />
-        <div className="flex flex-wrap gap-2">
-          <Button size="sm" variant="outline" asChild>
-            <Link href="/owner/aircraft">{t("myAircraft")}</Link>
-          </Button>
-          <Button size="sm" variant="outline" asChild>
-            <Link href="/owner/aircraft/new">{t("addAircraft")}</Link>
-          </Button>
-          <Button size="sm" variant="outline" asChild>
-            <Link href="/bookings">{t("allBookings")}</Link>
-          </Button>
-        </div>
       </CardContent>
     </Card>
   );

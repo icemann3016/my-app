@@ -47,4 +47,13 @@ Your starting point after logging in, with everything at a glance and a link to 
   verified, your next and recent flights, and shortcuts to search, bookings and credentials.
 - **As an owner**: listed aircraft, upcoming bookings of them, your rating as an owner, your
   aircraft with their status, and shortcuts to My aircraft and bookings.
-- **Getting started**: profile, credentials and first listing, shown until they're done.
+- **Profile completion**: a percentage at the top; open it to see what's left for you to do
+  (items waiting for our check don't count against you). **Open the setup guide** leads to the
+  same steps one by one.
+
+## The setup guide
+
+Right after you sign up, the guide asks whether you're a **pilot**, an **aircraft owner** or
+**both**, then lists your steps: profile, pilot credentials, first aircraft. **Continue** always
+opens the next one. You can come back to it from the dashboard, and change pilot/owner at any
+time.

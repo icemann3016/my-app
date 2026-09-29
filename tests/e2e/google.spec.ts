@@ -38,7 +38,7 @@ test("a logged-in user can connect Google from the account page", async ({ page 
   await page.getByLabel("Password").fill("blue-skies-2026");
   await page.getByRole("checkbox").check();
   await page.getByRole("button", { name: "Create account" }).click();
-  await expect(page).toHaveURL(/\/dashboard$/);
+  await expect(page).toHaveURL(/\/welcome$/);
 
   await page.goto("/account");
   await expect(page.getByText("Email and password")).toBeVisible();

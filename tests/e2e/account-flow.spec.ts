@@ -19,8 +19,8 @@ test("a new pilot can sign up, set up their profile and log back in", async ({ p
   await page.getByRole("checkbox").check();
   await page.getByRole("button", { name: "Create account" }).click();
 
-  await expect(page).toHaveURL(/\/dashboard$/);
-  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Welcome, Test");
+  await expect(page).toHaveURL(/\/welcome$/);
+  await expect(page.getByRole("heading", { level: 1 })).toContainText("Welcome, Test");
 
   // Profile
   await page.goto("/account");
@@ -73,7 +73,7 @@ test("a user can change language, download their data and delete their account",
   await page.getByLabel("Password").fill(password);
   await page.getByRole("checkbox").check();
   await page.getByRole("button", { name: "Create account" }).click();
-  await expect(page).toHaveURL(/\/dashboard$/);
+  await expect(page).toHaveURL(/\/welcome$/);
 
   // Preferences: switch to Bulgarian, the app follows
   await page.goto("/account");
