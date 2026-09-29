@@ -72,14 +72,16 @@ before launch and whenever a new table, storage path or Server Action is added. 
 
 ## 5. Found and fixed in this review
 
-- Added the security headers (there were none).
+- Added the security headers (there were none), and later (29 Sep) a strict
+  Content-Security-Policy with a fresh nonce per request (`proxy.ts`, `lib/csp.ts`):
+  `'strict-dynamic'` scripts, own styles, images only from our storage hosts and the map,
+  no framing, no plugins. `tests/e2e/csp.spec.ts` fails on any CSP violation.
 - Added the automated guards above so the rules can't silently break.
 - Added spam limits: 30 messages per sender in 10 minutes, 20 reports per reporter a day
   (`0047_content_limits`); log-in and sign-up are rate-limited by Better Auth.
 
 ## 6. Open items (before or soon after launch)
 
-- [ ] A full Content-Security-Policy with nonces (needs care with the map's web workers).
 - [ ] Switch on email verification once real email (SMTP) is configured
       (`AUTH_REQUIRE_EMAIL_VERIFICATION=true`).
 - [ ] Lawyer review of the terms and privacy policy (company details are placeholders).

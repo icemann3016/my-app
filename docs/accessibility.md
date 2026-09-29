@@ -10,6 +10,11 @@ messages). Checked on 28 September 2026.
 - Pages: home, sign-up, log-in, search, help, dashboard, account, credentials, aircraft page,
   booking request, booking (with the review form), bookings, messages, notifications.
 
+- **axe-core** (`@axe-core/playwright`) runs the WCAG 2.1 A/AA rules on the same pages, colour
+  contrast included, in light **and dark** mode. It found low contrast in the green "success"
+  text, the amber warning text and grey text on grey badges; the colour tokens were darkened
+  to at least 4.5:1 (29 Sep).
+
 ## Built in
 
 - Forms: `TextField` / `SelectField` link labels, hints and errors (`aria-describedby`,
@@ -30,4 +35,3 @@ messages). Checked on 28 September 2026.
 - Zoom to 200 % and 320 px wide on the booking and flight log pages.
 - The search map: the list view is the accessible alternative; the map itself is not usable
   with a screen reader.
-- Consider adding axe-core (`@axe-core/playwright`, dev dependency) for colour-contrast checks.

@@ -119,6 +119,7 @@ docs/                 # requirements, implementation plan, deployment guide
 content/help/         # help articles (Markdown, en/ + bg/), shown at /help
 content/legal/        # terms, privacy, cookies (Markdown, en/ + bg/), drafts until lawyer review
 instrumentation.ts    # server errors → lib/monitoring
+proxy.ts              # per-request CSP nonce (lib/csp.ts)
 Dockerfile, docker-compose.yml
 ```
 
@@ -184,6 +185,7 @@ _TODO: split areas so we don't edit the same files at the same time._
 
 Add one line per decision, newest first.
 
+- 2026-09-29: **Strict CSP + axe.** `proxy.ts` sets a per-request nonce Content-Security-Policy (`lib/csp.ts`): scripts only with the nonce (`strict-dynamic`), styles from us (+ inline style attributes), images from our storage hosts and the map, connections to us, the map tiles and the analytics host. New external hosts must be added in `lib/csp.ts` (the CSP e2e test catches violations). Every page must stay dynamically rendered (the layout reads the locale cookie) so Next can apply the nonce. Dev dependency `@axe-core/playwright` (approved) checks WCAG 2.1 AA incl. contrast in light and dark mode; colour tokens darkened to ≥ 4.5:1.
 - 2026-09-29: **Notification settings (MSG-3):** `user_settings` has email/in-app switches for bookings and reviews and an email switch for messages (default on). The `booking_events` trigger and the reminder job apply them (`notifications.in_app`; unwanted emails are marked sent; nothing is created when both are off); message emails skip people who turned them off. Always sent: defect emails, account/auth emails, document decisions and expiry reminders. Push stays for later.
 - 2026-09-29: **Weather warnings built** (per the 2026-09-27 decision): `lib/weather` reads METAR/TAF text itself (visibility, BKN/OVC/VV ceiling) instead of trusting the API's derived fields; TAF periods are base/FM/BECMG/TEMPO/PROB windows, a warning is any below-minima period overlapping the booked time. Shown on the booking and the open flight log. The "no valid IR" line is shown **only to the pilot** (owners never see credentials); owners see the weather and whether the aircraft is IFR. Cached 10 min; if the service fails the card says so. Browser tests use a local stand-in (`tests/e2e/fixtures/weather-mock.mjs`, `WEATHER_API_URL`).
 - 2026-09-29: **No Supabase backups for now** (Free plan). Real usage will move to Azure or Google Cloud, with managed backups set up there (`docs/deployment.md` §3–5). Until then, take a manual `pg_dump` before risky changes; photos and documents aren't backed up. Error monitoring is live (Sentry EU, `SENTRY_DSN`).

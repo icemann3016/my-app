@@ -17,6 +17,14 @@ test("public pages meet the basics", async ({ page }) => {
   }
 });
 
+test("dark mode has enough contrast too", async ({ page }) => {
+  await page.emulateMedia({ colorScheme: "dark" });
+  for (const path of ["/", "/signup", "/search", "/help/getting-started", "/terms"]) {
+    await page.goto(path);
+    await expectAccessible(page);
+  }
+});
+
 test("the skip link jumps to the content", async ({ page, isMobile }) => {
   test.skip(isMobile, "keyboard navigation");
   await page.goto("/help");

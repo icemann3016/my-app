@@ -1,3 +1,4 @@
+import AxeBuilder from "@axe-core/playwright";
 import { expect, type Page } from "@playwright/test";
 
 /**
@@ -58,6 +59,23 @@ export async function a11yProblems(page: Page): Promise<string[]> {
   });
 }
 
+/** WCAG 2.1 A/AA violations found by axe-core, colour contrast included. */
+export async function axeViolations(page: Page): Promise<string[]> {
+  const results = await new AxeBuilder({ page })
+    .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"])
+    // The map canvas is covered by the list view (docs/accessibility.md).
+    .exclude(".maplibregl-map")
+    .analyze();
+  return results.violations.map(
+    (v) =>
+      `${v.id} (${v.impact}): ${v.nodes
+        .slice(0, 4)
+        .map((n) => n.target.join(" "))
+        .join(" | ")}`,
+  );
+}
+
 export async function expectAccessible(page: Page) {
   expect(await a11yProblems(page), page.url()).toEqual([]);
+  expect(await axeViolations(page), page.url()).toEqual([]);
 }
