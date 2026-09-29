@@ -2033,5 +2033,29 @@
   },
   "legal": {
     "draft": "Draft: this text is still being reviewed by our lawyer and may change before launch."
+  },
+  "weather": {
+    "title": "Weather",
+    "disclaimer": "Warnings from METAR and TAF (aviationweather.gov) for the airfields of this flight. Not an official briefing: the pilot in command decides, after a full weather briefing.",
+    "later": "Forecasts (TAF) appear here from {date}, 30 hours before departure.",
+    "belowVfr": "Weather below VFR minima (visibility under 5 km or ceiling below 1 500 ft) is reported or forecast for this flight.",
+    "aircraftNotIfr": "This aircraft isn't approved for IFR.",
+    "noIr": "You don't have a valid, verified instrument rating (IR).",
+    "unavailable": "Some weather reports couldn't be loaded right now. Check them in your usual briefing service.",
+    "noReport": "No weather report within 50 km.",
+    "nearest": "From {station}, {km} km away (no report for this airfield).",
+    "vfr": "VFR",
+    "belowShort": "Below VFR minima",
+    "tafOk": "No conditions below VFR minima forecast for the booked time.",
+    "rawTaf": "Show the TAF",
+    "visibility": "visibility {m, number} m",
+    "ceiling": "ceiling {ft, number} ft",
+    "kinds": {
+      "base": "Forecast",
+      "from": "From",
+      "becoming": "Becoming",
+      "temporary": "Temporarily",
+      "probable": "{p}% chance"
+    }
   }
 }

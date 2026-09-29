@@ -3,6 +3,18 @@
 Every rental has a **flight log**: a record between you and the owner. It is **not** the
 aircraft's journey or technical log, and not your pilot logbook.
 
+## Weather
+
+From **30 hours before departure**, the booking and the flight log show the forecast (TAF) for
+the booked time at every airfield of the flight; from **3 hours before**, also the latest
+observation (METAR). Airfields without their own reports use the nearest reporting station
+within 50 km.
+
+When visibility under 5 km or a ceiling below 1 500 ft is reported or forecast, you see a
+warning, plus whether the aircraft is approved for IFR and (only for you, the pilot) whether you
+hold a valid instrument rating. These are **warnings, never a block**: the pilot in command
+decides, after a full official weather briefing. Data: aviationweather.gov.
+
 ## Check-out
 
 From **2 hours before** the booked time, your booking has a **Check out** button. It opens the

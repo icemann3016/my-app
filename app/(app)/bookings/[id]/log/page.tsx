@@ -5,6 +5,7 @@ import { ArrowLeftIcon, InfoIcon, TriangleAlertIcon } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 
 import { KnownItems } from "@/components/bookings/known-items";
+import { WeatherCard } from "@/components/bookings/weather-card";
 import { ReportDefectDialog } from "@/components/bookings/report-defect-dialog";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
@@ -102,6 +103,15 @@ export default async function FlightLogPage({ params }: { params: Promise<{ id: 
         <AlertDescription>{t("disclaimer")}</AlertDescription>
       </Alert>
       {role === "pilot" && <KnownItems items={knownItems} />}
+      {(log.status === "draft" || log.status === "correction_requested") && (
+        <WeatherCard
+          userId={user.id}
+          isPilot={role === "pilot"}
+          route={detail.route}
+          period={period}
+          aircraftIfr={plane.ifr}
+        />
+      )}
       {log.correctionNote && log.status === "correction_requested" && (
         <Alert variant="destructive">
           <TriangleAlertIcon />

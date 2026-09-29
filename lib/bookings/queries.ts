@@ -59,6 +59,7 @@ export async function getBooking(viewerId: string, id: string) {
       oilUnit: aircraft.oilUnit,
       fuelType: aircraft.fuelType,
       status: aircraft.status,
+      ifr: aircraft.ifr,
     })
     .from(aircraft)
     .where(eq(aircraft.id, b.aircraftId));
@@ -72,6 +73,8 @@ export async function getBooking(viewerId: string, id: string) {
       code: sql<string>`coalesce(${airports.icaoCode}, ${airports.ident})`,
       name: airports.name,
       timezone: airports.timezone,
+      latitude: airports.latitude,
+      longitude: airports.longitude,
     })
     .from(airports)
     .where(inArray(airports.ident, [b.departureIdent, b.arrivalIdent, ...b.stops]));

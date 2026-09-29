@@ -14,6 +14,7 @@ import { getLocale, getTranslations } from "next-intl/server";
 
 import { BookingStatusBadge } from "@/components/bookings/booking-status-badge";
 import { KnownItems } from "@/components/bookings/known-items";
+import { WeatherCard } from "@/components/bookings/weather-card";
 import { ReportDefectDialog } from "@/components/bookings/report-defect-dialog";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
@@ -151,6 +152,15 @@ export default async function BookingPage({
           <TriangleAlertIcon />
           <AlertDescription>{t("detail.grounded")}</AlertDescription>
         </Alert>
+      )}
+      {["requested", "accepted", "in_progress"].includes(b.status) && (
+        <WeatherCard
+          userId={user.id}
+          isPilot={b.pilotId === user.id}
+          route={route}
+          period={period}
+          aircraftIfr={plane.ifr}
+        />
       )}
       {["requested", "accepted", "in_progress"].includes(b.status) && (
         <KnownItems items={await getKnownItems(user.id, b.aircraftId)} />
