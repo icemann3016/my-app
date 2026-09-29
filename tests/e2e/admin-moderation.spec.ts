@@ -51,8 +51,9 @@ test("an admin handles a report: unlist, suspend, audit log", async ({ page, bro
   await admin.getByRole("dialog").getByRole("button", { name: "Unlist aircraft" }).click();
   await expect(card).toHaveCount(0); // the report is resolved too
 
-  // Suspend the owner from the members list.
+  // Suspend the owner from their page in the members list.
   await admin.goto(`/admin/users?q=${encodeURIComponent(ownerEmail)}`);
+  await admin.getByRole("link", { name: new RegExp(`Owner ${id}`) }).click();
   await admin.getByRole("button", { name: "Suspend member" }).click();
   await admin.getByRole("dialog").getByRole("button", { name: "Suspend member" }).click();
   await expect(admin.getByText("Member suspended.")).toBeVisible();
@@ -92,10 +93,13 @@ test("an admin deletes a member for good; admins can't be deleted", async ({ pag
 
   // Another admin has no delete button.
   await page.goto(`/admin/users?q=${encodeURIComponent(otherAdminEmail)}`);
+  await page.getByRole("link", { name: new RegExp(`Other admin ${id}`) }).click();
   await expect(page.getByText(otherAdminEmail)).toBeVisible();
+  await expect(page.getByRole("button", { name: "Remove admin rights" })).toBeVisible();
   await expect(page.getByRole("button", { name: "Delete member" })).toHaveCount(0);
 
   await page.goto(`/admin/users?q=${encodeURIComponent(memberEmail)}`);
+  await page.getByRole("link", { name: new RegExp(`Gone ${id}`) }).click();
   await page.getByRole("button", { name: "Delete member" }).click();
   const dialog = page.getByRole("dialog");
   await expect(dialog.getByText("This can't be undone", { exact: false })).toBeVisible();
@@ -117,4 +121,58 @@ test("an admin deletes a member for good; admins can't be deleted", async ({ pag
   await login.getByRole("button", { name: "Log in" }).click();
   await expect(login.getByText("Wrong email or password.")).toBeVisible();
   await loginContext.close();
+});
+
+test("an admin gives and removes admin rights from the member page", async ({ page, browser }) => {
+  test.setTimeout(90_000);
+  const id = unique();
+  const memberEmail = `helper-${id}@example.com`;
+  const adminEmail = `admin-g-${id}@example.com`;
+  const memberContext = await browser.newContext();
+  const member = await memberContext.newPage();
+  await signUp(member, `Helper ${id}`, memberEmail);
+  await member.goto("/admin");
+  await expect(member.getByText("Off the charts")).toBeVisible(); // not an admin: 404
+
+  await signUp(page, `Admin ${id}`, adminEmail);
+  execFileSync("node", ["scripts/grant-admin.mjs", adminEmail], { stdio: "pipe" });
+
+  // Filters and search find the member; their page shows the account details.
+  await page.goto("/admin/users?filter=unverified");
+  await expect(page.getByRole("link", { name: /Email not confirmed \d+/ })).toHaveAttribute(
+    "aria-current",
+    "page",
+  );
+  await page.goto(`/admin/users?q=${encodeURIComponent(memberEmail)}`);
+  await page.getByRole("link", { name: new RegExp(`Helper ${id}`) }).click();
+  await expect(
+    page.getByRole("heading", { level: 1, name: new RegExp(`Helper ${id}`) }),
+  ).toBeVisible();
+  await expect(page.getByText(memberEmail)).toBeVisible();
+  await expect(page.getByText("Email and password")).toBeVisible();
+
+  await page.getByRole("button", { name: "Make admin" }).click();
+  await page.getByRole("dialog").getByLabel("Reason (for the audit log)").fill(`Helps ${id}`);
+  await page.getByRole("dialog").getByRole("button", { name: "Make admin" }).click();
+  await expect(page.getByText("Admin rights given.")).toBeVisible();
+  await page.reload();
+  await expect(page.getByText("Made admin")).toBeVisible();
+  await expect(page.getByText(`“Helps ${id}”`)).toBeVisible();
+
+  // The member now reaches the admin pages.
+  await member.goto("/admin");
+  await expect(member.getByRole("heading", { name: "Admin dashboard" })).toBeVisible();
+
+  await page.getByRole("button", { name: "Remove admin rights" }).click();
+  await page.getByRole("dialog").getByRole("button", { name: "Remove admin rights" }).click();
+  await expect(page.getByText("Admin rights removed.").first()).toBeVisible();
+  await member.goto("/admin");
+  await expect(member.getByText("Off the charts")).toBeVisible();
+  await memberContext.close();
+
+  // You can't remove your own admin rights.
+  await page.goto(`/admin/users?q=${encodeURIComponent(adminEmail)}`);
+  await page.getByRole("link", { name: new RegExp(`Admin ${id}`) }).click();
+  await expect(page.getByText("This is your own account")).toBeVisible();
+  await expect(page.getByRole("button", { name: "Remove admin rights" })).toHaveCount(0);
 });

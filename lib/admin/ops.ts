@@ -9,5 +9,7 @@ export const MODERATION_OPS = [
   "resolve_report",
   "dismiss_report",
   "delete_user",
+  "grant_admin",
+  "revoke_admin",
 ] as const;
 export type ModerationOp = (typeof MODERATION_OPS)[number];

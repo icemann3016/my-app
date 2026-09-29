@@ -905,14 +905,42 @@
     },
     "users": {
       "title": "Members",
-      "description": "Find members by name or email. Suspended members can't log in, book, message or review, and their aircraft are unlisted.",
+      "description": "Find members, see what they do on ownAplane and manage their access: admin rights, suspension and deletion.",
       "search": "Search members",
       "placeholder": "Name or email",
       "searchButton": "Search",
       "none": "No members found.",
       "admin": "Admin",
       "joined": "joined {date}",
-      "suspended": "Suspended"
+      "suspended": "Suspended",
+      "filterLabel": "Show",
+      "filters": {
+        "all": "All",
+        "pilots": "Pilots",
+        "owners": "Owners",
+        "admins": "Admins",
+        "suspended": "Suspended",
+        "pending": "Credentials to check",
+        "unverified": "Email not confirmed"
+      },
+      "sort": "Sort by",
+      "sorts": {
+        "newest": "Newest first",
+        "oldest": "Oldest first",
+        "name": "Name",
+        "active": "Last active"
+      },
+      "showing": "{from}–{to} of {total}",
+      "pagination": "Pages",
+      "previous": "Previous",
+      "next": "Next",
+      "verifiedPilot": "Verified pilot",
+      "pendingCount": "{count, plural, one {# credential to check} other {# credentials to check}}",
+      "emailUnverified": "email not confirmed",
+      "flights": "{count, plural, one {# flight} other {# flights}}",
+      "aircraftCount": "{count, plural, one {# aircraft} other {# aircraft}}",
+      "lastActive": "active {date}",
+      "noSession": "no active session"
     },
     "aircraft": {
       "title": "Aircraft",
@@ -955,7 +983,9 @@
         "show_review": "Show review again",
         "resolve_report": "Mark resolved",
         "dismiss_report": "Dismiss",
-        "delete_user": "Delete member"
+        "delete_user": "Delete member",
+        "grant_admin": "Make admin",
+        "revoke_admin": "Remove admin rights"
       },
       "confirm": {
         "suspend": "They are logged out and can't log in, book, message or review. Their listed aircraft are unlisted.",
@@ -966,7 +996,9 @@
         "show_review": "The review becomes public again and counts in the averages.",
         "resolve_report": "Close the report: action was taken.",
         "dismiss_report": "Close the report: nothing breaks the rules.",
-        "delete_user": "Deletes the account for good: profile, credentials, documents, photos, and their aircraft with its bookings. Bookings they made as a pilot, reviews and messages stay for the other side, shown as a former member. This can't be undone; suspend instead if you're not sure."
+        "delete_user": "Deletes the account for good: profile, credentials, documents, photos, and their aircraft with its bookings. Bookings they made as a pilot, reviews and messages stay for the other side, shown as a former member. This can't be undone; suspend instead if you're not sure.",
+        "grant_admin": "They can then verify documents, handle reports, suspend and delete members, and change admin rights, including yours. Only give this to people you trust.",
+        "revoke_admin": "They lose access to the admin pages straight away. Their account stays as it is."
       },
       "done": {
         "suspend": "Member suspended.",
@@ -977,10 +1009,13 @@
         "show_review": "Review shown again.",
         "resolve_report": "Report resolved.",
         "dismiss_report": "Report dismissed.",
-        "delete_user": "Member deleted."
+        "delete_user": "Member deleted.",
+        "grant_admin": "Admin rights given.",
+        "revoke_admin": "Admin rights removed."
       },
       "adminAccount": "Admin accounts can't be deleted here. Remove the admin role first.",
-      "activeBookings": "This member has open bookings (requested, accepted or in progress). Suspend them now, and delete once those are cancelled or finished."
+      "activeBookings": "This member has open bookings (requested, accepted or in progress). Suspend them now, and delete once those are cancelled or finished.",
+      "suspendedAccount": "Lift the suspension before making this member an admin."
     },
     "monitoring": {
       "title": "Error monitoring",
@@ -992,6 +1027,89 @@
         "ok": "Errors are sent to the monitoring service (SENTRY_DSN is set).",
         "missing": "Not set up: SENTRY_DSN isn't set on this deployment, so errors only go to the server log. Add it to the project's environment variables (a shared variable must be linked to the project) and redeploy.",
         "invalid": "SENTRY_DSN is set but isn't a valid DSN. Copy the whole value from Sentry → Project Settings → Client Keys (DSN), starting with https://, and redeploy."
+      }
+    },
+    "member": {
+      "metaTitle": "Member",
+      "back": "All members",
+      "memberSince": "Member since {date}",
+      "lastActive": "Last active {date} UTC",
+      "noSession": "No active session",
+      "publicProfile": "Public profile",
+      "reviewCredentials": "Review credentials",
+      "access": {
+        "title": "Access",
+        "text": "Admin rights, suspension and deletion. Every change goes to the audit log.",
+        "isAdmin": "Admin: can verify documents, handle reports and manage members.",
+        "notAdmin": "Not an admin.",
+        "ownAccount": "This is your own account: you can't remove your own admin rights, suspend or delete yourself.",
+        "suspendedSince": "Suspended since {date} UTC.",
+        "deleteHint": "Admins can't be deleted. Remove the admin rights first."
+      },
+      "account": {
+        "title": "Account",
+        "email": "Email",
+        "emailVerified": "confirmed",
+        "emailNotVerified": "not confirmed",
+        "signIn": "Signs in with",
+        "language": "Language",
+        "phone": "Phone",
+        "homeAirfield": "Home airfield",
+        "sessions": "Active sessions",
+        "notSet": "Not set"
+      },
+      "pilot": {
+        "title": "As a pilot",
+        "roleOff": "The pilot role is switched off.",
+        "verified": "Verified: licence and medical valid",
+        "notVerified": "Not verified: can't rent aircraft yet",
+        "pending": "{count, plural, one {# credential waiting} other {# credentials waiting}} for review",
+        "rejected": "{count, plural, one {# credential} other {# credentials}} rejected",
+        "expiring": "{count, plural, one {# credential expires} other {# credentials expire}} within 30 days",
+        "credentials": "{count, plural, =0 {No credentials added} one {# credential added} other {# credentials added}}",
+        "totalHours": "Total hours (declared)",
+        "rating": "Rating as a pilot",
+        "noRating": "No reviews yet"
+      },
+      "owner": {
+        "title": "As an owner",
+        "roleOff": "The owner role is switched off.",
+        "noAircraft": "No aircraft.",
+        "rating": "Rating as an owner"
+      },
+      "bookings": {
+        "title": "Bookings",
+        "asPilot": "As pilot",
+        "asOwner": "As owner",
+        "total": "Total",
+        "completed": "Completed",
+        "open": "Open",
+        "cancelled": "Cancelled",
+        "late": "Late cancellations",
+        "recent": "Most recent",
+        "none": "No bookings yet.",
+        "side": {
+          "pilot": "as pilot",
+          "owner": "as owner"
+        }
+      },
+      "reports": {
+        "title": "Open reports",
+        "text": "About this member or their aircraft.",
+        "none": "No open reports.",
+        "queue": "Open the reports queue"
+      },
+      "history": {
+        "title": "Admin history",
+        "none": "No admin actions yet.",
+        "by": "by {name}",
+        "formerAdmin": "a former admin",
+        "actions": {
+          "suspend_user": "Suspended",
+          "unsuspend_user": "Suspension lifted",
+          "grant_admin": "Made admin",
+          "revoke_admin": "Admin rights removed"
+        }
       }
     }
   },

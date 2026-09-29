@@ -21,7 +21,11 @@ import {
 // transaction.
 
 export type ModerationResult =
-  { ok: true } | { ok: false; error: "notFound" | "self" | "adminAccount" | "activeBookings" };
+  | { ok: true }
+  | {
+      ok: false;
+      error: "notFound" | "self" | "adminAccount" | "activeBookings" | "suspendedAccount";
+    };
 
 type Tx = Parameters<Parameters<ReturnType<typeof getDb>["transaction"]>[0]>[0];
 

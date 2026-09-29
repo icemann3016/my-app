@@ -88,7 +88,7 @@ components/
   airport-picker.tsx  # airport search box (combobox), submits the airport ident
 lib/
   auth/               # auth.ts (Better Auth config), session.ts (getUser, requireUser, requireAdmin…), errors.ts
-  admin/              # verification queues, moderation (suspend, unlist, hide, reports), queries, metrics
+  admin/              # verification queues, moderation (suspend, unlist, hide, reports), members, roles, queries, metrics
                       #   (trusted admin code, after requireAdmin())
   reviews/            # review queries, submit/reply, daily publishing
   messages/           # conversations, unread counts, message emails
@@ -185,6 +185,8 @@ _TODO: split areas so we don't edit the same files at the same time._
 ## Decisions log
 
 Add one line per decision, newest first.
+
+- 2026-09-29: **Member management** (Zlati): Admin → Members has filters (pilots, owners, admins, suspended, credentials to check, email not confirmed), search, sorting and paging (`lib/admin/members.ts`); each member has a page (`/admin/users/[id]`, `lib/admin/member-detail.ts`) with account, credentials status, aircraft, bookings, open reports, admin history and all actions. Admins give/remove admin rights there (`lib/admin/roles.ts`, logged as `grant_admin`/`revoke_admin`): never your own, never to a suspended member; any admin can remove another's rights (`npm run admin:grant` still works as a fallback).
 
 - 2026-09-29: **Logo** (Zlati): wordmark "own" + an A drawn as a delta-wing aircraft seen from above + "plane" (`components/layout/logo.tsx`, the A in `logo-mark.tsx`, in the primary colour; screen readers hear "ownAplane"). The same A, white on blue, is the browser icon (`app/icon.svg`), phone icon (`app/apple-icon.png`) and app icon for Facebook/Apple (`docs/brand/app-icon-1024.png`).
 

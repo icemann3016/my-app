@@ -905,14 +905,42 @@
     },
     "users": {
       "title": "Mitglieder",
-      "description": "Mitglieder nach Name oder E-Mail finden. Gesperrte Mitglieder können sich nicht anmelden, buchen, Nachrichten senden oder bewerten, und ihre Flugzeuge werden aus dem Angebot genommen.",
+      "description": "Mitglieder finden, sehen, was sie auf ownAplane tun, und ihren Zugang verwalten: Admin-Rechte, Sperre und Löschung.",
       "search": "Mitglieder suchen",
       "placeholder": "Name oder E-Mail",
       "searchButton": "Suchen",
       "none": "Keine Mitglieder gefunden.",
       "admin": "Admin",
       "joined": "dabei seit {date}",
-      "suspended": "Gesperrt"
+      "suspended": "Gesperrt",
+      "filterLabel": "Anzeigen",
+      "filters": {
+        "all": "Alle",
+        "pilots": "Piloten",
+        "owners": "Halter",
+        "admins": "Admins",
+        "suspended": "Gesperrt",
+        "pending": "Nachweise zu prüfen",
+        "unverified": "E-Mail nicht bestätigt"
+      },
+      "sort": "Sortieren nach",
+      "sorts": {
+        "newest": "Neueste zuerst",
+        "oldest": "Älteste zuerst",
+        "name": "Name",
+        "active": "Zuletzt aktiv"
+      },
+      "showing": "{from}–{to} von {total}",
+      "pagination": "Seiten",
+      "previous": "Zurück",
+      "next": "Weiter",
+      "verifiedPilot": "Verifizierter Pilot",
+      "pendingCount": "{count, plural, one {# Nachweis zu prüfen} other {# Nachweise zu prüfen}}",
+      "emailUnverified": "E-Mail nicht bestätigt",
+      "flights": "{count, plural, one {# Flug} other {# Flüge}}",
+      "aircraftCount": "{count, plural, one {# Flugzeug} other {# Flugzeuge}}",
+      "lastActive": "aktiv {date}",
+      "noSession": "keine aktive Sitzung"
     },
     "aircraft": {
       "title": "Flugzeuge",
@@ -955,7 +983,9 @@
         "show_review": "Bewertung wieder anzeigen",
         "resolve_report": "Als erledigt markieren",
         "dismiss_report": "Verwerfen",
-        "delete_user": "Mitglied löschen"
+        "delete_user": "Mitglied löschen",
+        "grant_admin": "Zum Admin machen",
+        "revoke_admin": "Admin-Rechte entfernen"
       },
       "confirm": {
         "suspend": "Das Mitglied wird abgemeldet und kann sich nicht anmelden, buchen, Nachrichten senden oder bewerten. Seine angebotenen Flugzeuge werden entfernt.",
@@ -966,7 +996,9 @@
         "show_review": "Die Bewertung wird wieder öffentlich und zählt in den Durchschnitt.",
         "resolve_report": "Meldung schließen: Es wurde gehandelt.",
         "dismiss_report": "Meldung schließen: Es liegt kein Regelverstoß vor.",
-        "delete_user": "Löscht das Konto endgültig: Profil, Nachweise, Dokumente, Fotos sowie seine Flugzeuge mit deren Buchungen. Buchungen als Pilot, Bewertungen und Nachrichten bleiben für die Gegenseite erhalten, als ehemaliges Mitglied angezeigt. Das kann nicht rückgängig gemacht werden; im Zweifel lieber sperren."
+        "delete_user": "Löscht das Konto endgültig: Profil, Nachweise, Dokumente, Fotos sowie seine Flugzeuge mit deren Buchungen. Buchungen als Pilot, Bewertungen und Nachrichten bleiben für die Gegenseite erhalten, als ehemaliges Mitglied angezeigt. Das kann nicht rückgängig gemacht werden; im Zweifel lieber sperren.",
+        "grant_admin": "Das Mitglied kann dann Dokumente verifizieren, Meldungen bearbeiten, Mitglieder sperren und löschen sowie Admin-Rechte ändern, auch Ihre. Geben Sie das nur Personen, denen Sie vertrauen.",
+        "revoke_admin": "Das Mitglied verliert sofort den Zugang zu den Admin-Seiten. Sein Konto bleibt unverändert."
       },
       "done": {
         "suspend": "Mitglied gesperrt.",
@@ -977,10 +1009,13 @@
         "show_review": "Bewertung wieder angezeigt.",
         "resolve_report": "Meldung erledigt.",
         "dismiss_report": "Meldung verworfen.",
-        "delete_user": "Mitglied gelöscht."
+        "delete_user": "Mitglied gelöscht.",
+        "grant_admin": "Admin-Rechte vergeben.",
+        "revoke_admin": "Admin-Rechte entfernt."
       },
       "adminAccount": "Admin-Konten können hier nicht gelöscht werden. Entfernen Sie zuerst die Admin-Rolle.",
-      "activeBookings": "Dieses Mitglied hat offene Buchungen (angefragt, angenommen oder laufend). Sperren Sie es jetzt und löschen Sie es, sobald diese storniert oder abgeschlossen sind."
+      "activeBookings": "Dieses Mitglied hat offene Buchungen (angefragt, angenommen oder laufend). Sperren Sie es jetzt und löschen Sie es, sobald diese storniert oder abgeschlossen sind.",
+      "suspendedAccount": "Heben Sie die Sperre auf, bevor Sie dieses Mitglied zum Admin machen."
     },
     "monitoring": {
       "title": "Fehlerüberwachung",
@@ -992,6 +1027,89 @@
         "ok": "Fehler werden an den Überwachungsdienst gesendet (SENTRY_DSN ist gesetzt).",
         "missing": "Nicht eingerichtet: SENTRY_DSN ist in dieser Bereitstellung nicht gesetzt, daher landen Fehler nur im Serverprotokoll. Fügen Sie die Variable den Umgebungsvariablen des Projekts hinzu (eine geteilte Variable muss mit dem Projekt verknüpft sein) und stellen Sie neu bereit.",
         "invalid": "SENTRY_DSN ist gesetzt, aber kein gültiger DSN. Kopieren Sie den ganzen Wert aus Sentry → Project Settings → Client Keys (DSN), beginnend mit https://, und stellen Sie neu bereit."
+      }
+    },
+    "member": {
+      "metaTitle": "Mitglied",
+      "back": "Alle Mitglieder",
+      "memberSince": "Mitglied seit {date}",
+      "lastActive": "Zuletzt aktiv {date} UTC",
+      "noSession": "Keine aktive Sitzung",
+      "publicProfile": "Öffentliches Profil",
+      "reviewCredentials": "Nachweise prüfen",
+      "access": {
+        "title": "Zugang",
+        "text": "Admin-Rechte, Sperre und Löschung. Jede Änderung wird im Prüfprotokoll erfasst.",
+        "isAdmin": "Admin: kann Dokumente verifizieren, Meldungen bearbeiten und Mitglieder verwalten.",
+        "notAdmin": "Kein Admin.",
+        "ownAccount": "Das ist Ihr eigenes Konto: Sie können Ihre eigenen Admin-Rechte nicht entfernen und sich nicht sperren oder löschen.",
+        "suspendedSince": "Gesperrt seit {date} UTC.",
+        "deleteHint": "Admins können nicht gelöscht werden. Entfernen Sie zuerst die Admin-Rechte."
+      },
+      "account": {
+        "title": "Konto",
+        "email": "E-Mail",
+        "emailVerified": "bestätigt",
+        "emailNotVerified": "nicht bestätigt",
+        "signIn": "Meldet sich an mit",
+        "language": "Sprache",
+        "phone": "Telefon",
+        "homeAirfield": "Heimatflugplatz",
+        "sessions": "Aktive Sitzungen",
+        "notSet": "Nicht angegeben"
+      },
+      "pilot": {
+        "title": "Als Pilot",
+        "roleOff": "Die Pilotenrolle ist ausgeschaltet.",
+        "verified": "Verifiziert: Lizenz und Tauglichkeitszeugnis gültig",
+        "notVerified": "Nicht verifiziert: kann noch keine Flugzeuge mieten",
+        "pending": "{count, plural, one {# Nachweis wartet} other {# Nachweise warten}} auf Prüfung",
+        "rejected": "{count, plural, one {# Nachweis} other {# Nachweise}} abgelehnt",
+        "expiring": "{count, plural, one {# Nachweis läuft} other {# Nachweise laufen}} innerhalb von 30 Tagen ab",
+        "credentials": "{count, plural, =0 {Keine Nachweise hinzugefügt} one {# Nachweis hinzugefügt} other {# Nachweise hinzugefügt}}",
+        "totalHours": "Gesamtstunden (angegeben)",
+        "rating": "Bewertung als Pilot",
+        "noRating": "Noch keine Bewertungen"
+      },
+      "owner": {
+        "title": "Als Halter",
+        "roleOff": "Die Halterrolle ist ausgeschaltet.",
+        "noAircraft": "Keine Flugzeuge.",
+        "rating": "Bewertung als Halter"
+      },
+      "bookings": {
+        "title": "Buchungen",
+        "asPilot": "Als Pilot",
+        "asOwner": "Als Halter",
+        "total": "Gesamt",
+        "completed": "Abgeschlossen",
+        "open": "Offen",
+        "cancelled": "Storniert",
+        "late": "Späte Stornierungen",
+        "recent": "Zuletzt",
+        "none": "Noch keine Buchungen.",
+        "side": {
+          "pilot": "als Pilot",
+          "owner": "als Halter"
+        }
+      },
+      "reports": {
+        "title": "Offene Meldungen",
+        "text": "Zu diesem Mitglied oder seinen Flugzeugen.",
+        "none": "Keine offenen Meldungen.",
+        "queue": "Meldungen öffnen"
+      },
+      "history": {
+        "title": "Admin-Verlauf",
+        "none": "Noch keine Admin-Aktionen.",
+        "by": "von {name}",
+        "formerAdmin": "einem ehemaligen Admin",
+        "actions": {
+          "suspend_user": "Gesperrt",
+          "unsuspend_user": "Sperre aufgehoben",
+          "grant_admin": "Zum Admin gemacht",
+          "revoke_admin": "Admin-Rechte entfernt"
+        }
       }
     }
   },

@@ -16,6 +16,7 @@ import {
   unsuspendUser,
 } from "@/lib/admin/moderation";
 import { MODERATION_OPS, type ModerationOp } from "@/lib/admin/ops";
+import { setAdminRole } from "@/lib/admin/roles";
 import { requireAdmin } from "@/lib/auth/session";
 import type { FormState } from "@/lib/forms";
 
@@ -48,6 +49,8 @@ export async function moderate(_prev: FormState, formData: FormData): Promise<Fo
     resolve_report: () => closeReport(adminId, targetId, "resolved", reason),
     dismiss_report: () => closeReport(adminId, targetId, "dismissed", reason),
     delete_user: () => deleteMember(adminId, targetId, reason),
+    grant_admin: () => setAdminRole(adminId, targetId, true, reason),
+    revoke_admin: () => setAdminRole(adminId, targetId, false, reason),
   };
   const result = await run[op]();
   if (!result.ok) return { message: t(result.error) };

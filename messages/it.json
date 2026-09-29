@@ -905,14 +905,42 @@
     },
     "users": {
       "title": "Membri",
-      "description": "Trova membri per nome o e-mail. I membri sospesi non possono accedere, prenotare, scrivere messaggi o recensire, e i loro aerei vengono ritirati.",
+      "description": "Trova i membri, guarda cosa fanno su ownAplane e gestisci il loro accesso: diritti di admin, sospensione ed eliminazione.",
       "search": "Cerca membri",
       "placeholder": "Nome o e-mail",
       "searchButton": "Cerca",
       "none": "Nessun membro trovato.",
       "admin": "Admin",
       "joined": "iscritto il {date}",
-      "suspended": "Sospeso"
+      "suspended": "Sospeso",
+      "filterLabel": "Mostra",
+      "filters": {
+        "all": "Tutti",
+        "pilots": "Piloti",
+        "owners": "Proprietari",
+        "admins": "Admin",
+        "suspended": "Sospesi",
+        "pending": "Titoli da verificare",
+        "unverified": "E-mail non confermata"
+      },
+      "sort": "Ordina per",
+      "sorts": {
+        "newest": "Più recenti",
+        "oldest": "Meno recenti",
+        "name": "Nome",
+        "active": "Ultima attività"
+      },
+      "showing": "{from}–{to} di {total}",
+      "pagination": "Pagine",
+      "previous": "Precedente",
+      "next": "Successiva",
+      "verifiedPilot": "Pilota verificato",
+      "pendingCount": "{count, plural, one {# titolo da verificare} other {# titoli da verificare}}",
+      "emailUnverified": "e-mail non confermata",
+      "flights": "{count, plural, one {# volo} other {# voli}}",
+      "aircraftCount": "{count, plural, one {# aereo} other {# aerei}}",
+      "lastActive": "attivo il {date}",
+      "noSession": "nessuna sessione attiva"
     },
     "aircraft": {
       "title": "Aerei",
@@ -955,7 +983,9 @@
         "show_review": "Mostra di nuovo la recensione",
         "resolve_report": "Segna come risolta",
         "dismiss_report": "Archivia",
-        "delete_user": "Elimina membro"
+        "delete_user": "Elimina membro",
+        "grant_admin": "Nomina admin",
+        "revoke_admin": "Rimuovi diritti di admin"
       },
       "confirm": {
         "suspend": "Viene disconnesso e non può accedere, prenotare, scrivere messaggi o recensire. I suoi aerei offerti vengono ritirati.",
@@ -966,7 +996,9 @@
         "show_review": "La recensione torna pubblica e conta nelle medie.",
         "resolve_report": "Chiudi la segnalazione: è stata presa una misura.",
         "dismiss_report": "Chiudi la segnalazione: nessuna regola violata.",
-        "delete_user": "Elimina l'account per sempre: profilo, titoli, documenti, foto e i suoi aerei con le relative prenotazioni. Le prenotazioni fatte come pilota, le recensioni e i messaggi restano per l'altra parte, indicati come ex membro. L'operazione non si può annullare; nel dubbio, sospendi."
+        "delete_user": "Elimina l'account per sempre: profilo, titoli, documenti, foto e i suoi aerei con le relative prenotazioni. Le prenotazioni fatte come pilota, le recensioni e i messaggi restano per l'altra parte, indicati come ex membro. L'operazione non si può annullare; nel dubbio, sospendi.",
+        "grant_admin": "Potrà verificare documenti, gestire segnalazioni, sospendere ed eliminare membri e modificare i diritti di admin, anche i tuoi. Concedili solo a persone di cui ti fidi.",
+        "revoke_admin": "Perde subito l'accesso alle pagine di admin. Il suo account resta invariato."
       },
       "done": {
         "suspend": "Membro sospeso.",
@@ -977,10 +1009,13 @@
         "show_review": "Recensione di nuovo visibile.",
         "resolve_report": "Segnalazione risolta.",
         "dismiss_report": "Segnalazione archiviata.",
-        "delete_user": "Membro eliminato."
+        "delete_user": "Membro eliminato.",
+        "grant_admin": "Diritti di admin concessi.",
+        "revoke_admin": "Diritti di admin rimossi."
       },
       "adminAccount": "Gli account admin non si possono eliminare da qui. Rimuovi prima il ruolo di admin.",
-      "activeBookings": "Questo membro ha prenotazioni aperte (richieste, accettate o in corso). Sospendilo ora ed eliminalo quando saranno cancellate o concluse."
+      "activeBookings": "Questo membro ha prenotazioni aperte (richieste, accettate o in corso). Sospendilo ora ed eliminalo quando saranno cancellate o concluse.",
+      "suspendedAccount": "Revoca la sospensione prima di nominare admin questo membro."
     },
     "monitoring": {
       "title": "Monitoraggio errori",
@@ -992,6 +1027,89 @@
         "ok": "Gli errori vengono inviati al servizio di monitoraggio (SENTRY_DSN è impostato).",
         "missing": "Non configurato: SENTRY_DSN non è impostato in questo deployment, quindi gli errori finiscono solo nel log del server. Aggiungilo alle variabili d'ambiente del progetto (una variabile condivisa va collegata al progetto) e ripeti il deploy.",
         "invalid": "SENTRY_DSN è impostato ma non è un DSN valido. Copia il valore completo da Sentry → Project Settings → Client Keys (DSN), a partire da https://, e ripeti il deploy."
+      }
+    },
+    "member": {
+      "metaTitle": "Membro",
+      "back": "Tutti i membri",
+      "memberSince": "Membro dal {date}",
+      "lastActive": "Ultima attività il {date} UTC",
+      "noSession": "Nessuna sessione attiva",
+      "publicProfile": "Profilo pubblico",
+      "reviewCredentials": "Verifica i titoli",
+      "access": {
+        "title": "Accesso",
+        "text": "Diritti di admin, sospensione ed eliminazione. Ogni modifica finisce nel registro di controllo.",
+        "isAdmin": "Admin: può verificare documenti, gestire segnalazioni e gestire i membri.",
+        "notAdmin": "Non è admin.",
+        "ownAccount": "Questo è il tuo account: non puoi rimuovere i tuoi diritti di admin, sospenderti o eliminarti.",
+        "suspendedSince": "Sospeso dal {date} UTC.",
+        "deleteHint": "Gli admin non possono essere eliminati. Rimuovi prima i diritti di admin."
+      },
+      "account": {
+        "title": "Account",
+        "email": "E-mail",
+        "emailVerified": "confermata",
+        "emailNotVerified": "non confermata",
+        "signIn": "Accede con",
+        "language": "Lingua",
+        "phone": "Telefono",
+        "homeAirfield": "Aeroporto di base",
+        "sessions": "Sessioni attive",
+        "notSet": "Non indicato"
+      },
+      "pilot": {
+        "title": "Come pilota",
+        "roleOff": "Il ruolo di pilota è disattivato.",
+        "verified": "Verificato: licenza e certificato medico validi",
+        "notVerified": "Non verificato: non può ancora noleggiare aerei",
+        "pending": "{count, plural, one {# titolo in attesa} other {# titoli in attesa}} di verifica",
+        "rejected": "{count, plural, one {# titolo rifiutato} other {# titoli rifiutati}}",
+        "expiring": "{count, plural, one {# titolo scade} other {# titoli scadono}} entro 30 giorni",
+        "credentials": "{count, plural, =0 {Nessun titolo aggiunto} one {# titolo aggiunto} other {# titoli aggiunti}}",
+        "totalHours": "Ore totali (dichiarate)",
+        "rating": "Valutazione come pilota",
+        "noRating": "Ancora nessuna recensione"
+      },
+      "owner": {
+        "title": "Come proprietario",
+        "roleOff": "Il ruolo di proprietario è disattivato.",
+        "noAircraft": "Nessun aereo.",
+        "rating": "Valutazione come proprietario"
+      },
+      "bookings": {
+        "title": "Prenotazioni",
+        "asPilot": "Come pilota",
+        "asOwner": "Come proprietario",
+        "total": "Totale",
+        "completed": "Completate",
+        "open": "Aperte",
+        "cancelled": "Cancellate",
+        "late": "Cancellazioni tardive",
+        "recent": "Più recenti",
+        "none": "Ancora nessuna prenotazione.",
+        "side": {
+          "pilot": "come pilota",
+          "owner": "come proprietario"
+        }
+      },
+      "reports": {
+        "title": "Segnalazioni aperte",
+        "text": "Su questo membro o sui suoi aerei.",
+        "none": "Nessuna segnalazione aperta.",
+        "queue": "Apri la coda delle segnalazioni"
+      },
+      "history": {
+        "title": "Cronologia admin",
+        "none": "Ancora nessuna azione di admin.",
+        "by": "da {name}",
+        "formerAdmin": "un ex admin",
+        "actions": {
+          "suspend_user": "Sospeso",
+          "unsuspend_user": "Sospensione revocata",
+          "grant_admin": "Nominato admin",
+          "revoke_admin": "Diritti di admin rimossi"
+        }
       }
     }
   },

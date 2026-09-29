@@ -154,6 +154,65 @@ describeDb("moderation", () => {
     expect(m.signupsByWeek.at(-1)!.n).toBe(3);
   });
 
+  it("gives and removes admin rights, logged; never your own, never to a suspended member", async () => {
+    const roles = await import("@/lib/admin/roles");
+    const isAdmin = async (id: string) =>
+      (
+        await db
+          .getDb()
+          .select()
+          .from(s.userRoles)
+          .where(sql`${s.userRoles.userId} = ${id}::uuid and ${s.userRoles.role} = 'admin'`)
+      ).length > 0;
+    expect(await roles.setAdminRole(ADM, ADM, false, null)).toEqual({ ok: false, error: "self" });
+    expect(await roles.setAdminRole(ADM, PIL, true, "Helps with checks")).toEqual({ ok: true });
+    expect(await isAdmin(PIL)).toBe(true);
+    expect(await roles.setAdminRole(ADM, PIL, true, null)).toEqual({
+      ok: false,
+      error: "notFound",
+    });
+    expect(await roles.setAdminRole(ADM, PIL, false, null)).toEqual({ ok: true });
+    expect(await isAdmin(PIL)).toBe(false);
+    await mod.suspendUser(ADM, OWN, null);
+    expect(await roles.setAdminRole(ADM, OWN, true, null)).toEqual({
+      ok: false,
+      error: "suspendedAccount",
+    });
+    await mod.unsuspendUser(ADM, OWN, null);
+    const logged = await db
+      .getDb()
+      .select({ action: s.adminActions.action, reason: s.adminActions.reason })
+      .from(s.adminActions)
+      .where(sql`${s.adminActions.targetId} = ${PIL} and ${s.adminActions.action} like '%admin'`)
+      .orderBy(s.adminActions.createdAt);
+    expect(logged).toEqual([
+      { action: "grant_admin", reason: "Helps with checks" },
+      { action: "revoke_admin", reason: null },
+    ]);
+  });
+
+  it("lists members with filters, search and details for admins", async () => {
+    const members = await import("@/lib/admin/members");
+    const list = (filter: (typeof members.MEMBER_FILTERS)[number], q = "") =>
+      members
+        .listMembers({ q, filter, sort: "name", page: 1 })
+        .then((r) => r.rows.map((m) => m.id));
+    expect((await list("all")).sort()).toEqual([ADM, OWN, PIL].sort());
+    expect(await list("admins")).toEqual([ADM]);
+    expect(await list("all", "own-x@")).toEqual([OWN]);
+    expect(await list("all", "100%_")).toEqual([]); // LIKE wildcards are escaped
+    expect(await list("unverified")).toHaveLength(3);
+    const counts = await members.memberCounts();
+    expect(counts).toMatchObject({ all: 3, admins: 1, suspended: 0 });
+
+    const { getMemberDetail } = await import("@/lib/admin/member-detail");
+    const owner = await getMemberDetail(OWN, ADM);
+    expect(owner).toMatchObject({ email: "own-x@example.com", roles: [], activeSessions: 0 });
+    expect(owner!.aircraft.map((a) => a.registration)).toEqual(["LZ-MOD"]);
+    expect(owner!.history.map((h) => h.action)).toContain("suspend_user");
+    expect(await getMemberDetail("00000000-0000-4000-8000-000000000000", ADM)).toBeNull();
+  });
+
   it("deletes a member only when nothing is open; the owner keeps the pilot's past booking", async () => {
     const owner = db.getDb();
     const booking = async (status: string) => {

@@ -27,7 +27,19 @@ first, with the reported content and the actions that fit:
 Every action asks for a reason (optional but recommended) and is written to the **audit log**,
 which you can search by action, admin, target or reason. You can't suspend yourself.
 
-**Delete member** (Admin → Members) removes an account for good, for example when someone asks
+**Members** (Admin → Members) lists everyone, with filters (pilots, owners, admins, suspended,
+credentials to check, email not confirmed), search by name or email, and sorting. Each row shows
+roles, whether the pilot is verified, flights, aircraft and when they were last active. Open a
+member to see their account (email, sign-in methods, language, phone), pilot credentials status,
+aircraft, bookings on both sides, open reports and the admin history of the account. All actions
+are on that page:
+
+- **Make admin** / **Remove admin rights**: admins can verify documents, handle reports and
+  manage members, including other admins' rights, so only give this to people you trust. You
+  can't remove your own admin rights, and a suspended member can't become an admin.
+- **Suspend member** / **Lift suspension**, as above.
+
+**Delete member** removes an account for good, for example when someone asks
 by email or for a spam account: profile, credentials, documents, photos, and their aircraft with
 its bookings. Bookings they made as a pilot, reviews and messages stay for the other side, shown
 as a former member. It isn't possible while the member has open bookings (requested, accepted or
