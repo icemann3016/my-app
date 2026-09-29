@@ -74,7 +74,26 @@
     "trustLicences": "Verified licences, ratings and medicals",
     "trustRatings": "Two-way ratings after every flight",
     "trustEasa": "Built for EASA rules and European airfields",
-    "accountDeleted": "Your account and all its data have been deleted."
+    "accountDeleted": "Your account and all its data have been deleted.",
+    "how": {
+      "heading": "How it works",
+      "search": {
+        "title": "Find an aircraft",
+        "text": "Search by airfield, radius and dates. See photos, specs, price per hour and when it's free."
+      },
+      "request": {
+        "title": "Send a request",
+        "text": "We check your licence, ratings and medical against the owner's rules before you ask. The owner answers, often the same day."
+      },
+      "fly": {
+        "title": "Fly and rate",
+        "text": "Log your legs, fuel and remarks, settle the amount due, then rate each other so the next rental is easier."
+      }
+    },
+    "cta": {
+      "title": "Ready for your next flight?",
+      "text": "Join pilots and owners across Europe. It's free while we're in preview."
+    }
   },
   "fields": {
     "email": "Email",

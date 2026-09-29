@@ -12,6 +12,9 @@ import {
 import { getTranslations } from "next-intl/server";
 
 import { DatabaseStatus } from "@/components/dev/database-status";
+import { ClosingCta } from "@/components/marketing/closing-cta";
+import { HowItWorks } from "@/components/marketing/how-it-works";
+import { SkyScene } from "@/components/marketing/sky-scene";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -39,30 +42,35 @@ export default async function HomePage({
 
   return (
     <>
-      <section className="mx-auto flex max-w-6xl flex-col items-start gap-6 px-4 pt-16 pb-12 sm:pt-24">
-        {deleted && (
-          <Alert variant="success" className="max-w-xl">
-            <CircleCheckIcon />
-            <AlertDescription>{t("accountDeleted")}</AlertDescription>
-          </Alert>
-        )}
-        <Suspense fallback={null}>
-          <DatabaseStatus />
-        </Suspense>
-        <span className="rounded-full bg-accent px-3 py-1 text-xs font-medium text-accent-foreground">
-          {t("badge")}
-        </span>
-        <h1 className="max-w-3xl text-4xl font-semibold tracking-tight text-balance sm:text-6xl">
-          {t("title")}
-        </h1>
-        <p className="max-w-2xl text-lg text-pretty text-muted-foreground">{t("subtitle")}</p>
-        <div className="flex flex-wrap gap-3">
-          <Button size="lg" asChild>
-            <Link href="/search">{t("findAircraft")}</Link>
-          </Button>
-          <Button size="lg" variant="outline" asChild>
-            <Link href="/owner/aircraft">{t("listAircraft")}</Link>
-          </Button>
+      <section className="mx-auto grid max-w-6xl items-center gap-10 px-4 pt-12 pb-12 sm:pt-20 lg:grid-cols-[1.1fr_1fr]">
+        <div className="flex flex-col items-start gap-6">
+          {deleted && (
+            <Alert variant="success" className="max-w-xl">
+              <CircleCheckIcon />
+              <AlertDescription>{t("accountDeleted")}</AlertDescription>
+            </Alert>
+          )}
+          <Suspense fallback={null}>
+            <DatabaseStatus />
+          </Suspense>
+          <span className="rounded-full bg-accent px-3 py-1 text-xs font-medium text-accent-foreground">
+            {t("badge")}
+          </span>
+          <h1 className="max-w-3xl text-4xl font-semibold tracking-tight text-balance sm:text-6xl">
+            {t("title")}
+          </h1>
+          <p className="max-w-2xl text-lg text-pretty text-muted-foreground">{t("subtitle")}</p>
+          <div className="flex flex-wrap gap-3">
+            <Button size="lg" asChild>
+              <Link href="/search">{t("findAircraft")}</Link>
+            </Button>
+            <Button size="lg" variant="outline" asChild>
+              <Link href="/owner/aircraft">{t("listAircraft")}</Link>
+            </Button>
+          </div>
+        </div>
+        <div className="aspect-[8/5] overflow-hidden rounded-2xl border shadow-xl ring-1 ring-black/5">
+          <SkyScene />
         </div>
       </section>
 
@@ -72,10 +80,15 @@ export default async function HomePage({
         </h2>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {audiences.map(({ key, icon: Icon, soon }) => (
-            <Card key={key} className="gap-3">
+            <Card
+              key={key}
+              className="gap-3 transition-[transform,box-shadow] duration-200 hover:-translate-y-0.5 hover:shadow-md"
+            >
               <CardHeader>
                 <div className="flex items-center justify-between">
-                  <Icon className="size-5 text-primary" aria-hidden />
+                  <span className="flex size-10 items-center justify-center rounded-full bg-primary/10">
+                    <Icon className="size-5 text-primary" aria-hidden />
+                  </span>
                   {soon && (
                     <span className="rounded-full bg-muted px-2 py-0.5 text-xs text-muted-foreground">
                       {t("comingLater")}
@@ -94,7 +107,9 @@ export default async function HomePage({
         </div>
       </section>
 
-      <section className="border-t bg-muted/40">
+      <HowItWorks />
+
+      <section className="border-y bg-muted/40">
         <ul className="mx-auto grid max-w-6xl gap-4 px-4 py-8 sm:grid-cols-3">
           {trust.map(({ key, icon: Icon }) => (
             <li key={key} className="flex items-center gap-3 text-sm">
@@ -104,6 +119,8 @@ export default async function HomePage({
           ))}
         </ul>
       </section>
+
+      <ClosingCta />
     </>
   );
 }

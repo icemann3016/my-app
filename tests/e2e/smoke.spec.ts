@@ -3,7 +3,7 @@ import { expect, test } from "@playwright/test";
 test("home page shows the hero and main actions", async ({ page }) => {
   await page.goto("/");
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("Rent a plane. Fly more.");
-  await expect(page.getByRole("link", { name: "Find an aircraft" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Find an aircraft" }).first()).toBeVisible();
 });
 
 test("navigation reaches the search page", async ({ page, isMobile }) => {

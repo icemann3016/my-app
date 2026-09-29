@@ -105,3 +105,85 @@
     animation: spin 2s linear infinite !important;
   }
 }
+
+/* Home page sky scene (components/marketing/sky-scene.tsx). */
+@keyframes sky-drift {
+  to {
+    transform: translateX(-800px);
+  }
+}
+@keyframes sky-fly {
+  from {
+    transform: translate(-160px, 20px);
+  }
+  50% {
+    transform: translate(330px, -30px);
+  }
+  to {
+    transform: translate(860px, 10px);
+  }
+}
+@keyframes sky-bob {
+  to {
+    transform: translateY(-8px);
+  }
+}
+@keyframes sky-prop {
+  50% {
+    transform: scaleY(0.15);
+  }
+}
+@keyframes sky-twinkle {
+  50% {
+    opacity: 0.25;
+  }
+}
+@keyframes sky-windsock {
+  50% {
+    transform: skewY(4deg) scaleX(0.94);
+  }
+}
+.sky-drift-slow {
+  animation: sky-drift 120s linear infinite;
+}
+.sky-drift-fast {
+  animation: sky-drift 45s linear infinite;
+}
+.sky-fly {
+  animation: sky-fly 22s linear infinite;
+}
+.sky-bob {
+  animation: sky-bob 2.6s ease-in-out infinite alternate;
+}
+.sky-prop,
+.sky-windsock {
+  transform-box: fill-box;
+  transform-origin: left center;
+}
+.sky-prop {
+  transform-origin: center;
+  animation: sky-prop 0.18s linear infinite;
+}
+.sky-twinkle {
+  animation: sky-twinkle 3.5s ease-in-out infinite;
+}
+.sky-windsock {
+  animation: sky-windsock 2.4s ease-in-out infinite;
+}
+/* Reduced motion: a still picture, with the aircraft parked mid-sky. */
+@media (prefers-reduced-motion: reduce) {
+  .sky-scene * {
+    animation: none !important;
+  }
+  .sky-scene .sky-fly {
+    transform: translate(330px, -30px);
+  }
+}
+@keyframes cta-plane {
+  50% {
+    transform: translate(-10px, -10px) rotate(45deg);
+  }
+}
+.cta-plane {
+  animation: cta-plane 6s ease-in-out infinite;
+}
