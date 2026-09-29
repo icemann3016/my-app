@@ -3,7 +3,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 
-import { GoogleSignIn } from "@/components/auth/google-sign-in";
+import { SocialSignIn } from "@/components/auth/social-sign-in";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { getUser } from "@/lib/auth/session";
 import { SignupForm } from "./signup-form";
@@ -26,7 +26,7 @@ export default async function SignupPage() {
         <CardDescription>{t("description")}</CardDescription>
       </CardHeader>
       <CardContent className="grid gap-6">
-        <GoogleSignIn showTerms />
+        <SocialSignIn showTerms />
         <SignupForm />
         <p className="text-center text-sm text-muted-foreground">
           {t("alreadyHaveAccount")}{" "}

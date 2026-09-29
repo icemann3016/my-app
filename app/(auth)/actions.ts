@@ -8,6 +8,7 @@ import { getLocale, getTranslations } from "next-intl/server";
 
 import { getAuth } from "@/lib/auth/auth";
 import { authErrorCode, isAuthApiError } from "@/lib/auth/errors";
+import { isProviderEnabled, isSocialProvider } from "@/lib/auth/providers";
 import { safeNextPath } from "@/lib/auth/redirect";
 import { getDb, isDatabaseConfigured } from "@/lib/db";
 import { userSettings } from "@/lib/db/schema";
@@ -130,12 +131,17 @@ export async function signIn(_prev: FormState, formData: FormData): Promise<Form
   redirect(safeNextPath(raw.next));
 }
 
-/** Start "Continue with Google": redirects to Google, which returns to /api/auth/callback/google. */
-export async function signInWithGoogle(formData: FormData) {
+/**
+ * Start "Continue with Google/Apple/Facebook": redirects to the provider, which returns to
+ * /api/auth/callback/<provider>.
+ */
+export async function signInWithProvider(formData: FormData) {
+  const provider = formData.get("provider");
+  if (!isSocialProvider(provider) || !isProviderEnabled(provider)) redirect("/login");
   const next = safeNextPath(formData.get("next")?.toString());
   const { url } = await getAuth().api.signInSocial({
     body: {
-      provider: "google",
+      provider,
       callbackURL: next,
       newUserCallbackURL: "/welcome",
       errorCallbackURL: "/login",

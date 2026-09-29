@@ -8,7 +8,7 @@ The controller is [company name, registered address, company number]. Contact fo
 
 ## What we process and why
 
-- **Account**: name, email, password (stored only as a hash), sign-in method (e.g. Google), sessions (IP address, browser) and rate-limit records. *Why*: to run your account and keep it secure (contract; legitimate interest in security).
+- **Account**: name, email, password (stored only as a hash), sign-in method (e.g. Google, Apple or Facebook), sessions (IP address, browser) and rate-limit records. *Why*: to run your account and keep it secure (contract; legitimate interest in security).
 - **Profile** (public): display name, photo or avatar, home airfield, bio, roles, ratings and reviews. *Why*: so others know who they fly with (contract).
 - **Settings** (private): language, units, contact phone. Your phone and email are shown only to the other side of an **accepted** booking (contract).
 - **Pilot credentials**: licences, ratings, experience, date of birth (optional) and uploaded documents. **Medical certificates are special-category health data**: only you and our admins see them, and we process them only with your explicit consent, which you give by adding them (Art. 9(2)(a)). Public profiles show only verified licence types and ratings, never numbers, documents or medical data. Owners only get a yes/no "meets the requirements".
@@ -21,7 +21,7 @@ The controller is [company name, registered address, company number]. Contact fo
 
 ## Who receives data
 
-Only processors that help us run the service, under data processing agreements: hosting (Vercel, EU region Frankfurt), database and file storage (Supabase, EU), email delivery, and, if you choose it, Google for sign-in. The map on the search page loads tiles from OpenFreeMap, which receives your IP address. We never sell data.
+Only processors that help us run the service, under data processing agreements: hosting (Vercel, EU region Frankfurt), database and file storage (Supabase, EU), email delivery, and, if you choose them, Google, Apple or Facebook (Meta) for sign-in. The map on the search page loads tiles from OpenFreeMap, which receives your IP address. We never sell data.
 
 ## How long we keep it
 

@@ -11,7 +11,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { getAirport } from "@/lib/airports";
 import { presetFromKey } from "@/lib/avatar-presets";
 import { avatarUrl } from "@/lib/avatar-url";
-import { isGoogleEnabled } from "@/lib/auth/google";
+import { enabledProviders, isSocialProvider, PROVIDER_NAMES } from "@/lib/auth/providers";
 import { requireProfile } from "@/lib/auth/session";
 import { getDb } from "@/lib/db";
 import { asUser } from "@/lib/db/rls";
@@ -48,7 +48,7 @@ export default async function AccountPage({
     .from(accounts)
     .where(eq(accounts.userId, userId));
   const hasPassword = methods.some((m) => m.providerId === "credential");
-  const hasGoogle = methods.some((m) => m.providerId === "google");
+  const connected = methods.map((m) => m.providerId).filter(isSocialProvider);
   const homeAirport = await getAirport(profile.homeAirportIdent);
 
   return (
@@ -66,10 +66,12 @@ export default async function AccountPage({
         </Button>
       </div>
 
-      {linked === "google" && (
+      {isSocialProvider(linked) && (
         <Alert variant="success">
           <CircleCheckIcon />
-          <AlertDescription>{t("signIn.linked")}</AlertDescription>
+          <AlertDescription>
+            {t("signIn.linked", { provider: PROVIDER_NAMES[linked] })}
+          </AlertDescription>
         </Alert>
       )}
       {error && (
@@ -152,8 +154,8 @@ export default async function AccountPage({
         <CardContent className="grid gap-4">
           <SignInMethods
             hasPassword={hasPassword}
-            hasGoogle={hasGoogle}
-            googleEnabled={isGoogleEnabled()}
+            connected={connected}
+            enabled={enabledProviders()}
           />
           {hasPassword && (
             <Button variant="outline" className="justify-self-start" asChild>

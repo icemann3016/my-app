@@ -1,8 +1,23 @@
+import { generateKeyPairSync } from "node:crypto";
+
 import { defineConfig, devices } from "@playwright/test";
 
 const PORT = 3000;
 const WEATHER_PORT = 4555;
 const isCI = !!process.env.CI;
+
+// CI: dummy Apple and Facebook keys (Google's are in ci.yml) show the buttons, so the redirects
+// to the providers can be tested. The Apple key is a throwaway made for this run.
+if (isCI) {
+  process.env.APPLE_CLIENT_ID ??= "eu.ownaplane.ci";
+  process.env.APPLE_TEAM_ID ??= "CITEAM0000";
+  process.env.APPLE_KEY_ID ??= "CIKEY00000";
+  process.env.APPLE_PRIVATE_KEY ??= generateKeyPairSync("ec", { namedCurve: "P-256" })
+    .privateKey.export({ type: "pkcs8", format: "pem" })
+    .toString();
+  process.env.FACEBOOK_CLIENT_ID ??= "ci-facebook-app";
+  process.env.FACEBOOK_CLIENT_SECRET ??= "ci-facebook-secret";
+}
 
 export default defineConfig({
   testDir: "./tests/e2e",

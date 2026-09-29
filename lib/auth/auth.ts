@@ -14,7 +14,7 @@ import { resetPasswordEmail, verifyEmailEmail } from "@/lib/email/templates";
 import { siteConfig } from "@/lib/site";
 import { appUrl } from "@/lib/site-url";
 import { getStorage } from "@/lib/storage";
-import { isGoogleEnabled } from "./google";
+import { isProviderEnabled, PROVIDER_HOSTS, socialProviderOptions } from "./providers";
 
 /** The user's chosen language, for emails. */
 async function userLocale(userId: string): Promise<string | undefined> {
@@ -41,7 +41,9 @@ function trustedOrigins(): string[] {
     .split(",")
     .map((o) => o.trim())
     .filter(Boolean);
-  return [...new Set([...extra, ...vercel])];
+  // Apple returns to us with a form POST from its own site.
+  const apple = isProviderEnabled("apple") ? [PROVIDER_HOSTS.apple] : [];
+  return [...new Set([...extra, ...vercel, ...apple])];
 }
 
 function createAuth() {
@@ -128,14 +130,8 @@ function createAuth() {
         },
       },
     },
-    socialProviders: isGoogleEnabled()
-      ? {
-          google: {
-            clientId: process.env.GOOGLE_CLIENT_ID!,
-            clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-          },
-        }
-      : {},
+    // Google, Apple and Facebook, each only when its keys are set (lib/auth/providers.ts).
+    socialProviders: socialProviderOptions(),
     rateLimit: {
       // Stored in Postgres so limits hold across several server instances.
       storage: "database",
@@ -145,10 +141,17 @@ function createAuth() {
 }
 
 type Auth = ReturnType<typeof createAuth>;
-const globalForAuth = globalThis as unknown as { auth?: Auth };
+const globalForAuth = globalThis as unknown as { auth?: Auth; authCreatedAt?: number };
+
+/** Rebuilt now and then so a long-running server never uses an expired Apple client secret. */
+const AUTH_MAX_AGE_MS = 30 * 24 * 60 * 60 * 1000;
 
 /** The Better Auth instance (created on first use, so builds work without a database). */
 export function getAuth(): Auth {
-  globalForAuth.auth ??= createAuth();
+  const now = Date.now();
+  if (!globalForAuth.auth || now - (globalForAuth.authCreatedAt ?? 0) > AUTH_MAX_AGE_MS) {
+    globalForAuth.auth = createAuth();
+    globalForAuth.authCreatedAt = now;
+  }
   return globalForAuth.auth;
 }

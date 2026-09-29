@@ -8,6 +8,7 @@ import { getTranslations } from "next-intl/server";
 
 import { getAuth } from "@/lib/auth/auth";
 import { authErrorCode } from "@/lib/auth/errors";
+import { isProviderEnabled, isSocialProvider } from "@/lib/auth/providers";
 import { requireUser } from "@/lib/auth/session";
 import { getDb } from "@/lib/db";
 import { asUser } from "@/lib/db/rls";
@@ -147,13 +148,15 @@ export async function deleteAccount(_prev: FormState, formData: FormData): Promi
   redirect("/?deleted=1");
 }
 
-/** Connect Google to the logged-in account (safe: the user has proven who they are). */
-export async function linkGoogle() {
+/** Connect Google/Apple/Facebook to the logged-in account (safe: the user has proven who they are). */
+export async function linkProvider(formData: FormData) {
   await requireUser("/account");
+  const provider = formData.get("provider");
+  if (!isSocialProvider(provider) || !isProviderEnabled(provider)) redirect("/account");
   const { url } = await getAuth().api.linkSocialAccount({
     body: {
-      provider: "google",
-      callbackURL: "/account?linked=google",
+      provider,
+      callbackURL: `/account?linked=${provider}`,
       errorCallbackURL: "/account",
     },
     headers: await headers(),
@@ -161,22 +164,26 @@ export async function linkGoogle() {
   redirect(url);
 }
 
-/** Disconnect Google (only offered when the user can still log in with a password). */
-export async function unlinkGoogle() {
+/** Disconnect a provider (only offered while the user can still log in another way). */
+export async function unlinkProvider(formData: FormData) {
   const user = await requireUser("/account");
+  const provider = formData.get("provider");
+  if (!isSocialProvider(provider)) return;
   try {
-    const [google] = await getDb()
-      .select({ accountId: accounts.accountId })
+    const methods = await getDb()
+      .select({ id: accounts.id, providerId: accounts.providerId })
       .from(accounts)
-      .where(and(eq(accounts.userId, user.id), eq(accounts.providerId, "google")));
-    if (google) {
+      .where(eq(accounts.userId, user.id));
+    const target = methods.find((m) => m.providerId === provider);
+    // Never remove the last way to log in.
+    if (target && methods.length > 1) {
       await getAuth().api.unlinkAccount({
-        body: { accountId: google.accountId },
+        body: { accountId: target.id }, // Better Auth's own row id, not the provider's
         headers: await headers(),
       });
     }
   } catch (error) {
-    console.error("[account] unlink google failed", error);
+    console.error(`[account] unlink ${provider} failed`, error);
   }
   revalidatePath("/account");
 }

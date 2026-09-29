@@ -10,6 +10,9 @@ describe("loginErrorKey", () => {
     expect(loginErrorKey("INVALID_TOKEN")).toBe("linkExpired");
     expect(loginErrorKey("token_expired")).toBe("linkExpired");
   });
+  it("explains a social account that didn't share an email", () => {
+    expect(loginErrorKey("email_not_found")).toBe("emailMissing");
+  });
   it("reports other Google problems as a failed Google sign-in", () => {
     expect(loginErrorKey("state_mismatch")).toBe("oauthFailed");
   });

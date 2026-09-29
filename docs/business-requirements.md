@@ -61,7 +61,7 @@ Format: **ID** · user story · acceptance criteria. Priority: **M** = must (in 
 
 | ID | Pri | Requirement |
 |----|-----|-------------|
-| ACC-1 | M | As a user I can sign up with email + password or Google/Apple, and verify my email. |
+| ACC-1 | M | As a user I can sign up with email + password or Google/Apple/Facebook, and verify my email. |
 | ACC-2 | M | As a user I can switch on roles (pilot, owner) from my profile without creating a new account. |
 | ACC-3 | M | My public profile shows name, photo, home airfield, roles, member-since date, verified badges and rating summary. Private data (documents, phone, email) is never public. |
 | ACC-4 | M | I can delete my account and export my data (GDPR). |

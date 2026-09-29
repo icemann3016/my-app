@@ -1,14 +1,16 @@
 /**
- * Errors that come back in the URL (?error=...) after email links or Google sign-in,
+ * Errors that come back in the URL (?error=...) after email links or Google/Apple/Facebook sign-in,
  * mapped to a message key in the "login" namespace.
  */
 export function loginErrorKey(
   code: string | undefined,
-): "linkExpired" | "accountNotLinked" | "oauthFailed" | "suspended" | null {
+): "linkExpired" | "accountNotLinked" | "emailMissing" | "oauthFailed" | "suspended" | null {
   if (!code) return null;
   const c = code.toLowerCase();
   if (c === "account_not_linked") return "accountNotLinked";
   if (c === "account_suspended") return "suspended";
+  // Facebook accounts made with a phone number (or email sharing declined) have no email.
+  if (c === "email_not_found") return "emailMissing";
   if (["invalid_token", "token_expired", "expired_token"].includes(c)) return "linkExpired";
   return "oauthFailed";
 }

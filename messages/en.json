@@ -91,10 +91,16 @@
     "resendConfirmation": "Send the confirmation email again",
     "passwordChanged": "Your password was changed. Log in with the new one.",
     "linkExpired": "That link has expired or was already used. Log in, or request a new link.",
-    "oauthFailed": "Signing in with Google didn't work. Please try again or use your email.",
-    "accountNotLinked": "You already have an account with this email. Log in with your password, then connect Google under Account → Security.",
+    "oauthFailed": "Signing in with Google, Apple or Facebook didn't work. Please try again or use your email.",
+    "accountNotLinked": "You already have an account with this email. Log in with your password, then connect Google, Apple or Facebook under Account → Security.",
     "errorCode": "Error code: {code}",
-    "suspended": "This account is suspended. If you think this is a mistake, contact us."
+    "suspended": "This account is suspended. If you think this is a mistake, contact us.",
+    "emailMissing": "We didn't get an email address from that account. Allow sharing your email when asked, or sign up with your email."
+  },
+  "social": {
+    "continue": "Continue with {provider}",
+    "or": "or",
+    "termsNote": "By continuing with Google, Apple or Facebook you accept the <terms>terms</terms> and <privacy>privacy policy</privacy>."
   },
   "signup": {
     "title": "Create your account",
@@ -107,11 +113,6 @@
     "pending": "Creating account…",
     "alreadyHaveAccount": "Already have an account?",
     "logIn": "Log in"
-  },
-  "google": {
-    "continue": "Continue with Google",
-    "or": "or",
-    "termsNote": "By continuing with Google you accept the <terms>terms</terms> and <privacy>privacy policy</privacy>."
   },
   "checkEmail": {
     "title": "Check your email",
@@ -347,10 +348,10 @@
       "active": "Active",
       "notSet": "Not set",
       "connected": "Connected",
-      "connectGoogle": "Connect Google",
       "disconnect": "Disconnect",
-      "linked": "Google is now connected. Next time you can log in with Google.",
-      "linkFailed": "Couldn't connect Google (error: {code}). Please try again."
+      "linked": "{provider} is now connected. Next time you can log in with {provider}.",
+      "linkFailed": "Couldn't connect the account (error: {code}). Please try again.",
+      "connect": "Connect {provider}"
     },
     "tabs": {
       "label": "Account sections",

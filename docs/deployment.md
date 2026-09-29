@@ -83,6 +83,23 @@ code**, so nothing about users or security is tied to a provider.
 4. Put the client ID and secret in `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET`. The "Continue with Google" button appears automatically.
 5. People who already have an email/password account connect Google from **Account → Security** while logged in (automatic linking is refused for unverified emails, on purpose).
 
+### Apple sign-in (optional)
+Needs a paid Apple Developer account (99 USD/year). Sign in with Apple doesn't work on `localhost`: test on ownaplane.eu.
+1. [developer.apple.com](https://developer.apple.com/account) → **Certificates, Identifiers & Profiles → Identifiers → +** → **App IDs** → App, e.g. `eu.ownaplane.app`, tick **Sign in with Apple**. Note your **Team ID** (top right).
+2. **Identifiers → + → Services IDs**, e.g. `eu.ownaplane.signin` (this is `APPLE_CLIENT_ID`). Open it, tick **Sign in with Apple → Configure**: primary App ID from step 1, **Domains** `ownaplane.eu`, **Return URLs** `https://ownaplane.eu/api/auth/callback/apple`.
+3. **Keys → +**, tick **Sign in with Apple** (configure → the App ID), download the `.p8` file (only once!) and note the **Key ID**.
+4. Set `APPLE_CLIENT_ID` (Services ID), `APPLE_TEAM_ID`, `APPLE_KEY_ID` and `APPLE_PRIVATE_KEY` (the whole `.p8` file, including the `BEGIN`/`END` lines). The app makes Apple's client secret from the key itself and renews it, so nothing expires every 6 months.
+5. People can hide their email ("Hide My Email"): we then get an `@privaterelay.appleid.com` address. For our emails to reach them, register the sending domain/address in **Services → Sign in with Apple for Email Communication** once real email (SMTP) is set up.
+
+### Facebook sign-in (optional)
+1. [developers.facebook.com](https://developers.facebook.com/apps) → **Create app** → use case **Authenticate and request data from users with Facebook Login**.
+2. **Facebook Login → Settings → Valid OAuth Redirect URIs:** `https://ownaplane.eu/api/auth/callback/facebook` (and `http://localhost:3000/api/auth/callback/facebook`; localhost works while the app is in development mode).
+3. **Use cases → Customise → Permissions:** make sure `email` and `public_profile` are added.
+4. **App settings → Basic:** copy the **App ID** and **App secret** into `FACEBOOK_CLIENT_ID` / `FACEBOOK_CLIENT_SECRET`; add the privacy policy URL `https://ownaplane.eu/privacy`, terms `https://ownaplane.eu/terms` and the data-deletion instructions URL `https://ownaplane.eu/help/account`, then switch the app to **Live**.
+5. Some Facebook accounts have no email (made with a phone number) or people decline sharing it; they're told to sign up with their email instead.
+
+All three work the same way: the button appears once the keys are set, new accounts go to the setup guide, and existing accounts connect a provider from **Account → Security**.
+
 ### Email
 - `EMAIL_DRIVER=smtp` + `SMTP_*` + `EMAIL_FROM`. Every major provider offers SMTP.
 - Once real email works, set `AUTH_REQUIRE_EMAIL_VERIFICATION=true`.
@@ -116,6 +133,8 @@ Environment variables on Vercel (Project → Settings → Environment Variables)
 | `CRON_SECRET` | output of `openssl rand -base64 32` (for the daily job) |
 | `EMAIL_DRIVER` | `console` for now |
 | `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET` | optional, see "Google sign-in" above |
+| `APPLE_CLIENT_ID`, `APPLE_TEAM_ID`, `APPLE_KEY_ID`, `APPLE_PRIVATE_KEY` | optional, see "Apple sign-in" above |
+| `FACEBOOK_CLIENT_ID`, `FACEBOOK_CLIENT_SECRET` | optional, see "Facebook sign-in" above |
 
 Migrations are run from your Mac (`npm run db:migrate` with the Session pooler URL in `.env.local`).
 | `SENTRY_DSN`, `NEXT_PUBLIC_ANALYTICS_*` | optional, see "Monitoring" above |

@@ -18,10 +18,12 @@ customs. It also doesn't take payments yet: you pay the owner directly, as agree
 3. Log in with your email and password. Forgot it? Use **Forgot password** on the login page and
    follow the link in the email.
 
-**Google sign-in.** If it's switched on for the site, you can sign up with Google. To add Google
-to an existing email/password account, log in and use **Connect Google** in **Account →
-General**.
-(For your safety we never link Google to an account automatically.)
+**Google, Apple or Facebook.** You can also sign up with your Google, Apple or Facebook account
+(the buttons appear when that option is switched on for the site). To add one to an existing
+email/password account, log in and use **Connect Google** (or Apple, Facebook) in **Account →
+General**. (For your safety we never link them to an account automatically.) With Apple you may
+hide your email; we then write to Apple's private relay address, which forwards to you. Facebook
+accounts without an email address can't be used: sign up with your email instead.
 
 ## The menu
 

@@ -65,6 +65,9 @@ before launch and whenever a new table, storage path or Server Action is added. 
 - [x] Security headers on every response: `X-Content-Type-Options`, `Referrer-Policy`,
       `X-Frame-Options: DENY` + `frame-ancestors 'none'`, `Permissions-Policy`, HSTS
       (`next.config.ts`).
+- [x] Social log-in (Google, Apple, Facebook): accounts are never linked automatically to an
+      existing account with an unverified email; connecting needs a logged-in session. CSP
+      `form-action` allows only the three providers' sign-in pages.
 - [x] Cookies: only the session (HttpOnly, Secure, SameSite=Lax, by Better Auth) and the
       language cookie.
 - [x] No raw HTML from users is rendered (help articles use our own Markdown renderer, links are

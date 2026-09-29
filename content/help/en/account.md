@@ -27,7 +27,7 @@ only the other side of an **accepted** booking sees it, together with your email
 
 ## Security and data
 
-- **Change password**, and the ways you can log in (**Connect Google**).
+- **Change password**, and the ways you can log in (**Connect Google**, **Apple** or **Facebook**; **Disconnect** while another way to log in remains).
 - **Download my data** gives you everything we store about you as a JSON file (without passwords
   or login tokens).
 - **Delete account** removes your account, profile, credentials, documents and aircraft for good.

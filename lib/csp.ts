@@ -2,6 +2,8 @@
 // nonce in proxy.ts; Next.js puts the nonce on its own scripts. Only our own origin plus what the
 // app really loads: storage images, the map tiles, and the optional statistics script.
 
+import { PROVIDER_HOSTS } from "@/lib/auth/provider-list";
+
 const host = (url: string | undefined) => {
   try {
     return url ? new URL(url).origin : null;
@@ -38,7 +40,8 @@ export function contentSecurityPolicy(nonce: string, dev = false): string {
     "child-src": ["'self'", "blob:"],
     "object-src": ["'none'"],
     "base-uri": ["'self'"],
-    "form-action": ["'self'", "https://accounts.google.com"],
+    // Social log-in buttons redirect to the provider's sign-in page.
+    "form-action": ["'self'", ...Object.values(PROVIDER_HOSTS)],
     "frame-ancestors": ["'none'"],
   };
   return Object.entries(directives)
