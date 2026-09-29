@@ -10,4 +10,9 @@ describe("initials", () => {
     expect(initials("bob")).toBe("B");
     expect(initials("   ")).toBe("?");
   });
+  it("ignores brackets and punctuation", () => {
+    expect(initials("Maria Georgieva (demo)")).toBe("MG");
+    expect(initials('Иван "Ваньо" Петров')).toBe("ИП");
+    expect(initials("(test)")).toBe("?");
+  });
 });

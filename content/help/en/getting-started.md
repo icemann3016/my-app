@@ -37,5 +37,14 @@ visible.
 
 ## The dashboard
 
-Your starting point after logging in: what's missing from your profile, the state of your pilot
-credentials, and shortcuts to your bookings and aircraft.
+Your starting point after logging in, with everything at a glance and a link to each area:
+
+- **To do**: everything waiting for you, most urgent first, each opening the page where you deal
+  with it: booking requests to answer, flight logs to finish or confirm, open defects, ARC or
+  insurance about to expire, credentials that expire or need fixing, reviews to write, unread
+  messages and notifications.
+- **As a pilot**: upcoming and completed flights, your rating, whether your credentials are
+  verified, your next and recent flights, and shortcuts to search, bookings and credentials.
+- **As an owner**: listed aircraft, upcoming bookings of them, your rating as an owner, your
+  aircraft with their status, and shortcuts to My aircraft and bookings.
+- **Getting started**: profile, credentials and first listing, shown until they're done.
