@@ -120,17 +120,19 @@ export async function listMembers(opts: {
 
 export type MemberRow = Awaited<ReturnType<typeof listMembers>>["rows"][number];
 
-/** Counts for the filter chips. */
+/** Counts for the filter chips, in one query (the pool is small on serverless hosts). */
 export async function memberCounts(): Promise<Record<MemberFilter, number>> {
-  const entries = await Promise.all(
-    MEMBER_FILTERS.map(async (f) => {
-      const [row] = await getDb()
-        .select({ n: sql<number>`count(*)::int` })
-        .from(profiles)
-        .innerJoin(users, eq(users.id, profiles.id))
-        .where(FILTERS[f]);
-      return [f, row?.n ?? 0] as const;
-    }),
+  const counts = Object.fromEntries(
+    MEMBER_FILTERS.map((f) => [
+      f,
+      sql<number>`(count(*) filter (where ${FILTERS[f] ?? sql`true`}))::int`,
+    ]),
+  ) as Record<MemberFilter, SQL<number>>;
+  const [row] = await getDb()
+    .select(counts)
+    .from(profiles)
+    .innerJoin(users, eq(users.id, profiles.id));
+  return (
+    row ?? (Object.fromEntries(MEMBER_FILTERS.map((f) => [f, 0])) as Record<MemberFilter, number>)
   );
-  return Object.fromEntries(entries) as Record<MemberFilter, number>;
 }
