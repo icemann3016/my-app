@@ -16,7 +16,9 @@ describe("error monitoring", () => {
     expect(parseDsn("https://key@glitchtip.example.com/prefix/7")?.url).toBe(
       "https://glitchtip.example.com/prefix/api/7/envelope/",
     );
+    expect(parseDsn(' "https://abc123@o1.ingest.de.sentry.io/4507" ')?.key).toBe("abc123");
     expect(parseDsn("not a dsn")).toBeNull();
+    expect(parseDsn("https://o1.ingest.de.sentry.io/4507")).toBeNull(); // no key
     expect(parseDsn(undefined)).toBeNull();
   });
 

@@ -903,12 +903,15 @@
     },
     "monitoring": {
       "title": "Error monitoring",
-      "configured": "Errors are sent to the monitoring service (SENTRY_DSN is set).",
-      "notConfigured": "Not set up: errors only go to the server log. Add SENTRY_DSN in the hosting settings and redeploy.",
       "send": "Send a test error",
       "sending": "Sending…",
       "sent": "Test error sent. It should appear in Sentry under Issues within a minute.",
-      "failed": "The monitoring service didn't accept the test error. Check that SENTRY_DSN is copied completely."
+      "failed": "The monitoring service didn't accept the test error. Check that SENTRY_DSN is copied completely.",
+      "status": {
+        "ok": "Errors are sent to the monitoring service (SENTRY_DSN is set).",
+        "missing": "Not set up: SENTRY_DSN isn't set on this deployment, so errors only go to the server log. Add it to the project's environment variables (a shared variable must be linked to the project) and redeploy.",
+        "invalid": "SENTRY_DSN is set but isn't a valid DSN. Copy the whole value from Sentry → Project Settings → Client Keys (DSN), starting with https://, and redeploy."
+      }
     }
   },
   "aircraft": {

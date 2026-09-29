@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { getMetrics } from "@/lib/admin/metrics";
 import { requireAdmin } from "@/lib/auth/session";
 import { intlLocale } from "@/lib/i18n/config";
-import { monitoringConfigured } from "@/lib/monitoring";
+import { monitoringStatus } from "@/lib/monitoring";
 import { AdminHeader } from "./page-header";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -116,7 +116,7 @@ export default async function AdminDashboardPage() {
           <CardTitle as="h2">{tm("title")}</CardTitle>
         </CardHeader>
         <CardContent className="grid gap-3 text-sm">
-          <p>{monitoringConfigured() ? tm("configured") : tm("notConfigured")}</p>
+          <p>{tm(`status.${monitoringStatus()}`)}</p>
           <TestErrorButton />
         </CardContent>
       </Card>

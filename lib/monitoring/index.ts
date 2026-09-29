@@ -7,9 +7,14 @@ import { randomUUID } from "node:crypto";
 type Dsn = { url: string; key: string };
 
 export function parseDsn(dsn: string | undefined): Dsn | null {
-  if (!dsn) return null;
+  // Tolerate quotes or spaces pasted around the value in the hosting settings.
+  const value = dsn
+    ?.trim()
+    .replace(/^["']|["']$/g, "")
+    .trim();
+  if (!value) return null;
   try {
-    const u = new URL(dsn);
+    const u = new URL(value);
     const parts = u.pathname.split("/").filter(Boolean);
     const project = parts.pop();
     if (!u.username || !project) return null;
@@ -105,5 +110,8 @@ export async function reportError(error: unknown, context: ErrorContext): Promis
   }
 }
 
-/** Whether error reports go to a monitoring service (SENTRY_DSN set and valid). */
-export const monitoringConfigured = () => parseDsn(process.env.SENTRY_DSN) !== null;
+/** Whether error reports go to a monitoring service: SENTRY_DSN missing, not a DSN, or ok. */
+export function monitoringStatus(): "missing" | "invalid" | "ok" {
+  if (!process.env.SENTRY_DSN?.trim()) return "missing";
+  return parseDsn(process.env.SENTRY_DSN) ? "ok" : "invalid";
+}
