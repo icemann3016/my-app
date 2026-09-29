@@ -31,10 +31,14 @@ describe("error monitoring", () => {
   it("sends the error without the query string, and only with a DSN", async () => {
     vi.spyOn(console, "error").mockImplementation(() => {});
     const fetch = vi.spyOn(globalThis, "fetch").mockResolvedValue(new Response(""));
-    await reportError(new Error("nope"), { where: "/x", path: "/search?home=LBSF" });
+    expect(await reportError(new Error("nope"), { where: "/x", path: "/search?home=LBSF" })).toBe(
+      false,
+    );
     expect(fetch).not.toHaveBeenCalled();
     vi.stubEnv("SENTRY_DSN", "https://k@sentry.example.com/1");
-    await reportError(new Error("nope"), { where: "/x", path: "/search?home=LBSF" });
+    expect(await reportError(new Error("nope"), { where: "/x", path: "/search?home=LBSF" })).toBe(
+      true,
+    );
     const [url, init] = fetch.mock.calls[0]!;
     expect(url).toBe("https://sentry.example.com/api/1/envelope/");
     const event = JSON.parse(String(init!.body).split("\n")[2]!);

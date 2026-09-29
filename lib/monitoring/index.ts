@@ -48,15 +48,18 @@ export type ErrorContext = {
   tags?: Record<string, string>;
 };
 
-/** Report an error (awaitable; never throws). */
-export async function reportError(error: unknown, context: ErrorContext): Promise<void> {
+/**
+ * Report an error (awaitable; never throws). Resolves to true when the monitoring service
+ * accepted it, false when it isn't configured or the report failed.
+ */
+export async function reportError(error: unknown, context: ErrorContext): Promise<boolean> {
   const err = error instanceof Error ? error : new Error(String(error));
   const digest =
     context.digest ??
     (typeof error === "object" && error && "digest" in error ? String(error.digest) : undefined);
   console.error(`[error] ${context.where}${digest ? ` (${digest})` : ""}:`, err);
   const dsn = parseDsn(process.env.SENTRY_DSN);
-  if (!dsn) return;
+  if (!dsn) return false;
   const eventId = randomUUID().replaceAll("-", "");
   const event = {
     event_id: eventId,
@@ -85,7 +88,7 @@ export async function reportError(error: unknown, context: ErrorContext): Promis
     JSON.stringify(event),
   ].join("\n");
   try {
-    await fetch(dsn.url, {
+    const response = await fetch(dsn.url, {
       method: "POST",
       headers: {
         "content-type": "application/x-sentry-envelope",
@@ -94,7 +97,13 @@ export async function reportError(error: unknown, context: ErrorContext): Promis
       body,
       signal: AbortSignal.timeout(3000),
     });
+    if (!response.ok) console.warn(`[error] the error report was refused (${response.status})`);
+    return response.ok;
   } catch (e) {
     console.warn("[error] couldn't send the error report", e);
+    return false;
   }
 }
+
+/** Whether error reports go to a monitoring service (SENTRY_DSN set and valid). */
+export const monitoringConfigured = () => parseDsn(process.env.SENTRY_DSN) !== null;

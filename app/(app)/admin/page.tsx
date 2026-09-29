@@ -2,10 +2,12 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { getLocale, getTranslations } from "next-intl/server";
 
+import { TestErrorButton } from "@/components/admin/test-error-button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { getMetrics } from "@/lib/admin/metrics";
 import { requireAdmin } from "@/lib/auth/session";
 import { intlLocale } from "@/lib/i18n/config";
+import { monitoringConfigured } from "@/lib/monitoring";
 import { AdminHeader } from "./page-header";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -17,6 +19,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function AdminDashboardPage() {
   await requireAdmin("/admin");
   const t = await getTranslations("admin.dashboard");
+  const tm = await getTranslations("admin.monitoring");
   const m = await getMetrics(30);
   const intl = intlLocale(await getLocale());
   const num = new Intl.NumberFormat(intl);
@@ -106,6 +109,15 @@ export default async function AdminDashboardPage() {
               </li>
             ))}
           </ol>
+        </CardContent>
+      </Card>
+      <Card>
+        <CardHeader>
+          <CardTitle as="h2">{tm("title")}</CardTitle>
+        </CardHeader>
+        <CardContent className="grid gap-3 text-sm">
+          <p>{monitoringConfigured() ? tm("configured") : tm("notConfigured")}</p>
+          <TestErrorButton />
         </CardContent>
       </Card>
       {m.suspended > 0 && (

@@ -39,6 +39,9 @@ test("an admin handles a report: unlist, suspend, audit log", async ({ page, bro
   execFileSync("node", ["scripts/grant-admin.mjs", adminEmail], { stdio: "pipe" });
   await admin.goto("/admin");
   await expect(admin.getByRole("heading", { name: "Admin dashboard" })).toBeVisible();
+  // No SENTRY_DSN in tests: the test button says so.
+  await admin.getByRole("button", { name: "Send a test error" }).click();
+  await expect(admin.getByRole("alert").filter({ hasText: "Not set up" })).toBeVisible();
   await admin.getByRole("link", { name: /Open reports/ }).click();
   // Other tests may run at the same time: work on this test's report only.
   const card = admin.getByRole("listitem").filter({ hasText: `LZ-A${letters}` });

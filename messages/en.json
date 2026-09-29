@@ -900,6 +900,15 @@
         "resolve_report": "Report resolved.",
         "dismiss_report": "Report dismissed."
       }
+    },
+    "monitoring": {
+      "title": "Error monitoring",
+      "configured": "Errors are sent to the monitoring service (SENTRY_DSN is set).",
+      "notConfigured": "Not set up: errors only go to the server log. Add SENTRY_DSN in the hosting settings and redeploy.",
+      "send": "Send a test error",
+      "sending": "Sending…",
+      "sent": "Test error sent. It should appear in Sentry under Issues within a minute.",
+      "failed": "The monitoring service didn't accept the test error. Check that SENTRY_DSN is copied completely."
     }
   },
   "aircraft": {

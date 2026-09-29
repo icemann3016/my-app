@@ -91,7 +91,9 @@ code**, so nothing about users or security is tied to a provider.
 - **Errors**: `SENTRY_DSN` of any Sentry-compatible service (Sentry with EU data region, or a
   self-hosted GlitchTip). Server errors (pages, routes, Server Actions via `instrumentation.ts`)
   and browser errors (`app/error.tsx` → `/api/errors`) are sent without cookies, headers, query
-  strings or user data. No SDK: `lib/monitoring` speaks the envelope API directly.
+  strings or user data. No SDK: `lib/monitoring` speaks the envelope API directly, so skip
+  Sentry's setup wizard (`npx @sentry/wizard`); only the DSN is needed (Project Settings →
+  Client Keys (DSN)). Check it with **Admin → Dashboard → Send a test error**.
 - **Page statistics**: a cookie-less service, e.g. Plausible (`NEXT_PUBLIC_ANALYTICS_SRC=https://plausible.io/js/script.js`,
   `NEXT_PUBLIC_ANALYTICS_DOMAIN=ownaplane.eu`) or Umami (`…_SRC` + `…_WEBSITE_ID`). No cookie
   banner needed; the cookie policy already says so.
