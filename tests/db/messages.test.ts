@@ -257,4 +257,26 @@ describeDb("messages", () => {
     for (let i = 0; i < 30; i++) expect(await send(OTH, enquiry, `Spam ${i}`)).toHaveLength(1);
     expect(await send(OTH, enquiry, "One more")).toEqual({ error: "too_many_messages" });
   });
+
+  it("sends no message emails to people who turned them off (MSG-3)", async () => {
+    const { deliverMessageEmails } = await import("@/lib/messages/emails");
+    const setEmail = (on: boolean) =>
+      rls.asUser(OWN, (tx) =>
+        tx
+          .update(s.userSettings)
+          .set({ emailMessages: on })
+          .where(sql`user_id = ${OWN}::uuid`),
+      );
+    const log = console.info;
+    console.info = () => {};
+    try {
+      await setEmail(false);
+      await send(PIL, bookingThread, "Running 10 minutes late");
+      expect(await deliverMessageEmails()).toBe(0);
+      await setEmail(true);
+      expect(await deliverMessageEmails()).toBeGreaterThan(0);
+    } finally {
+      console.info = log;
+    }
+  });
 });

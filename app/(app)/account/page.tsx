@@ -19,6 +19,7 @@ import { accounts, userSettings } from "@/lib/db/schema";
 import { AvatarUpload } from "./avatar-upload";
 import { DeleteAccount } from "./delete-account";
 import { ContactForm } from "./contact-form";
+import { NotificationForm } from "./notification-form";
 import { PreferencesForm } from "./preferences-form";
 import { ProfileForm } from "./profile-form";
 import { RolesForm } from "./roles-form";
@@ -107,6 +108,23 @@ export default async function AccountPage({
         </CardContent>
       </Card>
 
+      <Card id="notifications">
+        <CardHeader>
+          <CardTitle as="h2">{t("notifications.title")}</CardTitle>
+          <CardDescription>{t("notifications.description")}</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <NotificationForm
+            settings={{
+              emailBookings: settings?.emailBookings ?? true,
+              inAppBookings: settings?.inAppBookings ?? true,
+              emailReviews: settings?.emailReviews ?? true,
+              inAppReviews: settings?.inAppReviews ?? true,
+              emailMessages: settings?.emailMessages ?? true,
+            }}
+          />
+        </CardContent>
+      </Card>
       <Card id="contact">
         <CardHeader>
           <CardTitle as="h2">{t("contact.title")}</CardTitle>

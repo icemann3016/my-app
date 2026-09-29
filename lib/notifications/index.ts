@@ -61,7 +61,7 @@ export async function listNotifications(userId: string, limit = 50) {
       .select({ n: notifications, actor: profiles.displayName })
       .from(notifications)
       .leftJoin(profiles, eq(profiles.id, notifications.actorId))
-      .where(eq(notifications.userId, userId))
+      .where(and(eq(notifications.userId, userId), eq(notifications.inApp, true)))
       .orderBy(desc(notifications.createdAt))
       .limit(limit),
   );
@@ -80,7 +80,13 @@ export async function unreadCount(userId: string): Promise<number> {
     tx
       .select({ n: count() })
       .from(notifications)
-      .where(and(eq(notifications.userId, userId), isNull(notifications.readAt))),
+      .where(
+        and(
+          eq(notifications.userId, userId),
+          eq(notifications.inApp, true),
+          isNull(notifications.readAt),
+        ),
+      ),
   );
   return row?.n ?? 0;
 }

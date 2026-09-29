@@ -341,6 +341,34 @@
       "save": "Save phone",
       "saving": "Saving…",
       "saved": "Saved."
+    },
+    "notifications": {
+      "title": "Notifications",
+      "description": "Choose how we tell you about what happens on ownAplane.",
+      "caption": "Notification channels",
+      "kind": "About",
+      "email": "Email",
+      "inApp": "In the app",
+      "always": "Always",
+      "aria": "{kind}: {channel}",
+      "kinds": {
+        "bookings": {
+          "label": "Bookings",
+          "hint": "Requests, answers, cancellations, flight logs and reminders"
+        },
+        "reviews": {
+          "label": "Reviews",
+          "hint": "Reviews of you, published reviews and replies"
+        },
+        "messages": {
+          "label": "Messages",
+          "hint": "One email when you get new messages; they're always in Messages"
+        }
+      },
+      "alwaysSent": "Always sent by email: defects reported on your aircraft, password and sign-in emails, and decisions about your documents and their expiry.",
+      "save": "Save notifications",
+      "saving": "Saving…",
+      "saved": "Saved."
     }
   },
   "password": {

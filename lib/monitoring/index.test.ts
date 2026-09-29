@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 
-import { parseDsn, reportError, stackFrames } from "./index";
+import { isClientAbort, parseDsn, reportError, stackFrames } from "./index";
 
 describe("error monitoring", () => {
   afterEach(() => {
@@ -46,5 +46,11 @@ describe("error monitoring", () => {
     const event = JSON.parse(String(init!.body).split("\n")[2]!);
     expect(event.request.url).toBe("/search");
     expect(event.exception.values[0].value).toBe("nope");
+  });
+
+  it("ignores visitors leaving a page while it streams", () => {
+    expect(isClientAbort(new Error("The destination stream closed early."))).toBe(true);
+    expect(isClientAbort(Object.assign(new Error("x"), { name: "AbortError" }))).toBe(true);
+    expect(isClientAbort(new Error("Cannot read properties of undefined"))).toBe(false);
   });
 });

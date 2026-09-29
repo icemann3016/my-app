@@ -43,6 +43,17 @@ export function stackFrames(stack: string | undefined) {
     .slice(-50);
 }
 
+/** A visitor left or cancelled the request while the page was still streaming: not a bug. */
+export function isClientAbort(error: unknown): boolean {
+  const e = error as { name?: string; message?: string; code?: string } | null;
+  return Boolean(
+    e &&
+    (e.name === "AbortError" ||
+      e.code === "ECONNRESET" ||
+      /destination stream closed early|aborted|socket hang up/i.test(e.message ?? "")),
+  );
+}
+
 export type ErrorContext = {
   /** Where: a route path, "cron", "client"… */
   where: string;

@@ -16,3 +16,11 @@ You're told about everything that happens to your bookings, **in the app** (🔔
 
 Also by email: credential and aircraft document decisions, expiry reminders, and when an aircraft
 is unlisted because a document expired. Opening **Notifications** marks everything read.
+
+## Choosing how you're told
+
+In **Account → General → Notifications** choose, for **bookings** and **reviews**, whether you
+get an **email**, a notification **in the app** (the bell), both or neither; for **messages**,
+whether you get an email (they're always under Messages). Defects reported on your aircraft,
+password and sign-in emails, and decisions about your documents and their expiry are always sent
+by email.

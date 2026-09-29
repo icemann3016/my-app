@@ -2,6 +2,7 @@
 // triggers) live in the SQL migration db/migrations/0001_security.sql.
 import { sql } from "drizzle-orm";
 import {
+  boolean,
   check,
   integer,
   numeric,
@@ -58,6 +59,12 @@ export const userSettings = pgTable(
     units: text("units").notNull().default("metric"),
     // Shared only with the other side of an accepted booking (MSG-2), see booking_contacts().
     phone: text("phone"),
+    // Notification channels per kind (MSG-3). Safety and account emails are always sent.
+    emailBookings: boolean("email_bookings").notNull().default(true),
+    inAppBookings: boolean("in_app_bookings").notNull().default(true),
+    emailReviews: boolean("email_reviews").notNull().default(true),
+    inAppReviews: boolean("in_app_reviews").notNull().default(true),
+    emailMessages: boolean("email_messages").notNull().default(true),
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
     updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
   },

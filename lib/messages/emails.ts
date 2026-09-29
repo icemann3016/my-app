@@ -22,6 +22,9 @@ export async function deliverMessageEmails(limit = 100): Promise<number> {
                         (c.pilot_id, false, c.pilot_read_at, c.pilot_emailed_at))
           as side(person, is_owner, read_at, emailed_at)
       where side.person is not null
+        -- MSG-3: people can turn message emails off.
+        and coalesce((select us.email_messages from public.user_settings us
+                      where us.user_id = side.person), true)
         and c.last_message_at > now() - interval '3 days'
         and exists (select 1 from public.messages m
                     where m.conversation_id = c.id and m.sender_id is distinct from side.person

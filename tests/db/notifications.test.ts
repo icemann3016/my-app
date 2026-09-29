@@ -149,4 +149,49 @@ describeDb("notifications", () => {
     expect((await mine(PIL)).map((n) => n.type)).toContain("reminder");
     expect((await mine(OWN)).map((n) => n.type)).toContain("reminder");
   });
+
+  it("follows each person's email and in-app choices (MSG-3)", async () => {
+    // The owner wants booking news by email only, the pilot wants nothing about bookings.
+    await rls.asUser(OWN, (tx) =>
+      tx
+        .update(s.userSettings)
+        .set({ inAppBookings: false })
+        .where(sql`user_id = ${OWN}::uuid`),
+    );
+    await rls.asUser(PIL, (tx) =>
+      tx
+        .update(s.userSettings)
+        .set({ inAppBookings: false, emailBookings: false })
+        .where(sql`user_id = ${PIL}::uuid`),
+    );
+    // Nobody may change someone else's choices.
+    await rls.asUser(OTH, (tx) =>
+      tx
+        .update(s.userSettings)
+        .set({ emailBookings: false })
+        .where(sql`user_id = ${OWN}::uuid`),
+    );
+    await db
+      .getDb()
+      .insert(s.bookingEvents)
+      .values({ bookingId, actorId: null, type: "log_confirmed" });
+    const rows = await db
+      .getDb()
+      .select()
+      .from(s.notifications)
+      .where(sql`booking_id = ${bookingId}::uuid and type = 'log_confirmed'`);
+    expect(rows.map((r) => r.userId)).toEqual([OWN]);
+    expect(rows[0]).toMatchObject({ inApp: false, emailedAt: null });
+    // In-app lists leave it out; the email still goes.
+    const { listNotifications, unreadCount } = await import("@/lib/notifications");
+    const before = await unreadCount(OWN);
+    expect((await listNotifications(OWN)).map((n) => n.type)).not.toContain("log_confirmed");
+    expect(await unreadCount(OWN)).toBe(before);
+    const [owner] = await db
+      .getDb()
+      .select()
+      .from(s.userSettings)
+      .where(sql`user_id = ${OWN}::uuid`);
+    expect(owner!.emailBookings).toBe(true);
+  });
 });
