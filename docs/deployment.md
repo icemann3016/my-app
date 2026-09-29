@@ -128,7 +128,8 @@ real owners:
 1. **Separate databases**: keep the production Supabase project for ownaplane.eu only; use a
    second project (or `docker compose up -d db`) for development and Vercel preview deployments
    (Vercel → Settings → Environment Variables: set `DATABASE_URL` etc. per environment).
-2. **Backups**: Supabase → Database → Backups. The Pro plan keeps daily backups for 7 days;
+2. **Backups** (decision 2026-09-29: off on Supabase Free for now; set up managed backups when
+   moving to Azure or Google Cloud). On Supabase: Database → Backups. The Pro plan keeps daily backups for 7 days;
    add **Point-in-Time Recovery** for the production project. Once a month, test a restore into
    the development project. Files: Storage has no backups of its own; copy the buckets with
    `rclone sync` (see §5) on a schedule, or accept that photos can be re-uploaded.
