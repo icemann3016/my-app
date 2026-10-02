@@ -1,6 +1,6 @@
 # Business Requirements — ownAplane
 
-> **Status:** Draft v0.2 · 2026-09-26 · Owner: Zlati · v0.2: flight log (BKG-7, BKG-12…16)
+> **Status:** Draft v0.3 · 2026-10-02 · Owner: Zlati · v0.2: flight log (BKG-7, BKG-12…16) · v0.3: subscriptions (SUB, §5.11, §8)
 > **Purpose:** The single source of truth for *what* we are building and *why*. Claude reads this before building any feature.
 > **How to change it:** Edit it in a PR like any other code. Add new ideas under [§11 Parking lot](#11-parking-lot-ideas-for-later).
 
@@ -36,6 +36,7 @@ _Numbers are placeholders to refine together._
 | **Phase 2 — Maintenance** | Technician profiles, service catalogue, quote requests, maintenance jobs, maintenance blocks on the aircraft calendar | Owners from Phase 1 are the customers for technicians |
 | **Phase 3 — Airports** | Airport profiles, PPR requests, parking/hangar requests, ground services, customs requests | Pilots from Phase 1 are the customers for airports |
 | **Phase 4 — Payments** | In-app payments, deposits, payouts, platform commission | Deliberately postponed. See §8 |
+| **Subscriptions** (not scheduled) | Free / Owner / Fleet plans for owners, billing through a payment provider | Planned for the future, not built yet. Can start any time after launch, before Phase 4. See §5.11 and §8 |
 
 **MVP payments decision:** In Phase 1 the app shows prices and confirms bookings, but **no money moves through the platform**. Pilots pay owners directly (bank transfer, cash, club account). See §8.
 
@@ -186,6 +187,25 @@ Owners need to know who's flying their aircraft. Verification is the trust found
 | APT-6 | S | The operator sees a daily list of expected arrivals, departures and parked aircraft. |
 | APT-7 | C | The pilot can attach the PPR to an aircraft booking so the whole trip is in one place. |
 
+### 5.11 Subscriptions (SUB) — future, not scheduled
+
+Owners pay for growth and convenience; **pilots are always free**. Plans and prices are in [§8](#8-business-model--payments).
+
+| ID | Pri | Requirement |
+|----|-----|-------------|
+| SUB-1 | M | Every account has a **plan**: Free (default), Owner or Fleet. Limits and features per plan are defined in one place in the code; prices live with the payment provider. |
+| SUB-2 | M | **Safety and trust are never paid features:** pilot verification, eligibility checks, defects and grounding, flight log, reviews, messages and reports work the same on every plan. |
+| SUB-3 | M | Plan limits are **enforced in the database** (e.g. listing an aircraft beyond the plan's limit is refused), like the listing checks for LST-6. |
+| SUB-4 | M | As an owner I see my plan, what I use ("2 of 3 aircraft") and when it renews under **Account → Plan & billing**, and can upgrade, change payment details or cancel there (the provider's hosted pages; the app never handles card data). |
+| SUB-5 | M | A public **Pricing** page compares the plans, with prices **including VAT** for consumers. |
+| SUB-6 | M | **Downgrade or non-payment never deletes data:** a 7-day warning first; then aircraft beyond the limit are unlisted (the owner picks which stay listed) and paid features stop. Accepted and upcoming bookings continue as normal. |
+| SUB-7 | M | Admins can **give a plan for free** (founding owners, partners, testers) with an end date and see each member's plan in Admin → Members. Logged in the audit log. |
+| SUB-8 | M | Payments, renewals, failed payments and cancellations reach the app through the provider's **webhook**; the app's plan always follows the provider. |
+| SUB-9 | S | **Founding owners:** owners who list an aircraft before a cut-off date get the Owner plan free for 12 months. |
+| SUB-10 | S | Paid features: instant booking (BKG-4), full usage history and CSV exports, owner statistics (hours, earnings, busiest months), "Featured" (clearly labelled) spots in search, calendar link for Google/Outlook. |
+| SUB-11 | C | Fleet features: co-managers who answer requests and manage the calendar; organisation page (club name, logo, its aircraft). |
+| SUB-12 | C | Technician and airport plans in Phases 2–3. |
+
 ## 6. Key business rules (summary)
 
 1. One account, many roles.
@@ -217,6 +237,28 @@ Owners need to know who's flying their aircraft. Verification is the trust found
 - Owner subscription (e.g. monthly per listed aircraft) or featured listings.
 - Technician and airport subscriptions in Phases 2–3.
 
+**Proposed subscription plans (2026-10-02, not built yet; requirements in §5.11):**
+
+| | **Free** | **Owner** | **Fleet** (clubs, schools, operators) |
+|---|---|---|---|
+| Price (suggested) | €0 | €15/month or €150/year | €49/month or €490/year |
+| Listed aircraft | 1 | up to 3 | up to 15 |
+| Booking requests, calendar, flight log, defects, reviews, messages | ✓ | ✓ | ✓ |
+| Instant booking | – | ✓ | ✓ |
+| Usage history and CSV exports | last 3 months | full | full |
+| Owner statistics (hours flown, earnings, busiest months) | – | ✓ | ✓ |
+| "Featured" spot in search (labelled) | – | 1 aircraft | 3 aircraft |
+| Calendar link for Google/Outlook | – | ✓ | ✓ |
+| Co-managers | – | – | ✓ |
+| Organisation page | – | – | ✓ |
+
+- **Pilots never pay.** They bring the bookings; one extra rental hour (≈ €150–200 for a C172) pays for the Owner plan.
+- **Launch free:** everything is free during the beta; founding owners get the Owner plan free for 12 months (SUB-9). Charging starts once there is real use.
+- **Payment provider (to decide):** a merchant of record (**Paddle** or Lemon Squeezy) handles EU VAT for consumers in every country (≈ 5% + €0.50 per payment); **Stripe Billing** is cheaper (≈ 1.5–2.5%) but we register for VAT OSS and file returns ourselves. Recommendation: Paddle for subscriptions; Stripe Connect stays the plan for Phase 4 payouts. Called with plain HTTP (no SDK) to keep the app portable.
+- **Data:** a `subscriptions` table (user, plan, status, current period end, provider and its customer/subscription ids, granted-by-admin flag and end date) with RLS: users read only their own row; only the webhook and admins write.
+- **Before charging (not code):** a company to receive the money (Q7), terms with subscription and refund rules incl. the EU 14-day right of withdrawal for consumers, prices shown with VAT.
+- **Build order when we start:** S1 plans, limits and admin-given plans (no payments) → S2 Pricing page and Plan & billing page → S3 checkout, webhook and billing portal → S4 the paid features (SUB-10, SUB-11).
+
 **Phase 4 (in-app payments):** Pilot pays through the app (e.g. via Stripe Connect), the platform keeps a commission, and the owner receives a payout. This also enables **security deposits**, automatic cancellation fees and protection for both sides. It needs KYC for payees and careful terms, which is why it comes later.
 
 ## 9. Regulatory & legal points to verify
@@ -232,7 +274,7 @@ _Not legal advice. Verify each point with an aviation lawyer and the national CA
 
 ## 10. Key entities (for the data model)
 
-`User` · `Role` · `PilotCredential` (licence, rating, medical) · `ExperienceRecord` · `Aircraft` · `AircraftDocument` · `RentalRequirements` · `Availability/CalendarBlock` · `Booking` · `FlightLog` (check-out/in) · `FlightLeg` · `Uplift` (fuel/oil added) · `Remark` · `Defect` · `Review` · `Message/Conversation` · `Report` · _Phase 2:_ `TechnicianProfile` · `Organisation` · `ServiceOffering` · `QuoteRequest` · `MaintenanceJob` · `MaintenanceSchedule` · _Phase 3:_ `Airport` · `AirportService` · `AirportRequest` (PPR/parking/hangar/services)
+`User` · `Role` · `PilotCredential` (licence, rating, medical) · `ExperienceRecord` · `Aircraft` · `AircraftDocument` · `RentalRequirements` · `Availability/CalendarBlock` · `Booking` · `FlightLog` (check-out/in) · `FlightLeg` · `Uplift` (fuel/oil added) · `Remark` · `Defect` · `Review` · `Message/Conversation` · `Report` · _Subscriptions:_ `Subscription` · _Phase 2:_ `TechnicianProfile` · `Organisation` · `ServiceOffering` · `QuoteRequest` · `MaintenanceJob` · `MaintenanceSchedule` · _Phase 3:_ `Airport` · `AirportService` · `AirportRequest` (PPR/parking/hangar/services)
 
 ## 11. Parking lot (ideas for later)
 
@@ -252,7 +294,7 @@ _Not legal advice. Verify each point with an aviation lawyer and the national CA
 |---|----------|-------|
 | Q1 | ~~App name~~ **Decided: ownAplane** (2026-09-26). Logo and brand look still open. | Zlati + friend |
 | Q2 | Launch country: Bulgaria only first, or a wider EU area? | |
-| Q3 | Phase 1 revenue: free, subscription, or featured listings? | |
+| Q3 | Phase 1 revenue: free, subscription, or featured listings? **Proposed (2026-10-02):** free at launch, later owner subscriptions (Free / Owner / Fleet, §8, SUB). Open: final prices and limits, payment provider (Paddle vs Stripe). | Zlati |
 | Q4 | Do we verify flight hours (logbook upload) or keep them self-declared with a label? | |
 | Q5 | Which ultralight/microlight categories do we support? These are often nationally regulated, not EASA. | |
 | Q6 | Who handles disputes (damage, no-shows) when no money passes through us? | |
