@@ -18,7 +18,9 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { type VolumeUnit } from "@/lib/domain/units";
 import { type FormState, initialFormState } from "@/lib/forms";
+import { useFuelUnit } from "./fuel-unit";
 import { saveUplift } from "./uplift-actions";
 
 /** Add or edit fuel or oil added during the rental, with the receipt (BKG-13, BKG-14). */
@@ -40,7 +42,7 @@ export function UpliftDialog({
   values: Record<string, string>;
   airport: PickerAirport | null;
   receipt: UploadedDocument | null;
-  fuelUnit: string;
+  fuelUnit: VolumeUnit;
   oilUnit: string;
   currency: string;
   fuelTypes: { value: string; label: string }[];
@@ -57,6 +59,7 @@ export function UpliftDialog({
   const e = state.errors ?? {};
   const [kind, setKind] = useState(v.kind === "oil" ? "oil" : "fuel");
   const editing = Boolean(values.upliftId);
+  const fuel = useFuelUnit("uplift", v.fuelUnit, fuelUnit);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -112,11 +115,17 @@ export function UpliftDialog({
             errors={e.airport}
           />
           <div className="grid grid-cols-2 gap-4">
+            {kind === "fuel" && (
+              <>
+                {fuel.select}
+                <div />
+              </>
+            )}
             <TextField
               id="uplift-quantity"
               name="quantity"
               inputMode="decimal"
-              label={t("quantity", { unit: kind === "oil" ? oilUnit : fuelUnit })}
+              label={t("quantity", { unit: kind === "oil" ? oilUnit : fuel.label })}
               defaultValue={v.quantity}
               errors={e.quantity}
               required

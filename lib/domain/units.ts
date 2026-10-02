@@ -46,3 +46,18 @@ export function oilToLitres(value: number, unit: "qt" | "l"): number {
 export function litresToOil(litres: number, unit: "qt" | "l"): number {
   return round(unit === "qt" ? litres / LITRES_PER_US_QUART : litres, 1);
 }
+
+/** A fuel quantity's unit, chosen per entry in the flight log (stored in litres). */
+export type VolumeUnit = "l" | "usgal";
+
+export const VOLUME_UNITS = ["l", "usgal"] as const;
+
+/** The volume unit of a unit system (the default choice in forms). */
+export function volumeUnitOf(units: UnitSystem): VolumeUnit {
+  return units === "imperial" ? "usgal" : "l";
+}
+
+/** The unit system that enters volumes in this unit. */
+export function unitSystemOf(unit: VolumeUnit): UnitSystem {
+  return unit === "usgal" ? "imperial" : "metric";
+}

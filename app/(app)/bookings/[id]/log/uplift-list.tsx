@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { formatPrice } from "@/lib/aircraft/format";
 import type { AirportSummary } from "@/lib/airports";
 import type { FlightUplift } from "@/lib/db/schema";
-import { litresToOil, litresToVolume, type UnitSystem } from "@/lib/domain/units";
+import { litresToOil, litresToVolume, type UnitSystem, type VolumeUnit } from "@/lib/domain/units";
 import type { Locale } from "@/lib/i18n/config";
 import { UpliftDialog } from "./uplift-dialog";
 import { deleteUplift } from "./uplift-actions";
@@ -36,7 +36,7 @@ export async function UpliftList({
   editable: boolean;
   bookingId: string;
   logId: string;
-  fuelUnit: string;
+  fuelUnit: VolumeUnit;
   oilUnit: string;
   currency: string;
   fuelTypes: { value: string; label: string }[];
@@ -52,7 +52,7 @@ export async function UpliftList({
         const code = airport?.code ?? u.airportIdent;
         const quantity =
           u.kind === "fuel"
-            ? `${text(u.quantityL, (l) => litresToVolume(l, units))} ${fuelUnit}`
+            ? `${text(u.quantityL, (l) => litresToVolume(l, units))} ${t(`units.${fuelUnit}`)}`
             : `${text(u.quantityL, (l) => litresToOil(l, dipstick))} ${oilUnit}`;
         const what =
           u.kind === "fuel" ? (u.fuelType ? ta(`fuelTypes.${u.fuelType}`) : "") : u.oilGrade;

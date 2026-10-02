@@ -17,13 +17,15 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { LEG_TIME_FIELDS } from "@/lib/domain/leg-times";
+import { type VolumeUnit } from "@/lib/domain/units";
 import { type FormState, initialFormState } from "@/lib/forms";
 import { saveLeg } from "./actions";
+import { useFuelUnit } from "./fuel-unit";
 
-const TIMES = ["blockOff", "engineStart", "takeoff", "landing", "engineStop", "blockOn"] as const;
 const OPTIONAL = new Set(["takeoff", "landing"]);
 
-/** Add or edit a leg: airfields, local clock times, landings, meters, fuel and oil (BKG-12…14). */
+/** Add or edit a leg: airfields, UTC times, landings, meters, fuel and oil (BKG-12…14). */
 export function LegDialog({
   bookingId,
   logId,
@@ -40,7 +42,7 @@ export function LegDialog({
   values: Record<string, string>;
   from: PickerAirport | null;
   to: PickerAirport | null;
-  fuelUnit: string;
+  fuelUnit: VolumeUnit;
   oilUnit: string;
   label?: string;
 }) {
@@ -54,6 +56,7 @@ export function LegDialog({
   const v = { ...values, ...state.values };
   const e = state.errors ?? {};
   const editing = Boolean(values.legId);
+  const fuel = useFuelUnit("leg", v.fuelUnit, fuelUnit);
   const number = (name: string, text: string) => (
     <TextField
       key={name}
@@ -103,7 +106,7 @@ export function LegDialog({
             required
           />
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
-            {TIMES.map((name) => (
+            {LEG_TIME_FIELDS.map((name) => (
               <TextField
                 key={name}
                 id={`leg-${name}`}
@@ -134,8 +137,10 @@ export function LegDialog({
             {number("hobbsEnd", t("hobbsEnd"))}
             {number("tachStart", t("tachStart"))}
             {number("tachEnd", t("tachEnd"))}
-            {number("fuelBefore", t("fuelBefore", { unit: fuelUnit }))}
-            {number("fuelAfter", t("fuelAfter", { unit: fuelUnit }))}
+            {fuel.select}
+            <div />
+            {number("fuelBefore", t("fuelBefore", { unit: fuel.label }))}
+            {number("fuelAfter", t("fuelAfter", { unit: fuel.label }))}
             {number("oilBefore", t("oilBefore", { unit: oilUnit }))}
             {number("oilAfter", t("oilAfter", { unit: oilUnit }))}
           </div>

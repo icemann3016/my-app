@@ -1,7 +1,14 @@
 import { z } from "zod";
 
 import { FUEL_TYPES } from "@/lib/aircraft/catalog";
-import { oilToLitres, type UnitSystem, volumeToLitres } from "@/lib/domain/units";
+import {
+  oilToLitres,
+  unitSystemOf,
+  type UnitSystem,
+  VOLUME_UNITS,
+  volumeToLitres,
+  volumeUnitOf,
+} from "@/lib/domain/units";
 
 // Messages are translation keys in messages/*.json → "validation".
 
@@ -15,6 +22,13 @@ const reading = (max: number, message = "numberInvalid") =>
     .transform((v) => (v === "" ? null : Number(v.replace(",", "."))))
     .refine((v) => v === null || (Number.isFinite(v) && v >= 0 && v <= max), message);
 
+/** The fuel unit picked in the form (L or US gal); the user's preference when missing. */
+const fuelUnit = (units: UnitSystem) =>
+  z
+    .enum(VOLUME_UNITS)
+    .catch(volumeUnitOf(units))
+    .transform((unit) => unitSystemOf(unit));
+
 const clock = z
   .string()
   .trim()
@@ -26,7 +40,7 @@ const optionalClock = z
   .default("")
   .refine((v) => v === "" || /^([01]\d|2[0-3]):[0-5]\d$/.test(v), "timeInvalid");
 
-/** Check-out readings (BKG-7): meters, fuel (user's units) and oil (dipstick unit) on board. */
+/** Check-out readings (BKG-7): meters, fuel (L or US gal) and oil (dipstick unit) on board. */
 export function checkoutSchema(units: UnitSystem, oilUnit: "qt" | "l") {
   return z
     .object({
@@ -35,6 +49,7 @@ export function checkoutSchema(units: UnitSystem, oilUnit: "qt" | "l") {
       tachStart: reading(999999),
       fuelStart: reading(5000),
       oilStart: reading(100),
+      fuelUnit: fuelUnit(units),
       checkoutPhotoId: z
         .string()
         .trim()
@@ -43,14 +58,18 @@ export function checkoutSchema(units: UnitSystem, oilUnit: "qt" | "l") {
         .transform((v) => v || null)
         .pipe(z.uuid("documentInvalid").nullable()),
     })
-    .transform(({ fuelStart, oilStart, ...d }) => ({
+    .transform(({ fuelStart, oilStart, fuelUnit, ...d }) => ({
       ...d,
-      fuelStartL: fuelStart === null ? null : volumeToLitres(fuelStart, units),
+      fuelStartL: fuelStart === null ? null : volumeToLitres(fuelStart, fuelUnit),
       oilStartL: oilStart === null ? null : oilToLitres(oilStart, oilUnit),
     }));
 }
 
-/** One leg (BKG-12…14). Times are local clock times; the server turns them into UTC. */
+/**
+ * One leg (BKG-12…14). Times are clock times; the server turns them into instants and checks
+ * their order (legTimeIssues). Meters must move on; within a leg fuel goes down and oil doesn't go
+ * up: refuelling and oil added between legs are separate entries (upliftSchema).
+ */
 export function legSchema(units: UnitSystem, oilUnit: "qt" | "l") {
   return z
     .object({
@@ -67,12 +86,12 @@ export function legSchema(units: UnitSystem, oilUnit: "qt" | "l") {
         .string()
         .trim()
         .regex(/^\d{4}-\d{2}-\d{2}$/, "dateInvalid"),
-      blockOff: clock,
       engineStart: clock,
+      blockOff: clock,
       takeoff: optionalClock,
       landing: optionalClock,
-      engineStop: clock,
       blockOn: clock,
+      engineStop: clock,
       landings: z.coerce
         .number("numberInvalid")
         .int("numberInvalid")
@@ -86,19 +105,28 @@ export function legSchema(units: UnitSystem, oilUnit: "qt" | "l") {
       fuelAfter: reading(5000),
       oilBefore: reading(100),
       oilAfter: reading(100),
+      fuelUnit: fuelUnit(units),
     })
-    .refine((d) => d.hobbsEnd === null || d.hobbsStart === null || d.hobbsEnd >= d.hobbsStart, {
+    .refine((d) => d.hobbsEnd === null || d.hobbsStart === null || d.hobbsEnd > d.hobbsStart, {
       path: ["hobbsEnd"],
       error: "meterBackwards",
     })
-    .refine((d) => d.tachEnd === null || d.tachStart === null || d.tachEnd >= d.tachStart, {
+    .refine((d) => d.tachEnd === null || d.tachStart === null || d.tachEnd > d.tachStart, {
       path: ["tachEnd"],
       error: "meterBackwards",
     })
-    .transform(({ fuelBefore, fuelAfter, oilBefore, oilAfter, ...d }) => ({
+    .refine((d) => d.fuelAfter === null || d.fuelBefore === null || d.fuelAfter < d.fuelBefore, {
+      path: ["fuelAfter"],
+      error: "fuelNotBurned",
+    })
+    .refine((d) => d.oilAfter === null || d.oilBefore === null || d.oilAfter <= d.oilBefore, {
+      path: ["oilAfter"],
+      error: "oilRose",
+    })
+    .transform(({ fuelBefore, fuelAfter, oilBefore, oilAfter, fuelUnit, ...d }) => ({
       ...d,
-      fuelBeforeL: fuelBefore === null ? null : volumeToLitres(fuelBefore, units),
-      fuelAfterL: fuelAfter === null ? null : volumeToLitres(fuelAfter, units),
+      fuelBeforeL: fuelBefore === null ? null : volumeToLitres(fuelBefore, fuelUnit),
+      fuelAfterL: fuelAfter === null ? null : volumeToLitres(fuelAfter, fuelUnit),
       oilBeforeL: oilBefore === null ? null : oilToLitres(oilBefore, oilUnit),
       oilAfterL: oilAfter === null ? null : oilToLitres(oilAfter, oilUnit),
     }));
@@ -106,7 +134,7 @@ export function legSchema(units: UnitSystem, oilUnit: "qt" | "l") {
 
 export type LegInput = z.infer<ReturnType<typeof legSchema>>;
 
-/** Fuel or oil added (BKG-13, BKG-14): fuel in the user's units, oil in the dipstick unit. */
+/** Fuel or oil added (BKG-13, BKG-14): fuel in L or US gal, oil in the dipstick unit. */
 export function upliftSchema(units: UnitSystem, oilUnit: "qt" | "l") {
   return z
     .object({
@@ -124,6 +152,7 @@ export function upliftSchema(units: UnitSystem, oilUnit: "qt" | "l") {
       oilGrade: z.string().trim().max(40).optional().default(""),
       price: reading(100000),
       paidBy: z.enum(["pilot", "owner"]),
+      fuelUnit: fuelUnit(units),
       receiptId: z
         .string()
         .trim()
@@ -132,11 +161,11 @@ export function upliftSchema(units: UnitSystem, oilUnit: "qt" | "l") {
         .transform((v) => v || null)
         .pipe(z.uuid("documentInvalid").nullable()),
     })
-    .transform(({ quantity, kind, fuelType, oilGrade, ...d }) => ({
+    .transform(({ quantity, kind, fuelType, oilGrade, fuelUnit, ...d }) => ({
       ...d,
       kind,
       quantityL:
-        kind === "fuel" ? volumeToLitres(quantity!, units) : oilToLitres(quantity!, oilUnit),
+        kind === "fuel" ? volumeToLitres(quantity!, fuelUnit) : oilToLitres(quantity!, oilUnit),
       fuelType: kind === "fuel" ? (fuelType ?? null) : null,
       oilGrade: kind === "oil" && oilGrade ? oilGrade : null,
     }));

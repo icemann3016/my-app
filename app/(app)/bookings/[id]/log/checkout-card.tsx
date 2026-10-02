@@ -3,6 +3,7 @@ import { getTranslations } from "next-intl/server";
 
 import type { UploadedDocument } from "@/components/document-field";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { type VolumeUnit } from "@/lib/domain/units";
 import { CheckoutForm } from "./checkout-form";
 
 /** Check-out readings: a form while the pilot may change them, else read-only (BKG-7). */
@@ -21,14 +22,14 @@ export async function CheckoutCard({
   /** Readings as shown to the viewer (their units). */
   values: { hobbsStart: string; tachStart: string; fuelStart: string; oilStart: string };
   photo: UploadedDocument | null;
-  fuelUnit: string;
+  fuelUnit: VolumeUnit;
   oilUnit: string;
 }) {
   const t = await getTranslations("flightLog");
   const readings = [
     [t("hobbs"), values.hobbsStart],
     [t("tach"), values.tachStart],
-    [t("fuelOnBoard", { unit: fuelUnit }), values.fuelStart],
+    [t("fuelOnBoard", { unit: t(`units.${fuelUnit}`) }), values.fuelStart],
     [t("oilLevel", { unit: oilUnit }), values.oilStart],
   ] as const;
   return (

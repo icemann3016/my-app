@@ -133,29 +133,37 @@ describeDb("flight log", () => {
     seq: 1,
     fromIdent: "LBSF",
     toIdent: "LBSF",
-    blockOff: at(70),
-    engineStart: at(75),
-    engineStop: at(140),
-    blockOn: at(145),
+    engineStart: at(70),
+    blockOff: at(75),
+    takeoffAt: at(80),
+    landingAt: at(135),
+    blockOn: at(140),
+    engineStop: at(145),
     hobbsStart: 1234.5,
     hobbsEnd: 1235.6,
     ...overrides,
   });
 
-  it("refuses times out of order and meters going backwards", async () => {
+  it("refuses times out of order, meters not moving on, fuel going up during a leg", async () => {
     const code = (p: Promise<unknown>) =>
       p.then(
         () => undefined,
         (e: { cause?: { code?: string } }) => e.cause?.code,
       );
-    expect(
-      await code(
-        rls.asUser(PIL, (tx) => tx.insert(s.flightLegs).values(leg({ engineStart: at(60) }))),
-      ),
-    ).toBe("23514");
-    expect(
-      await code(rls.asUser(PIL, (tx) => tx.insert(s.flightLegs).values(leg({ hobbsEnd: 1200 })))),
-    ).toBe("23514");
+    const refused = async (overrides: Parameters<typeof leg>[0]) =>
+      expect(
+        await code(rls.asUser(PIL, (tx) => tx.insert(s.flightLegs).values(leg(overrides)))),
+      ).toBe("23514");
+    await refused({ engineStart: at(76) }); // after block off
+    await refused({ takeoffAt: at(75) }); // take-off = block off
+    await refused({ landingAt: at(80) }); // landing = take-off
+    await refused({ blockOn: at(135) }); // block on = landing
+    await refused({ engineStop: at(139) }); // before block on
+    await refused({ engineStop: at(70 + 12 * 60 + 1) }); // longer than 12 h
+    await refused({ hobbsEnd: 1200 });
+    await refused({ hobbsEnd: 1234.5 }); // the meter must move on
+    await refused({ fuelBeforeL: 100, fuelAfterL: 100 });
+    await refused({ oilBeforeL: 6, oilAfterL: 6.5 });
     expect(await code(rls.asUser(OWN, (tx) => tx.insert(s.flightLegs).values(leg())))).toBe(
       "42501",
     );

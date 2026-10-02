@@ -216,13 +216,17 @@
     "endBeforeStart": "La fin doit être après le début.",
     "plannedHoursInvalid": "Saisissez le temps de vol prévu, par ex. 1,5.",
     "timeInvalid": "Saisissez une heure au format HH:MM.",
-    "meterBackwards": "La valeur de fin ne peut pas être inférieure à celle de début.",
+    "meterBackwards": "La valeur de fin doit être supérieure à celle de début.",
     "remarkRequired": "Rédigez la remarque (1000 caractères max.).",
     "defectRequired": "Décrivez le défaut (2000 caractères max.).",
     "scoreRequired": "Choisissez de 1 à 5 étoiles.",
     "replyRequired": "Écrivez quelques mots.",
     "messageRequired": "Écrivez un message.",
-    "phoneInvalid": "Saisissez le numéro au format international, par ex. +33 6 12 34 56 78."
+    "phoneInvalid": "Saisissez le numéro au format international, par ex. +33 6 12 34 56 78.",
+    "timeAfter": "Doit être après {other}.",
+    "timeNotBefore": "Ne peut pas être avant {other}.",
+    "fuelNotBurned": "Le carburant après doit être inférieur au carburant avant. Enregistrez un avitaillement avec « Ajouter carburant ou huile ».",
+    "oilRose": "L’huile après ne peut pas dépasser l’huile avant. Enregistrez l’huile ajoutée avec « Ajouter carburant ou huile »."
   },
   "dashboard": {
     "title": "Bienvenue, {name}",
@@ -1844,6 +1848,7 @@
     "hobbs": "Hobbs",
     "tach": "Tach",
     "fuelOnBoard": "Carburant à bord ({unit})",
+    "fuelUnit": "Unité de carburant",
     "oilLevel": "Niveau d'huile ({unit})",
     "checkoutPhoto": "Photo des compteurs (facultatif)",
     "checkoutPhotoHint": "JPEG, PNG ou PDF, jusqu'à 4 Mo. Le propriétaire peut aussi l'ouvrir.",
@@ -1858,7 +1863,7 @@
     "delete": "Supprimer",
     "editLegOf": "Modifier l'étape {leg}",
     "deleteLegOf": "Supprimer l'étape {leg}",
-    "legHint": "Toutes les heures en UTC.",
+    "legHint": "Toutes les heures en UTC, dans l’ordre : mise en route, départ du parking, décollage, atterrissage, arrivée au parking, arrêt moteur. Le carburant et l’huile après sont les valeurs à l’arrivée, avant l’avitaillement ; enregistrez ce que vous ajoutez avec « Ajouter carburant ou huile ».",
     "from": "De",
     "to": "À",
     "date": "Date (bloc départ, UTC)",
@@ -1922,7 +1927,7 @@
       "note_required": "Indiquez ce qui doit être corrigé.",
       "bad_amount": "Le montant n'est pas valide.",
       "missing_meters": "Des valeurs de compteur manquent.",
-      "leg_checks": "Vérifiez l'étape : les heures doivent être dans l'ordre (bloc départ, mise en route, décollage, atterrissage, arrêt moteur, bloc arrivée), sur 24 heures au plus, et les compteurs ne peuvent pas reculer.",
+      "leg_checks": "Vérifiez l’étape : les heures doivent être dans l’ordre (mise en route, départ du parking, décollage, atterrissage, arrivée au parking, arrêt moteur) et sur 12 heures maximum, les compteurs doivent avancer, le carburant doit diminuer et l’huile ne peut pas augmenter pendant une étape.",
       "failed": "Une erreur s'est produite. Veuillez réessayer.",
       "aircraft_grounded": "L'avion est immobilisé par le propriétaire, il ne peut donc pas être pris en charge."
     },
@@ -1990,7 +1995,19 @@
       "text": "Le propriétaire est au courant. Vérifiez-les avant de voler.",
       "since": "depuis le {date}"
     },
-    "remarkSaved": "Remarque ajoutée."
+    "remarkSaved": "Remarque ajoutée.",
+    "continuity": {
+      "title": "Vérifiez les valeurs de carburant et d’huile",
+      "hint": "Ajoutez l’avitaillement ou l’huile manquant avec « Ajouter carburant ou huile », ou corrigez les valeurs. Le propriétaire le voit aussi.",
+      "rose": {
+        "fuel": "Le carburant a augmenté de {rise} avant l’étape {leg} à {airport}, mais seulement {recorded} y est enregistré.",
+        "oil": "L’huile a augmenté de {rise} avant l’étape {leg} à {airport}, mais seulement {recorded} y est enregistré."
+      },
+      "offRoute": {
+        "fuel": "Du carburant a été ajouté à {airport}, mais aucune étape n’y commence ni n’y finit.",
+        "oil": "De l’huile a été ajoutée à {airport}, mais aucune étape n’y commence ni n’y finit."
+      }
+    }
   },
   "defects": {
     "report": "Signaler un défaut",

@@ -104,21 +104,30 @@ export const flightLegs = pgTable(
   (t) => [
     unique("flight_legs_seq").on(t.flightLogId, t.seq),
     index("flight_legs_log_idx").on(t.flightLogId),
-    // Sanity checks from plan §4.8: times in order, meters never go backwards.
+    // Sanity checks from plan §4.8: times in the order they happen (engine start ≤ block off <
+    // take-off < landing < block on ≤ engine stop, at most 12 h), meters move on, fuel goes down
+    // and oil doesn't go up during a leg (added fuel/oil are flight_uplifts). Added NOT VALID in
+    // 0051, so legs saved under the earlier rules stay readable.
     check(
       "flight_legs_times",
-      sql`${t.blockOff} <= ${t.engineStart} and ${t.engineStart} <= ${t.engineStop}
-        and ${t.engineStop} <= ${t.blockOn}
-        and (${t.takeoffAt} is null or (${t.engineStart} <= ${t.takeoffAt}
-          and ${t.takeoffAt} <= coalesce(${t.landingAt}, ${t.engineStop})))
-        and (${t.landingAt} is null or ${t.landingAt} <= ${t.engineStop})
-        and ${t.blockOn} - ${t.blockOff} <= interval '24 hours'`,
+      sql`${t.engineStart} <= ${t.blockOff} and ${t.blockOff} < ${t.blockOn}
+        and ${t.blockOn} <= ${t.engineStop}
+        and (${t.takeoffAt} is null or (${t.blockOff} < ${t.takeoffAt}
+          and ${t.takeoffAt} < coalesce(${t.landingAt}, ${t.blockOn})))
+        and (${t.landingAt} is null or (${t.blockOff} < ${t.landingAt}
+          and ${t.landingAt} < ${t.blockOn}))
+        and ${t.engineStop} - ${t.engineStart} <= interval '12 hours'`,
     ),
     check(
       "flight_legs_meters",
-      sql`(${t.hobbsEnd} is null or ${t.hobbsStart} is null or ${t.hobbsEnd} >= ${t.hobbsStart})
-        and (${t.tachEnd} is null or ${t.tachStart} is null or ${t.tachEnd} >= ${t.tachStart})
+      sql`(${t.hobbsEnd} is null or ${t.hobbsStart} is null or ${t.hobbsEnd} > ${t.hobbsStart})
+        and (${t.tachEnd} is null or ${t.tachStart} is null or ${t.tachEnd} > ${t.tachStart})
         and ${t.hobbsStart} >= 0 and ${t.tachStart} >= 0`,
+    ),
+    check(
+      "flight_legs_fuel_oil",
+      sql`(${t.fuelAfterL} is null or ${t.fuelBeforeL} is null or ${t.fuelAfterL} < ${t.fuelBeforeL})
+        and (${t.oilAfterL} is null or ${t.oilBeforeL} is null or ${t.oilAfterL} <= ${t.oilBeforeL})`,
     ),
     check(
       "flight_legs_amounts",

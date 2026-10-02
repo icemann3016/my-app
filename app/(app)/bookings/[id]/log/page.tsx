@@ -19,9 +19,11 @@ import { getBooking } from "@/lib/bookings/queries";
 import { getKnownItems } from "@/lib/bookings/remarks";
 import { logAirports, logDocuments } from "@/lib/bookings/log-view";
 import { fuelSettlement } from "@/lib/domain/flight-log";
+import { continuityIssues } from "@/lib/domain/fuel-checks";
 import { zonedDay } from "@/lib/domain/time";
-import { litresToOil, litresToVolume } from "@/lib/domain/units";
+import { litresToOil, litresToVolume, volumeUnitOf } from "@/lib/domain/units";
 import { CheckoutCard } from "./checkout-card";
+import { ContinuityAlert } from "./continuity-alert";
 import { LegDialog } from "./leg-dialog";
 import { LegList } from "./leg-list";
 import { LogSummary } from "./log-summary";
@@ -55,7 +57,7 @@ export default async function FlightLogPage({ params }: { params: Promise<{ id: 
   const { log, legs, uplifts, remarks } = data;
   const t = await getTranslations("flightLog");
   const units = await getUnits(user.id);
-  const fuelUnit = t(units === "metric" ? "units.l" : "units.usgal");
+  const fuelUnit = volumeUnitOf(units);
   const oilUnit = t(plane.oilUnit === "qt" ? "units.qt" : "units.l");
   const editable =
     role === "pilot" && (log.status === "draft" || log.status === "correction_requested");
@@ -191,6 +193,12 @@ export default async function FlightLogPage({ params }: { params: Promise<{ id: 
       />
 
       {role === "pilot" && <ReportDefectDialog aircraftId={plane.id} bookingId={b.id} />}
+
+      <ContinuityAlert
+        issues={continuityIssues(log, legs, uplifts, b.departureIdent)}
+        units={units}
+        dipstick={plane.oilUnit}
+      />
 
       <LogSummary
         bookingId={b.id}

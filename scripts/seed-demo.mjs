@@ -237,8 +237,8 @@ try {
   const minutes = (m) => new Date(Date.parse(at(-6, 8)) + m * 60_000).toISOString();
   await sql`insert into flight_legs (flight_log_id, seq, from_ident, to_ident, block_off,
       engine_start, takeoff_at, landing_at, engine_stop, block_on, landings, hobbs_start, hobbs_end)
-    values (${log.id}, 1, 'LBSF', 'LBSF', ${minutes(10)}, ${minutes(12)}, ${minutes(25)},
-      ${minutes(122)}, ${minutes(128)}, ${minutes(130)}, 3, 2451.3, 2453.4)`;
+    values (${log.id}, 1, 'LBSF', 'LBSF', ${minutes(12)}, ${minutes(10)}, ${minutes(25)},
+      ${minutes(122)}, ${minutes(130)}, ${minutes(128)}, 3, 2451.3, 2453.4)`;
   await sql`insert into reviews (booking_id, direction, author_id, subject_user_id,
       subject_aircraft_id, scores, overall, comment, submitted_at)
     values

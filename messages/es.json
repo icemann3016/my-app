@@ -216,13 +216,17 @@
     "endBeforeStart": "El final debe ser posterior al inicio.",
     "plannedHoursInvalid": "Introduce las horas que piensas volar, p. ej. 1,5.",
     "timeInvalid": "Introduce una hora en formato HH:MM.",
-    "meterBackwards": "La lectura final no puede ser menor que la inicial.",
+    "meterBackwards": "La lectura final debe ser mayor que la inicial.",
     "remarkRequired": "Escribe la observación (hasta 1000 caracteres).",
     "defectRequired": "Describe el defecto (hasta 2000 caracteres).",
     "scoreRequired": "Elige de 1 a 5 estrellas.",
     "replyRequired": "Escribe unas palabras.",
     "messageRequired": "Escribe un mensaje.",
-    "phoneInvalid": "Introduce el número en formato internacional, p. ej. +34 612 345 678."
+    "phoneInvalid": "Introduce el número en formato internacional, p. ej. +34 612 345 678.",
+    "timeAfter": "Debe ser posterior a {other}.",
+    "timeNotBefore": "No puede ser anterior a {other}.",
+    "fuelNotBurned": "El combustible después debe ser menor que antes. Registra el repostaje con «Añadir combustible o aceite».",
+    "oilRose": "El aceite después no puede ser mayor que antes. Registra el aceite añadido con «Añadir combustible o aceite»."
   },
   "dashboard": {
     "title": "Hola, {name}",
@@ -1844,6 +1848,7 @@
     "hobbs": "Hobbs",
     "tach": "Tach",
     "fuelOnBoard": "Combustible a bordo ({unit})",
+    "fuelUnit": "Unidad de combustible",
     "oilLevel": "Nivel de aceite ({unit})",
     "checkoutPhoto": "Foto de los contadores (opcional)",
     "checkoutPhotoHint": "JPEG, PNG o PDF, hasta 4 MB. El propietario también puede abrirla.",
@@ -1858,7 +1863,7 @@
     "delete": "Eliminar",
     "editLegOf": "Editar tramo {leg}",
     "deleteLegOf": "Eliminar tramo {leg}",
-    "legHint": "Todas las horas en UTC.",
+    "legHint": "Todas las horas en UTC, en el orden en que ocurren: arranque, salida del estacionamiento, despegue, aterrizaje, llegada al estacionamiento, parada del motor. El combustible y el aceite después son las lecturas a la llegada, antes de repostar; registra lo que añadas con «Añadir combustible o aceite».",
     "from": "Desde",
     "to": "Hasta",
     "date": "Fecha (fuera calzos, UTC)",
@@ -1922,7 +1927,7 @@
       "note_required": "Indica qué hay que corregir.",
       "bad_amount": "El importe no es válido.",
       "missing_meters": "Faltan algunas lecturas de contador.",
-      "leg_checks": "Revisa el tramo: las horas deben ir en orden (fuera calzos, arranque, despegue, aterrizaje, parada de motor, calzos), dentro de 24 horas, y los contadores no pueden retroceder.",
+      "leg_checks": "Revisa el tramo: las horas deben ir en orden (arranque, salida del estacionamiento, despegue, aterrizaje, llegada al estacionamiento, parada) y dentro de 12 horas, los contadores deben avanzar, el combustible debe bajar y el aceite no puede subir durante un tramo.",
       "failed": "Algo ha salido mal. Inténtalo de nuevo.",
       "aircraft_grounded": "El propietario ha inmovilizado el avión, así que no se puede recoger."
     },
@@ -1990,7 +1995,19 @@
       "text": "El propietario los conoce. Revísalos antes de volar.",
       "since": "desde el {date}"
     },
-    "remarkSaved": "Observación añadida."
+    "remarkSaved": "Observación añadida.",
+    "continuity": {
+      "title": "Revisa las lecturas de combustible y aceite",
+      "hint": "Añade el repostaje o el aceite que falta con «Añadir combustible o aceite» o corrige las lecturas. El propietario también lo ve.",
+      "rose": {
+        "fuel": "El combustible subió {rise} antes del tramo {leg} en {airport}, pero allí solo consta {recorded} añadido.",
+        "oil": "El aceite subió {rise} antes del tramo {leg} en {airport}, pero allí solo consta {recorded} añadido."
+      },
+      "offRoute": {
+        "fuel": "Se añadió combustible en {airport}, pero ningún tramo empieza ni termina allí.",
+        "oil": "Se añadió aceite en {airport}, pero ningún tramo empieza ni termina allí."
+      }
+    }
   },
   "defects": {
     "report": "Notificar un defecto",

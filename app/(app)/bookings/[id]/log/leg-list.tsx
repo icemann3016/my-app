@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import type { AirportSummary } from "@/lib/airports";
 import type { FlightLeg } from "@/lib/db/schema";
 import { utcToZoned } from "@/lib/domain/time";
-import { litresToOil, litresToVolume, type UnitSystem } from "@/lib/domain/units";
+import { litresToOil, litresToVolume, type UnitSystem, type VolumeUnit } from "@/lib/domain/units";
 import { deleteLeg } from "./actions";
 import { LegDialog } from "./leg-dialog";
 
@@ -33,7 +33,7 @@ export async function LegList({
   editable: boolean;
   bookingId: string;
   logId: string;
-  fuelUnit: string;
+  fuelUnit: VolumeUnit;
   /** Label of the oil unit. */
   oilUnit: string;
 }) {

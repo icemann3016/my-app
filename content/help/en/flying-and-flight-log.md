@@ -26,12 +26,23 @@ Hobbs and tach, fuel on board, oil level, and optionally a photo of the meters.
 Add one **leg** per flight (**Add leg**), for example LBSF → LBPD → LBSF as two legs:
 
 - **From / To** airfields and the **date**.
-- **Block off, engine start, take-off, landing, engine stop, block on**, all in UTC. Take-off
-  and landing are optional. Times past midnight (UTC) are handled.
+- The times **in the order they happen**, all in UTC: **engine start, block off, take-off,
+  landing, block on, engine stop**. Take-off and landing are optional. Times past midnight (UTC)
+  are handled.
 - **Landings**, **Hobbs** and **tach** at start and end, **fuel** and **oil** before and after.
+  Pick **L** or **US gal** for fuel in each form; the app converts it.
 
-The app refuses times out of order, legs longer than 24 hours and meters that go backwards. You
-can edit or delete legs until you check in.
+The app checks every leg:
+
+- **Engine start ≤ block off < take-off < landing < block on ≤ engine stop** (block off may be
+  the same minute as engine start, and engine stop the same minute as block on), and a leg can't
+  be longer than 12 hours.
+- **Hobbs and tach** end must be higher than start.
+- **Fuel after** must be lower than fuel before, and **oil after** can't be higher than oil
+  before. "After" is what you read on arrival, **before** refuelling: fuel and oil you add
+  between legs or after the last one go under **Fuel and oil added**.
+
+You can edit or delete legs until you check in.
 
 ## Fuel and oil added
 
@@ -43,6 +54,11 @@ the **receipt** (optional; the owner can open it). How it counts in the amount d
 - **Dry rate:** fuel from the owner's account is added.
 - **Oil** is part of both rates, so oil you paid for is always taken off.
 - Entries without a price don't count, and the page says so.
+
+If fuel or oil on board **went up between two legs** (or between check-out and the first leg) by
+more than you recorded as added at that airfield, or something was added at an airfield the
+aircraft never visited, the log shows a **Check the fuel and oil readings** note to you and the
+owner. Small gauge differences (2 L of fuel, 0.3 L of oil) are ignored.
 
 ## Remarks and PIREPs
 

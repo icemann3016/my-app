@@ -7,8 +7,10 @@ import { DocumentField, type UploadedDocument } from "@/components/document-fiel
 import { FormMessage } from "@/components/forms/form-message";
 import { SubmitButton } from "@/components/forms/submit-button";
 import { TextField } from "@/components/forms/text-field";
+import { type VolumeUnit } from "@/lib/domain/units";
 import { initialFormState } from "@/lib/forms";
 import { saveCheckout } from "./actions";
+import { useFuelUnit } from "./fuel-unit";
 
 /** Readings at check-out (BKG-7): meters, fuel and oil on board, optional photo. */
 export function CheckoutForm({
@@ -23,13 +25,14 @@ export function CheckoutForm({
   logId: string;
   values: Record<string, string>;
   photo: UploadedDocument | null;
-  fuelUnit: string;
+  fuelUnit: VolumeUnit;
   oilUnit: string;
 }) {
   const t = useTranslations("flightLog");
   const [state, formAction] = useActionState(saveCheckout, initialFormState);
   const v = { ...values, ...state.values };
   const e = state.errors ?? {};
+  const fuel = useFuelUnit("checkout", v.fuelUnit, fuelUnit);
   return (
     <form action={formAction} className="grid gap-4">
       <FormMessage state={state} />
@@ -50,10 +53,12 @@ export function CheckoutForm({
           defaultValue={v.tachStart}
           errors={e.tachStart}
         />
+        {fuel.select}
+        <div />
         <TextField
           name="fuelStart"
           inputMode="decimal"
-          label={t("fuelOnBoard", { unit: fuelUnit })}
+          label={t("fuelOnBoard", { unit: fuel.label })}
           defaultValue={v.fuelStart}
           errors={e.fuelStart}
         />

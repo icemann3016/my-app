@@ -15,7 +15,7 @@ import { getBooking } from "@/lib/bookings/queries";
 import { asUser } from "@/lib/db/rls";
 import { flightLegs, flightLogs } from "@/lib/db/schema";
 import { fuelSettlement } from "@/lib/domain/flight-log";
-import { legTimesToUtc } from "@/lib/domain/leg-times";
+import { legTimeIssues, legTimesToUtc } from "@/lib/domain/leg-times";
 import { type FormState, formValues } from "@/lib/forms";
 import { localizedFieldErrors } from "@/lib/i18n/server";
 import { checkoutSchema, legSchema } from "@/lib/validation/flight-log";
@@ -81,7 +81,31 @@ export async function saveCheckout(_prev: FormState, formData: FormData): Promis
   return { ok: true, message: t("saved"), values: raw };
 }
 
-/** Add or change one leg (BKG-12). Times are converted from the airfields' local time. */
+/** Times out of order, as form errors (UTC clock times; see legTimeIssues). */
+async function legOrderErrors(raw: Record<string, string>) {
+  const times = legTimesToUtc({
+    date: raw.date ?? "",
+    fromZone: "UTC",
+    toZone: "UTC",
+    engineStart: raw.engineStart ?? "",
+    blockOff: raw.blockOff ?? "",
+    takeoff: raw.takeoff,
+    landing: raw.landing,
+    blockOn: raw.blockOn ?? "",
+    engineStop: raw.engineStop ?? "",
+  });
+  if (!times) return { times, errors: {} };
+  const [t, v] = await Promise.all([getTranslations("flightLog"), getTranslations("validation")]);
+  const errors: Record<string, string[]> = Object.fromEntries(
+    legTimeIssues(times).map((i) => [
+      i.field,
+      [v(i.rule === "after" ? "timeAfter" : "timeNotBefore", { other: t(i.other) })],
+    ]),
+  );
+  return { times, errors };
+}
+
+/** Add or change one leg (BKG-12). Times (UTC) must be in the order they happen. */
 export async function saveLeg(_prev: FormState, formData: FormData): Promise<FormState> {
   const user = await requireUser("/bookings");
   const t = await getTranslations("flightLog");
@@ -90,38 +114,36 @@ export async function saveLeg(_prev: FormState, formData: FormData): Promise<For
   const ctx = await context(user.id, raw.bookingId ?? "");
   if (!ctx) return { message: t("errors.not_found") };
   const parsed = legSchema(ctx.units, ctx.oilUnit).safeParse(raw);
-  if (!parsed.success) return { errors: await localizedFieldErrors(parsed.error), values: raw };
+  const order = await legOrderErrors(raw);
+  if (!parsed.success) {
+    const errors = { ...(await localizedFieldErrors(parsed.error)), ...order.errors };
+    return { errors, values: raw };
+  }
+  if (Object.keys(order.errors).length) return { errors: order.errors, values: raw };
+  if (!order.times) return { errors: { engineStop: [v("timeInvalid")] }, values: raw };
   const {
     logId,
     legId,
     from,
     to,
-    date,
-    blockOff,
-    engineStart,
-    takeoff,
-    landing,
-    engineStop,
-    blockOn,
+    date: _date,
+    engineStart: _engineStart,
+    blockOff: _blockOff,
+    takeoff: _takeoff,
+    landing: _landing,
+    blockOn: _blockOn,
+    engineStop: _engineStop,
     ...rest
   } = parsed.data;
   const [fromAirport, toAirport] = await Promise.all([getAirport(from), getAirport(to)]);
   if (!fromAirport) return { errors: { from: [v("airportUnknown")] }, values: raw };
   if (!toAirport) return { errors: { to: [v("airportUnknown")] }, values: raw };
-  const times = legTimesToUtc({
-    date,
-    fromZone: "UTC",
-    toZone: "UTC",
-    blockOff,
-    engineStart,
-    takeoff,
-    landing,
-    engineStop,
-    blockOn,
-  });
-  if (!times) return { errors: { blockOn: [v("timeInvalid")] }, values: raw };
-
-  const values = { ...rest, ...times, fromIdent: fromAirport.ident, toIdent: toAirport.ident };
+  const values = {
+    ...rest,
+    ...order.times,
+    fromIdent: fromAirport.ident,
+    toIdent: toAirport.ident,
+  };
   try {
     const saved = await asUser(user.id, async (tx) => {
       if (legId) {

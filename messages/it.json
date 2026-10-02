@@ -216,13 +216,17 @@
     "endBeforeStart": "La fine deve essere dopo l'inizio.",
     "plannedHoursInvalid": "Inserisci le ore di volo previste, ad es. 1,5.",
     "timeInvalid": "Inserisci un orario nel formato HH:MM.",
-    "meterBackwards": "La lettura finale non può essere inferiore a quella iniziale.",
+    "meterBackwards": "La lettura finale deve essere superiore a quella iniziale.",
     "remarkRequired": "Scrivi la nota (fino a 1000 caratteri).",
     "defectRequired": "Descrivi il difetto (fino a 2000 caratteri).",
     "scoreRequired": "Scegli da 1 a 5 stelle.",
     "replyRequired": "Scrivi qualche parola.",
     "messageRequired": "Scrivi un messaggio.",
-    "phoneInvalid": "Inserisci il numero in formato internazionale, ad es. +39 312 345 6789."
+    "phoneInvalid": "Inserisci il numero in formato internazionale, ad es. +39 312 345 6789.",
+    "timeAfter": "Deve essere dopo {other}.",
+    "timeNotBefore": "Non può essere prima di {other}.",
+    "fuelNotBurned": "Il carburante dopo deve essere inferiore a quello prima. Registra il rifornimento con «Aggiungi carburante o olio».",
+    "oilRose": "L’olio dopo non può essere superiore a quello prima. Registra l’olio aggiunto con «Aggiungi carburante o olio»."
   },
   "dashboard": {
     "title": "Benvenuto, {name}",
@@ -1844,6 +1848,7 @@
     "hobbs": "Hobbs",
     "tach": "Tach",
     "fuelOnBoard": "Carburante a bordo ({unit})",
+    "fuelUnit": "Unità del carburante",
     "oilLevel": "Livello olio ({unit})",
     "checkoutPhoto": "Foto dei contatori (facoltativa)",
     "checkoutPhotoHint": "JPEG, PNG o PDF, fino a 4 MB. Anche il proprietario può aprirla.",
@@ -1858,7 +1863,7 @@
     "delete": "Elimina",
     "editLegOf": "Modifica tratta {leg}",
     "deleteLegOf": "Elimina tratta {leg}",
-    "legHint": "Tutti gli orari in UTC.",
+    "legHint": "Tutti gli orari in UTC, nell’ordine in cui avvengono: avviamento, partenza dal parcheggio, decollo, atterraggio, arrivo al parcheggio, spegnimento. Carburante e olio dopo sono le letture all’arrivo, prima del rifornimento; registra ciò che aggiungi con «Aggiungi carburante o olio».",
     "from": "Da",
     "to": "A",
     "date": "Data (fuori blocchi, UTC)",
@@ -1922,7 +1927,7 @@
       "note_required": "Indica cosa va corretto.",
       "bad_amount": "L'importo non è valido.",
       "missing_meters": "Mancano alcune letture dei contatori.",
-      "leg_checks": "Controlla la tratta: gli orari devono essere in ordine (fuori blocchi, avvio motore, decollo, atterraggio, spegnimento motore, in blocchi), entro 24 ore, e i contatori non possono tornare indietro.",
+      "leg_checks": "Controlla la tratta: gli orari devono essere in ordine (avviamento, partenza dal parcheggio, decollo, atterraggio, arrivo al parcheggio, spegnimento) ed entro 12 ore, i contatori devono avanzare, il carburante deve diminuire e l’olio non può aumentare durante una tratta.",
       "failed": "Qualcosa è andato storto. Riprova.",
       "aircraft_grounded": "L'aereo è fermo a terra per decisione del proprietario, quindi non può essere preso in consegna."
     },
@@ -1990,7 +1995,19 @@
       "text": "Il proprietario ne è al corrente. Controllali prima di volare.",
       "since": "dal {date}"
     },
-    "remarkSaved": "Nota aggiunta."
+    "remarkSaved": "Nota aggiunta.",
+    "continuity": {
+      "title": "Controlla le letture di carburante e olio",
+      "hint": "Aggiungi il rifornimento o l’olio mancante con «Aggiungi carburante o olio» o correggi le letture. Anche il proprietario lo vede.",
+      "rose": {
+        "fuel": "Il carburante è aumentato di {rise} prima della tratta {leg} a {airport}, ma lì risultano aggiunti solo {recorded}.",
+        "oil": "L’olio è aumentato di {rise} prima della tratta {leg} a {airport}, ma lì risultano aggiunti solo {recorded}."
+      },
+      "offRoute": {
+        "fuel": "È stato aggiunto carburante a {airport}, ma nessuna tratta parte o arriva lì.",
+        "oil": "È stato aggiunto olio a {airport}, ma nessuna tratta parte o arriva lì."
+      }
+    }
   },
   "defects": {
     "report": "Segnala un difetto",

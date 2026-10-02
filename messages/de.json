@@ -216,13 +216,17 @@
     "endBeforeStart": "Das Ende muss nach dem Beginn liegen.",
     "plannedHoursInvalid": "Geben Sie die geplante Flugzeit ein, z. B. 1,5.",
     "timeInvalid": "Geben Sie eine Uhrzeit als HH:MM ein.",
-    "meterBackwards": "Der Endstand darf nicht niedriger als der Anfangsstand sein.",
+    "meterBackwards": "Der Endstand muss höher als der Anfangsstand sein.",
     "remarkRequired": "Schreiben Sie die Bemerkung (bis zu 1000 Zeichen).",
     "defectRequired": "Beschreiben Sie den Mangel (bis zu 2000 Zeichen).",
     "scoreRequired": "Wählen Sie 1 bis 5 Sterne.",
     "replyRequired": "Schreiben Sie ein paar Worte.",
     "messageRequired": "Schreiben Sie eine Nachricht.",
-    "phoneInvalid": "Geben Sie die Nummer im internationalen Format ein, z. B. +49 170 1234567."
+    "phoneInvalid": "Geben Sie die Nummer im internationalen Format ein, z. B. +49 170 1234567.",
+    "timeAfter": "Muss nach {other} liegen.",
+    "timeNotBefore": "Darf nicht vor {other} liegen.",
+    "fuelNotBurned": "Kraftstoff danach muss niedriger sein als davor. Tanken erfassen Sie mit „Kraftstoff oder Öl hinzufügen“.",
+    "oilRose": "Öl danach darf nicht höher sein als davor. Nachgefülltes Öl erfassen Sie mit „Kraftstoff oder Öl hinzufügen“."
   },
   "dashboard": {
     "title": "Willkommen, {name}",
@@ -1844,6 +1848,7 @@
     "hobbs": "Hobbs",
     "tach": "Tach",
     "fuelOnBoard": "Kraftstoff an Bord ({unit})",
+    "fuelUnit": "Kraftstoffeinheit",
     "oilLevel": "Ölstand ({unit})",
     "checkoutPhoto": "Foto der Zähler (optional)",
     "checkoutPhotoHint": "JPEG, PNG oder PDF, bis 4 MB. Der Halter kann es auch öffnen.",
@@ -1858,7 +1863,7 @@
     "delete": "Löschen",
     "editLegOf": "Abschnitt {leg} bearbeiten",
     "deleteLegOf": "Abschnitt {leg} löschen",
-    "legHint": "Alle Zeiten in UTC.",
+    "legHint": "Alle Zeiten in UTC, in der Reihenfolge des Ablaufs: Anlassen, Off-Block, Start, Landung, On-Block, Abstellen. Kraftstoff und Öl danach sind die Werte bei Ankunft, vor dem Tanken; Nachgefülltes erfassen Sie mit „Kraftstoff oder Öl hinzufügen“.",
     "from": "Von",
     "to": "Nach",
     "date": "Datum (Off-Block, UTC)",
@@ -1922,7 +1927,7 @@
       "note_required": "Geben Sie an, was korrigiert werden soll.",
       "bad_amount": "Der Betrag ist ungültig.",
       "missing_meters": "Einige Zählerstände fehlen.",
-      "leg_checks": "Prüfen Sie den Abschnitt: Die Zeiten müssen in Reihenfolge sein (Off-Block, Anlassen, Start, Landung, Abstellen, On-Block), innerhalb von 24 Stunden, und Zähler können nicht rückwärts laufen.",
+      "leg_checks": "Prüfen Sie den Flug: Die Zeiten müssen in Reihenfolge sein (Anlassen, Off-Block, Start, Landung, On-Block, Abstellen) und innerhalb von 12 Stunden liegen, Zähler müssen weiterlaufen, Kraftstoff muss abnehmen und Öl darf während eines Flugs nicht zunehmen.",
       "failed": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut.",
       "aircraft_grounded": "Das Flugzeug ist vom Halter am Boden festgesetzt und kann nicht übernommen werden."
     },
@@ -1990,7 +1995,19 @@
       "text": "Der Halter weiß davon. Prüfen Sie sie vor dem Flug.",
       "since": "seit {date}"
     },
-    "remarkSaved": "Bemerkung hinzugefügt."
+    "remarkSaved": "Bemerkung hinzugefügt.",
+    "continuity": {
+      "title": "Kraftstoff- und Ölwerte prüfen",
+      "hint": "Fügen Sie fehlendes Tanken oder Öl mit „Kraftstoff oder Öl hinzufügen“ hinzu oder korrigieren Sie die Werte. Der Eigentümer sieht dies auch.",
+      "rose": {
+        "fuel": "Der Kraftstoff ist vor Flug {leg} in {airport} um {rise} gestiegen, dort sind aber nur {recorded} getankt erfasst.",
+        "oil": "Das Öl ist vor Flug {leg} in {airport} um {rise} gestiegen, dort sind aber nur {recorded} nachgefüllt erfasst."
+      },
+      "offRoute": {
+        "fuel": "In {airport} wurde Kraftstoff getankt, aber kein Flug beginnt oder endet dort.",
+        "oil": "In {airport} wurde Öl nachgefüllt, aber kein Flug beginnt oder endet dort."
+      }
+    }
   },
   "defects": {
     "report": "Mangel melden",

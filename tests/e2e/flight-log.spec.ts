@@ -36,6 +36,7 @@ test("a pilot fills in the flight log and the owner confirms it", async ({ page,
   await expect(page).toHaveURL(new RegExp(`/bookings/${bookingId}/log$`));
   await expect(page.getByRole("heading", { name: "Flight log", level: 1 })).toBeVisible();
   await page.getByLabel("Hobbs", { exact: true }).fill("1000");
+  await page.getByLabel("Fuel on board (L)").fill("100");
   await page.getByRole("button", { name: "Save check-out" }).click();
   await expect(page.getByText("Saved.")).toBeVisible();
 
@@ -45,17 +46,29 @@ test("a pilot fills in the flight log and the owner confirms it", async ({ page,
   await dialog.getByRole("combobox", { name: "To" }).fill("LBSF");
   await dialog.getByRole("listbox").getByRole("option").first().click();
   for (const [label, time] of [
-    ["Block off", "10:00"],
-    ["Engine start", "10:05"],
-    ["Engine stop", "11:15"],
-    ["Block on", "11:20"],
+    ["Engine start", "10:00"],
+    ["Block off", "09:55"],
+    ["Block on", "11:15"],
+    ["Engine stop", "11:20"],
   ]) {
     await dialog.getByLabel(label, { exact: true }).fill(time);
   }
   await dialog.getByLabel("Hobbs start").fill("1000");
   await dialog.getByLabel("Hobbs end").fill("1001.2");
+  // Fuel in US gallons (stored in litres): 31.7 US gal = 120 L, more than at check-out.
+  await dialog.getByLabel("Fuel unit").selectOption("usgal");
+  await dialog.getByLabel("Fuel before (US gal)").fill("31.7");
+  await dialog.getByLabel("Fuel after (US gal)").fill("35");
+  await dialog.getByRole("button", { name: "Save leg" }).click();
+  // Block off before engine start; fuel can't go up during a leg.
+  await expect(dialog.getByText("Can't be before Engine start.")).toBeVisible();
+  await expect(dialog.getByText(/Fuel after must be lower than fuel before/)).toBeVisible();
+  await dialog.getByLabel("Block off", { exact: true }).fill("10:05");
+  await dialog.getByLabel("Fuel after (US gal)").fill("20");
   await dialog.getByRole("button", { name: "Save leg" }).click();
   await expect(dialog).toBeHidden();
+  // Fuel went up between check-out and the leg without a recorded refuelling.
+  await expect(page.getByText("Fuel went up by 20 L before leg 1 at LBSF")).toBeVisible();
   await expect(page.getByText("1. LBSF → LBSF")).toBeVisible();
   await expect(page.getByText("1 h 12 min")).toBeVisible();
   await expect(page.getByText("€216", { exact: true })).toBeVisible();
@@ -70,6 +83,7 @@ test("a pilot fills in the flight log and the owner confirms it", async ({ page,
   await fuel.getByRole("button", { name: "Save" }).click();
   await expect(fuel).toBeHidden();
   await expect(page.getByText("Fuel 40 L · LBSF")).toBeVisible();
+  await expect(page.getByText("Check the fuel and oil readings")).toHaveCount(0);
   await expect(page.getByText("-€100", { exact: true })).toBeVisible();
   await expect(page.getByText("€116", { exact: true })).toBeVisible();
 
